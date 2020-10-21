@@ -1,0 +1,355 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>MeshExtruder.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="7c58b913-cd17-472a-bdb2-9918b335878c"><i class="material-icons">menu</i></a><ul class="sidenav" id="7c58b913-cd17-472a-bdb2-9918b335878c"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">meshmodifiers</span><a href="#" class="breadcrumb">MeshExtruder</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="00321bc4-b14b-4ee0-bdd6-1d2396728021" data-section-level="1" data-section-text="MeshExtruder"><h1 id="meshextruder">MeshExtruder</h1><p>The mesh extruder is a tool for increasing the dimensionality of a lower dimension mesh (1D or 2D). Each element is converted to one or more copies of its corresponding higher dimensional element along the specified axis. The Mesh Extruder can also add in the extra sidesets resulting from increasing the dimensionality of the original mesh. Existing sidesets are extruded.</p><div class="card moose-float" style="width:500px;"><div class="card-content"><img src="../../media/framework/mesh_modifiers/quad4.png" class="materialboxed moose-image"></img><p class="moose-caption"><span class="moose-caption-text">2D mesh consisting of a ring of QUAD4 elements.</span></p></div></div><div class="card moose-float"><div class="card-content"><img src="../../media/framework/mesh_modifiers/extrude_angle.png" class="materialboxed moose-image"></img><p class="moose-caption"><span class="moose-caption-text">Resulting mesh after extrusion along the vector (1, 1, 0).</span></p></div></div><p>Takes a 1D or 2D mesh and extrudes the entire structure along the specified axis increasing the dimensionality of the mesh.</p><section class="scrollspy" id="37c1baaf-4e6a-4f9b-baff-4b9ce0ac702d" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="16cd2cd2-a0f5-49c7-8733-c9d340f15445" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extrusion_vector</span><span class="moose-parameter-header-description">The direction and length of the extrusion</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>libMesh::VectorValue<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The direction and length of the extrusion</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="630b8908-0fa3-46ad-8c78-340507c642b6" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">bottom_sideset</span><span class="moose-parameter-header-description">The boundary that will be applied to the bottom of the extruded mesh</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The boundary that will be applied to the bottom of the extruded mesh</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">depends_on</span><span class="moose-parameter-header-description">The MeshModifiers that this modifier relies upon (i.e. must execute before this one)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The MeshModifiers that this modifier relies upon (i.e. must execute before this one)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">existing_subdomains</span><span class="moose-parameter-header-description">The subdomains that will be remapped for specific layers</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<unsigned short></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The subdomains that will be remapped for specific layers</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_prepare</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Normally all MeshModifiers run before the mesh is prepared for use. This flag can be set on an individual modifier to force preparation between modifiers where they might be needed.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Normally all MeshModifiers run before the mesh is prepared for use. This flag can be set on an individual modifier to force preparation between modifiers where they might be needed.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">layers</span><span class="moose-parameter-header-description">The layers where the "existing_subdomain" will be remapped to new ids</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<unsigned int></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The layers where the "existing_subdomain" will be remapped to new ids</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">new_ids</span><span class="moose-parameter-header-description">The list of new ids, This list should be either length "existing_subdomains" or "existing_subdomains" * layers</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<unsigned int></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of new ids, This list should be either length "existing_subdomains" or "existing_subdomains" * layers</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">num_layers</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">The number of layers in the extruded mesh</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The number of layers in the extruded mesh</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">top_sideset</span><span class="moose-parameter-header-description">The boundary that will be to the top of the extruded mesh</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The boundary that will be to the top of the extruded mesh</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="94924378-1f46-4bf3-9d3a-b91a39e9c95e" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="ff8ec336-dc97-403c-871c-fc3aae8ca56a" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#1792147f-7c45-4006-b9a3-5408ff3d93a4" class="modal-trigger">test/tests/mesh_modifiers/mesh_extruder/extruder_quad.i</a></li><li><a href="#192a440f-df6f-4fed-b589-45b7076edc87" class="modal-trigger">test/tests/mesh_modifiers/mesh_extruder/extrude_remap_layer2.i</a></li><li><a href="#57265a62-9375-4f4a-ab43-dd55963b6a03" class="modal-trigger">test/tests/mesh_modifiers/mesh_extruder/extrude_remap_layer1.i</a></li><li><a href="#4110904b-2dcc-4585-8cf5-bcf972e65194" class="modal-trigger">test/tests/mesh_modifiers/mesh_extruder/extruder_angle.i</a></li><li><a href="#dee75f40-d75d-45b1-8804-04c9fea4161f" class="modal-trigger">test/tests/mesh_modifiers/mesh_extruder/gen_extrude.i</a></li><li><a href="#a483d568-699d-40bc-a167-cff28356d95e" class="modal-trigger">test/tests/mesh_modifiers/mesh_extruder/extruder_tri.i</a></li></ul><div class="modal moose-modal" id="1792147f-7c45-4006-b9a3-5408ff3d93a4"><div class="modal-content"><h4>test/tests/mesh_modifiers/mesh_extruder/extruder_quad.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = FileMesh
+  file = chimney_quad.e
+[]
+
+[MeshModifiers]
+  [./extrude]
+    type = MeshExtruder
+    num_layers = 20
+    extrusion_vector = &#x27;0 1e-2 0&#x27;
+    bottom_sideset = &#x27;new_bottom&#x27;
+    top_sideset = &#x27;new_top&#x27;
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./bottom]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;new_bottom&#x27;
+    value = 0
+  [../]
+
+  [./top]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;new_top&#x27;
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Outputs]
+  file_base = out_quad
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="192a440f-df6f-4fed-b589-45b7076edc87"><div class="modal-content"><h4>test/tests/mesh_modifiers/mesh_extruder/extrude_remap_layer2.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = FileMesh
+  file = multiblock.e
+[]
+
+[MeshModifiers]
+  [./extrude]
+    type = MeshExtruder
+    num_layers = 6
+    extrusion_vector = &#x27;0 0 2&#x27;
+    bottom_sideset = &#x27;new_bottom&#x27;
+    top_sideset = &#x27;new_top&#x27;
+
+    # Remap layers
+    existing_subdomains = &#x27;1 2 5&#x27;
+    layers = &#x27;1 3 5&#x27;
+    new_ids = &#x27;10 12 15&#x27; # Repeat this remapping for each layer
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./bottom]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;new_bottom&#x27;
+    value = 0
+  [../]
+
+  [./top]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;new_top&#x27;
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="57265a62-9375-4f4a-ab43-dd55963b6a03"><div class="modal-content"><h4>test/tests/mesh_modifiers/mesh_extruder/extrude_remap_layer1.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = FileMesh
+  file = multiblock.e
+[]
+
+[MeshModifiers]
+  [./extrude]
+    type = MeshExtruder
+    num_layers = 6
+    extrusion_vector = &#x27;0 0 2&#x27;
+    bottom_sideset = &#x27;new_bottom&#x27;
+    top_sideset = &#x27;new_top&#x27;
+
+    # Remap layers
+    existing_subdomains = &#x27;1 2 5&#x27;
+    layers = &#x27;1 3 5&#x27;
+    new_ids = &#x27;10 12 15
+               30 32 35
+               50 52 55&#x27;
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./bottom]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;new_bottom&#x27;
+    value = 0
+  [../]
+
+  [./top]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;new_top&#x27;
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4110904b-2dcc-4585-8cf5-bcf972e65194"><div class="modal-content"><h4>test/tests/mesh_modifiers/mesh_extruder/extruder_angle.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = FileMesh
+  file = chimney_quad.e
+[]
+
+[MeshModifiers]
+  [./extrude]
+    type = MeshExtruder
+    num_layers = 20
+    extrusion_vector = &#x27;1e-2 1e-2 0&#x27;
+    bottom_sideset = &#x27;10&#x27;
+    top_sideset = &#x27;20&#x27;
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./bottom]
+    type = DirichletBC
+    variable = u
+    boundary = 10
+    value = 0
+  [../]
+
+  [./top]
+    type = DirichletBC
+    variable = u
+    boundary = 20
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Outputs]
+  file_base = out_quad_angle
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="dee75f40-d75d-45b1-8804-04c9fea4161f"><div class="modal-content"><h4>test/tests/mesh_modifiers/mesh_extruder/gen_extrude.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 6
+  ny = 6
+  nz = 0
+  zmin = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[MeshModifiers]
+  [./extrude]
+    type = MeshExtruder
+    num_layers = 6
+    extrusion_vector = &#x27;1 0 1&#x27;
+    bottom_sideset = &#x27;10&#x27;
+    top_sideset = &#x27;20&#x27;
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./bottom]
+    type = DirichletBC
+    variable = u
+    boundary = 10
+    value = 0
+  [../]
+
+  [./top]
+    type = DirichletBC
+    variable = u
+    boundary = 20
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Outputs]
+  file_base = out_gen
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a483d568-699d-40bc-a167-cff28356d95e"><div class="modal-content"><h4>test/tests/mesh_modifiers/mesh_extruder/extruder_tri.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = FileMesh
+  file = ellipse_tri.e
+[]
+
+[MeshModifiers]
+  [./extrude]
+    type = MeshExtruder
+    num_layers = 20
+    extrusion_vector = &#x27;0 0 5&#x27;
+    bottom_sideset = &#x27;2&#x27;
+    top_sideset = &#x27;4&#x27;
+  [../]
+[]
+
+[Variables]
+  active = &#x27;u&#x27;
+
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  active = &#x27;diff&#x27;
+
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./bottom]
+    type = DirichletBC
+    variable = u
+    boundary = 2
+    value = 0
+  [../]
+
+  [./top]
+    type = DirichletBC
+    variable = u
+    boundary = 4
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Outputs]
+  file_base = out_tri
+  exodus = true
+[]
+
+[Debug]
+  show_actions = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#37c1baaf-4e6a-4f9b-baff-4b9ce0ac702d" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#ff8ec336-dc97-403c-871c-fc3aae8ca56a" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

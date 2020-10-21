@@ -1,0 +1,4832 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>LowerDBlockFromSidesetGenerator.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="4609ddcd-cb95-48b9-b105-a6aabcce9ff8"><i class="material-icons">menu</i></a><ul class="sidenav" id="4609ddcd-cb95-48b9-b105-a6aabcce9ff8"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">meshgenerators</span><a href="#" class="breadcrumb">LowerDBlockFromSidesetGenerator</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="d59f5a5d-733d-4651-a026-4c05ff2ced5b" data-section-level="1" data-section-text="LowerDBlockFromSidesetGenerator"><h1 id="lowerdblockfromsidesetgenerator">LowerDBlockFromSidesetGenerator</h1><p>Adds lower dimensional elements on the specified sidesets.</p><section class="scrollspy" id="8a2cb27a-aa42-435e-8df5-e6f1ac4e3631" data-section-level="2" data-section-text="Overview"><h2 id="overview">Overview</h2><p>This mesh generator accepts a list of sidesets and creates a lower dimensional block of elements along those sides. The order of the newly create lower dimensional element block will match the order of the parent elements (e.g. first order for first order parents, second order for second order parents).</p></section><section class="scrollspy" id="486a8140-d33e-48fd-a599-5556ce6fc325" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="f8f41a4e-da4d-4019-bb6f-5a439e2ff8fb" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">input</span><span class="moose-parameter-header-description">The mesh we want to modify</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MeshGeneratorName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The mesh we want to modify</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">sidesets</span><span class="moose-parameter-header-description">The sidesets from which to create the new block</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The sidesets from which to create the new block</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="1e18a90f-ad59-4f4a-9dfb-053bb3333c97" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">new_block_id</span><span class="moose-parameter-header-description">The lower dimensional block id to create</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned short</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The lower dimensional block id to create</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">new_block_name</span><span class="moose-parameter-header-description">The lower dimensional block name to create (optional)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>SubdomainName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The lower dimensional block name to create (optional)</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="1c72be7a-1a1f-4a16-acec-6874b575bd18" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="8532e885-c9e4-4b0f-a9b4-36ffde8130cf" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#00d5cb7a-c56b-44dc-af9e-536793a5f881" class="modal-trigger">test/tests/mortar/continuity-2d-non-conforming/sequencing-stateful-soln-continuity.i</a></li><li><a href="#9385c98c-1540-4d66-aca3-4b1e3f4aaed7" class="modal-trigger">modules/combined/test/tests/gap_heat_transfer_mortar/gap_heat_transfer_mortar.i</a></li><li><a href="#39edb7d3-11bc-4ef1-ab5b-2de283290215" class="modal-trigger">modules/combined/examples/mortar/mortar_gradient.i</a></li><li><a href="#05425afa-8c25-43de-864f-cf153087ea23" class="modal-trigger">test/tests/meshgenerators/lower_d_block_generator/names.i</a></li><li><a href="#587ba4ff-5ace-4978-a1cf-0e5015c11e9f" class="modal-trigger">modules/contact/test/tests/mortar_tm/2d/frictionless_second/finite_noaction.i</a></li><li><a href="#7dd3dca3-b9c3-4ac0-9fe9-a1103a093f04" class="modal-trigger">test/tests/mortar/displaced-gap-conductance-2d-bnd-coupling/gap-conductance.i</a></li><li><a href="#f0ee43f8-1743-4173-a5d4-9c2389e0e11a" class="modal-trigger">modules/contact/test/tests/mortar_tm/2drz/frictionless_second/finite_noaction.i</a></li><li><a href="#8710cbe7-fc16-4c15-93a8-d664cd77135c" class="modal-trigger">test/tests/meshgenerators/lower_d_block_generator/ids.i</a></li><li><a href="#14164684-0822-4f1b-a3d3-cec96aca6322" class="modal-trigger">test/tests/mortar/periodic-value/periodic.i</a></li><li><a href="#c5b9c50b-950b-4caf-8e51-f9282c0b9633" class="modal-trigger">test/tests/mortar/continuity-2d-conforming/conforming_two_var.i</a></li><li><a href="#9ef5f89d-f64e-4622-bc70-13ff7ba8a813" class="modal-trigger">test/tests/mortar/displaced-gap-conductance-2d-bnd-coupling/gap-conductance-bnd-material.i</a></li><li><a href="#2a90c9dd-0d67-4f2e-878b-575f444ec7b8" class="modal-trigger">test/tests/mortar/cant-do-3d/periodic.i</a></li><li><a href="#82ae4c83-fecd-480d-be3a-6aca20d64bc1" class="modal-trigger">modules/contact/test/tests/mortar_tm/2d/frictionless_first/finite_noaction.i</a></li><li><a href="#01960407-706e-4bd0-8e18-64a98bad167c" class="modal-trigger">test/tests/mortar/continuity-2d-conforming/conforming.i</a></li><li><a href="#1d22637f-5e32-499a-a674-aac3cbf94f58" class="modal-trigger">modules/contact/test/tests/mortar_tm/2drz/frictionless_first/finite_noaction.i</a></li><li><a href="#8b4c86ef-75e5-4def-9c5f-10ccdd90ddf4" class="modal-trigger">modules/contact/test/tests/mechanical-small-problem/frictionless-nodal-lm-mortar-disp.i</a></li><li><a href="#3a2766ee-c9ab-4bc7-9ecc-4f59537e3e59" class="modal-trigger">modules/contact/test/tests/mechanical-small-problem/mortar-mech.i</a></li><li><a href="#d695b2d0-70fd-4c5c-9ec1-58814c491a9c" class="modal-trigger">test/tests/mortar/gap-conductance-2d-non-conforming/gap-conductance.i</a></li><li><a href="#6524f6a8-de4b-4048-9e88-8075a872a2a1" class="modal-trigger">test/tests/mortar/displaced-gap-conductance-2d-bnd-coupling/gap-conductance-bnd-aux-kernel.i</a></li><li><a href="#83980328-2419-4813-9a07-9dde85e6ff11" class="modal-trigger">test/tests/bcs/ad_coupled_lower_value/test.i</a></li><li><a href="#b84fc23a-dcb2-4d02-828c-fffc6cfbd7ec" class="modal-trigger">test/tests/mortar/continuity-2d-conforming/equalgradient.i</a></li><li><a href="#f5d77909-4213-4f9b-add9-9c89b1d79dae" class="modal-trigger">modules/contact/test/tests/sliding_block/in_and_out/frictional_lm.i</a></li><li><a href="#cbcee676-50e5-4642-b949-346574945324" class="modal-trigger">modules/combined/examples/mortar/eigenstrain.i</a></li><li><a href="#c8dfa539-25a5-41d0-9d8c-58787548af79" class="modal-trigger">modules/contact/test/tests/sliding_block/in_and_out/frictionless_lm.i</a></li><li><a href="#301861bc-d807-4569-a9a4-a70a5a75acc5" class="modal-trigger">test/tests/mortar/continuity-2d-non-conforming/dual-soln-continuity.i</a></li><li><a href="#641fcc78-2326-4fb5-9a3e-b2b9eea91033" class="modal-trigger">test/tests/mortar/continuity-2d-non-conforming/soln-continuity.i</a></li><li><a href="#fb0c3ff7-d897-4734-be10-d66c146ab6e0" class="modal-trigger">test/tests/mortar/displaced-gap-conductance-2d-non-conforming/gap-conductance.i</a></li><li><a href="#6495f313-1a1f-4fee-894a-4308e8415896" class="modal-trigger">modules/combined/test/tests/gap_heat_transfer_mortar/gap_heat_transfer_mortar_displaced.i</a></li><li><a href="#2d1f9ecc-d5b8-4188-b75b-ca9122920829" class="modal-trigger">test/tests/mortar/continuity-2d-conforming/conforming-2nd-order.i</a></li></ul><div class="modal moose-modal" id="00d5cb7a-c56b-44dc-af9e-536793a5f881"><div class="modal-content"><h4>test/tests/mortar/continuity-2d-non-conforming/sequencing-stateful-soln-continuity.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  second_order = true
+  [file]
+    type = FileMeshGenerator
+    file = nodal_normals_test_offset_nonmatching_gap.e
+  []
+  [./primary]
+    input = file
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;2&#x27;
+    new_block_id = &#x27;20&#x27;
+  [../]
+  [./secondary]
+    input = primary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;1&#x27;
+    new_block_id = &#x27;10&#x27;
+  [../]
+[]
+
+[Variables]
+  [./T]
+    block = &#x27;1 2&#x27;
+    order = SECOND
+  [../]
+  [./lambda]
+    block = &#x27;10&#x27;
+  [../]
+[]
+
+[AuxVariables]
+  [ssm]
+    order = CONSTANT
+    family = MONOMIAL
+    block = &#x27;1 2&#x27;
+  []
+[]
+
+[BCs]
+  [./neumann]
+    type = FunctionGradientNeumannBC
+    exact_solution = exact_soln
+    variable = T
+    boundary = &#x27;3 4 5 6 7 8&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./conduction]
+    type = Diffusion
+    variable = T
+    block = &#x27;1 2&#x27;
+  [../]
+  [./sink]
+    type = Reaction
+    variable = T
+    block = &#x27;1 2&#x27;
+  [../]
+  [./forcing_function]
+    type = BodyForce
+    variable = T
+    function = forcing_function
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[AuxKernels]
+  [ssm]
+    type = MaterialRealAux
+    variable = ssm
+    property = diffusivity
+    block = &#x27;1 2&#x27;
+  []
+[]
+
+[Materials]
+  [./ssm]
+    type = SpatialStatefulMaterial
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[Functions]
+  [./forcing_function]
+    type = ParsedFunction
+    value = &#x27;-4 + x^2 + y^2&#x27;
+  [../]
+  [./exact_soln]
+    type = ParsedFunction
+    value = &#x27;x^2 + y^2&#x27;
+  [../]
+[]
+
+[Debug]
+  show_var_residual_norms = 1
+[]
+
+[Constraints]
+  [./mortar]
+    type = EqualValueConstraint
+    primary_boundary = 2
+    secondary_boundary = 1
+    primary_subdomain = 20
+    secondary_subdomain = 10
+    variable = lambda
+    secondary_variable = T
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  solve_type = NEWTON
+  type = Steady
+  nl_abs_tol = 1e-12
+  petsc_options_iname = &#x27;-pc_type -snes_linesearch_type -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27;lu       basic                 NONZERO               1e-15&#x27;
+  num_grids = 2
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = uniform
+  [Markers]
+    [uniform]
+      type = UniformMarker
+      mark = refine
+    []
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9385c98c-1540-4d66-aca3-4b1e3f4aaed7"><div class="modal-content"><h4>modules/combined/test/tests/gap_heat_transfer_mortar/gap_heat_transfer_mortar.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [file]
+    type = FileMeshGenerator
+    file = 2blk-gap.e
+  []
+  [secondary]
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;101&#x27;
+    new_block_id = &#x27;10001&#x27;
+    new_block_name = &#x27;secondary_lower&#x27;
+    input = file
+  []
+  [primary]
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;100&#x27;
+    new_block_id = &#x27;10000&#x27;
+    new_block_name = &#x27;primary_lower&#x27;
+    input = secondary
+  []
+[]
+
+[Problem]
+  kernel_coverage_check = false
+  material_coverage_check = false
+[]
+
+[Variables]
+  [./temp]
+    order = FIRST
+    family = LAGRANGE
+    block = &#x27;1 2&#x27;
+  [../]
+
+  [./lm]
+    order = FIRST
+    family = LAGRANGE
+    block = &#x27;secondary_lower&#x27;
+  [../]
+[]
+
+[Materials]
+  [./left]
+    type = HeatConductionMaterial
+    block = 1
+    thermal_conductivity = 1000
+    specific_heat = 1
+  [../]
+
+  [./right]
+    type = HeatConductionMaterial
+    block = 2
+    thermal_conductivity = 500
+    specific_heat = 1
+  [../]
+[]
+
+[Kernels]
+  [./hc]
+    type = HeatConduction
+    variable = temp
+    use_displaced_mesh = false
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[Constraints]
+  [./ced]
+    type = GapConductanceConstraint
+    variable = lm
+    secondary_variable = temp
+    k = 100
+    primary_boundary = 100
+    primary_subdomain = 10000
+    secondary_boundary = 101
+    secondary_subdomain = 10001
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = temp
+    boundary = &#x27;left&#x27;
+    value = 1
+  [../]
+
+  [./right]
+    type = DirichletBC
+    variable = temp
+    boundary = &#x27;right&#x27;
+    value = 0
+  [../]
+[]
+
+[Preconditioning]
+  [./fmp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;PJFNK&#x27;
+  nl_rel_tol = 1e-11
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="39edb7d3-11bc-4ef1-ab5b-2de283290215"><div class="modal-content"><h4>modules/combined/examples/mortar/mortar_gradient.i</h4><pre class="moose-pre"><code class="language-text">#
+# Compare a diffusion equation with (c) and without (v) periodic gradient
+# constraints and a ramped sloped initial condition and value-periodic diffusion (p)
+# without a slope.
+#
+
+[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 40
+    ny = 40
+  []
+  [secondary_x]
+    input = gen
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;3&#x27;
+    new_block_id = 10
+    new_block_name = &quot;secondary_x&quot;
+  []
+  [primary_x]
+    input = secondary_x
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;1&#x27;
+    new_block_id = 12
+    new_block_name = &quot;primary_x&quot;
+  []
+  [secondary_y]
+    input = primary_x
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;0&#x27;
+    new_block_id = 11
+    new_block_name = &quot;secondary_y&quot;
+  []
+  [primary_y]
+    input = secondary_y
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;2&#x27;
+    new_block_id = 13
+    new_block_name = &quot;primary_y&quot;
+  []
+[]
+
+[Functions]
+  [./init_slope]
+    # slope with a concentration spike close to the lower interface
+    type = ParsedFunction
+    value = &#x27;if(x&gt;0.4 &amp; x&lt;0.6 &amp; y&gt;0.1 &amp; y&lt;0.3, 3+y, y)&#x27;
+  [../]
+  [./init_flat]
+    # no-slope and the same spike
+    type = ParsedFunction
+    value = &#x27;if(x&gt;0.4 &amp; x&lt;0.6 &amp; y&gt;0.1 &amp; y&lt;0.3, 3, 0)&#x27;
+  [../]
+[]
+
+[Variables]
+  # gradient constrained concentration
+  [./c]
+    order = FIRST
+    family = LAGRANGE
+    block = 0
+    [./InitialCondition]
+      type = FunctionIC
+      function = init_slope
+    [../]
+  [../]
+
+  # unconstrained concentrarion
+  [./v]
+    order = FIRST
+    family = LAGRANGE
+    block = 0
+    [./InitialCondition]
+      type = FunctionIC
+      function = init_slope
+    [../]
+  [../]
+
+  # flat value periodic diffusion
+  [./p]
+    order = FIRST
+    family = LAGRANGE
+    block = 0
+    [./InitialCondition]
+      type = FunctionIC
+      function = init_flat
+    [../]
+  [../]
+
+  # Lagrange multipliers for gradient component in the horizontal directon
+  [./lm_left_right_x]
+    order = FIRST
+    family = LAGRANGE
+    block = &quot;secondary_x&quot;
+  [../]
+  [./lm_left_right_y]
+    order = FIRST
+    family = LAGRANGE
+    block = &quot;secondary_x&quot;
+  [../]
+
+  # Lagrange multipliers for gradient component in the vertical directon
+  [./lm_up_down_x]
+    order = FIRST
+    family = LAGRANGE
+    block = &quot;secondary_y&quot;
+  [../]
+  [./lm_up_down_y]
+    order = FIRST
+    family = LAGRANGE
+    block = &quot;secondary_y&quot;
+  [../]
+[]
+
+[Kernels]
+  # the gradient constrained concentration
+  [./diff]
+    type = Diffusion
+    variable = c
+    block = 0
+  [../]
+  [./dt]
+    type = TimeDerivative
+    variable = c
+    block = 0
+  [../]
+
+  # the un-constrained concentration
+  [./diff2]
+    type = Diffusion
+    variable = v
+    block = 0
+  [../]
+  [./dt2]
+    type = TimeDerivative
+    variable = v
+    block = 0
+  [../]
+
+  # the value periodic concentration
+  [./diff3]
+    type = Diffusion
+    variable = p
+    block = 0
+  [../]
+  [./dt3]
+    type = TimeDerivative
+    variable = p
+    block = 0
+  [../]
+[]
+
+[Constraints]
+  [./equaly_grad_x]
+    type = EqualGradientConstraint
+    variable = lm_up_down_x
+    component = 0
+    secondary_variable = c
+    secondary_boundary = bottom
+    primary_boundary = top
+    secondary_subdomain = secondary_y
+    primary_subdomain = primary_y
+    periodic = true
+  [../]
+  [./equaly_grad_y]
+    type = EqualGradientConstraint
+    variable = lm_up_down_y
+    component = 1
+    secondary_variable = c
+    secondary_boundary = bottom
+    primary_boundary = top
+    secondary_subdomain = secondary_y
+    primary_subdomain = primary_y
+    periodic = true
+  [../]
+
+  [./equalx_grad_x]
+    type = EqualGradientConstraint
+    variable = lm_left_right_x
+    component = 0
+    secondary_variable = c
+    secondary_boundary = left
+    primary_boundary = right
+    secondary_subdomain = secondary_x
+    primary_subdomain = primary_x
+    periodic = true
+  [../]
+  [./equalx_grad_y]
+    type = EqualGradientConstraint
+    variable = lm_left_right_y
+    component = 1
+    secondary_variable = c
+    secondary_boundary = left
+    primary_boundary = right
+    secondary_subdomain = secondary_x
+    primary_subdomain = primary_x
+    periodic = true
+  [../]
+[]
+
+[BCs]
+  # DiffusionFluxBC is the surface term in the weak form of the Diffusion equation
+  [./surface]
+    type = DiffusionFluxBC
+    boundary = &#x27;top bottom left right&#x27;
+    variable = c
+  [../]
+  [./surface2]
+    type = DiffusionFluxBC
+    boundary = &#x27;top bottom left right&#x27;
+    variable = v
+  [../]
+
+  # for the value periodic diffusion we skip the surface term and apply value PBCs
+  [./Periodic]
+    [./up_down]
+      variable = p
+      primary = 0
+      secondary = 2
+      translation = &#x27;0 1 0&#x27;
+    [../]
+    [./left_right]
+      variable = p
+      primary = 1
+      secondary = 3
+      translation = &#x27;-1 0 0&#x27;
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  [./diff_constraint]
+    block = 0
+  [../]
+  [./diff_periodic]
+    block = 0
+  [../]
+  [./diff_slope]
+    block = 0
+  [../]
+  [./slope]
+    block = 0
+    [./InitialCondition]
+      type = FunctionIC
+      function = y
+    [../]
+  [../]
+[]
+
+[AuxKernels]
+  # difference between the constrained and unconstrained sloped diffusions
+  [./diff_constraint]
+    type = ParsedAux
+    variable = diff_constraint
+    function = &#x27;c-v&#x27;
+    args = &#x27;c v&#x27;
+    block = 0
+  [../]
+
+  # difference between the periodic gradient constrained diffusion and the flat
+  # value period diffusien with a constant slope added. This should be the same,
+  # but they aren&#x27;t quite because the gradient constraint affects the gradient in
+  # the entire elements (i.e. a larger volume is affected by the gradient constraint
+  # compared to the nodal value periodicity)
+  [./diff_periodic]
+    type = ParsedAux
+    variable = diff_periodic
+    function = &#x27;c-p-slope&#x27;
+    args = &#x27;c p slope&#x27;
+    block = 0
+  [../]
+
+  # subtract the constant slope from the gradient periodic simulation (should yield
+  # almost p - per the argument above)
+  [./diff_slope]
+    type = ParsedAux
+    variable = diff_slope
+    function = &#x27;c-slope&#x27;
+    args = &#x27;c slope&#x27;
+    block = 0
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+
+  # the shift is necessary to facilitate the solve. The Lagrange multipliers
+  # introduce zero-on diaginal blocks, which make the matrix hard to invert.
+  petsc_options_iname = &#x27;-pc_type -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27; lu       NONZERO               1e-10&#x27;
+
+  nl_rel_tol = 1e-11
+  nl_abs_tol = 1e-10
+  l_tol = 1e-10
+  dt = 0.01
+  num_steps = 20
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="05425afa-8c25-43de-864f-cf153087ea23"><div class="modal-content"><h4>test/tests/meshgenerators/lower_d_block_generator/names.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [./gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 10
+    ny = 10
+  []
+
+  [./lower_d_block]
+    type = LowerDBlockFromSidesetGenerator
+    input = gmg
+    new_block_id = 10
+    sidesets = &#x27;bottom bottom right top left&#x27;
+  []
+[]
+
+[Variables]
+  [./u]
+    block = 0
+  [../]
+  [./v]
+    block = 10
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+    block = 0
+  [../]
+  [./srcv]
+    type = BodyForce
+    block = 10
+    variable = v
+    function = 1
+  [../]
+  [./time_v]
+    type = TimeDerivative
+    block = 10
+    variable = v
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 2
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="587ba4ff-5ace-4978-a1cf-0e5015c11e9f"><div class="modal-content"><h4>modules/contact/test/tests/mortar_tm/2d/frictionless_second/finite_noaction.i</h4><pre class="moose-pre"><code class="language-text">E_block = 1e7
+E_plank = 1e7
+elem = QUAD9
+order = SECOND
+name = &#x27;finite_noaction&#x27;
+
+[Mesh]
+  patch_size = 80
+  patch_update_strategy = auto
+  [./plank]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = -0.3
+    xmax = 0.3
+    ymin = -10
+    ymax = 10
+    nx = 2
+    ny = 67
+    elem_type = ${elem}
+    boundary_name_prefix = plank
+  [../]
+  [./plank_id]
+    type = SubdomainIDGenerator
+    input = plank
+    subdomain_id = 1
+  [../]
+
+  [./block]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0.31
+    xmax = 0.91
+    ymin = 7.7
+    ymax = 8.5
+    nx = 3
+    ny = 4
+    elem_type = ${elem}
+    boundary_name_prefix = block
+    boundary_id_offset = 10
+  [../]
+  [./block_id]
+    type = SubdomainIDGenerator
+    input = block
+    subdomain_id = 2
+  [../]
+
+  [./combined]
+    type = MeshCollectionGenerator
+    inputs = &#x27;plank_id block_id&#x27;
+  [../]
+  [./block_rename]
+    type = RenameBlockGenerator
+    input = combined
+    old_block_id = &#x27;1 2&#x27;
+    new_block_name = &#x27;plank block&#x27;
+  [../]
+
+  [./secondary]
+    input = block_rename
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;block_left&#x27;
+    new_block_id = &#x27;30&#x27;
+    new_block_name = &#x27;frictionless_secondary_subdomain&#x27;
+  [../]
+  [./primary]
+    input = secondary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;plank_right&#x27;
+    new_block_id = &#x27;20&#x27;
+    new_block_name = &#x27;frictionless_primary_subdomain&#x27;
+  [../]
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = ${order}
+    block = &#x27;plank block&#x27;
+    scaling = ${fparse 2.0 / (E_plank + E_block)}
+  [../]
+  [./disp_y]
+    order = ${order}
+    block = &#x27;plank block&#x27;
+    scaling = ${fparse 2.0 / (E_plank + E_block)}
+  [../]
+  [./frictionless_normal_lm]
+    order = ${order}
+    block = &#x27;frictionless_secondary_subdomain&#x27;
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./action]
+    strain = FINITE
+    generate_output = &#x27;stress_xx stress_yy stress_zz vonmises_stress hydrostatic_stress strain_xx strain_yy strain_zz&#x27;
+    block = &#x27;plank block&#x27;
+  [../]
+[]
+
+[Constraints]
+  [./lm]
+    type = NormalNodalLMMechanicalContact
+    secondary = block_left
+    primary = plank_right
+    variable = frictionless_normal_lm
+    primary_variable = disp_x
+    disp_y = disp_y
+    ncp_function_type = min
+    use_displaced_mesh = true
+  [../]
+  [./normal_x]
+    type = NormalMortarMechanicalContact
+    primary_boundary = plank_right
+    secondary_boundary = block_left
+    primary_subdomain = frictionless_primary_subdomain
+    secondary_subdomain = frictionless_secondary_subdomain
+    variable = frictionless_normal_lm
+    secondary_variable = disp_x
+    component = x
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  [../]
+  [./normal_y]
+    type = NormalMortarMechanicalContact
+    primary_boundary = plank_right
+    secondary_boundary = block_left
+    primary_subdomain = frictionless_primary_subdomain
+    secondary_subdomain = frictionless_secondary_subdomain
+    variable = frictionless_normal_lm
+    secondary_variable = disp_y
+    component = y
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  [../]
+[]
+
+[BCs]
+  [./left_x]
+    type = DirichletBC
+    variable = disp_x
+    preset = false
+    boundary = plank_left
+    value = 0.0
+  [../]
+  [./left_y]
+    type = DirichletBC
+    variable = disp_y
+    preset = false
+    boundary = plank_bottom
+    value = 0.0
+  [../]
+  [./right_x]
+    type = FunctionDirichletBC
+    variable = disp_x
+    preset = false
+    boundary = block_right
+    function = &#x27;-0.04*sin(4*(t+1.5))+0.02&#x27;
+  [../]
+  [./right_y]
+    type = FunctionDirichletBC
+    variable = disp_y
+    preset = false
+    boundary = block_right
+    function = &#x27;-t&#x27;
+  [../]
+[]
+
+[Materials]
+  [./plank]
+    type = ComputeIsotropicElasticityTensor
+    block = &#x27;plank&#x27;
+    poissons_ratio = 0.3
+    youngs_modulus = ${E_plank}
+  [../]
+  [./block]
+    type = ComputeIsotropicElasticityTensor
+    block = &#x27;block&#x27;
+    poissons_ratio = 0.3
+    youngs_modulus = ${E_block}
+  [../]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+    block = &#x27;plank block&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options = &#x27;-snes_converged_reason -ksp_converged_reason&#x27;
+  petsc_options_iname = &#x27;-pc_type -mat_mffd_err -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27;lu       1e-5          NONZERO               1e-15&#x27;
+  end_time = 13.5
+  dt = 0.1
+  dtmin = 0.1
+  timestep_tolerance = 1e-6
+  line_search = &#x27;contact&#x27;
+[]
+
+[Postprocessors]
+  [./nl_its]
+    type = NumNonlinearIterations
+  [../]
+  [./total_nl_its]
+    type = CumulativeValuePostprocessor
+    postprocessor = nl_its
+  [../]
+  [./l_its]
+    type = NumLinearIterations
+  [../]
+  [./total_l_its]
+    type = CumulativeValuePostprocessor
+    postprocessor = l_its
+  [../]
+  [./contact]
+    type = ContactDOFSetSize
+    variable = frictionless_normal_lm
+    subdomain = frictionless_secondary_subdomain
+  [../]
+  [./avg_hydro]
+    type = ElementAverageValue
+    variable = hydrostatic_stress
+    block = &#x27;block&#x27;
+  [../]
+  [./max_hydro]
+    type = ElementExtremeValue
+    variable = hydrostatic_stress
+    block = &#x27;block&#x27;
+  [../]
+  [./min_hydro]
+    type = ElementExtremeValue
+    variable = hydrostatic_stress
+    block = &#x27;block&#x27;
+    value_type = min
+  [../]
+  [./avg_vonmises]
+    type = ElementAverageValue
+    variable = vonmises_stress
+    block = &#x27;block&#x27;
+  [../]
+  [./max_vonmises]
+    type = ElementExtremeValue
+    variable = vonmises_stress
+    block = &#x27;block&#x27;
+  [../]
+  [./min_vonmises]
+    type = ElementExtremeValue
+    variable = vonmises_stress
+    block = &#x27;block&#x27;
+    value_type = min
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  file_base = ${name}
+  [./comp]
+    type = CSV
+    show = &#x27;contact&#x27;
+  [../]
+  [./out]
+    type = CSV
+    file_base = &#x27;${name}_out&#x27;
+  [../]
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="7dd3dca3-b9c3-4ac0-9fe9-a1103a093f04"><div class="modal-content"><h4>test/tests/mortar/displaced-gap-conductance-2d-bnd-coupling/gap-conductance.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  displacements = &#x27;disp_x disp_y&#x27;
+  [file]
+    type = FileMeshGenerator
+    file = nodal_normals_test_offset_nonmatching_gap.e
+    # block 1: left
+    # block 2: right
+  []
+  [./primary]
+    input = file
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;2&#x27;
+    new_block_id = &#x27;20&#x27;
+  [../]
+  [./secondary]
+    input = primary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;1&#x27;
+    new_block_id = &#x27;10&#x27;
+  [../]
+[]
+
+[AuxVariables]
+  [disp_x]
+    block = &#x27;1 2&#x27;
+  []
+  [disp_y]
+    block = &#x27;1 2&#x27;
+  []
+  [aux_var]
+  []
+[]
+
+[AuxKernels]
+  [function_x]
+    type = FunctionAux
+    function = &#x27;.05 * t&#x27;
+    variable = &#x27;disp_x&#x27;
+    block = &#x27;2&#x27;
+  []
+  [function_y]
+    type = FunctionAux
+    function = &#x27;.05 * t&#x27;
+    variable = &#x27;disp_y&#x27;
+    block = &#x27;2&#x27;
+  []
+  [flux_modifier]
+    type = StatefulAuxLowerD
+    variable = &#x27;aux_var&#x27;
+    coupled_variable = &#x27;lambda&#x27;
+    boundary = &#x27;1&#x27;
+  []
+[]
+
+[Problem]
+  kernel_coverage_check = false
+[]
+
+[Variables]
+  [./T]
+    block = &#x27;1 2&#x27;
+  [../]
+  [./lambda]
+    block = &#x27;10&#x27;
+    family = LAGRANGE
+    order = FIRST
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = T
+    boundary = &#x27;5&#x27;
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = T
+    boundary = &#x27;8&#x27;
+    value = 1
+  [../]
+[]
+
+[Kernels]
+  [./conduction]
+    type = Diffusion
+    variable = T
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[Debug]
+  show_var_residual_norms = 1
+[]
+
+[Constraints]
+  [./mortar]
+    type = GapHeatConductanceAuxKernel
+    primary_boundary = 2
+    secondary_boundary = 1
+    primary_subdomain = 20
+    secondary_subdomain = 10
+    variable = lambda
+    secondary_variable = T
+    use_displaced_mesh = true
+    auxkernel_variable = &#x27;aux_var&#x27;
+  [../]
+[]
+
+[Materials]
+  [constant]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;gap_conductance&#x27;
+    prop_values = &#x27;.03&#x27;
+    block = &#x27;1 2&#x27;
+    use_displaced_mesh = true
+  []
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  solve_type = NEWTON
+  type = Transient
+  num_steps = 5
+  petsc_options_iname = &#x27;-pc_type -snes_linesearch_type&#x27;
+  petsc_options_value = &#x27;lu       basic&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [dofmap]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f0ee43f8-1743-4173-a5d4-9c2389e0e11a"><div class="modal-content"><h4>modules/contact/test/tests/mortar_tm/2drz/frictionless_second/finite_noaction.i</h4><pre class="moose-pre"><code class="language-text">E_block = 1e7
+E_plank = 1e7
+elem = QUAD9
+order = SECOND
+name = &#x27;finite_noaction&#x27;
+
+[Problem]
+  coord_type = RZ
+[]
+
+[Mesh]
+  patch_size = 80
+  patch_update_strategy = auto
+  [./plank]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 0.6
+    ymin = 0
+    ymax = 10
+    nx = 2
+    ny = 33
+    elem_type = ${elem}
+    boundary_name_prefix = plank
+  [../]
+  [./plank_id]
+    type = SubdomainIDGenerator
+    input = plank
+    subdomain_id = 1
+  [../]
+
+  [./block]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0.61
+    xmax = 1.21
+    ymin = 9.2
+    ymax = 10.0
+    nx = 3
+    ny = 4
+    elem_type = ${elem}
+    boundary_name_prefix = block
+    boundary_id_offset = 10
+  [../]
+  [./block_id]
+    type = SubdomainIDGenerator
+    input = block
+    subdomain_id = 2
+  [../]
+
+  [./combined]
+    type = MeshCollectionGenerator
+    inputs = &#x27;plank_id block_id&#x27;
+  [../]
+  [./block_rename]
+    type = RenameBlockGenerator
+    input = combined
+    old_block_id = &#x27;1 2&#x27;
+    new_block_name = &#x27;plank block&#x27;
+  [../]
+
+  [./secondary]
+    input = block_rename
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;block_left&#x27;
+    new_block_id = &#x27;30&#x27;
+    new_block_name = &#x27;frictionless_secondary_subdomain&#x27;
+  [../]
+  [./primary]
+    input = secondary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;plank_right&#x27;
+    new_block_id = &#x27;20&#x27;
+    new_block_name = &#x27;frictionless_primary_subdomain&#x27;
+  [../]
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = ${order}
+    block = &#x27;plank block&#x27;
+    scaling = ${fparse 2.0 / (E_plank + E_block)}
+  [../]
+  [./disp_y]
+    order = ${order}
+    block = &#x27;plank block&#x27;
+    scaling = ${fparse 2.0 / (E_plank + E_block)}
+  [../]
+  [./frictionless_normal_lm]
+    order = ${order}
+    block = &#x27;frictionless_secondary_subdomain&#x27;
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./block]
+    strain = FINITE
+    generate_output = &#x27;stress_xx stress_yy stress_zz vonmises_stress hydrostatic_stress strain_xx strain_yy strain_zz&#x27;
+    block = &#x27;block&#x27;
+  [../]
+  [./plank]
+    strain = FINITE
+    generate_output = &#x27;stress_xx stress_yy stress_zz vonmises_stress hydrostatic_stress strain_xx strain_yy strain_zz&#x27;
+    block = &#x27;plank&#x27;
+    eigenstrain_names = &#x27;swell&#x27;
+  [../]
+[]
+
+[Constraints]
+  [./lm]
+    type = NormalNodalLMMechanicalContact
+    secondary = block_left
+    primary = plank_right
+    variable = frictionless_normal_lm
+    primary_variable = disp_x
+    disp_y = disp_y
+    ncp_function_type = min
+    use_displaced_mesh = true
+  [../]
+  [./normal_x]
+    type = NormalMortarMechanicalContact
+    primary_boundary = plank_right
+    secondary_boundary = block_left
+    primary_subdomain = frictionless_primary_subdomain
+    secondary_subdomain = frictionless_secondary_subdomain
+    variable = frictionless_normal_lm
+    secondary_variable = disp_x
+    component = x
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  [../]
+  [./normal_y]
+    type = NormalMortarMechanicalContact
+    primary_boundary = plank_right
+    secondary_boundary = block_left
+    primary_subdomain = frictionless_primary_subdomain
+    secondary_subdomain = frictionless_secondary_subdomain
+    variable = frictionless_normal_lm
+    secondary_variable = disp_y
+    component = y
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  [../]
+[]
+
+[BCs]
+  [./left_x]
+    type = DirichletBC
+    variable = disp_x
+    preset = false
+    boundary = plank_left
+    value = 0.0
+  [../]
+  [./left_y]
+    type = DirichletBC
+    variable = disp_y
+    preset = false
+    boundary = plank_bottom
+    value = 0.0
+  [../]
+  [./right_x]
+    type = DirichletBC
+    variable = disp_x
+    preset = false
+    boundary = block_right
+    value = 0
+  [../]
+  [./right_y]
+    type = FunctionDirichletBC
+    variable = disp_y
+    preset = false
+    boundary = block_right
+    function = &#x27;-t&#x27;
+  [../]
+[]
+
+[Materials]
+  [./plank]
+    type = ComputeIsotropicElasticityTensor
+    block = &#x27;plank&#x27;
+    poissons_ratio = 0.3
+    youngs_modulus = ${E_plank}
+  [../]
+  [./block]
+    type = ComputeIsotropicElasticityTensor
+    block = &#x27;block&#x27;
+    poissons_ratio = 0.3
+    youngs_modulus = ${E_block}
+  [../]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+    block = &#x27;plank block&#x27;
+  [../]
+  [./swell]
+    type = ComputeEigenstrain
+    block = &#x27;plank&#x27;
+    eigenstrain_name = swell
+    eigen_base = &#x27;1 0 0 0 0 0 0 0 0&#x27;
+    prefactor = swell_mat
+  [../]
+  [./swell_mat]
+    type = GenericFunctionMaterial
+    prop_names = &#x27;swell_mat&#x27;
+    prop_values = &#x27;7e-2*(1-cos(4*t))&#x27;
+    block = &#x27;plank&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options = &#x27;-snes_converged_reason -ksp_converged_reason&#x27;
+  petsc_options_iname = &#x27;-pc_type -mat_mffd_err -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27;lu       1e-5          NONZERO               1e-15&#x27;
+  end_time = 5
+  dt = 0.1
+  dtmin = 0.1
+  timestep_tolerance = 1e-6
+  line_search = &#x27;contact&#x27;
+[]
+
+[Postprocessors]
+  [./nl_its]
+    type = NumNonlinearIterations
+  [../]
+  [./total_nl_its]
+    type = CumulativeValuePostprocessor
+    postprocessor = nl_its
+  [../]
+  [./l_its]
+    type = NumLinearIterations
+  [../]
+  [./total_l_its]
+    type = CumulativeValuePostprocessor
+    postprocessor = l_its
+  [../]
+  [./contact]
+    type = ContactDOFSetSize
+    variable = frictionless_normal_lm
+    subdomain = frictionless_secondary_subdomain
+  [../]
+  [./avg_hydro]
+    type = ElementAverageValue
+    variable = hydrostatic_stress
+    block = &#x27;block&#x27;
+  [../]
+  [./max_hydro]
+    type = ElementExtremeValue
+    variable = hydrostatic_stress
+    block = &#x27;block&#x27;
+  [../]
+  [./min_hydro]
+    type = ElementExtremeValue
+    variable = hydrostatic_stress
+    block = &#x27;block&#x27;
+    value_type = min
+  [../]
+  [./avg_vonmises]
+    type = ElementAverageValue
+    variable = vonmises_stress
+    block = &#x27;block&#x27;
+  [../]
+  [./max_vonmises]
+    type = ElementExtremeValue
+    variable = vonmises_stress
+    block = &#x27;block&#x27;
+  [../]
+  [./min_vonmises]
+    type = ElementExtremeValue
+    variable = vonmises_stress
+    block = &#x27;block&#x27;
+    value_type = min
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  file_base = ${name}
+  [./comp]
+    type = CSV
+    show = &#x27;contact&#x27;
+  [../]
+  [./out]
+    type = CSV
+    file_base = &#x27;${name}_out&#x27;
+  [../]
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8710cbe7-fc16-4c15-93a8-d664cd77135c"><div class="modal-content"><h4>test/tests/meshgenerators/lower_d_block_generator/ids.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [./gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 10
+    ny = 10
+  []
+
+  [./lower_d_block]
+    type = LowerDBlockFromSidesetGenerator
+    input = gmg
+    new_block_id = 10
+    sidesets = &#x27;0 0 1 2 3&#x27;
+  []
+[]
+
+[Variables]
+  [./u]
+    block = 0
+  [../]
+  [./v]
+    block = 10
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+    block = 0
+  [../]
+  [./srcv]
+    type = BodyForce
+    block = 10
+    variable = v
+    function = 1
+  [../]
+  [./time_v]
+    type = TimeDerivative
+    block = 10
+    variable = v
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 2
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="14164684-0822-4f1b-a3d3-cec96aca6322"><div class="modal-content"><h4>test/tests/mortar/periodic-value/periodic.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [file]
+    type = FileMeshGenerator
+    file = square.msh
+  []
+  [secondary]
+    input = file
+    type = LowerDBlockFromSidesetGenerator
+    new_block_id = 11
+    new_block_name = &quot;secondary&quot;
+    sidesets = &#x27;101&#x27;
+  []
+  [primary]
+    input = secondary
+    type = LowerDBlockFromSidesetGenerator
+    new_block_id = 12
+    new_block_name = &quot;primary&quot;
+    sidesets = &#x27;103&#x27;
+  []
+[]
+
+[Variables]
+  [u]
+    order = SECOND
+    block = &#x27;domain&#x27;
+  []
+  [lm]
+    block = &#x27;secondary&#x27;
+  []
+[]
+
+[Kernels]
+  [diffusion]
+    type = Diffusion
+    variable = u
+    block = &#x27;domain&#x27;
+  []
+  [force]
+    type = BodyForce
+    variable = u
+    block = &#x27;domain&#x27;
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    value = 1
+    boundary = &#x27;left&#x27;
+  []
+[]
+
+[Constraints]
+  [ev]
+    type = EqualValueConstraint
+    variable = lm
+    secondary_variable = u
+    primary_boundary = 103
+    secondary_boundary = 101
+    primary_subdomain = 12
+    secondary_subdomain = 11
+    periodic = true
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = NEWTON
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c5b9c50b-950b-4caf-8e51-f9282c0b9633"><div class="modal-content"><h4>test/tests/mortar/continuity-2d-conforming/conforming_two_var.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [file]
+    type = FileMeshGenerator
+    file = 2blk-conf.e
+  []
+  [secondary]
+    input = file
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;101&#x27;
+    new_block_id = &#x27;10001&#x27;
+    new_block_name = &#x27;secondary_lower&#x27;
+  []
+  [primary]
+    input = secondary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;100&#x27;
+    new_block_id = &#x27;10000&#x27;
+    new_block_name = &#x27;primary_lower&#x27;
+  []
+[]
+
+[Functions]
+  [./exact_sln]
+    type = ParsedFunction
+    value = y
+  [../]
+  [./ffn]
+    type = ParsedFunction
+    value = 0
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    block = &#x27;1 2&#x27;
+  [../]
+
+  [./lm_u]
+    order = FIRST
+    family = LAGRANGE
+    block = &#x27;secondary_lower&#x27;
+  [../]
+
+  [./v]
+    order = FIRST
+    family = LAGRANGE
+    block = &#x27;1 2&#x27;
+  [../]
+
+  [./lm_v]
+    order = FIRST
+    family = LAGRANGE
+    block = &#x27;secondary_lower&#x27;
+  [../]
+
+[]
+
+[Kernels]
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+  [./ffn]
+    type = BodyForce
+    variable = u
+    function = ffn
+  [../]
+  [./diff_v]
+    type = Diffusion
+    variable = v
+  [../]
+  [./coupled_u]
+    type = CoupledForce
+    variable = v
+    v = u
+  [../]
+[]
+
+[Constraints]
+  [./ced_u]
+    type = EqualValueConstraint
+    variable = lm_u
+    secondary_variable = u
+    primary_boundary = 100
+    primary_subdomain = 10000
+    secondary_boundary = 101
+    secondary_subdomain = 10001
+  [../]
+  [./ced_v]
+    type = EqualValueConstraint
+    variable = lm_v
+    secondary_variable = v
+    primary_boundary = 100
+    primary_subdomain = 10000
+    secondary_boundary = 101
+    secondary_subdomain = 10001
+  [../]
+[]
+
+[BCs]
+  [./all]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = &#x27;1 2 3 4&#x27;
+    function = exact_sln
+  [../]
+  [./allv]
+    type = DirichletBC
+    variable = v
+    boundary = &#x27;1 2 3 4&#x27;
+    value = 0
+  [../]
+[]
+
+[Postprocessors]
+  [./l2_error]
+    type = ElementL2Error
+    variable = u
+    function = exact_sln
+    block = &#x27;1 2&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./l2_v]
+    type = ElementL2Norm
+    variable = v
+    block = &#x27;1 2&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./fmp]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  nl_rel_tol = 1e-12
+  l_tol = 1e-12
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9ef5f89d-f64e-4622-bc70-13ff7ba8a813"><div class="modal-content"><h4>test/tests/mortar/displaced-gap-conductance-2d-bnd-coupling/gap-conductance-bnd-material.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  displacements = &#x27;disp_x disp_y&#x27;
+  [file]
+    type = FileMeshGenerator
+    file = nodal_normals_test_offset_nonmatching_gap.e
+    # block 1: left
+    # block 2: right
+  []
+  [./primary]
+    input = file
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;2&#x27;
+    new_block_id = &#x27;20&#x27;
+  [../]
+  [./secondary]
+    input = primary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;1&#x27;
+    new_block_id = &#x27;10&#x27;
+  [../]
+[]
+
+[AuxVariables]
+  [disp_x]
+    block = &#x27;1 2&#x27;
+  []
+  [disp_y]
+    block = &#x27;1 2&#x27;
+  []
+[]
+
+[AuxKernels]
+  [function_x]
+    type = FunctionAux
+    function = &#x27;.05 * t&#x27;
+    variable = &#x27;disp_x&#x27;
+    block = &#x27;2&#x27;
+  []
+  [function_y]
+    type = FunctionAux
+    function = &#x27;.05 * t&#x27;
+    variable = &#x27;disp_y&#x27;
+    block = &#x27;2&#x27;
+  []
+[]
+
+[Problem]
+  kernel_coverage_check = false
+[]
+
+[Variables]
+  [./T]
+    block = &#x27;1 2&#x27;
+  [../]
+  [./lambda]
+    block = &#x27;10&#x27;
+    family = LAGRANGE
+    order = FIRST
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = T
+    boundary = &#x27;5&#x27;
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = T
+    boundary = &#x27;8&#x27;
+    value = 1
+  [../]
+[]
+
+[Kernels]
+  [./conduction]
+    type = Diffusion
+    variable = T
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[Debug]
+  show_var_residual_norms = 1
+[]
+
+[Constraints]
+  [./mortar]
+    type = GapHeatConductanceMaterial
+    primary_boundary = 2
+    secondary_boundary = 1
+    primary_subdomain = 20
+    secondary_subdomain = 10
+    variable = lambda
+    secondary_variable = T
+    use_displaced_mesh = true
+    material_property = &#x27;layer_modifier&#x27;
+  [../]
+[]
+
+[Materials]
+  [constant]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;gap_conductance&#x27;
+    prop_values = &#x27;.03&#x27;
+    block = &#x27;1 2&#x27;
+    use_displaced_mesh = true
+  []
+  [bnd_material_modifier]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;layer_modifier&#x27;
+    prop_values = &#x27;5.0&#x27;
+    boundary = &#x27;1 2&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  solve_type = NEWTON
+  type = Transient
+  num_steps = 5
+  petsc_options_iname = &#x27;-pc_type -snes_linesearch_type&#x27;
+  petsc_options_value = &#x27;lu       basic&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [dofmap]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2a90c9dd-0d67-4f2e-878b-575f444ec7b8"><div class="modal-content"><h4>test/tests/mortar/cant-do-3d/periodic.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [file]
+    type = FileMeshGenerator
+    file = flow_test.e
+  []
+  [secondary]
+    input = file
+    type = LowerDBlockFromSidesetGenerator
+    new_block_id = 11
+    new_block_name = &quot;secondary&quot;
+    sidesets = &#x27;1&#x27;
+  []
+  [primary]
+    input = secondary
+    type = LowerDBlockFromSidesetGenerator
+    new_block_id = 12
+    new_block_name = &quot;primary&quot;
+    sidesets = &#x27;2&#x27;
+  []
+[]
+
+[Variables]
+  [u]
+    block = &#x27;bottom middle top&#x27;
+  []
+  [lm]
+    block = &#x27;secondary&#x27;
+  []
+[]
+
+[Kernels]
+  [diffusion]
+    type = Diffusion
+    variable = u
+    block = &#x27;bottom middle top&#x27;
+  []
+  [force]
+    type = BodyForce
+    variable = u
+    block = &#x27;bottom middle top&#x27;
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    value = 1
+    boundary = &#x27;around&#x27;
+  []
+[]
+
+[Constraints]
+  [ev]
+    type = EqualValueConstraint
+    variable = lm
+    secondary_variable = u
+    primary_boundary = top
+    secondary_boundary = bottom
+    primary_subdomain = 12
+    secondary_subdomain = 11
+
+    periodic = true
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = NEWTON
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="82ae4c83-fecd-480d-be3a-6aca20d64bc1"><div class="modal-content"><h4>modules/contact/test/tests/mortar_tm/2d/frictionless_first/finite_noaction.i</h4><pre class="moose-pre"><code class="language-text">E_block = 1e7
+E_plank = 1e7
+elem = QUAD4
+order = FIRST
+name = &#x27;finite_noaction&#x27;
+
+[Mesh]
+  patch_size = 80
+  patch_update_strategy = auto
+  [./plank]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = -0.3
+    xmax = 0.3
+    ymin = -10
+    ymax = 10
+    nx = 2
+    ny = 67
+    elem_type = ${elem}
+    boundary_name_prefix = plank
+  [../]
+  [./plank_id]
+    type = SubdomainIDGenerator
+    input = plank
+    subdomain_id = 1
+  [../]
+
+  [./block]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0.31
+    xmax = 0.91
+    ymin = 7.7
+    ymax = 8.5
+    nx = 3
+    ny = 4
+    elem_type = ${elem}
+    boundary_name_prefix = block
+    boundary_id_offset = 10
+  [../]
+  [./block_id]
+    type = SubdomainIDGenerator
+    input = block
+    subdomain_id = 2
+  [../]
+
+  [./combined]
+    type = MeshCollectionGenerator
+    inputs = &#x27;plank_id block_id&#x27;
+  [../]
+  [./block_rename]
+    type = RenameBlockGenerator
+    input = combined
+    old_block_id = &#x27;1 2&#x27;
+    new_block_name = &#x27;plank block&#x27;
+  [../]
+
+  [./secondary]
+    input = block_rename
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;block_left&#x27;
+    new_block_id = &#x27;30&#x27;
+    new_block_name = &#x27;frictionless_secondary_subdomain&#x27;
+  [../]
+  [./primary]
+    input = secondary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;plank_right&#x27;
+    new_block_id = &#x27;20&#x27;
+    new_block_name = &#x27;frictionless_primary_subdomain&#x27;
+  [../]
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = ${order}
+    block = &#x27;plank block&#x27;
+    scaling = ${fparse 2.0 / (E_plank + E_block)}
+  [../]
+  [./disp_y]
+    order = ${order}
+    block = &#x27;plank block&#x27;
+    scaling = ${fparse 2.0 / (E_plank + E_block)}
+  [../]
+  [./frictionless_normal_lm]
+    order = ${order}
+    block = &#x27;frictionless_secondary_subdomain&#x27;
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./action]
+    strain = FINITE
+    generate_output = &#x27;stress_xx stress_yy stress_zz vonmises_stress hydrostatic_stress strain_xx strain_yy strain_zz&#x27;
+    block = &#x27;plank block&#x27;
+  [../]
+[]
+
+[Constraints]
+  [./lm]
+    type = NormalNodalLMMechanicalContact
+    secondary = block_left
+    primary = plank_right
+    variable = frictionless_normal_lm
+    primary_variable = disp_x
+    disp_y = disp_y
+    ncp_function_type = min
+    use_displaced_mesh = true
+  [../]
+  [./normal_x]
+    type = NormalMortarMechanicalContact
+    primary_boundary = plank_right
+    secondary_boundary = block_left
+    primary_subdomain = frictionless_primary_subdomain
+    secondary_subdomain = frictionless_secondary_subdomain
+    variable = frictionless_normal_lm
+    secondary_variable = disp_x
+    component = x
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  [../]
+  [./normal_y]
+    type = NormalMortarMechanicalContact
+    primary_boundary = plank_right
+    secondary_boundary = block_left
+    primary_subdomain = frictionless_primary_subdomain
+    secondary_subdomain = frictionless_secondary_subdomain
+    variable = frictionless_normal_lm
+    secondary_variable = disp_y
+    component = y
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  [../]
+[]
+
+[BCs]
+  [./left_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = plank_left
+    value = 0.0
+  [../]
+  [./left_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = plank_bottom
+    value = 0.0
+  [../]
+  [./right_x]
+    type = FunctionDirichletBC
+    variable = disp_x
+    boundary = block_right
+    function = &#x27;-0.04*sin(4*(t+1.5))+0.02&#x27;
+  [../]
+  [./right_y]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = block_right
+    function = &#x27;-t&#x27;
+  [../]
+[]
+
+[Materials]
+  [./plank]
+    type = ComputeIsotropicElasticityTensor
+    block = &#x27;plank&#x27;
+    poissons_ratio = 0.3
+    youngs_modulus = ${E_plank}
+  [../]
+  [./block]
+    type = ComputeIsotropicElasticityTensor
+    block = &#x27;block&#x27;
+    poissons_ratio = 0.3
+    youngs_modulus = ${E_block}
+  [../]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+    block = &#x27;plank block&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options = &#x27;-snes_converged_reason -ksp_converged_reason&#x27;
+  petsc_options_iname = &#x27;-pc_type -mat_mffd_err -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27;lu       1e-5          NONZERO               1e-15&#x27;
+  end_time = 13.5
+  dt = 0.1
+  dtmin = 0.1
+  timestep_tolerance = 1e-6
+  line_search = &#x27;contact&#x27;
+[]
+
+[Postprocessors]
+  [./nl_its]
+    type = NumNonlinearIterations
+  [../]
+  [./total_nl_its]
+    type = CumulativeValuePostprocessor
+    postprocessor = nl_its
+  [../]
+  [./l_its]
+    type = NumLinearIterations
+  [../]
+  [./total_l_its]
+    type = CumulativeValuePostprocessor
+    postprocessor = l_its
+  [../]
+  [./contact]
+    type = ContactDOFSetSize
+    variable = frictionless_normal_lm
+    subdomain = frictionless_secondary_subdomain
+  [../]
+  [./avg_hydro]
+    type = ElementAverageValue
+    variable = hydrostatic_stress
+    block = &#x27;block&#x27;
+  [../]
+  [./max_hydro]
+    type = ElementExtremeValue
+    variable = hydrostatic_stress
+    block = &#x27;block&#x27;
+  [../]
+  [./min_hydro]
+    type = ElementExtremeValue
+    variable = hydrostatic_stress
+    block = &#x27;block&#x27;
+    value_type = min
+  [../]
+  [./avg_vonmises]
+    type = ElementAverageValue
+    variable = vonmises_stress
+    block = &#x27;block&#x27;
+  [../]
+  [./max_vonmises]
+    type = ElementExtremeValue
+    variable = vonmises_stress
+    block = &#x27;block&#x27;
+  [../]
+  [./min_vonmises]
+    type = ElementExtremeValue
+    variable = vonmises_stress
+    block = &#x27;block&#x27;
+    value_type = min
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  file_base = ${name}
+  [./comp]
+    type = CSV
+    show = &#x27;contact&#x27;
+  [../]
+  [./out]
+    type = CSV
+    file_base = &#x27;${name}_out&#x27;
+  [../]
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="01960407-706e-4bd0-8e18-64a98bad167c"><div class="modal-content"><h4>test/tests/mortar/continuity-2d-conforming/conforming.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [file]
+    type = FileMeshGenerator
+    file = 2blk-conf.e
+  []
+  [secondary]
+    input = file
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;101&#x27;
+    new_block_id = &#x27;10001&#x27;
+    new_block_name = &#x27;secondary_lower&#x27;
+  []
+  [primary]
+    input = secondary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;100&#x27;
+    new_block_id = &#x27;10000&#x27;
+    new_block_name = &#x27;primary_lower&#x27;
+  []
+[]
+
+[Functions]
+  [./exact_sln]
+    type = ParsedFunction
+    value = y
+  [../]
+  [./ffn]
+    type = ParsedFunction
+    value = 0
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    block = &#x27;1 2&#x27;
+  [../]
+
+  [./lm]
+    order = FIRST
+    family = LAGRANGE
+    block = &#x27;secondary_lower&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./ffn]
+    type = BodyForce
+    variable = u
+    function = ffn
+  [../]
+[]
+
+[Constraints]
+  [./ced]
+    type = EqualValueConstraint
+    variable = lm
+    secondary_variable = u
+    primary_boundary = 100
+    primary_subdomain = 10000
+    secondary_boundary = 101
+    secondary_subdomain = 10001
+  [../]
+[]
+
+[BCs]
+  [./all]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = &#x27;1 2 3 4&#x27;
+    function = exact_sln
+  [../]
+[]
+
+[Postprocessors]
+  [./l2_error]
+    type = ElementL2Error
+    variable = u
+    function = exact_sln
+    block = &#x27;1 2&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./fmp]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  nl_rel_tol = 1e-11
+  l_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1d22637f-5e32-499a-a674-aac3cbf94f58"><div class="modal-content"><h4>modules/contact/test/tests/mortar_tm/2drz/frictionless_first/finite_noaction.i</h4><pre class="moose-pre"><code class="language-text">E_block = 1e7
+E_plank = 1e7
+elem = QUAD4
+order = FIRST
+name = &#x27;finite_noaction&#x27;
+
+[Problem]
+  coord_type = RZ
+[]
+
+[Mesh]
+  patch_size = 80
+  patch_update_strategy = auto
+  [./plank]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 0.6
+    ymin = -10
+    ymax = 10
+    nx = 2
+    ny = 67
+    elem_type = ${elem}
+    boundary_name_prefix = plank
+  [../]
+  [./plank_id]
+    type = SubdomainIDGenerator
+    input = plank
+    subdomain_id = 1
+  [../]
+
+  [./block]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0.61
+    xmax = 1.21
+    ymin = 9.2
+    ymax = 10.0
+    nx = 3
+    ny = 4
+    elem_type = ${elem}
+    boundary_name_prefix = block
+    boundary_id_offset = 10
+  [../]
+  [./block_id]
+    type = SubdomainIDGenerator
+    input = block
+    subdomain_id = 2
+  [../]
+
+  [./combined]
+    type = MeshCollectionGenerator
+    inputs = &#x27;plank_id block_id&#x27;
+  [../]
+  [./block_rename]
+    type = RenameBlockGenerator
+    input = combined
+    old_block_id = &#x27;1 2&#x27;
+    new_block_name = &#x27;plank block&#x27;
+  [../]
+
+  [./secondary]
+    input = block_rename
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;block_left&#x27;
+    new_block_id = &#x27;30&#x27;
+    new_block_name = &#x27;frictionless_secondary_subdomain&#x27;
+  [../]
+  [./primary]
+    input = secondary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;plank_right&#x27;
+    new_block_id = &#x27;20&#x27;
+    new_block_name = &#x27;frictionless_primary_subdomain&#x27;
+  [../]
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = ${order}
+    block = &#x27;plank block&#x27;
+    scaling = ${fparse 2.0 / (E_plank + E_block)}
+  [../]
+  [./disp_y]
+    order = ${order}
+    block = &#x27;plank block&#x27;
+    scaling = ${fparse 2.0 / (E_plank + E_block)}
+  [../]
+  [./frictionless_normal_lm]
+    order = ${order}
+    block = &#x27;frictionless_secondary_subdomain&#x27;
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./block]
+    strain = FINITE
+    generate_output = &#x27;stress_xx stress_yy stress_zz vonmises_stress hydrostatic_stress strain_xx strain_yy strain_zz&#x27;
+    block = &#x27;block&#x27;
+  [../]
+  [./plank]
+    strain = FINITE
+    generate_output = &#x27;stress_xx stress_yy stress_zz vonmises_stress hydrostatic_stress strain_xx strain_yy strain_zz&#x27;
+    block = &#x27;plank&#x27;
+    eigenstrain_names = &#x27;swell&#x27;
+  [../]
+[]
+
+[Constraints]
+  [./lm]
+    type = NormalNodalLMMechanicalContact
+    secondary = block_left
+    primary = plank_right
+    variable = frictionless_normal_lm
+    primary_variable = disp_x
+    disp_y = disp_y
+    ncp_function_type = min
+    use_displaced_mesh = true
+  [../]
+  [./normal_x]
+    type = NormalMortarMechanicalContact
+    primary_boundary = plank_right
+    secondary_boundary = block_left
+    primary_subdomain = frictionless_primary_subdomain
+    secondary_subdomain = frictionless_secondary_subdomain
+    variable = frictionless_normal_lm
+    secondary_variable = disp_x
+    component = x
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  [../]
+  [./normal_y]
+    type = NormalMortarMechanicalContact
+    primary_boundary = plank_right
+    secondary_boundary = block_left
+    primary_subdomain = frictionless_primary_subdomain
+    secondary_subdomain = frictionless_secondary_subdomain
+    variable = frictionless_normal_lm
+    secondary_variable = disp_y
+    component = y
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  [../]
+[]
+
+[BCs]
+  [./left_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = plank_left
+    value = 0.0
+  [../]
+  [./left_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = plank_bottom
+    value = 0.0
+  [../]
+  [./right_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = block_right
+    value = 0
+  [../]
+  [./right_y]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = block_right
+    function = &#x27;-t&#x27;
+  [../]
+[]
+
+[Materials]
+  [./plank]
+    type = ComputeIsotropicElasticityTensor
+    block = &#x27;plank&#x27;
+    poissons_ratio = 0.3
+    youngs_modulus = ${E_plank}
+  [../]
+  [./block]
+    type = ComputeIsotropicElasticityTensor
+    block = &#x27;block&#x27;
+    poissons_ratio = 0.3
+    youngs_modulus = ${E_block}
+  [../]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+    block = &#x27;plank block&#x27;
+  [../]
+  [./swell]
+    type = ComputeEigenstrain
+    block = &#x27;plank&#x27;
+    eigenstrain_name = swell
+    eigen_base = &#x27;1 0 0 0 0 0 0 0 0&#x27;
+    prefactor = swell_mat
+  [../]
+  [./swell_mat]
+    type = GenericFunctionMaterial
+    prop_names = &#x27;swell_mat&#x27;
+    prop_values = &#x27;7e-2*(1-cos(4*t))&#x27;
+    block = &#x27;plank&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options = &#x27;-snes_converged_reason -ksp_converged_reason&#x27;
+  petsc_options_iname = &#x27;-pc_type -mat_mffd_err -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27;lu       1e-5          NONZERO               1e-15&#x27;
+  end_time = 10
+  dt = 0.1
+  dtmin = 0.1
+  timestep_tolerance = 1e-6
+  line_search = &#x27;contact&#x27;
+[]
+
+[Postprocessors]
+  [./nl_its]
+    type = NumNonlinearIterations
+  [../]
+  [./total_nl_its]
+    type = CumulativeValuePostprocessor
+    postprocessor = nl_its
+  [../]
+  [./l_its]
+    type = NumLinearIterations
+  [../]
+  [./total_l_its]
+    type = CumulativeValuePostprocessor
+    postprocessor = l_its
+  [../]
+  [./contact]
+    type = ContactDOFSetSize
+    variable = frictionless_normal_lm
+    subdomain = frictionless_secondary_subdomain
+  [../]
+  [./avg_hydro]
+    type = ElementAverageValue
+    variable = hydrostatic_stress
+    block = &#x27;block&#x27;
+  [../]
+  [./max_hydro]
+    type = ElementExtremeValue
+    variable = hydrostatic_stress
+    block = &#x27;block&#x27;
+  [../]
+  [./min_hydro]
+    type = ElementExtremeValue
+    variable = hydrostatic_stress
+    block = &#x27;block&#x27;
+    value_type = min
+  [../]
+  [./avg_vonmises]
+    type = ElementAverageValue
+    variable = vonmises_stress
+    block = &#x27;block&#x27;
+  [../]
+  [./max_vonmises]
+    type = ElementExtremeValue
+    variable = vonmises_stress
+    block = &#x27;block&#x27;
+  [../]
+  [./min_vonmises]
+    type = ElementExtremeValue
+    variable = vonmises_stress
+    block = &#x27;block&#x27;
+    value_type = min
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  file_base = ${name}
+  [./comp]
+    type = CSV
+    show = &#x27;contact&#x27;
+  [../]
+  [./out]
+    type = CSV
+    file_base = &#x27;${name}_out&#x27;
+  [../]
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8b4c86ef-75e5-4def-9c5f-10ccdd90ddf4"><div class="modal-content"><h4>modules/contact/test/tests/mechanical-small-problem/frictionless-nodal-lm-mortar-disp.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Mesh]
+  [./simple_mesh]
+    type = FileMeshGenerator
+    file = mesh.e
+  [../]
+  [./primary]
+    type = LowerDBlockFromSidesetGenerator
+    input = simple_mesh
+    sidesets = &#x27;2&#x27;
+    new_block_id = &#x27;3&#x27;
+  [../]
+  [./secondary]
+    type = LowerDBlockFromSidesetGenerator
+    input = primary
+    sidesets = &#x27;1&#x27;
+    new_block_id = &#x27;4&#x27;
+  [../]
+[]
+
+[Constraints]
+  [./lm]
+    type = NormalNodalLMMechanicalContact
+    secondary = 1
+    primary = 2
+    variable = frictionless_normal_lm
+    primary_variable = disp_x
+    disp_y = disp_y
+  [../]
+  [x]
+    type = NormalMortarMechanicalContact
+    primary_boundary = &#x27;2&#x27;
+    secondary_boundary = &#x27;1&#x27;
+    primary_subdomain = &#x27;3&#x27;
+    secondary_subdomain = &#x27;4&#x27;
+    variable = frictionless_normal_lm
+    secondary_variable = disp_x
+    component = x
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  []
+  [y]
+    type = NormalMortarMechanicalContact
+    primary_boundary = &#x27;2&#x27;
+    secondary_boundary = &#x27;1&#x27;
+    primary_subdomain = &#x27;3&#x27;
+    secondary_subdomain = &#x27;4&#x27;
+    variable = frictionless_normal_lm
+    secondary_variable = disp_y
+    component = y
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  []
+[]
+
+[Variables]
+  [./disp_x]
+    block = &#x27;1 2&#x27;
+  [../]
+  [./disp_y]
+    block = &#x27;1 2&#x27;
+  [../]
+  [./frictionless_normal_lm]
+    block = 4
+  [../]
+[]
+
+[BCs]
+  [./left_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;outside_left&#x27;
+    value = 0.0
+  [../]
+  [./left_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;outside_left&#x27;
+    value = 0.0
+  [../]
+  [./right_x]
+    type = FunctionDirichletBC
+    variable = disp_x
+    boundary = &#x27;outside_right&#x27;
+    function = &#x27;-5e-3 * t&#x27;
+  [../]
+  [./right_y]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = &#x27;outside_right&#x27;
+    function = 0
+  [../]
+[]
+
+[Kernels]
+  [disp_x]
+    type = Diffusion
+    variable = disp_x
+    block = &#x27;1 2&#x27;
+  []
+  [disp_y]
+    type = Diffusion
+    variable = disp_y
+    block = &#x27;1 2&#x27;
+  []
+[]
+
+[Debug]
+  show_var_residual_norms = 1
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  solve_type = PJFNK
+  type = Transient
+  num_steps = 10
+  dt = 1
+  dtmin = 1
+  petsc_options_iname = &#x27;-pc_type -snes_linesearch_type -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27;lu       basic                 NONZERO               1e-15&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[Postprocessors]
+  [contact]
+    type = ContactDOFSetSize
+    variable = frictionless_normal_lm
+    subdomain = &#x27;4&#x27;
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3a2766ee-c9ab-4bc7-9ecc-4f59537e3e59"><div class="modal-content"><h4>modules/contact/test/tests/mechanical-small-problem/mortar-mech.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  displacements = &#x27;disp_x disp_y&#x27;
+  [file]
+    type = FileMeshGenerator
+    file = mesh.e
+  []
+  [./primary]
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;2&#x27;
+    new_block_id = &#x27;20&#x27;
+    input = file
+  [../]
+  [./secondary]
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;1&#x27;
+    new_block_id = &#x27;10&#x27;
+    input = primary
+  [../]
+[]
+
+[Problem]
+  kernel_coverage_check = false
+[]
+
+[Variables]
+  [./disp_x]
+    block = &#x27;1 2&#x27;
+  [../]
+  [./disp_y]
+    block = &#x27;1 2&#x27;
+  [../]
+  [./lambda]
+    block = &#x27;10&#x27;
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+[]
+
+[BCs]
+  [./left_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;outside_left&#x27;
+    value = 0.0
+  [../]
+  [./left_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;outside_left&#x27;
+    value = 0.0
+  [../]
+  [./right_x]
+    type = FunctionDirichletBC
+    variable = disp_x
+    boundary = &#x27;outside_right&#x27;
+    function = &#x27;-5e-3 * t&#x27;
+  [../]
+  [./right_y]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = &#x27;outside_right&#x27;
+    function = 0
+  [../]
+[]
+
+[Kernels]
+  [disp_x]
+    type = Diffusion
+    variable = disp_x
+    block = &#x27;1 2&#x27;
+  []
+  [disp_y]
+    type = Diffusion
+    variable = disp_y
+    block = &#x27;1 2&#x27;
+  []
+[]
+
+[Debug]
+  show_var_residual_norms = 1
+[]
+
+[Constraints]
+  [lm]
+    type = NormalMortarLMMechanicalContact
+    primary_boundary = &#x27;2&#x27;
+    secondary_boundary = &#x27;1&#x27;
+    primary_subdomain = &#x27;20&#x27;
+    secondary_subdomain = &#x27;10&#x27;
+    variable = lambda
+    secondary_variable = disp_x
+    secondary_disp_y = disp_y
+    use_displaced_mesh = true
+    compute_primal_residuals = false
+  []
+  [x]
+    type = NormalMortarMechanicalContact
+    primary_boundary = &#x27;2&#x27;
+    secondary_boundary = &#x27;1&#x27;
+    primary_subdomain = &#x27;20&#x27;
+    secondary_subdomain = &#x27;10&#x27;
+    variable = lambda
+    secondary_variable = disp_x
+    component = x
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  []
+  [y]
+    type = NormalMortarMechanicalContact
+    primary_boundary = &#x27;2&#x27;
+    secondary_boundary = &#x27;1&#x27;
+    primary_subdomain = &#x27;20&#x27;
+    secondary_subdomain = &#x27;10&#x27;
+    variable = lambda
+    secondary_variable = disp_y
+    component = y
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  []
+[]
+
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  solve_type = PJFNK
+  type = Transient
+  num_steps = 10
+  dt = 1
+  dtmin = 1
+  petsc_options_iname = &#x27;-pc_type -snes_linesearch_type -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27;lu       basic                 NONZERO               1e-15&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [dofmap]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d695b2d0-70fd-4c5c-9ec1-58814c491a9c"><div class="modal-content"><h4>test/tests/mortar/gap-conductance-2d-non-conforming/gap-conductance.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [file]
+    type = FileMeshGenerator
+    file = nodal_normals_test_offset_nonmatching_gap.e
+  []
+  [./primary]
+    input = file
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;2&#x27;
+    new_block_id = &#x27;20&#x27;
+  [../]
+  [./secondary]
+    input = primary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;1&#x27;
+    new_block_id = &#x27;10&#x27;
+  [../]
+[]
+
+[Problem]
+  kernel_coverage_check = false
+[]
+
+[Variables]
+  [./T]
+    block = &#x27;1 2&#x27;
+  [../]
+  [./lambda]
+    block = &#x27;10&#x27;
+  [../]
+[]
+
+[BCs]
+  [./neumann]
+    type = FunctionGradientNeumannBC
+    exact_solution = exact_soln
+    variable = T
+    boundary = &#x27;3 4 5 6 7 8&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./conduction]
+    type = Diffusion
+    variable = T
+    block = &#x27;1 2&#x27;
+  [../]
+  [./sink]
+    type = Reaction
+    variable = T
+    block = &#x27;1 2&#x27;
+  [../]
+  [./forcing_function]
+    type = BodyForce
+    variable = T
+    function = forcing_function
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[Functions]
+  [./forcing_function]
+    type = ParsedFunction
+    value = &#x27;-4 + x^2 + y^2&#x27;
+  [../]
+  [./exact_soln]
+    type = ParsedFunction
+    value = &#x27;x^2 + y^2&#x27;
+  [../]
+[]
+
+[Debug]
+  show_var_residual_norms = 1
+[]
+
+[Constraints]
+  [./mortar]
+    type = GapHeatConductanceTest
+    primary_boundary = 2
+    secondary_boundary = 1
+    primary_subdomain = 20
+    secondary_subdomain = 10
+    variable = lambda
+    secondary_variable = T
+  [../]
+[]
+
+[Materials]
+  [constant]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;gap_conductance&#x27;
+    prop_values = &#x27;.03&#x27;
+    block = &#x27;1 2&#x27;
+  []
+  [./ssm]
+    type = SpatialStatefulMaterial
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  solve_type = NEWTON
+  type = Steady
+  petsc_options_iname = &#x27;-pc_type -snes_linesearch_type&#x27;
+  petsc_options_value = &#x27;lu       basic&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [dofmap]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6524f6a8-de4b-4048-9e88-8075a872a2a1"><div class="modal-content"><h4>test/tests/mortar/displaced-gap-conductance-2d-bnd-coupling/gap-conductance-bnd-aux-kernel.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  displacements = &#x27;disp_x disp_y&#x27;
+  [file]
+    type = FileMeshGenerator
+    file = nodal_normals_test_offset_nonmatching_gap.e
+    # block 1: left
+    # block 2: right
+  []
+  [./primary]
+    input = file
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;2&#x27;
+    new_block_id = &#x27;20&#x27;
+  [../]
+  [./secondary]
+    input = primary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;1&#x27;
+    new_block_id = &#x27;10&#x27;
+  [../]
+[]
+
+[AuxVariables]
+  [disp_x]
+    block = &#x27;1 2&#x27;
+  []
+  [disp_y]
+    block = &#x27;1 2&#x27;
+  []
+  [aux_var]
+  []
+[]
+
+[AuxKernels]
+  [function_x]
+    type = FunctionAux
+    function = &#x27;.05 * t&#x27;
+    variable = &#x27;disp_x&#x27;
+    block = &#x27;2&#x27;
+  []
+  [function_y]
+    type = FunctionAux
+    function = &#x27;.05 * t&#x27;
+    variable = &#x27;disp_y&#x27;
+    block = &#x27;2&#x27;
+  []
+  [flux_modifier]
+    type = StatefulAuxLowerD
+    variable = &#x27;aux_var&#x27;
+    coupled_variable = &#x27;lambda&#x27;
+    boundary = &#x27;1&#x27;
+  []
+[]
+
+[Problem]
+  kernel_coverage_check = false
+[]
+
+[Variables]
+  [./T]
+    block = &#x27;1 2&#x27;
+  [../]
+  [./lambda]
+    block = &#x27;10&#x27;
+    family = LAGRANGE
+    order = FIRST
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = T
+    boundary = &#x27;5&#x27;
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = T
+    boundary = &#x27;8&#x27;
+    value = 1
+  [../]
+[]
+
+[Kernels]
+  [./conduction]
+    type = Diffusion
+    variable = T
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[Debug]
+  show_var_residual_norms = 1
+[]
+
+[Constraints]
+  [./mortar]
+    type = GapHeatConductanceAuxKernel
+    primary_boundary = 2
+    secondary_boundary = 1
+    primary_subdomain = 20
+    secondary_subdomain = 10
+    variable = lambda
+    secondary_variable = T
+    use_displaced_mesh = true
+    auxkernel_variable = &#x27;aux_var&#x27;
+  [../]
+[]
+
+[Materials]
+  [constant]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;gap_conductance&#x27;
+    prop_values = &#x27;.03&#x27;
+    block = &#x27;1 2&#x27;
+    use_displaced_mesh = true
+  []
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  solve_type = NEWTON
+  type = Transient
+  num_steps = 5
+  petsc_options_iname = &#x27;-pc_type -snes_linesearch_type&#x27;
+  petsc_options_value = &#x27;lu       basic&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [dofmap]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="83980328-2419-4813-9a07-9dde85e6ff11"><div class="modal-content"><h4>test/tests/bcs/ad_coupled_lower_value/test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [./square]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 10
+    ny = 10
+  [../]
+  [lower_d]
+    type = LowerDBlockFromSidesetGenerator
+    input = square
+    new_block_name = &#x27;lower&#x27;
+    sidesets = &#x27;top right&#x27;
+  []
+[]
+
+[Variables]
+  [./u]
+    block = 0
+  [../]
+  [lower]
+    block = &#x27;lower&#x27;
+  []
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+    block = 0
+  [../]
+[]
+
+[NodalKernels]
+  [time]
+    type = TimeDerivativeNodalKernel
+    variable = lower
+    block = lower
+  []
+  [growth]
+    type = ConstantRate
+    rate = 1
+    variable = lower
+    block = lower
+  []
+[]
+
+[BCs]
+  [./dirichlet]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;left bottom&#x27;
+    value = 0
+  [../]
+  [./neumann]
+    type = ADCoupledLowerValue
+    variable = u
+    boundary = &#x27;right top&#x27;
+    lower_d_var = lower
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 2
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b84fc23a-dcb2-4d02-828c-fffc6cfbd7ec"><div class="modal-content"><h4>test/tests/mortar/continuity-2d-conforming/equalgradient.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [file]
+    type = FileMeshGenerator
+    file = 2blk-conf.e
+  []
+  [secondary]
+    input = file
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;101&#x27;
+    new_block_id = &#x27;10001&#x27;
+    new_block_name = &#x27;secondary_lower&#x27;
+  []
+  [primary]
+    input = secondary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;100&#x27;
+    new_block_id = &#x27;10000&#x27;
+    new_block_name = &#x27;primary_lower&#x27;
+  []
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    block = &#x27;1 2&#x27;
+  [../]
+
+  [./lmx]
+    order = FIRST
+    family = LAGRANGE
+    block = &#x27;secondary_lower&#x27;
+  [../]
+  [./lmy]
+    order = FIRST
+    family = LAGRANGE
+    block = &#x27;secondary_lower&#x27;
+  [../]
+[]
+
+[ICs]
+  [./block1]
+    type = FunctionIC
+    variable = u
+    block = 1
+    function = y
+  [../]
+  [./block2]
+    type = FunctionIC
+    variable = u
+    block = 2
+    function = y-0.5
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./dt]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[Constraints]
+  [./cedx]
+    type = EqualGradientConstraint
+    secondary_variable = u
+    variable = lmx
+    primary_boundary = 100
+    primary_subdomain = 10000
+    secondary_boundary = 101
+    secondary_subdomain = 10001
+    component = 0
+  [../]
+  [./cedy]
+    type = EqualGradientConstraint
+    secondary_variable = u
+    variable = lmy
+    primary_boundary = 100
+    primary_subdomain = 10000
+    secondary_boundary = 101
+    secondary_subdomain = 10001
+    component = 1
+  [../]
+[]
+
+[BCs]
+  [./all]
+    type = DiffusionFluxBC
+    variable = u
+    boundary = &#x27;2 4 100 101&#x27;
+  [../]
+  [./boundary]
+    type = DirichletBC
+    boundary = 1
+    variable = u
+    value = 0.0
+  [../]
+  [./top]
+    type = FunctionDirichletBC
+    boundary = 3
+    variable = u
+    function = 0.5-t
+  [../]
+[]
+
+[Preconditioning]
+  [./fmp]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  nl_rel_tol = 1e-11
+  l_tol = 1e-10
+  l_max_its = 10
+  dt = 0.05
+  num_steps = 3
+[]
+
+[Outputs]
+  exodus = true
+  print_linear_residuals = false
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f5d77909-4213-4f9b-add9-9c89b1d79dae"><div class="modal-content"><h4>modules/contact/test/tests/sliding_block/in_and_out/frictional_lm.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  patch_size = 80
+  [file]
+    type = FileMeshGenerator
+    file = sliding_elastic_blocks_2d.e
+  []
+  [secondary]
+    input = file
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;3&#x27;
+    new_block_id = &#x27;30&#x27;
+  []
+  [primary]
+    input = secondary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;2&#x27;
+    new_block_id = &#x27;20&#x27;
+  []
+[]
+
+[GlobalParams]
+  volumetric_locking_correction = false
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [normal_lm]
+    block = &#x27;30&#x27;
+  []
+  [tangential_lm]
+    block = &#x27;30&#x27;
+    family = MONOMIAL
+    order = CONSTANT
+  []
+[]
+
+[BCs]
+  [./left_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = 1
+    value = 0.0
+  [../]
+  [./left_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = 1
+    value = 0.0
+  [../]
+  [./right_x]
+    type = FunctionDirichletBC
+    variable = disp_x
+    boundary = 4
+    function = horizontal_movement
+  [../]
+  [./right_y]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = 4
+    function = vertical_movement
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./all]
+    add_variables = true
+    strain = FINITE
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[Materials]
+  [./tensor]
+    type = ComputeIsotropicElasticityTensor
+    block = &#x27;1 2&#x27;
+    youngs_modulus = 1e6
+    poissons_ratio = 0.3
+    constant_on = SUBDOMAIN
+  [../]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options = &#x27;-snes_converged_reason -ksp_converged_reason -snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-pc_type -mat_mffd_err -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27;lu       1e-5          NONZERO               1e-15&#x27;
+  end_time = 15
+  dt = 0.1
+  dtmin = 0.01
+  l_max_its = 30
+  nl_max_its = 20
+  line_search = &#x27;none&#x27;
+  timestep_tolerance = 1e-6
+
+  [./Predictor]
+    type = SimplePredictor
+    scale = 1.0
+  [../]
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Outputs]
+  sync_times = &#x27;1 2 3 4 5 6 7 8 9 10 11 12 13 14 15&#x27;
+  [out]
+    type = Exodus
+    sync_only = true
+  []
+  [dof]
+    execute_on = &#x27;initial&#x27;
+    type = DOFMap
+  []
+  [csv]
+    type = CSV
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+[]
+
+[Functions]
+  [./vertical_movement]
+    type = ParsedFunction
+    value = -t
+  [../]
+  [./horizontal_movement]
+    type = ParsedFunction
+    value = -0.04*sin(4*t)+0.02
+  [../]
+[]
+
+[Constraints]
+  [./lm]
+    type = NormalNodalLMMechanicalContact
+    secondary = 3
+    primary = 2
+    variable = normal_lm
+    primary_variable = disp_x
+    disp_y = disp_y
+    ncp_function_type = min
+    use_displaced_mesh = true
+    c = 1e6 # relative scale difference between pressure and gap
+  [../]
+  [normal_x]
+    type = NormalMortarMechanicalContact
+    primary_boundary = &#x27;2&#x27;
+    secondary_boundary = &#x27;3&#x27;
+    primary_subdomain = &#x27;20&#x27;
+    secondary_subdomain = &#x27;30&#x27;
+    variable = normal_lm
+    secondary_variable = disp_x
+    component = x
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  []
+  [normal_y]
+    type = NormalMortarMechanicalContact
+    primary_boundary = &#x27;2&#x27;
+    secondary_boundary = &#x27;3&#x27;
+    primary_subdomain = &#x27;20&#x27;
+    secondary_subdomain = &#x27;30&#x27;
+    variable = normal_lm
+    secondary_variable = disp_y
+    component = y
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  []
+  [tangential_lm]
+    type = TangentialMortarLMMechanicalContact
+    primary_boundary = &#x27;2&#x27;
+    secondary_boundary = &#x27;3&#x27;
+    primary_subdomain = &#x27;20&#x27;
+    secondary_subdomain = &#x27;30&#x27;
+    variable = tangential_lm
+    secondary_variable = disp_x
+    secondary_disp_y = disp_y
+    use_displaced_mesh = true
+    compute_primal_residuals = false
+    contact_pressure = normal_lm
+    friction_coefficient = .4
+    ncp_function_type = fb
+    c = 1000 # relative scale difference between pressure and velocity
+  []
+  [tangential_x]
+    type = TangentialMortarMechanicalContact
+    primary_boundary = &#x27;2&#x27;
+    secondary_boundary = &#x27;3&#x27;
+    primary_subdomain = &#x27;20&#x27;
+    secondary_subdomain = &#x27;30&#x27;
+    variable = tangential_lm
+    secondary_variable = disp_x
+    component = x
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  []
+  [tangential_y]
+    type = TangentialMortarMechanicalContact
+    primary_boundary = &#x27;2&#x27;
+    secondary_boundary = &#x27;3&#x27;
+    primary_subdomain = &#x27;20&#x27;
+    secondary_subdomain = &#x27;30&#x27;
+    variable = tangential_lm
+    secondary_variable = disp_y
+    component = y
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  []
+[]
+
+[Postprocessors]
+  [./num_nl]
+    type = NumNonlinearIterations
+  [../]
+  [./cumulative]
+    type = CumulativeValuePostprocessor
+    postprocessor = num_nl
+  [../]
+  [lin]
+    type = NumLinearIterations
+  []
+  [cum_lin]
+    type = CumulativeValuePostprocessor
+    postprocessor = lin
+  []
+  [contact]
+    type = ContactDOFSetSize
+    variable = normal_lm
+    subdomain = &#x27;30&#x27;
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="cbcee676-50e5-4642-b949-346574945324"><div class="modal-content"><h4>modules/combined/examples/mortar/eigenstrain.i</h4><pre class="moose-pre"><code class="language-text">#
+# Eigenstrain with Mortar gradient periodicity
+#
+
+[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 50
+    ny = 50
+    xmin = -0.5
+    xmax = 0.5
+    ymin = -0.5
+    ymax = 0.5
+  []
+  [./cnode]
+    input = gen
+    type = ExtraNodesetGenerator
+    coord = &#x27;0.0 0.0&#x27;
+    new_boundary = 100
+  [../]
+  [./anode]
+    input = cnode
+    type = ExtraNodesetGenerator
+    coord = &#x27;0.0 0.5&#x27;
+    new_boundary = 101
+  [../]
+  [secondary_x]
+    input = anode
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;3&#x27;
+    new_block_id = 10
+    new_block_name = &quot;secondary_x&quot;
+  []
+  [primary_x]
+    input = secondary_x
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;1&#x27;
+    new_block_id = 12
+    new_block_name = &quot;primary_x&quot;
+  []
+  [secondary_y]
+    input = primary_x
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;0&#x27;
+    new_block_id = 11
+    new_block_name = &quot;secondary_y&quot;
+  []
+  [primary_y]
+    input = secondary_y
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;2&#x27;
+    new_block_id = 13
+    new_block_name = &quot;primary_y&quot;
+  []
+[]
+
+[GlobalParams]
+  derivative_order = 2
+  enable_jit = true
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+# AuxVars to compute the free energy density for outputting
+[AuxVariables]
+  [./local_energy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./local_free_energy]
+    type = TotalFreeEnergy
+    block = 0
+    execute_on = &#x27;initial LINEAR&#x27;
+    variable = local_energy
+    interfacial_vars = &#x27;c&#x27;
+    kappa_names = &#x27;kappa_c&#x27;
+  [../]
+[]
+
+[Variables]
+  # Solute concentration variable
+  [./c]
+    [./InitialCondition]
+      type = RandomIC
+      min = 0.49
+      max = 0.51
+    [../]
+    block = 0
+  [../]
+  [./w]
+    block = 0
+  [../]
+
+  # Mesh displacement
+  [./disp_x]
+    block = 0
+  [../]
+  [./disp_y]
+    block = 0
+  [../]
+
+  # Lagrange multipliers for gradient component periodicity
+  [./lm_left_right_xx]
+    order = FIRST
+    family = LAGRANGE
+    block = secondary_x
+  [../]
+  [./lm_left_right_xy]
+    order = FIRST
+    family = LAGRANGE
+    block = secondary_x
+  [../]
+  [./lm_left_right_yx]
+    order = FIRST
+    family = LAGRANGE
+    block = secondary_x
+  [../]
+  [./lm_left_right_yy]
+    order = FIRST
+    family = LAGRANGE
+    block = secondary_x
+  [../]
+
+  [./lm_up_down_xx]
+    order = FIRST
+    family = LAGRANGE
+    block = secondary_y
+  [../]
+  [./lm_up_down_xy]
+    order = FIRST
+    family = LAGRANGE
+    block = secondary_y
+  [../]
+  [./lm_up_down_yx]
+    order = FIRST
+    family = LAGRANGE
+    block = secondary_y
+  [../]
+  [./lm_up_down_yy]
+    order = FIRST
+    family = LAGRANGE
+    block = secondary_y
+  [../]
+[]
+
+[Constraints]
+  [./ud_disp_x_grad_x]
+    type = EqualGradientConstraint
+    variable = lm_up_down_xx
+    component = 0
+    secondary_variable = disp_x
+    secondary_boundary = bottom
+    primary_boundary = top
+    secondary_subdomain = secondary_y
+    primary_subdomain = primary_y
+    periodic = true
+  [../]
+  [./ud_disp_x_grad_y]
+    type = EqualGradientConstraint
+    variable = lm_up_down_xy
+    component = 1
+    secondary_variable = disp_x
+    secondary_boundary = bottom
+    primary_boundary = top
+    secondary_subdomain = secondary_y
+    primary_subdomain = primary_y
+    periodic = true
+  [../]
+  [./ud_disp_y_grad_x]
+    type = EqualGradientConstraint
+    variable = lm_up_down_yx
+    component = 0
+    secondary_variable = disp_y
+    secondary_boundary = bottom
+    primary_boundary = top
+    secondary_subdomain = secondary_y
+    primary_subdomain = primary_y
+    periodic = true
+  [../]
+  [./ud_disp_y_grad_y]
+    type = EqualGradientConstraint
+    variable = lm_up_down_yy
+    component = 1
+    secondary_variable = disp_y
+    secondary_boundary = bottom
+    primary_boundary = top
+    secondary_subdomain = secondary_y
+    primary_subdomain = primary_y
+    periodic = true
+  [../]
+
+  [./lr_disp_x_grad_x]
+    type = EqualGradientConstraint
+    variable = lm_left_right_xx
+    component = 0
+    secondary_variable = disp_x
+    secondary_boundary = left
+    primary_boundary = right
+    secondary_subdomain = secondary_x
+    primary_subdomain = primary_x
+    periodic = true
+  [../]
+  [./lr_disp_x_grad_y]
+    type = EqualGradientConstraint
+    variable = lm_left_right_xy
+    component = 1
+    secondary_variable = disp_x
+    secondary_boundary = left
+    primary_boundary = right
+    secondary_subdomain = secondary_x
+    primary_subdomain = primary_x
+    periodic = true
+  [../]
+  [./lr_disp_y_grad_x]
+    type = EqualGradientConstraint
+    variable = lm_left_right_yx
+    component = 0
+    secondary_variable = disp_y
+    secondary_boundary = left
+    primary_boundary = right
+    secondary_subdomain = secondary_x
+    primary_subdomain = primary_x
+    periodic = true
+  [../]
+  [./lr_disp_y_grad_y]
+    type = EqualGradientConstraint
+    variable = lm_left_right_yy
+    component = 1
+    secondary_variable = disp_y
+    secondary_boundary = left
+    primary_boundary = right
+    secondary_subdomain = secondary_x
+    primary_subdomain = primary_x
+    periodic = true
+  [../]
+[]
+
+[Kernels]
+  # Set up stress divergence kernels
+  [./TensorMechanics]
+    block = 0
+  [../]
+
+  # Cahn-Hilliard kernels
+  [./c_dot]
+    type = CoupledTimeDerivative
+    variable = w
+    v = c
+    block = 0
+  [../]
+  [./c_res]
+    type = SplitCHParsed
+    variable = c
+    f_name = F
+    kappa_name = kappa_c
+    w = w
+    block = 0
+  [../]
+  [./w_res]
+    type = SplitCHWRes
+    variable = w
+    mob_name = M
+    block = 0
+  [../]
+[]
+
+[Materials]
+  # declare a few constants, such as mobilities (L,M) and interface gradient prefactors (kappa*)
+  [./consts]
+    type = GenericConstantMaterial
+    block = &#x27;0 10 11&#x27;
+    prop_names  = &#x27;M   kappa_c&#x27;
+    prop_values = &#x27;0.2 0.01   &#x27;
+  [../]
+
+  [./shear1]
+    type = GenericConstantRankTwoTensor
+    block = 0
+    tensor_values = &#x27;0 0 0 0 0 0.5&#x27;
+    tensor_name = shear1
+  [../]
+  [./shear2]
+    type = GenericConstantRankTwoTensor
+    block = 0
+    tensor_values = &#x27;0 0 0 0 0 -0.5&#x27;
+    tensor_name = shear2
+  [../]
+  [./expand3]
+    type = GenericConstantRankTwoTensor
+    block = 0
+    tensor_values = &#x27;1 1 0 0 0 0&#x27;
+    tensor_name = expand3
+  [../]
+
+  [./weight1]
+    type = DerivativeParsedMaterial
+    block = 0
+    function = &#x27;0.3*c^2&#x27;
+    f_name = weight1
+    args = c
+  [../]
+  [./weight2]
+    type = DerivativeParsedMaterial
+    block = 0
+    function = &#x27;0.3*(1-c)^2&#x27;
+    f_name = weight2
+    args = c
+  [../]
+  [./weight3]
+    type = DerivativeParsedMaterial
+    block = 0
+    function = &#x27;4*(0.5-c)^2&#x27;
+    f_name = weight3
+    args = c
+  [../]
+
+  # matrix phase
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    block = 0
+    C_ijkl = &#x27;1 1&#x27;
+    fill_method = symmetric_isotropic
+  [../]
+  [./strain]
+    type = ComputeSmallStrain
+    block = 0
+    displacements = &#x27;disp_x disp_y&#x27;
+    eigenstrain_names = eigenstrain
+  [../]
+
+  [./eigenstrain]
+    type = CompositeEigenstrain
+    block = 0
+    tensors = &#x27;shear1  shear2  expand3&#x27;
+    weights = &#x27;weight1 weight2 weight3&#x27;
+    args = c
+    eigenstrain_name = eigenstrain
+  [../]
+
+  [./stress]
+    type = ComputeLinearElasticStress
+    block = 0
+  [../]
+
+  # chemical free energies
+  [./chemical_free_energy]
+    type = DerivativeParsedMaterial
+    block = 0
+    f_name = Fc
+    function = &#x27;4*c^2*(1-c)^2&#x27;
+    args = &#x27;c&#x27;
+    outputs = exodus
+    output_properties = Fc
+  [../]
+
+  # elastic free energies
+  [./elastic_free_energy]
+    type = ElasticEnergyMaterial
+    f_name = Fe
+    block = 0
+    args = &#x27;c&#x27;
+    outputs = exodus
+    output_properties = Fe
+  [../]
+
+  # free energy (chemical + elastic)
+  [./free_energy]
+    type = DerivativeSumMaterial
+    block = 0
+    f_name = F
+    sum_materials = &#x27;Fc Fe&#x27;
+    args = &#x27;c&#x27;
+  [../]
+[]
+
+[BCs]
+  [./Periodic]
+    [./up_down]
+      primary = top
+      secondary = bottom
+      translation = &#x27;0 -1 0&#x27;
+      variable = &#x27;c w&#x27;
+    [../]
+    [./left_right]
+      primary = left
+      secondary = right
+      translation = &#x27;1 0 0&#x27;
+      variable = &#x27;c w&#x27;
+    [../]
+  [../]
+
+  # fix center point location
+  [./centerfix_x]
+    type = DirichletBC
+    boundary = 100
+    variable = disp_x
+    value = 0
+  [../]
+  [./centerfix_y]
+    type = DirichletBC
+    boundary = 100
+    variable = disp_y
+    value = 0
+  [../]
+
+  # fix side point x coordinate to inhibit rotation
+  [./angularfix]
+    type = DirichletBC
+    boundary = 101
+    variable = disp_x
+    value = 0
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+# We monitor the total free energy and the total solute concentration (should be constant)
+[Postprocessors]
+  [./total_free_energy]
+    type = ElementIntegralVariablePostprocessor
+    block = 0
+    execute_on = &#x27;initial TIMESTEP_END&#x27;
+    variable = local_energy
+  [../]
+  [./total_solute]
+    type = ElementIntegralVariablePostprocessor
+    block = 0
+    execute_on = &#x27;initial TIMESTEP_END&#x27;
+    variable = c
+  [../]
+  [./min]
+    type = ElementExtremeValue
+    block = 0
+    execute_on = &#x27;initial TIMESTEP_END&#x27;
+    value_type = min
+    variable = c
+  [../]
+  [./max]
+    type = ElementExtremeValue
+    block = 0
+    execute_on = &#x27;initial TIMESTEP_END&#x27;
+    value_type = max
+    variable = c
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = &#x27;PJFNK&#x27;
+
+  line_search = basic
+
+  # mortar currently does not support MPI parallelization
+  petsc_options_iname = &#x27;-pc_type -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27; lu       NONZERO               1e-10&#x27;
+
+  l_max_its = 30
+  nl_max_its = 12
+
+  l_tol = 1.0e-4
+
+  nl_rel_tol = 1.0e-8
+  nl_abs_tol = 1.0e-10
+
+  start_time = 0.0
+  num_steps = 200
+
+  [./TimeStepper]
+    type = SolutionTimeAdaptiveDT
+    dt = 0.01
+  [../]
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  print_linear_residuals = false
+  exodus = true
+  [./table]
+    type = CSV
+    delimiter = &#x27; &#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c8dfa539-25a5-41d0-9d8c-58787548af79"><div class="modal-content"><h4>modules/contact/test/tests/sliding_block/in_and_out/frictionless_lm.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  patch_size = 80
+  [file]
+    type = FileMeshGenerator
+    file = sliding_elastic_blocks_2d.e
+  []
+  [secondary]
+    input = file
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;3&#x27;
+    new_block_id = &#x27;30&#x27;
+  []
+  [primary]
+    input = secondary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;2&#x27;
+    new_block_id = &#x27;20&#x27;
+  []
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+  volumetric_locking_correction = false
+[]
+
+[Modules/TensorMechanics/Master]
+  [./all]
+    add_variables = true
+    strain = FINITE
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[Variables]
+  [normal_lm]
+    block = &#x27;30&#x27;
+  []
+[]
+
+[BCs]
+  [./left_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = 1
+    value = 0.0
+  [../]
+  [./left_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = 1
+    value = 0.0
+  [../]
+  [./right_x]
+    type = FunctionDirichletBC
+    variable = disp_x
+    boundary = 4
+    function = horizontal_movement
+  [../]
+  [./right_y]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = 4
+    function = vertical_movement
+  [../]
+[]
+
+[Materials]
+  [./left]
+    type = ComputeIsotropicElasticityTensor
+    block = &#x27;1 2&#x27;
+    youngs_modulus = 1e6
+    poissons_ratio = 0.3
+    constant_on = SUBDOMAIN
+  [../]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options = &#x27;-snes_converged_reason -ksp_converged_reason -snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-pc_type -mat_mffd_err -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27;lu       1e-5          NONZERO               1e-15&#x27;
+  end_time = 15
+  dt = 0.1
+  dtmin = 0.01
+  l_max_its = 30
+  nl_max_its = 20
+  line_search = &#x27;none&#x27;
+  timestep_tolerance = 1e-6
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Outputs]
+  sync_times = &#x27;1 2 3 4 5 6 7 8 9 10 11 12 13 14 15&#x27;
+  [out]
+    type = Exodus
+    sync_only = true
+  []
+  [dof]
+    execute_on = &#x27;initial&#x27;
+    type = DOFMap
+  []
+  [csv]
+    type = CSV
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+[]
+
+[Functions]
+  [./vertical_movement]
+    type = ParsedFunction
+    value = -t
+  [../]
+  [./horizontal_movement]
+    type = ParsedFunction
+    value = -0.04*sin(4*t)+0.02
+  [../]
+[]
+
+[Constraints]
+  [./lm]
+    type = NormalNodalLMMechanicalContact
+    secondary = 3
+    primary = 2
+    variable = normal_lm
+    primary_variable = disp_x
+    disp_y = disp_y
+    ncp_function_type = min
+    use_displaced_mesh = true
+  [../]
+  [normal_x]
+    type = NormalMortarMechanicalContact
+    primary_boundary = &#x27;2&#x27;
+    secondary_boundary = &#x27;3&#x27;
+    primary_subdomain = &#x27;20&#x27;
+    secondary_subdomain = &#x27;30&#x27;
+    variable = normal_lm
+    secondary_variable = disp_x
+    component = x
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  []
+  [normal_y]
+    type = NormalMortarMechanicalContact
+    primary_boundary = &#x27;2&#x27;
+    secondary_boundary = &#x27;3&#x27;
+    primary_subdomain = &#x27;20&#x27;
+    secondary_subdomain = &#x27;30&#x27;
+    variable = normal_lm
+    secondary_variable = disp_y
+    component = y
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  []
+[]
+
+[Postprocessors]
+  [./num_nl]
+    type = NumNonlinearIterations
+  [../]
+  [lin]
+    type = NumLinearIterations
+  []
+  [contact]
+    type = ContactDOFSetSize
+    variable = normal_lm
+    subdomain = &#x27;30&#x27;
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="301861bc-d807-4569-a9a4-a70a5a75acc5"><div class="modal-content"><h4>test/tests/mortar/continuity-2d-non-conforming/dual-soln-continuity.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  second_order = false
+  [file]
+    type = FileMeshGenerator
+    file = nodal_normals_test_offset_nonmatching_gap.e
+  []
+  [./primary]
+    input = file
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;2&#x27;
+    new_block_id = &#x27;20&#x27;
+  [../]
+  [./secondary]
+    input = primary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;1&#x27;
+    new_block_id = &#x27;10&#x27;
+  [../]
+[]
+
+[Problem]
+  kernel_coverage_check = false
+[]
+
+[Variables]
+  [./T]
+    block = &#x27;1 2&#x27;
+    order = FIRST
+  [../]
+  [./lambda]
+    block = &#x27;10&#x27;
+    order = FIRST
+    use_dual = true
+  [../]
+[]
+
+[BCs]
+  [./neumann]
+    type = FunctionGradientNeumannBC
+    exact_solution = exact_soln
+    variable = T
+    boundary = &#x27;3 4 5 6 7 8&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./conduction]
+    type = Diffusion
+    variable = T
+    block = &#x27;1 2&#x27;
+  [../]
+  [./sink]
+    type = Reaction
+    variable = T
+    block = &#x27;1 2&#x27;
+  [../]
+  [./forcing_function]
+    type = BodyForce
+    variable = T
+    function = forcing_function
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[Functions]
+  [./forcing_function]
+    type = ParsedFunction
+    value = &#x27;-4 + x^2 + y^2&#x27;
+  [../]
+  [./exact_soln]
+    type = ParsedFunction
+    value = &#x27;x^2 + y^2&#x27;
+  [../]
+[]
+
+[Debug]
+  show_var_residual_norms = 1
+[]
+
+[Constraints]
+  [./mortar]
+    type = EqualValueConstraint
+    primary_boundary = 2
+    secondary_boundary = 1
+    primary_subdomain = 20
+    secondary_subdomain = 10
+    variable = lambda
+    secondary_variable = T
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  solve_type = NEWTON
+  type = Steady
+  petsc_options_iname = &#x27;-pc_type -snes_linesearch_type -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27;lu       basic                 NONZERO               1e-15&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [dofmap]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="641fcc78-2326-4fb5-9a3e-b2b9eea91033"><div class="modal-content"><h4>test/tests/mortar/continuity-2d-non-conforming/soln-continuity.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  second_order = true
+  [file]
+    type = FileMeshGenerator
+    file = nodal_normals_test_offset_nonmatching_gap.e
+  []
+  [./primary]
+    input = file
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;2&#x27;
+    new_block_id = &#x27;20&#x27;
+  [../]
+  [./secondary]
+    input = primary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;1&#x27;
+    new_block_id = &#x27;10&#x27;
+  [../]
+[]
+
+[Problem]
+  kernel_coverage_check = false
+[]
+
+[Variables]
+  [./T]
+    block = &#x27;1 2&#x27;
+    order = SECOND
+  [../]
+  [./lambda]
+    block = &#x27;10&#x27;
+  [../]
+[]
+
+[BCs]
+  [./neumann]
+    type = FunctionGradientNeumannBC
+    exact_solution = exact_soln
+    variable = T
+    boundary = &#x27;3 4 5 6 7 8&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./conduction]
+    type = Diffusion
+    variable = T
+    block = &#x27;1 2&#x27;
+  [../]
+  [./sink]
+    type = Reaction
+    variable = T
+    block = &#x27;1 2&#x27;
+  [../]
+  [./forcing_function]
+    type = BodyForce
+    variable = T
+    function = forcing_function
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[Functions]
+  [./forcing_function]
+    type = ParsedFunction
+    value = &#x27;-4 + x^2 + y^2&#x27;
+  [../]
+  [./exact_soln]
+    type = ParsedFunction
+    value = &#x27;x^2 + y^2&#x27;
+  [../]
+[]
+
+[Debug]
+  show_var_residual_norms = 1
+[]
+
+[Constraints]
+  [./mortar]
+    type = EqualValueConstraint
+    primary_boundary = 2
+    secondary_boundary = 1
+    primary_subdomain = 20
+    secondary_subdomain = 10
+    variable = lambda
+    secondary_variable = T
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  solve_type = NEWTON
+  type = Steady
+  petsc_options_iname = &#x27;-pc_type -snes_linesearch_type -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27;lu       basic                 NONZERO               1e-15&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [dofmap]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fb0c3ff7-d897-4734-be10-d66c146ab6e0"><div class="modal-content"><h4>test/tests/mortar/displaced-gap-conductance-2d-non-conforming/gap-conductance.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  displacements = &#x27;disp_x disp_y&#x27;
+  [file]
+    type = FileMeshGenerator
+    file = nodal_normals_test_offset_nonmatching_gap.e
+    # block 1: left
+    # block 2: right
+  []
+  [./primary]
+    input = file
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;2&#x27;
+    new_block_id = &#x27;20&#x27;
+  [../]
+  [./secondary]
+    input = primary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;1&#x27;
+    new_block_id = &#x27;10&#x27;
+  [../]
+[]
+
+[AuxVariables]
+  [disp_x]
+    block = &#x27;1 2&#x27;
+  []
+  [disp_y]
+    block = &#x27;1 2&#x27;
+  []
+[]
+
+[AuxKernels]
+  [function_x]
+    type = FunctionAux
+    function = &#x27;.05 * t&#x27;
+    variable = &#x27;disp_x&#x27;
+    block = &#x27;2&#x27;
+  []
+  [function_y]
+    type = FunctionAux
+    function = &#x27;.05 * t&#x27;
+    variable = &#x27;disp_y&#x27;
+    block = &#x27;2&#x27;
+  []
+[]
+
+[Problem]
+  kernel_coverage_check = false
+[]
+
+[Variables]
+  [./T]
+    block = &#x27;1 2&#x27;
+  [../]
+  [./lambda]
+    block = &#x27;10&#x27;
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = T
+    boundary = &#x27;5&#x27;
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = T
+    boundary = &#x27;8&#x27;
+    value = 1
+  [../]
+[]
+
+[Kernels]
+  [./conduction]
+    type = Diffusion
+    variable = T
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[Debug]
+  show_var_residual_norms = 1
+[]
+
+[Constraints]
+  [./mortar]
+    type = GapHeatConductanceTest
+    primary_boundary = 2
+    secondary_boundary = 1
+    primary_subdomain = 20
+    secondary_subdomain = 10
+    variable = lambda
+    secondary_variable = T
+    use_displaced_mesh = true
+  [../]
+[]
+
+[Materials]
+  [constant]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;gap_conductance&#x27;
+    prop_values = &#x27;.03&#x27;
+    block = &#x27;1 2&#x27;
+    use_displaced_mesh = true
+  []
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  solve_type = NEWTON
+  type = Transient
+  num_steps = 5
+  petsc_options_iname = &#x27;-pc_type -snes_linesearch_type&#x27;
+  petsc_options_value = &#x27;lu       basic&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [dofmap]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6495f313-1a1f-4fee-894a-4308e8415896"><div class="modal-content"><h4>modules/combined/test/tests/gap_heat_transfer_mortar/gap_heat_transfer_mortar_displaced.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  displacements = &#x27;disp_x disp_y&#x27;
+  [file]
+    type = FileMeshGenerator
+    file = 2blk-gap.e
+  []
+  [secondary]
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;101&#x27;
+    new_block_id = 10001
+    new_block_name = &#x27;secondary_lower&#x27;
+    input = file
+  []
+  [primary]
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;100&#x27;
+    new_block_id = 10000
+    new_block_name = &#x27;primary_lower&#x27;
+    input = secondary
+  []
+[]
+
+[Problem]
+  kernel_coverage_check = false
+  material_coverage_check = false
+[]
+
+[AuxVariables]
+  [./disp_x]
+    block = &#x27;1&#x27;
+  [../]
+  [./disp_y]
+    block = &#x27;1&#x27;
+  [../]
+[]
+
+[AuxKernels]
+  [./disp_x_kernel]
+    type = ConstantAux
+    variable = disp_x
+    value = 0.1
+    block = &#x27;1&#x27;
+  [../]
+
+  [./disp_y_kernel]
+    type = ConstantAux
+    variable = disp_y
+    value = 0
+    block = &#x27;1&#x27;
+  [../]
+[]
+
+[Variables]
+  [./temp]
+    order = FIRST
+    family = LAGRANGE
+    block = &#x27;1 2&#x27;
+  [../]
+
+  [./lm]
+    order = FIRST
+    family = LAGRANGE
+    block = &#x27;secondary_lower&#x27;
+  [../]
+[]
+
+[Materials]
+  [./left]
+    type = HeatConductionMaterial
+    block = 1
+    thermal_conductivity = 1000
+    specific_heat = 1
+  [../]
+
+  [./right]
+    type = HeatConductionMaterial
+    block = 2
+    thermal_conductivity = 500
+    specific_heat = 1
+  [../]
+[]
+
+[Kernels]
+  [./hc_displaced_block]
+    type = HeatConduction
+    variable = temp
+    use_displaced_mesh = true
+    block = &#x27;1&#x27;
+  [../]
+  [./hc_undisplaced_block]
+    type = HeatConduction
+    variable = temp
+    use_displaced_mesh = false
+    block = &#x27;2&#x27;
+  [../]
+[]
+
+[Constraints]
+  [./ced]
+    type = GapConductanceConstraint
+    variable = lm
+    secondary_variable = temp
+    k = 100
+    use_displaced_mesh = true
+    primary_boundary = 100
+    primary_subdomain = 10000
+    secondary_boundary = 101
+    secondary_subdomain = 10001
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = temp
+    boundary = &#x27;left&#x27;
+    value = 1
+  [../]
+
+  [./right]
+    type = DirichletBC
+    variable = temp
+    boundary = &#x27;right&#x27;
+    value = 0
+  [../]
+[]
+
+[Preconditioning]
+  [./fmp]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  nl_rel_tol = 1e-11
+[]
+
+[Outputs]
+  exodus = true
+  show = &#x27;temp disp_x disp_y&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2d1f9ecc-d5b8-4188-b75b-ca9122920829"><div class="modal-content"><h4>test/tests/mortar/continuity-2d-conforming/conforming-2nd-order.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [file]
+    type = FileMeshGenerator
+    file = 2blk-conf-2nd.e
+  []
+  [secondary]
+    input = file
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;101&#x27;
+    new_block_id = &#x27;10001&#x27;
+    new_block_name = &#x27;secondary_lower&#x27;
+  []
+  [primary]
+    input = secondary
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;100&#x27;
+    new_block_id = &#x27;10000&#x27;
+    new_block_name = &#x27;primary_lower&#x27;
+  []
+[]
+
+[Problem]
+  kernel_coverage_check = false
+[]
+
+[Functions]
+  [./exact_sln]
+    type = ParsedFunction
+    value = x*x+y*y
+  [../]
+  [./ffn]
+    type = ParsedFunction
+    value = -4
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = SECOND
+    family = LAGRANGE
+    block = &#x27;1 2&#x27;
+  [../]
+
+  [./lm]
+    order = SECOND
+    family = LAGRANGE
+    block = secondary_lower
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./ffn]
+    type = BodyForce
+    variable = u
+    function = ffn
+  [../]
+[]
+
+[Constraints]
+  [./ced]
+    type = EqualValueConstraint
+    variable = lm
+    secondary_variable = u
+    primary_boundary = 100
+    primary_subdomain = 10000
+    secondary_boundary = 101
+    secondary_subdomain = 10001
+  [../]
+[]
+
+[BCs]
+  [./all]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = &#x27;1 2 3 4&#x27;
+    function = exact_sln
+  [../]
+[]
+
+[Postprocessors]
+  [./l2_error]
+    type = ElementL2Error
+    variable = u
+    function = exact_sln
+    block = &#x27;1 2&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./fmp]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  nl_rel_tol = 1e-14
+  l_tol = 1e-14
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#8a2cb27a-aa42-435e-8df5-e6f1ac4e3631" class="tooltipped" data-position="left" data-tooltip="Overview">Overview</a></li><li><a href="#486a8140-d33e-48fd-a599-5556ce6fc325" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#8532e885-c9e4-4b0f-a9b4-36ffde8130cf" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

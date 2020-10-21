@@ -1,0 +1,850 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>MaterialPropertyValue.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="afae3b2d-4565-421e-a99e-9df5af4eecb0"><i class="material-icons">menu</i></a><ul class="sidenav" id="afae3b2d-4565-421e-a99e-9df5af4eecb0"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">kernels</span><a href="#" class="breadcrumb">MaterialPropertyValue</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="432244a4-7304-424f-8bff-b05c6b78d510" data-section-level="1" data-section-text="MaterialPropertyValue"><h1 id="materialpropertyvalue">MaterialPropertyValue</h1><p>Residual term (u - prop) to set variable u equal to a given material property prop</p><p>This kernel sets the kernel variable <span tex="u" bookmark="moose-equation-355fe5a7-2201-47c5-8d24-40fd3a540841" recursive="True" class="moose-katex-inline-equation" id="moose-equation-355fe5a7-2201-47c5-8d24-40fd3a540841"><script>var element = document.getElementById("moose-equation-355fe5a7-2201-47c5-8d24-40fd3a540841");katex.render("u", element, {displayMode:false,throwOnError:false});</script></span> (<code>variable</code>) weekly enforced to the value of a material  property <span tex="p" bookmark="moose-equation-599bd455-3635-4165-b720-ab044c5a24ff" recursive="True" class="moose-katex-inline-equation" id="moose-equation-599bd455-3635-4165-b720-ab044c5a24ff"><script>var element = document.getElementById("moose-equation-599bd455-3635-4165-b720-ab044c5a24ff");katex.render("p", element, {displayMode:false,throwOnError:false});</script></span> (<code>prop</code>).</p><span class="moose-katex-block-equation"><span tex="\left(\pm(p-u),\psi\right)" bookmark="moose-equation-c451201d-3872-4c5b-997c-3dae9ee24060" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-c451201d-3872-4c5b-997c-3dae9ee24060"></span><script>var element = document.getElementById("moose-equation-c451201d-3872-4c5b-997c-3dae9ee24060");katex.render("\\left(\\pm(p-u),\\psi\\right)", element, {displayMode:true,throwOnError:false});</script></span><p>The <span tex="\pm" bookmark="moose-equation-92426688-60f6-4544-af65-b474b87c05f0" recursive="True" class="moose-katex-inline-equation" id="moose-equation-92426688-60f6-4544-af65-b474b87c05f0"><script>var element = document.getElementById("moose-equation-92426688-60f6-4544-af65-b474b87c05f0");katex.render("\\pm", element, {displayMode:false,throwOnError:false});</script></span> sign is controlled by the <code>positive</code> boolean parameter.</p><p>This kernel can be used to emulate the action of nodal patch recovery, by finding a projection of an interior material property onto (nodal) basis function degrees of freedom. It can be used to generate a smooth field for outputting material properties.</p><section class="scrollspy" id="9a53c6d4-829f-418f-bebc-3b6680810943" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="1a1a4a84-0b59-4765-85c6-258f259ee72f" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">prop_name</span><span class="moose-parameter-header-description">Name of material property to be used in the kernel</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Name of material property to be used in the kernel</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this Kernel operates on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this Kernel operates on</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="aa1c18ee-bd4b-446e-8589-245940392243" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">positive</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">If the kernel is positive, this is true, if negative, it is false</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>If the kernel is positive, this is true, if negative, it is false</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="4eab49c0-1eec-4fbc-bbad-a94a96a862d0" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="1a9ae13a-70af-4e97-9090-618e472abb7e" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="d1e533e4-7c4e-41f8-9436-a67ab250dc77" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#7a42a11d-cfa2-4beb-9480-3aa12cdf574e" class="modal-trigger">modules/combined/examples/publications/rapid_dev/fig7b.i</a></li><li><a href="#ecb45929-b53b-4d19-837a-2b5208bc51dd" class="modal-trigger">test/tests/kernels/materialpropertyvalue/materialpropertyvalue.i</a></li><li><a href="#8e7687a8-ff48-402e-a34d-efcc0d884eae" class="modal-trigger">modules/combined/examples/publications/rapid_dev/fig7a.i</a></li></ul><div class="modal moose-modal" id="7a42a11d-cfa2-4beb-9480-3aa12cdf574e"><div class="modal-content"><h4>modules/combined/examples/publications/rapid_dev/fig7b.i</h4><pre class="moose-pre"><code class="language-text">#
+# Fig. 7 input for 10.1016/j.commatsci.2017.02.017
+# D. Schwen et al./Computational Materials Science 132 (2017) 36-45
+# Dashed black curve (2)
+# Eigenstrain is globally applied. Single global elastic free energies.
+# Supply the RADIUS parameter (10-35) on the command line to generate data
+# for all curves in the plot.
+#
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 32
+  xmin = 0
+  xmax = 100
+  second_order = true
+[]
+
+[Problem]
+  coord_type = RSPHERICAL
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_r&#x27;
+[]
+
+[Functions]
+  [./diff]
+    type = ParsedFunction
+    value = &#x27;${RADIUS}-pos_c&#x27;
+    vars = pos_c
+    vals = pos_c
+  [../]
+[]
+
+# AuxVars to compute the free energy density for outputting
+[AuxVariables]
+  [./local_energy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./cross_energy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./local_free_energy]
+    type = TotalFreeEnergy
+    variable = local_energy
+    interfacial_vars = &#x27;c&#x27;
+    kappa_names = &#x27;kappa_c&#x27;
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  [../]
+[]
+
+[Variables]
+  # Solute concentration variable
+  [./c]
+    [./InitialCondition]
+      type = SmoothCircleIC
+      invalue = 1
+      outvalue = 0
+      x1 = 0
+      y1 = 0
+      radius = ${RADIUS}
+      int_width = 3
+    [../]
+  [../]
+  [./w]
+  [../]
+
+  # Phase order parameter
+  [./eta]
+    [./InitialCondition]
+      type = SmoothCircleIC
+      invalue = 1
+      outvalue = 0
+      x1 = 0
+      y1 = 0
+      radius = ${RADIUS}
+      int_width = 3
+    [../]
+  [../]
+
+  [./Fe_fit]
+    order = SECOND
+  [../]
+[]
+
+[Modules/TensorMechanics/Master/all]
+  add_variables = true
+  eigenstrain_names = eigenstrain
+[]
+
+[Kernels]
+  # Split Cahn-Hilliard kernels
+  [./c_res]
+    type = SplitCHParsed
+    variable = c
+    f_name = F
+    args = &#x27;eta&#x27;
+    kappa_name = kappa_c
+    w = w
+  [../]
+  [./wres]
+    type = SplitCHWRes
+    variable = w
+    mob_name = M
+  [../]
+  [./time]
+    type = CoupledTimeDerivative
+    variable = w
+    v = c
+  [../]
+
+  # Allen-Cahn and Lagrange-multiplier constraint kernels for order parameter 1
+  [./detadt]
+    type = TimeDerivative
+    variable = eta
+  [../]
+  [./ACBulk1]
+    type = AllenCahn
+    variable = eta
+    args = &#x27;c&#x27;
+    mob_name = L
+    f_name = F
+  [../]
+  [./ACInterface]
+    type = ACInterface
+    variable = eta
+    mob_name = L
+    kappa_name = kappa_eta
+  [../]
+
+  [./Fe]
+    type = MaterialPropertyValue
+    prop_name = Fe
+    variable = Fe_fit
+  [../]
+
+  [./autoadjust]
+    type = MaskedBodyForce
+    variable = w
+    function = diff
+    mask = mask
+  [../]
+[]
+
+[Materials]
+  # declare a few constants, such as mobilities (L,M) and interface gradient prefactors (kappa*)
+  [./consts]
+    type = GenericConstantMaterial
+    prop_names  = &#x27;M   L   kappa_c kappa_eta&#x27;
+    prop_values = &#x27;1.0 1.0 0.5     1&#x27;
+  [../]
+
+  # forcing function mask
+  [./mask]
+    type = ParsedMaterial
+    f_name = mask
+    function = grad/dt
+    material_property_names = &#x27;grad dt&#x27;
+  [../]
+  [./grad]
+    type = VariableGradientMaterial
+    variable = c
+    prop = grad
+  [../]
+  [./time]
+    type = TimeStepMaterial
+  [../]
+
+  # global mechanical properties
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    C_ijkl = &#x27;1 1&#x27;
+    fill_method = symmetric_isotropic
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+  [../]
+
+  # eigenstrain as a function of phase
+  [./eigenstrain]
+    type = ComputeVariableEigenstrain
+    eigen_base = &#x27;0.05 0.05 0.05 0 0 0&#x27;
+    prefactor = h
+    args = eta
+    eigenstrain_name = eigenstrain
+  [../]
+
+  # switching functions
+  [./switching]
+    type = SwitchingFunctionMaterial
+    function_name = h
+    eta = eta
+    h_order = SIMPLE
+  [../]
+  [./barrier]
+    type = BarrierFunctionMaterial
+    eta = eta
+  [../]
+
+  # chemical free energies
+  [./chemical_free_energy_1]
+    type = DerivativeParsedMaterial
+    f_name = Fc1
+    function = &#x27;c^2&#x27;
+    args = &#x27;c&#x27;
+    derivative_order = 2
+  [../]
+  [./chemical_free_energy_2]
+    type = DerivativeParsedMaterial
+    f_name = Fc2
+    function = &#x27;(1-c)^2&#x27;
+    args = &#x27;c&#x27;
+    derivative_order = 2
+  [../]
+
+  # global chemical free energy
+  [./chemical_free_energy]
+    type = DerivativeTwoPhaseMaterial
+    f_name = Fc
+    fa_name = Fc1
+    fb_name = Fc2
+    eta = eta
+    args = &#x27;c&#x27;
+    W = 4
+  [../]
+
+  # global elastic free energy
+  [./elastic_free_energy]
+    type = ElasticEnergyMaterial
+    f_name = Fe
+    args = &#x27;eta&#x27;
+    output_properties = Fe
+    derivative_order = 2
+  [../]
+
+  # free energy
+  [./free_energy]
+    type = DerivativeSumMaterial
+    f_name = F
+    sum_materials = &#x27;Fc Fe&#x27;
+    args = &#x27;c eta&#x27;
+    derivative_order = 2
+  [../]
+[]
+
+[BCs]
+  [./left_r]
+    type = DirichletBC
+    variable = disp_r
+    boundary = &#x27;left&#x27;
+    value = 0
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+# We monitor the total free energy and the total solute concentration (should be constant)
+[Postprocessors]
+  [./total_free_energy]
+    type = ElementIntegralVariablePostprocessor
+    variable = local_energy
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    outputs = &#x27;table console&#x27;
+  [../]
+  [./total_solute]
+    type = ElementIntegralVariablePostprocessor
+    variable = c
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    outputs = &#x27;table console&#x27;
+  [../]
+  [./pos_c]
+    type = FindValueOnLine
+    start_point = &#x27;0 0 0&#x27;
+    end_point = &#x27;100 0 0&#x27;
+    v = c
+    target = 0.582
+    tol = 1e-8
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    outputs = &#x27;table console&#x27;
+  [../]
+  [./pos_eta]
+    type = FindValueOnLine
+    start_point = &#x27;0 0 0&#x27;
+    end_point = &#x27;100 0 0&#x27;
+    v = eta
+    target = 0.5
+    tol = 1e-8
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    outputs = &#x27;table console&#x27;
+  [../]
+  [./c_min]
+    type = ElementExtremeValue
+    value_type = min
+    variable = c
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    outputs = &#x27;table console&#x27;
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./line]
+    type = LineValueSampler
+    variable = &#x27;Fe_fit c w&#x27;
+    start_point = &#x27;0 0 0&#x27;
+    end_point =   &#x27;100 0 0&#x27;
+    num_points = 5000
+    sort_by = x
+    outputs = vpp
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type&#x27;
+  petsc_options_value = &#x27;asm      lu&#x27;
+
+  l_max_its = 30
+  nl_max_its = 15
+  l_tol = 1.0e-4
+  nl_rel_tol = 1.0e-8
+  nl_abs_tol = 2.0e-9
+  start_time = 0.0
+  end_time = 100000.0
+
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    optimal_iterations = 8
+    iteration_window = 1
+    dt = 1
+  [../]
+
+  [./Adaptivity]
+    initial_adaptivity = 5
+    interval = 10
+    max_h_level = 5
+    refine_fraction = 0.9
+    coarsen_fraction = 0.1
+  [../]
+[]
+
+[Outputs]
+  print_linear_residuals = false
+  perf_graph = true
+  execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  [./table]
+    type = CSV
+    delimiter = &#x27; &#x27;
+    file_base = radius_${RADIUS}/eigenstrain_pp
+  [../]
+  [./vpp]
+    type = CSV
+    delimiter = &#x27; &#x27;
+    sync_times = &#x27;10 50 100 500 1000 5000 10000 50000 100000&#x27;
+    sync_only = true
+    time_data = true
+    file_base = radius_${RADIUS}/eigenstrain_vpp
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ecb45929-b53b-4d19-837a-2b5208bc51dd"><div class="modal-content"><h4>test/tests/kernels/materialpropertyvalue/materialpropertyvalue.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 15
+  ny = 15
+  nz = 0
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./c]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Materials]
+  #
+  [./funcmat]
+    type = GenericFunctionMaterial
+    block = 0
+    prop_names  = &#x27;C&#x27;
+    prop_values = &#x27;x^2-y^2&#x27;
+    outputs = exodus
+  [../]
+[]
+
+[Kernels]
+  [./value]
+    type = MaterialPropertyValue
+    prop_name = C
+    variable = c
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8e7687a8-ff48-402e-a34d-efcc0d884eae"><div class="modal-content"><h4>modules/combined/examples/publications/rapid_dev/fig7a.i</h4><pre class="moose-pre"><code class="language-text">#
+# Fig. 7 input for 10.1016/j.commatsci.2017.02.017
+# D. Schwen et al./Computational Materials Science 132 (2017) 36-45
+# Solid gray curve (1)
+# Eigenstrain and elastic energies ar computed per phase and then interpolated.
+# Supply the RADIUS parameter (10-35) on the command line to generate data
+# for all curves in the plot.
+#
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 32
+  xmin = 0
+  xmax = 100
+  second_order = true
+[]
+
+[Problem]
+  coord_type = RSPHERICAL
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_r&#x27;
+[]
+
+[Functions]
+  [./diff]
+    type = ParsedFunction
+    value = &#x27;${RADIUS}-pos_c&#x27;
+    vars = pos_c
+    vals = pos_c
+  [../]
+[]
+
+# AuxVars to compute the free energy density for outputting
+[AuxVariables]
+  [./local_energy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./cross_energy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./local_free_energy]
+    type = TotalFreeEnergy
+    variable = local_energy
+    interfacial_vars = &#x27;c&#x27;
+    kappa_names = &#x27;kappa_c&#x27;
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  [../]
+[]
+
+[Variables]
+  # Solute concentration variable
+  [./c]
+    [./InitialCondition]
+      type = SmoothCircleIC
+      invalue = 1
+      outvalue = 0
+      x1 = 0
+      y1 = 0
+      radius = ${RADIUS}
+      int_width = 3
+    [../]
+  [../]
+  [./w]
+  [../]
+
+  # Phase order parameter
+  [./eta]
+    [./InitialCondition]
+      type = SmoothCircleIC
+      invalue = 1
+      outvalue = 0
+      x1 = 0
+      y1 = 0
+      radius = ${RADIUS}
+      int_width = 3
+    [../]
+  [../]
+
+  # Mesh displacement
+  [./disp_r]
+    order = SECOND
+  [../]
+
+  [./Fe_fit]
+    order = SECOND
+  [../]
+[]
+
+[Kernels]
+  # Set up stress divergence kernels
+  [./TensorMechanics]
+  [../]
+
+  # Split Cahn-Hilliard kernels
+  [./c_res]
+    type = SplitCHParsed
+    variable = c
+    f_name = F
+    args = &#x27;eta&#x27;
+    kappa_name = kappa_c
+    w = w
+  [../]
+  [./wres]
+    type = SplitCHWRes
+    variable = w
+    mob_name = M
+  [../]
+  [./time]
+    type = CoupledTimeDerivative
+    variable = w
+    v = c
+  [../]
+
+  # Allen-Cahn and Lagrange-multiplier constraint kernels for order parameter 1
+  [./detadt]
+    type = TimeDerivative
+    variable = eta
+  [../]
+  [./ACBulk1]
+    type = AllenCahn
+    variable = eta
+    args = &#x27;c&#x27;
+    mob_name = L
+    f_name = F
+  [../]
+  [./ACInterface]
+    type = ACInterface
+    variable = eta
+    mob_name = L
+    kappa_name = kappa_eta
+  [../]
+
+  [./Fe]
+    type = MaterialPropertyValue
+    prop_name = Fe
+    variable = Fe_fit
+  [../]
+
+  [./autoadjust]
+    type = MaskedBodyForce
+    variable = w
+    function = diff
+    mask = mask
+  [../]
+[]
+
+[Materials]
+  # declare a few constants, such as mobilities (L,M) and interface gradient prefactors (kappa*)
+  [./consts]
+    type = GenericConstantMaterial
+    prop_names  = &#x27;M   L   kappa_c kappa_eta&#x27;
+    prop_values = &#x27;1.0 1.0 0.5     1&#x27;
+  [../]
+
+  # forcing function mask
+  [./mask]
+    type = ParsedMaterial
+    f_name = mask
+    function = grad/dt
+    material_property_names = &#x27;grad dt&#x27;
+  [../]
+  [./grad]
+    type = VariableGradientMaterial
+    variable = c
+    prop = grad
+  [../]
+  [./time]
+    type = TimeStepMaterial
+  [../]
+
+  # global mechanical properties
+  [./elasticity_tensor_1]
+    type = ComputeElasticityTensor
+    C_ijkl = &#x27;1 1&#x27;
+    base_name = phase1
+    fill_method = symmetric_isotropic
+  [../]
+  [./elasticity_tensor_2]
+    type = ComputeElasticityTensor
+    C_ijkl = &#x27;1 1&#x27;
+    base_name = phase2
+    fill_method = symmetric_isotropic
+  [../]
+  [./strain_1]
+    type = ComputeRSphericalSmallStrain
+    base_name = phase1
+  [../]
+  [./strain_2]
+    type = ComputeRSphericalSmallStrain
+    base_name = phase2
+    eigenstrain_names = eigenstrain
+  [../]
+  [./stress_1]
+    type = ComputeLinearElasticStress
+    base_name = phase1
+  [../]
+  [./stress_2]
+    type = ComputeLinearElasticStress
+    base_name = phase2
+  [../]
+
+  # eigenstrain per phase
+  [./eigenstrain2]
+    type = ComputeEigenstrain
+    eigen_base = &#x27;0.05 0.05 0.05 0 0 0&#x27;
+    base_name = phase2
+    eigenstrain_name = eigenstrain
+  [../]
+
+  # switching functions
+  [./switching]
+    type = SwitchingFunctionMaterial
+    function_name = h
+    eta = eta
+    h_order = SIMPLE
+  [../]
+  [./barrier]
+    type = BarrierFunctionMaterial
+    eta = eta
+  [../]
+
+  # chemical free energies
+  [./chemical_free_energy_1]
+    type = DerivativeParsedMaterial
+    f_name = Fc1
+    function = &#x27;c^2&#x27;
+    args = &#x27;c&#x27;
+    derivative_order = 2
+  [../]
+  [./chemical_free_energy_2]
+    type = DerivativeParsedMaterial
+    f_name = Fc2
+    function = &#x27;(1-c)^2&#x27;
+    args = &#x27;c&#x27;
+    derivative_order = 2
+  [../]
+
+  # elastic free energies
+  [./elastic_free_energy_1]
+    type = ElasticEnergyMaterial
+    f_name = Fe1
+    args = &#x27;&#x27;
+    base_name = phase1
+    derivative_order = 2
+  [../]
+  [./elastic_free_energy_2]
+    type = ElasticEnergyMaterial
+    f_name = Fe2
+    args = &#x27;&#x27;
+    base_name = phase2
+    derivative_order = 2
+  [../]
+
+  # per phase free energies
+  [./free_energy_1]
+    type = DerivativeSumMaterial
+    f_name = F1
+    sum_materials = &#x27;Fc1 Fe1&#x27;
+    args = &#x27;c&#x27;
+    derivative_order = 2
+  [../]
+  [./free_energy_2]
+    type = DerivativeSumMaterial
+    f_name = F2
+    sum_materials = &#x27;Fc2 Fe2&#x27;
+    args = &#x27;c&#x27;
+    derivative_order = 2
+  [../]
+
+  # global chemical free energy
+  [./global_free_energy]
+    type = DerivativeTwoPhaseMaterial
+    f_name = F
+    fa_name = F1
+    fb_name = F2
+    eta = eta
+    args = &#x27;c&#x27;
+    W = 4
+  [../]
+
+  # global stress
+  [./global_stress]
+    type = TwoPhaseStressMaterial
+    base_A = phase1
+    base_B = phase2
+  [../]
+
+  [./elastic_free_energy]
+    type = DerivativeTwoPhaseMaterial
+    f_name = Fe
+    fa_name = Fe1
+    fb_name = Fe2
+    eta = eta
+    args = &#x27;c&#x27;
+    W = 0
+  [../]
+[]
+
+[BCs]
+  [./left_r]
+    type = DirichletBC
+    variable = disp_r
+    boundary = &#x27;left&#x27;
+    value = 0
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+# We monitor the total free energy and the total solute concentration (should be constant)
+[Postprocessors]
+  [./total_free_energy]
+    type = ElementIntegralVariablePostprocessor
+    variable = local_energy
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    outputs = &#x27;table console&#x27;
+  [../]
+  [./total_solute]
+    type = ElementIntegralVariablePostprocessor
+    variable = c
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    outputs = &#x27;table console&#x27;
+  [../]
+  [./pos_c]
+    type = FindValueOnLine
+    start_point = &#x27;0 0 0&#x27;
+    end_point = &#x27;100 0 0&#x27;
+    v = c
+    target = 0.582
+    tol = 1e-8
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    outputs = &#x27;table console&#x27;
+  [../]
+  [./pos_eta]
+    type = FindValueOnLine
+    start_point = &#x27;0 0 0&#x27;
+    end_point = &#x27;100 0 0&#x27;
+    v = eta
+    target = 0.5
+    tol = 1e-8
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    outputs = &#x27;table console&#x27;
+  [../]
+  [./c_min]
+    type = ElementExtremeValue
+    value_type = min
+    variable = c
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    outputs = &#x27;table console&#x27;
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./line]
+    type = LineValueSampler
+    variable = &#x27;Fe_fit c w&#x27;
+    start_point = &#x27;0 0 0&#x27;
+    end_point =   &#x27;100 0 0&#x27;
+    num_points = 5000
+    sort_by = x
+    outputs = vpp
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type&#x27;
+  petsc_options_value = &#x27;asm      lu&#x27;
+
+  l_max_its = 30
+  nl_max_its = 15
+  l_tol = 1.0e-4
+  nl_rel_tol = 1.0e-8
+  nl_abs_tol = 2.0e-9
+  start_time = 0.0
+  end_time = 100000.0
+
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    optimal_iterations = 7
+    iteration_window = 1
+    dt = 1
+  [../]
+
+  [./Adaptivity]
+    initial_adaptivity = 5
+    interval = 10
+    max_h_level = 5
+    refine_fraction = 0.9
+    coarsen_fraction = 0.1
+  [../]
+[]
+
+[Outputs]
+  print_linear_residuals = false
+  perf_graph = true
+  execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  [./table]
+    type = CSV
+    delimiter = &#x27; &#x27;
+    file_base = radius_${RADIUS}/energy_pp
+  [../]
+  [./vpp]
+    type = CSV
+    delimiter = &#x27; &#x27;
+    sync_times = &#x27;10 50 100 500 1000 5000 10000 50000 100000&#x27;
+    sync_only = true
+    time_data = true
+    file_base = radius_${RADIUS}/energy_vpp
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="d94e2ecd-35fe-4bfc-b254-42caa7ffcbbd" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#9a53c6d4-829f-418f-bebc-3b6680810943" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#d1e533e4-7c4e-41f8-9436-a67ab250dc77" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li><li><a href="#d94e2ecd-35fe-4bfc-b254-42caa7ffcbbd" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

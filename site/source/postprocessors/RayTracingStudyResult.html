@@ -1,0 +1,1034 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>RayTracingStudyResult.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="fa3ad956-b71c-4b29-bb34-d1d336be0fa0"><i class="material-icons">menu</i></a><ul class="sidenav" id="fa3ad956-b71c-4b29-bb34-d1d336be0fa0"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">postprocessors</span><a href="#" class="breadcrumb">RayTracingStudyResult</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="4434eadf-a3b9-4c99-bd68-a6c33526861d" data-section-level="1" data-section-text="RayTracingStudyResult"><h1 id="raytracingstudyresult">RayTracingStudyResult</h1><section class="scrollspy" id="0311dd93-720f-454d-b8b7-5ba8552c90b8" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>RayTracingStudyResult gets a result from a TODO: ADD STUDY LINK.</p></section><section class="scrollspy" id="5373be50-2d98-4cc5-b33a-b9ff8bfdd7d2" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="669dc45f-36b7-4aff-b6a5-d3360c677b32" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">result</span><span class="moose-parameter-header-description">The result to use</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>total_rays_started total_processor_crossings max_processor_crossings total_distance</p><p class="moose-parameter-description"><span>Description:</span>The result to use</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">study</span><span class="moose-parameter-header-description">The RayTracingStudy to get results from</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>UserObjectName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The RayTracingStudy to get results from</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="878a81f1-0cd4-4d2f-9ae4-b9a58b37627d" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM TRANSFER</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="158dc1db-b3e1-4853-a029-8553b2bcb537" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">allow_duplicate_execution_on_initial</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preaux</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREAUX</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREAUX</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preic</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREIC during initial setup</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREIC during initial setup</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="55c2d7b9-8d3d-43bb-9cfa-707ead92793d" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#f5a112f8-3b7f-450b-b1a2-6e527e97213a" class="modal-trigger">modules/ray_tracing/test/tests/ray_tracing_study/lots.i</a></li><li><a href="#d6d900b8-6efc-4ed2-b47d-cfcd5f3849c5" class="modal-trigger">modules/ray_tracing/test/tests/ray_tracing_study/kernel_create_ray/kernel_create_ray.i</a></li><li><a href="#a0243e77-707c-4b28-8e99-b04330fac4de" class="modal-trigger">modules/ray_tracing/test/tests/trace_ray/adaptivity/adaptivity_1d.i</a></li><li><a href="#f0b3b3ef-ab01-4066-b3ea-10eec31c339c" class="modal-trigger">modules/ray_tracing/test/tests/ray_tracing_study/bc_create_ray/bc_create_ray.i</a></li><li><a href="#90de84d2-f206-4dfd-8596-7ea45e7eaafa" class="modal-trigger">modules/ray_tracing/test/tests/trace_ray/internal_sidesets/internal_sidesets_1d.i</a></li><li><a href="#c1530f40-a282-4eaf-9f0b-676ba5c4d1b5" class="modal-trigger">modules/ray_tracing/test/tests/trace_ray/lots.i</a></li><li><a href="#9de3ca47-7880-41aa-8bc2-dd62b3f1276b" class="modal-trigger">modules/ray_tracing/test/tests/trace_ray/internal_sidesets/internal_sidesets_2d.i</a></li><li><a href="#6e466b1d-f3bc-452c-922e-1805d14446c3" class="modal-trigger">modules/ray_tracing/test/tests/trace_ray/adaptivity/adaptivity_3d.i</a></li><li><a href="#85976e01-5b44-4e4d-bd5b-69f22845efe5" class="modal-trigger">modules/ray_tracing/test/tests/ray_tracing_study/kernel_change_ray/kernel_change_ray.i</a></li><li><a href="#8ee5fa03-70b2-4273-a5e0-9ef2dd7b75b8" class="modal-trigger">modules/ray_tracing/test/tests/ray_bcs/reflect_ray_bc/reflect_ray_bc.i</a></li><li><a href="#54debdad-17cf-420b-a985-4b310f956da9" class="modal-trigger">modules/ray_tracing/test/tests/trace_ray/adaptivity/adaptivity_2d.i</a></li><li><a href="#717827cc-20d6-483a-b2df-aa6483e741c4" class="modal-trigger">modules/ray_tracing/test/tests/trace_ray/internal_sidesets/internal_sidesets_3d.i</a></li></ul><div class="modal moose-modal" id="f5a112f8-3b7f-450b-b1a2-6e527e97213a"><div class="modal-content"><h4>modules/ray_tracing/test/tests/ray_tracing_study/lots.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 4
+    ny = 4
+  []
+[]
+
+[UserObjects/lots]
+  type = LotsOfRaysRayStudy
+  ray_kernel_coverage_check = false # no need for RayKernels
+  execute_on = initial
+[]
+
+[RayBCs/kill]
+  type = KillRayBC
+  boundary = &#x27;top left right bottom&#x27;
+[]
+
+[Postprocessors/total_distance]
+  type = RayTracingStudyResult
+  study = lots
+  result = total_distance
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Outputs]
+  csv = true
+  exodus = false
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d6d900b8-6efc-4ed2-b47d-cfcd5f3849c5"><div class="modal-content"><h4>modules/ray_tracing/test/tests/ray_tracing_study/kernel_create_ray/kernel_create_ray.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  active = gmg_2d
+  [gmg_2d]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 3
+    ny = 3
+    xmax = 3
+    ymax = 3
+  []
+  [gmg_3d]
+    type = GeneratedMeshGenerator
+    dim = 3
+    nx = 3
+    ny = 3
+    nz = 3
+    xmax = 3
+    ymax = 3
+    zmax = 3
+  []
+[]
+
+[RayBCs]
+  active = kill_2d
+  [kill_2d]
+    type = KillRayBC
+    boundary = &#x27;top right bottom left&#x27;
+  []
+  [kill_3d]
+    type = KillRayBC
+    boundary = &#x27;top right bottom left front back&#x27;
+  []
+[]
+
+[RayKernels/create_ray]
+  type = CreateRayRayKernelTest
+[]
+
+[UserObjects/lots]
+  type = LotsOfRaysRayStudy
+  execute_on = initial
+
+  vertex_to_vertex = true
+  centroid_to_vertex = true
+  centroid_to_centroid = true
+
+  allow_addition_during_execution = true
+[]
+
+[Postprocessors]
+  [total_distance]
+    type = RayTracingStudyResult
+    study = lots
+    result = total_distance
+  []
+  [total_rays_started]
+    type = RayTracingStudyResult
+    study = lots
+    result = total_rays_started
+  []
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a0243e77-707c-4b28-8e99-b04330fac4de"><div class="modal-content"><h4>modules/ray_tracing/test/tests/trace_ray/adaptivity/adaptivity_1d.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 1
+    nx = 2
+  []
+[]
+
+[Variables/u]
+[]
+
+[Kernels]
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 3
+  dt = 0.1
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = marker
+  initial_marker = marker
+  max_h_level = 2
+  [Indicators/indicator]
+    type = GradientJumpIndicator
+    variable = u
+  []
+  [Markers/marker]
+    type = ErrorFractionMarker
+    indicator = indicator
+    coarsen = 0.1
+    refine = 0.1
+  []
+[]
+
+[UserObjects/study]
+  type = LotsOfRaysRayStudy
+  ray_kernel_coverage_check = false
+  vertex_to_vertex = true
+  centroid_to_vertex = true
+  centroid_to_centroid = true
+  execute_on = timestep_end
+[]
+
+[RayBCs/kill]
+  type = KillRayBC
+  boundary = &#x27;left right&#x27;
+[]
+
+[Postprocessors]
+  [total_distance]
+    type = RayTracingStudyResult
+    study = study
+    result = total_distance
+    execute_on = timestep_end
+  []
+  [total_rays]
+    type = RayTracingStudyResult
+    study = study
+    result = total_rays_started
+    execute_on = timestep_end
+  []
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f0b3b3ef-ab01-4066-b3ea-10eec31c339c"><div class="modal-content"><h4>modules/ray_tracing/test/tests/ray_tracing_study/bc_create_ray/bc_create_ray.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  active = gmg_2d
+  [gmg_2d]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 3
+    ny = 3
+    xmax = 3
+    ymax = 3
+  []
+  [gmg_3d]
+    type = GeneratedMeshGenerator
+    dim = 3
+    nx = 3
+    ny = 3
+    nz = 3
+    xmax = 3
+    ymax = 3
+    zmax = 3
+  []
+[]
+
+[RayBCs]
+  active = &#x27;kill_2d create_2d&#x27;
+
+  [kill_2d]
+    type = KillRayBC
+    boundary = &#x27;top right bottom left&#x27;
+  []
+  [create_2d]
+    type = CreateRayRayBCTest
+    boundary = &#x27;top right bottom left&#x27;
+  []
+
+  [kill_3d]
+    type = KillRayBC
+    boundary = &#x27;top right bottom left front back&#x27;
+  []
+  [create_3d]
+    type = CreateRayRayBCTest
+    boundary = &#x27;top right bottom left front back&#x27;
+  []
+[]
+
+[UserObjects/lots]
+  type = LotsOfRaysRayStudy
+  execute_on = initial
+
+  vertex_to_vertex = true
+  centroid_to_vertex = true
+  centroid_to_centroid = true
+
+  allow_addition_during_execution = true
+  ray_kernel_coverage_check = false
+[]
+
+[Postprocessors]
+  [total_distance]
+    type = RayTracingStudyResult
+    study = lots
+    result = total_distance
+  []
+  [total_rays_started]
+    type = RayTracingStudyResult
+    study = lots
+    result = total_rays_started
+  []
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="90de84d2-f206-4dfd-8596-7ea45e7eaafa"><div class="modal-content"><h4>modules/ray_tracing/test/tests/trace_ray/internal_sidesets/internal_sidesets_1d.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 1
+    xmax = 6
+    nx = 6
+  []
+
+  [central_block]
+    type = SubdomainBoundingBoxGenerator
+    input = gmg
+    block_id = 1
+    bottom_left = &#x27;2 0 0&#x27;
+    top_right = &#x27;4 0 0&#x27;
+  []
+
+  [central_boundary]
+    type = SideSetsBetweenSubdomainsGenerator
+    input = central_block
+    master_block = 1
+    paired_block = 0
+    new_boundary = 7
+  []
+[]
+
+[RayBCs]
+  active = &#x27;kill_internal&#x27;
+  # active = &#x27;kill_external reflect_internal&#x27;
+
+  # for testing internal kill
+  [kill_internal]
+    type = KillRayBC
+    boundary = 7
+    rays = &#x27;left_in at_left right_in at_right inside_left&#x27;
+  []
+
+  # for testing internal reflect
+  [kill_external]
+    type = KillRayBC
+    boundary = &#x27;left right&#x27;
+    rays = &#x27;left_in at_left right_in at_right inside_left&#x27;
+  []
+  [reflect_internal]
+    type = ReflectRayBC
+    boundary = 7
+    rays = &#x27;left_in at_left right_in at_right inside_left&#x27;
+  []
+[]
+
+[UserObjects/study]
+  type = RepeatableRayStudy
+  start_points = &#x27;0 0 0
+                  2 0 0
+                  6 0 0
+                  4 0 0
+                  3 0 0&#x27;
+  directions = &#x27;1 0 0
+                1 0 0
+                -1 0 0
+                -1 0 0
+                -1 0 0&#x27;
+  names = &#x27;left_in at_left right_in at_right inside_left&#x27;
+  ray_distance = 10
+  execute_on = initial
+  ray_kernel_coverage_check = false
+  use_internal_sidesets = true
+[]
+
+[Postprocessors/total_distance]
+  type = RayTracingStudyResult
+  study = study
+  result = total_distance
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c1530f40-a282-4eaf-9f0b-676ba5c4d1b5"><div class="modal-content"><h4>modules/ray_tracing/test/tests/trace_ray/lots.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 5
+    ny = 5
+    nz = 5
+    xmax = 5
+    ymax = 5
+    zmax = 5
+  []
+[]
+
+[RayBCs]
+  active = &#x27;kill_2d&#x27;
+  [kill_1d]
+    type = KillRayBC
+    boundary = &#x27;left right&#x27;
+  []
+  [kill_2d]
+    type = KillRayBC
+    boundary = &#x27;top right bottom left&#x27;
+  []
+  [kill_3d]
+    type = KillRayBC
+    boundary = &#x27;top right bottom left front back&#x27;
+  []
+[]
+
+[UserObjects/lots]
+  type = LotsOfRaysRayStudy
+  ray_kernel_coverage_check = false
+  vertex_to_vertex = false
+  centroid_to_vertex = false
+  centroid_to_centroid = false
+  compute_expected_distance = true
+  execute_on = initial
+[]
+
+[Postprocessors]
+  [total_distance]
+    type = RayTracingStudyResult
+    study = lots
+    result = total_distance
+  []
+  [expected_distance]
+    type = LotsOfRaysExpectedDistance
+    lots_of_rays_study = lots
+  []
+  [distance_difference]
+    type = DifferencePostprocessor
+    value1 = total_distance
+    value2 = expected_distance
+  []
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9de3ca47-7880-41aa-8bc2-dd62b3f1276b"><div class="modal-content"><h4>modules/ray_tracing/test/tests/trace_ray/internal_sidesets/internal_sidesets_2d.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [cmg]
+    type = CartesianMeshGenerator
+    dim = 2
+    dx = &#x27;2 2 2&#x27;
+    dy = &#x27;2 2 2&#x27;
+    ix = &#x27;2 2 2&#x27;
+    iy = &#x27;2 2 2&#x27;
+    subdomain_id = &#x27;0 1 0
+                    2 5 3
+                    0 4 0&#x27;
+  []
+
+  [interior_bottom]
+    type = SideSetsBetweenSubdomainsGenerator
+    input = cmg
+    master_block = 5
+    paired_block = 1
+    new_boundary = &#x27;interior_bottom&#x27;
+  []
+  [interior_left]
+    type = SideSetsBetweenSubdomainsGenerator
+    input = interior_bottom
+    master_block = 5
+    paired_block = 2
+    new_boundary = &#x27;interior_left&#x27;
+  []
+  [interior_right]
+    type = SideSetsBetweenSubdomainsGenerator
+    input = interior_left
+    master_block = 5
+    paired_block = 3
+    new_boundary = &#x27;interior_right&#x27;
+  []
+  [interior_top]
+    type = SideSetsBetweenSubdomainsGenerator
+    input = interior_right
+    master_block = 5
+    paired_block = 4
+    new_boundary = &#x27;interior_top&#x27;
+  []
+[]
+
+[RayBCs]
+  active = &#x27;kill_internal&#x27;
+  # active = &#x27;kill_external reflect_internal&#x27;
+
+  # for testing internal kill
+  [kill_internal]
+    type = KillRayBC
+    boundary = &#x27;interior_top interior_right interior_bottom interior_left&#x27;
+    rays = &#x27;to_bottom_left_corner
+            at_top_left_corner
+            to_top_right_corner
+            to_left_offset
+            to_top_center_node
+            inside_to_top&#x27;
+  []
+
+  # for testing internal reflect
+  [kill_external]
+    type = KillRayBC
+    boundary = &#x27;top right bottom left&#x27;
+    rays = &#x27;to_bottom_left_corner
+            at_top_left_corner
+            to_top_right_corner
+            to_left_offset
+            to_top_center_node
+            inside_to_top&#x27;
+  []
+  [reflect_internal]
+    type = ReflectRayBC
+    boundary = &#x27;interior_top interior_right interior_bottom interior_left&#x27;
+    rays = &#x27;to_bottom_left_corner
+            at_top_left_corner
+            to_top_right_corner
+            to_left_offset
+            to_top_center_node
+            inside_to_top&#x27;
+  []
+[]
+
+[UserObjects/study]
+  type = RepeatableRayStudy
+  start_points = &#x27;0 0 0
+                  2 4 0
+                  6 6 0
+                  0 2.5 0
+                  3 6 0
+                  2.5 2.5 0&#x27;
+  directions = &#x27;1 1 0
+                1 -1 0
+                -1 -1 0
+                1 0.1 0
+                0 -1 0
+                0.5 1.5 0&#x27;
+  names = &#x27;to_bottom_left_corner
+           at_top_left_corner
+           to_top_right_corner
+           to_left_offset
+           to_top_center_node
+           inside_to_top&#x27;
+  ray_distance = 10
+  execute_on = initial
+  ray_kernel_coverage_check = false
+  use_internal_sidesets = true
+[]
+
+[Postprocessors/total_distance]
+  type = RayTracingStudyResult
+  study = study
+  result = total_distance
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6e466b1d-f3bc-452c-922e-1805d14446c3"><div class="modal-content"><h4>modules/ray_tracing/test/tests/trace_ray/adaptivity/adaptivity_3d.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 3
+    nx = 2
+    ny = 2
+    nz = 2
+  []
+[]
+
+[Variables/u]
+[]
+
+[Kernels]
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 3
+  dt = 0.1
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = marker
+  initial_marker = marker
+  max_h_level = 2
+  [Indicators/indicator]
+    type = GradientJumpIndicator
+    variable = u
+  []
+  [Markers/marker]
+    type = ErrorFractionMarker
+    indicator = indicator
+    coarsen = 0.1
+    refine = 0.1
+  []
+[]
+
+[UserObjects/study]
+  type = LotsOfRaysRayStudy
+  ray_kernel_coverage_check = false
+  vertex_to_vertex = true
+  centroid_to_vertex = true
+  centroid_to_centroid = true
+  execute_on = timestep_end
+[]
+
+[RayBCs/kill]
+  type = KillRayBC
+  boundary = &#x27;top right bottom left front back&#x27;
+[]
+
+[Postprocessors]
+  [total_distance]
+    type = RayTracingStudyResult
+    study = study
+    result = total_distance
+    execute_on = timestep_end
+  []
+  [total_rays]
+    type = RayTracingStudyResult
+    study = study
+    result = total_rays_started
+    execute_on = timestep_end
+  []
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="85976e01-5b44-4e4d-bd5b-69f22845efe5"><div class="modal-content"><h4>modules/ray_tracing/test/tests/ray_tracing_study/kernel_change_ray/kernel_change_ray.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 5
+    ny = 5
+    xmax = 5
+    ymax = 5
+  []
+[]
+
+[Variables/phase]
+  [InitialCondition]
+    type = FunctionIC
+    variable = field
+    function = &#x27;(x &gt; 2.99) * 1.0&#x27;
+  []
+[]
+
+[RayBCs/kill]
+  type = KillRayBC
+  boundary = &#x27;top right bottom left&#x27;
+[]
+
+[RayKernels/test]
+  type = RefractionRayKernelTest
+  field = phase
+[]
+
+[UserObjects/lots]
+  type = LotsOfRaysRayStudy
+  vertex_to_vertex = true
+  centroid_to_vertex = true
+  centroid_to_centroid = false
+  execute_on = initial
+[]
+
+[Postprocessors/total_distance]
+  type = RayTracingStudyResult
+  study = lots
+  result = total_distance
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8ee5fa03-70b2-4273-a5e0-9ef2dd7b75b8"><div class="modal-content"><h4>modules/ray_tracing/test/tests/ray_bcs/reflect_ray_bc/reflect_ray_bc.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 5
+    ny = 5
+    xmax = 5
+    ymax = 5
+  []
+[]
+
+[RayBCs]
+  [reflect]
+    type = ReflectRayBC
+    boundary = &#x27;top right left bottom&#x27;
+  []
+[]
+
+[UserObjects/lots]
+  type = LotsOfRaysRayStudy
+  ray_kernel_coverage_check = false
+  vertex_to_vertex = true
+  centroid_to_vertex = true
+  centroid_to_centroid = false
+  execute_on = initial
+  ray_distance = 10
+[]
+
+[Postprocessors/total_distance]
+  type = RayTracingStudyResult
+  study = lots
+  result = total_distance
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="54debdad-17cf-420b-a985-4b310f956da9"><div class="modal-content"><h4>modules/ray_tracing/test/tests/trace_ray/adaptivity/adaptivity_2d.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 2
+    ny = 2
+  []
+[]
+
+[Variables/u]
+[]
+
+[Kernels]
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 3
+  dt = 0.1
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = marker
+  initial_marker = marker
+  max_h_level = 2
+  [Indicators/indicator]
+    type = GradientJumpIndicator
+    variable = u
+  []
+  [Markers/marker]
+    type = ErrorFractionMarker
+    indicator = indicator
+    coarsen = 0.1
+    refine = 0.1
+  []
+[]
+
+[UserObjects/study]
+  type = LotsOfRaysRayStudy
+  ray_kernel_coverage_check = false
+  vertex_to_vertex = true
+  centroid_to_vertex = true
+  centroid_to_centroid = true
+  execute_on = timestep_end
+[]
+
+[RayBCs/kill]
+  type = KillRayBC
+  boundary = &#x27;top right bottom left&#x27;
+[]
+
+[Postprocessors]
+  [total_distance]
+    type = RayTracingStudyResult
+    study = study
+    result = total_distance
+    execute_on = timestep_end
+  []
+  [total_rays]
+    type = RayTracingStudyResult
+    study = study
+    result = total_rays_started
+    execute_on = timestep_end
+  []
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="717827cc-20d6-483a-b2df-aa6483e741c4"><div class="modal-content"><h4>modules/ray_tracing/test/tests/trace_ray/internal_sidesets/internal_sidesets_3d.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [cmg]
+    type = CartesianMeshGenerator
+    dim = 3
+    dx = &#x27;2 2 2&#x27;
+    dy = &#x27;2 2 2&#x27;
+    dz = &#x27;2 2 2&#x27;
+    ix = &#x27;2 2 2&#x27;
+    iy = &#x27;2 2 2&#x27;
+    iz = &#x27;2 2 2&#x27;
+    subdomain_id = &#x27;0 0 0
+                    0 1 0
+                    0 0 0
+
+                    0 2 0
+                    3 7 4
+                    0 5 0
+
+                    0 0 0
+                    0 6 0
+                    0 0 0&#x27;
+  []
+
+  [interior_back]
+    type = SideSetsBetweenSubdomainsGenerator
+    input = cmg
+    master_block = 7
+    paired_block = 1
+    new_boundary = &#x27;interior_back&#x27;
+  []
+  [interior_bottom]
+    type = SideSetsBetweenSubdomainsGenerator
+    input = interior_back
+    master_block = 7
+    paired_block = 2
+    new_boundary = &#x27;interior_bottom&#x27;
+  []
+  [interior_left]
+    type = SideSetsBetweenSubdomainsGenerator
+    input = interior_bottom
+    master_block = 7
+    paired_block = 3
+    new_boundary = &#x27;interior_left&#x27;
+  []
+  [interior_right]
+    type = SideSetsBetweenSubdomainsGenerator
+    input = interior_left
+    master_block = 7
+    paired_block = 4
+    new_boundary = &#x27;interior_right&#x27;
+  []
+  [interior_top]
+    type = SideSetsBetweenSubdomainsGenerator
+    input = interior_right
+    master_block = 7
+    paired_block = 5
+    new_boundary = &#x27;interior_top&#x27;
+  []
+  [interior_front]
+    type = SideSetsBetweenSubdomainsGenerator
+    input = interior_top
+    master_block = 7
+    paired_block = 6
+    new_boundary = &#x27;interior_front&#x27;
+  []
+[]
+
+[RayBCs]
+  active = &#x27;kill_internal&#x27;
+  # active = &#x27;kill_external reflect_internal&#x27;
+
+  # for testing internal kill
+  [kill_internal]
+    type = KillRayBC
+    boundary = &#x27;interior_top interior_right interior_bottom interior_left interior_front interior_back&#x27;
+    rays = &#x27;to_bottom_left_corner
+            at_bottom_left_corner
+            to_top_right_corner
+            at_top_right_corner
+            centroid_offset
+            top_down
+            left_to_edge
+            inside_to_corner
+            inside_offset&#x27;
+  []
+
+  # for testing internal reflect
+  [kill_external]
+    type = KillRayBC
+    boundary = &#x27;top right bottom left front back&#x27;
+    rays = &#x27;to_bottom_left_corner
+            at_bottom_left_corner
+            to_top_right_corner
+            at_top_right_corner
+            centroid_offset
+            top_down
+            left_to_edge
+            inside_to_corner
+            inside_offset&#x27;
+  []
+  [reflect_internal]
+    type = ReflectRayBC
+    boundary = &#x27;interior_top interior_right interior_bottom interior_left interior_front interior_back&#x27;
+    rays = &#x27;to_bottom_left_corner
+            at_bottom_left_corner
+            to_top_right_corner
+            at_top_right_corner
+            centroid_offset
+            top_down
+            left_to_edge
+            inside_to_corner
+            inside_offset&#x27;
+  []
+[]
+
+[UserObjects/study]
+  type = RepeatableRayStudy
+  start_points = &#x27;0 0 0
+                  2 2 2
+                  6 6 6
+                  4 4 4
+                  0 2.5 2.5
+                  3 3 6
+                  2.5 0 0
+                  3 3 3
+                  2.5 2.5 2.5&#x27;
+  directions = &#x27;1 1 1
+                1 1 1
+                -1 -1 -1
+                -1 -1 -1
+                1 0.1 0
+                0 0 -1
+                0 1 1
+                1 1 1
+                0.5 1.5 1.5&#x27;
+  names = &#x27;to_bottom_left_corner
+           at_bottom_left_corner
+           to_top_right_corner
+           at_top_right_corner
+           centroid_offset
+           top_down
+           left_to_edge
+           inside_to_corner
+           inside_offset&#x27;
+  execute_on = initial
+  ray_distance = 10
+  ray_kernel_coverage_check = false
+  use_internal_sidesets = true
+[]
+
+[Postprocessors/total_distance]
+  type = RayTracingStudyResult
+  study = study
+  result = total_distance
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#0311dd93-720f-454d-b8b7-5ba8552c90b8" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#5373be50-2d98-4cc5-b33a-b9ff8bfdd7d2" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#55c2d7b9-8d3d-43bb-9cfa-707ead92793d" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

@@ -1,0 +1,372 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>line_integrals.md|MOOSE Ray Tracing Module</title><link href="contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="css/moose.css" type="text/css" rel="stylesheet"></link><link href="css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="contrib/katex/katex.min.js"></script><script type="text/javascript" src="contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="media/framework/github-logo.png" class="github-mark"></img><img src="media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="ce08c5ac-77d3-496b-abb6-b1aaf248a298"><i class="material-icons">menu</i></a><ul class="sidenav" id="ce08c5ac-77d3-496b-abb6-b1aaf248a298"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href="#" class="breadcrumb">line_integrals</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="1a1be418-10f7-4611-bc15-61fc99ec3bce" data-section-level="1" data-section-text="Line Integrals"><h1 id="line-integrals">Line Integrals</h1><p>The <a href="modules/ray_tracing/index.html">Ray Tracing Module</a> can be utilized to integrate fields along a line throughout the domain. Example fields include <a href="syntax/Variables/index.html">Variables</a>, <a href="syntax/AuxVariables/index.html">AuxVariables</a>, <a href="syntax/Materials/index.html">Material properties</a>, and <a href="syntax/Functions/index.html">Functions</a>. The discussion that follows will describe how to integrate a variable across a line in a simple diffusion problem.</p><section class="scrollspy" id="5952d8fe-a800-493b-b402-dcdbbe9cda78" data-section-level="2" data-section-text="Problem Definition"><h2 id="problem-definition">Problem Definition</h2><p>We begin with the standard &quot;simple diffusion&quot; problem:</p><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 5
+    ny = 5
+    xmax = 5
+    ymax = 5
+  []
+[]
+
+[Variables/u]
+[]
+
+[Kernels/diff]
+  type = Diffusion
+  variable = u
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+</code></pre><a href="#fb5cba62-ff12-4687-85b5-58b7d7b2b1ee" class="modal-trigger">(modules/ray_tracing/test/tests/ray_kernels/variable_integral_ray_kernel/simple_diffusion_line_integral.i)</a><div class="modal moose-modal" id="fb5cba62-ff12-4687-85b5-58b7d7b2b1ee"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/modules/ray_tracing/test/tests/ray_kernels/variable_integral_ray_kernel/simple_diffusion_line_integral.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 5
+    ny = 5
+    xmax = 5
+    ymax = 5
+  []
+[]
+
+[Variables/u]
+[]
+
+[Kernels/diff]
+  type = Diffusion
+  variable = u
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  csv = true
+[]
+
+[UserObjects/study]
+  type = RepeatableRayStudy
+  names = &#x27;diag
+           right_up&#x27;
+  start_points = &#x27;0 0 0
+                  5 0 0&#x27;
+  end_points = &#x27;5 5 0
+                5 5 0&#x27;
+  execute_on = TIMESTEP_END
+[]
+
+[RayKernels/u_integral]
+  type = VariableIntegralRayKernel
+  variable = u
+  rays = &#x27;diag right_up&#x27;
+[]
+
+[Postprocessors]
+  [diag_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = diag
+  []
+  [right_up_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = right_up
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>For this problem, we seek the value of the integral</p><span class="moose-katex-block-equation"><span tex="\int_L u_h~dr, \quad L = \{\vec{r}_1 + t\vec{r}_2 \mid t \in [0, 1]\}" bookmark="moose-equation-ff5118ef-ca3d-47db-b9ef-a28327c198fe" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-ff5118ef-ca3d-47db-b9ef-a28327c198fe"></span><script>var element = document.getElementById("moose-equation-ff5118ef-ca3d-47db-b9ef-a28327c198fe");katex.render("\\int_L u_h~dr, \\quad L = \\{\\vec{r}_1 + t\\vec{r}_2 \\mid t \\in [0, 1]\\}", element, {displayMode:true,throwOnError:false});</script></span><p>for the lines defined by</p><span class="moose-katex-block-equation"><span tex="\vec{r}_1 = (0, 0)\,, \quad \vec{r}_1 = (5, 5)" bookmark="moose-equation-33d3935c-6efb-45b9-87ce-87555a13f6a3" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-33d3935c-6efb-45b9-87ce-87555a13f6a3"></span><script>var element = document.getElementById("moose-equation-33d3935c-6efb-45b9-87ce-87555a13f6a3");katex.render("\\vec{r}_1 = (0, 0)\\,, \\quad \\vec{r}_1 = (5, 5)", element, {displayMode:true,throwOnError:false});</script></span><p>and</p><span class="moose-katex-block-equation"><span tex="\vec{r}_1 = (5, 0)\,, \quad \vec{r}_1 = (5, 5)" bookmark="moose-equation-6ef850c9-421b-4fb8-8c44-a337e9623bd1" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-6ef850c9-421b-4fb8-8c44-a337e9623bd1"></span><script>var element = document.getElementById("moose-equation-6ef850c9-421b-4fb8-8c44-a337e9623bd1");katex.render("\\vec{r}_1 = (5, 0)\\,, \\quad \\vec{r}_1 = (5, 5)", element, {displayMode:true,throwOnError:false});</script></span><p>For simplicity, we will denote the lines as <code>diag</code> and <code>right_up</code>, respectively.</p></section><section class="scrollspy" id="902311e2-37a0-4cd1-98bd-277f73a91c5f" data-section-level="2" data-section-text="Defining the Study"><h2 id="defining-the-study">Defining the Study</h2><p>A <a href="source/ray_tracing/RepeatableRayStudy.html">RepeatableRayStudy</a> is be defined that generates and executes the rays that compute the variable line integral:</p><pre class="moose-pre"><code class="language-text">[UserObjects/study]
+  type = RepeatableRayStudy
+  names = &#x27;diag
+           right_up&#x27;
+  start_points = &#x27;0 0 0
+                  5 0 0&#x27;
+  end_points = &#x27;5 5 0
+                5 5 0&#x27;
+  execute_on = TIMESTEP_END
+[]
+</code></pre><a href="#92311de4-70a9-4d04-b9e1-6e0b73b556de" class="modal-trigger">(modules/ray_tracing/test/tests/ray_kernels/variable_integral_ray_kernel/simple_diffusion_line_integral.i)</a><div class="modal moose-modal" id="92311de4-70a9-4d04-b9e1-6e0b73b556de"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/modules/ray_tracing/test/tests/ray_kernels/variable_integral_ray_kernel/simple_diffusion_line_integral.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 5
+    ny = 5
+    xmax = 5
+    ymax = 5
+  []
+[]
+
+[Variables/u]
+[]
+
+[Kernels/diff]
+  type = Diffusion
+  variable = u
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  csv = true
+[]
+
+[UserObjects/study]
+  type = RepeatableRayStudy
+  names = &#x27;diag
+           right_up&#x27;
+  start_points = &#x27;0 0 0
+                  5 0 0&#x27;
+  end_points = &#x27;5 5 0
+                5 5 0&#x27;
+  execute_on = TIMESTEP_END
+[]
+
+[RayKernels/u_integral]
+  type = VariableIntegralRayKernel
+  variable = u
+  rays = &#x27;diag right_up&#x27;
+[]
+
+[Postprocessors]
+  [diag_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = diag
+  []
+  [right_up_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = right_up
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>The <code>study</code> object defines two rays to be exectued on <code>TIMESTEP_END</code>:</p><ul class="browser-default"><li><p><code>diag</code> from <span tex="(0, 0)" bookmark="moose-equation-b8c6bf3c-bf81-433c-bf47-72cec139a000" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b8c6bf3c-bf81-433c-bf47-72cec139a000"><script>var element = document.getElementById("moose-equation-b8c6bf3c-bf81-433c-bf47-72cec139a000");katex.render("(0, 0)", element, {displayMode:false,throwOnError:false});</script></span> to <span tex="(5, 5)" bookmark="moose-equation-9eef1a50-35a5-47ee-8416-c312fbb07bae" recursive="True" class="moose-katex-inline-equation" id="moose-equation-9eef1a50-35a5-47ee-8416-c312fbb07bae"><script>var element = document.getElementById("moose-equation-9eef1a50-35a5-47ee-8416-c312fbb07bae");katex.render("(5, 5)", element, {displayMode:false,throwOnError:false});</script></span> </p></li><li><p><code>right_up</code> from <span tex="(5, 0)" bookmark="moose-equation-b24f855b-5048-499d-8363-b10c2fbca3ec" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b24f855b-5048-499d-8363-b10c2fbca3ec"><script>var element = document.getElementById("moose-equation-b24f855b-5048-499d-8363-b10c2fbca3ec");katex.render("(5, 0)", element, {displayMode:false,throwOnError:false});</script></span> to <span tex="(5, 5)" bookmark="moose-equation-4db08a58-9ed7-4847-bb87-7f35db01c883" recursive="True" class="moose-katex-inline-equation" id="moose-equation-4db08a58-9ed7-4847-bb87-7f35db01c883"><script>var element = document.getElementById("moose-equation-4db08a58-9ed7-4847-bb87-7f35db01c883");katex.render("(5, 5)", element, {displayMode:false,throwOnError:false});</script></span></p></li></ul></section><section class="scrollspy" id="cdfe8062-0406-45ac-9503-2be62b659631" data-section-level="2" data-section-text="Defining the RayKernel"><h2 id="defining-the-raykernel">Defining the RayKernel</h2><p><a href="syntax/RayKernels/index.html">RayKernels</a> are objects that are executed on the segments of the rays. In this case, we wish to compute the integral of a variable so we will define a <a href="source/ray_kernels/VariableIntegralRayKernel.html">VariableIntegralRayKernel</a>:</p><pre class="moose-pre"><code class="language-text">[RayKernels/u_integral]
+  type = VariableIntegralRayKernel
+  variable = u
+  rays = &#x27;diag right_up&#x27;
+[]
+</code></pre><a href="#53516d66-be8a-41df-8bba-d18ec655f3c8" class="modal-trigger">(modules/ray_tracing/test/tests/ray_kernels/variable_integral_ray_kernel/simple_diffusion_line_integral.i)</a><div class="modal moose-modal" id="53516d66-be8a-41df-8bba-d18ec655f3c8"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/modules/ray_tracing/test/tests/ray_kernels/variable_integral_ray_kernel/simple_diffusion_line_integral.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 5
+    ny = 5
+    xmax = 5
+    ymax = 5
+  []
+[]
+
+[Variables/u]
+[]
+
+[Kernels/diff]
+  type = Diffusion
+  variable = u
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  csv = true
+[]
+
+[UserObjects/study]
+  type = RepeatableRayStudy
+  names = &#x27;diag
+           right_up&#x27;
+  start_points = &#x27;0 0 0
+                  5 0 0&#x27;
+  end_points = &#x27;5 5 0
+                5 5 0&#x27;
+  execute_on = TIMESTEP_END
+[]
+
+[RayKernels/u_integral]
+  type = VariableIntegralRayKernel
+  variable = u
+  rays = &#x27;diag right_up&#x27;
+[]
+
+[Postprocessors]
+  [diag_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = diag
+  []
+  [right_up_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = right_up
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>The <code>u_integral</code> <a href="source/ray_kernels/VariableIntegralRayKernel.html">VariableIntegralRayKernel</a> will accumulate the variable line integral of the <code>u</code> Variable for our defined rays, <code>diag</code> and <code>right_up</code>.</p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">note</span></div><div class="card-content"><div class="moose-alert-content"><p><p>Other commonly used <a href="IntegralVariableRayKernels">IntegralVariableRayKernels</a> are the <a href="source/ray_kernels/FunctionIntegralRayKernel.html">FunctionIntegralRayKernel</a> and the <a href="source/ray_kernels/MaterialIntegralRayKernel.html">MaterialIntegralRayKernel</a>.</p></p></div></div></div></section><section class="scrollspy" id="100d2ee1-f241-4966-be6e-45bef067cae8" data-section-level="2" data-section-text="Outputting the Integrals"><h2 id="outputting-the-integrals">Outputting the Integrals</h2><p>Lastly, we need to obtain the accumulated integrals from the <code>study</code>. We will utilize a <code>RayIntegralValue</code> <a href="syntax/Postprocessors/index.html">Postprocessor</a> to achieve this:</p><pre class="moose-pre"><code class="language-text">[Postprocessors]
+  [diag_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = diag
+  []
+  [right_up_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = right_up
+  []
+[]
+</code></pre><a href="#6ef939f9-83ed-4175-a560-bd8669e7a7ab" class="modal-trigger">(modules/ray_tracing/test/tests/ray_kernels/variable_integral_ray_kernel/simple_diffusion_line_integral.i)</a><div class="modal moose-modal" id="6ef939f9-83ed-4175-a560-bd8669e7a7ab"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/modules/ray_tracing/test/tests/ray_kernels/variable_integral_ray_kernel/simple_diffusion_line_integral.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 5
+    ny = 5
+    xmax = 5
+    ymax = 5
+  []
+[]
+
+[Variables/u]
+[]
+
+[Kernels/diff]
+  type = Diffusion
+  variable = u
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  csv = true
+[]
+
+[UserObjects/study]
+  type = RepeatableRayStudy
+  names = &#x27;diag
+           right_up&#x27;
+  start_points = &#x27;0 0 0
+                  5 0 0&#x27;
+  end_points = &#x27;5 5 0
+                5 5 0&#x27;
+  execute_on = TIMESTEP_END
+[]
+
+[RayKernels/u_integral]
+  type = VariableIntegralRayKernel
+  variable = u
+  rays = &#x27;diag right_up&#x27;
+[]
+
+[Postprocessors]
+  [diag_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = diag
+  []
+  [right_up_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = right_up
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>The accumulated integrals are seen in output:</p><pre class="moose-pre"><code class="language-text">
+Postprocessor Values:
++----------------+--------------------+------------------------+
+| time           | diag_line_integral | right_up_line_integral |
++----------------+--------------------+------------------------+
+|   0.000000e+00 |       0.000000e+00 |           0.000000e+00 |
+|   1.000000e+00 |       3.535534e+00 |           5.000000e+00 |
++----------------+--------------------+------------------------+
+</code></pre></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#5952d8fe-a800-493b-b402-dcdbbe9cda78" class="tooltipped" data-position="left" data-tooltip="Problem Definition">Problem Definition</a></li><li><a href="#902311e2-37a0-4cd1-98bd-277f73a91c5f" class="tooltipped" data-position="left" data-tooltip="Defining the Study">Defining the Study</a></li><li><a href="#cdfe8062-0406-45ac-9503-2be62b659631" class="tooltipped" data-position="left" data-tooltip="Defining the RayKernel">Defining the RayKernel</a></li><li><a href="#100d2ee1-f241-4966-be6e-45bef067cae8" class="tooltipped" data-position="left" data-tooltip="Outputting the Integrals">Outputting the Integrals</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="contrib/prism/prism.min.js"></script><script type="text/javascript" src="js/init.js"></script><script type="text/javascript" src="js/navigation.js"></script><script type="text/javascript" src="contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="js/search_index.js"></script><script type="text/javascript" src="js/sqa_moose.js"></script>

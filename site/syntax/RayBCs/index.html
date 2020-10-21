@@ -1,0 +1,118 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>index.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="5c9013c9-ef05-44e1-89f5-0eee3c1e20df"><i class="material-icons">menu</i></a><ul class="sidenav" id="5c9013c9-ef05-44e1-89f5-0eee3c1e20df"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">syntax</a><a href="." class="breadcrumb">RayBCs</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="9c14b759-5410-4aca-b9d4-7f2ba53a89b1" data-section-level="1" data-section-text="RayBCs"><h1 id="raybcs">RayBCs</h1><p>A RayBC operates on a <a href="../../source/ray_tracing/Ray.html">Ray</a> that has intersected a boundary (both external and internal boundaries are supported). The base object is the <a href="../../source/ray_bcs/RayBoundaryConditionBase.html">RayBoundaryConditionBase</a>. Common use cases for a RayBC are as follows:</p><ul class="browser-default"><li><p>Killing a <a href="../../source/ray_tracing/Ray.html">Ray</a> on a boundary (see <a href="index.html#killing-the-ray">Killing the Ray</a>). </p></li><li><p>Changing the direction of a <a href="../../source/ray_tracing/Ray.html">Ray</a> on a boundary, for example, reflecting the <a href="../../source/ray_tracing/Ray.html">Ray</a> (see <a href="index.html#changing-the-ray-trajectory">Changing the Ray Trajectory</a>). </p></li><li><p>Creating another <a href="../../source/ray_tracing/Ray.html">Ray</a> on a boundary mid-trace (see <a href="index.html#creating-a-new-ray">Creating a New Ray</a>)</p></li></ul><p>Support is not currently available for contributing to residuals and Jacobians with RayBCs, nor is support for accessing coupled variables and materials on element sides in a RayBC. This support is planned in the future and will be implemented as a need arises.</p><section class="scrollspy" id="6c234fee-acb2-4588-a2c0-2ae4cccc1dea" data-section-level="2" data-section-text="Using a RayBC"><h2 id="using-a-raybc">Using a RayBC</h2><p>The method that is called on each intersected boundary along the trajectory of a <a href="../../source/ray_tracing/Ray.html">Ray</a> in a RayBC is <code>onBoundary()</code>. This method is to be overridden to specialize the on-boundary operation.</p><p>The significant information pretaining to the trace that is available within <code>onBoundary()</code> is as follows:</p><ul class="browser-default"><li><p><code>currentRay()</code> - The current <a href="../../source/ray_tracing/Ray.html">Ray</a> being operated on that has intersected the boundary. </p></li><li><p><code>_current_elem</code> - The current element that the <a href="../../source/ray_tracing/Ray.html">Ray</a> has intersected on the boundary. </p></li><li><p><code>_current_intersected_side</code> - The side of <code>_current_elem</code> that the <a href="../../source/ray_tracing/Ray.html">Ray</a> has intersected on the boundary. </p></li><li><p><code>_current_intersection_point</code> - The point on <code>_current_elem</code> on <code>_current_intersected_side</code> that the <a href="../../source/ray_tracing/Ray.html">Ray</a> has intersected on the boundary. </p></li><li><p><code>_current_intersected_extrema</code> - The extrema (element vertex or edge, see <code>ElemExtrema</code> for more information) intersected on <code>_current_intersected_side</code> at <code>_current_intersection_point</code> on <code>_current_elem</code>, if any. </p></li><li><p><code>_current_bnd_id</code> - The ID of the boundary that the <a href="../../source/ray_tracing/Ray.html">Ray</a> has intersected.</p></li></ul><p>See the <a href="../../source/ray_tracing/Ray.html">Ray</a> documentation for what members are available for use during tracing.</p></section><section class="scrollspy" id="86dd4176-7648-485b-b170-7751351a861e" data-section-level="2" data-section-text="Killing the Ray"><h2 id="killing-the-ray">Killing the Ray</h2><p>A RayBC can stop a <a href="../../source/ray_tracing/Ray.html">Ray</a> from being traced, as is done in <a href="../../source/ray_bcs/KillRayBC.html">KillRayBC</a>:</p><pre class="moose-pre"><code class="language-cpp">void
+KillRayBC::onBoundary(const unsigned int /* num_applying */)
+{
+  // After RayBCs are completed, ray-&gt;shouldContinue() is checked and this will kill the Ray
+  currentRay()-&gt;setShouldContinue(false);
+}
+</code></pre><a href="#0e998c65-919a-4f61-b1f7-0b9d7ed31613" class="modal-trigger">(modules/ray_tracing/src/ray_bcs/KillRayBC.C)</a><div class="modal moose-modal" id="0e998c65-919a-4f61-b1f7-0b9d7ed31613"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/modules/ray_tracing/src/ray_bcs/KillRayBC.C</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#include &quot;KillRayBC.h&quot;
+
+registerMooseObject(&quot;RayTracingApp&quot;, KillRayBC);
+
+InputParameters
+KillRayBC::validParams()
+{
+  auto params = GeneralRayBC::validParams();
+  params.addClassDescription(&quot;A RayBC that kills a Ray on a boundary.&quot;);
+  return params;
+}
+
+KillRayBC::KillRayBC(const InputParameters &amp; params) : GeneralRayBC(params) {}
+
+void
+KillRayBC::onBoundary(const unsigned int /* num_applying */)
+{
+  // After RayBCs are completed, ray-&gt;shouldContinue() is checked and this will kill the Ray
+  currentRay()-&gt;setShouldContinue(false);
+}
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>Similarly, you can check if another object has set to kill a <a href="../../source/ray_tracing/Ray.html">Ray</a> after this segment with:</p><pre class="moose-pre"><code class="language-text">
+const bool ended = currentRay().shouldContinue();
+</code></pre><p>After all RayBCs are executed at a point, if <code>!shouldContinue()</code>, the trace for the <a href="../../source/ray_tracing/Ray.html">Ray</a> will end.</p></section><section class="scrollspy" id="6fca8e01-4976-4fe3-a803-2aedf78b7ef7" data-section-level="2" data-section-text="Changing the Ray Trajectory"><h2 id="changing-the-ray-trajectory">Changing the Ray Trajectory</h2><p>A <a href="../../source/ray_tracing/Ray.html">Ray</a> that is currently being traced can have its trajectory changed on a boundary by a RayBC. The following conditions are imposed on a <a href="../../source/ray_tracing/Ray.html">Ray</a> with such a trajectory change:</p><ul class="browser-default"><li><p>It be continuing, that is <code>currentRay()-&gt;shouldContinue() == true)</code>. </p></li><li><p>It must have moved some before hitting the boundary. </p></li><li><p>It cannot have its end point set, that is, it must only be killed by other RayKernel or RayBC objects. </p></li><li><p>The new direction must be entrant into <code>_current_elem</code> on <code>_current_intersected_side</code>.</p></li></ul><p>To change the trajectory of a <a href="../../source/ray_tracing/Ray.html">Ray</a> within a RayBC, the method <code>changeRayDirection()</code> is to be called with the new direction of the Ray. For example:</p><pre class="moose-pre"><code class="language-text">
+const Point some_direction(1, 0, 0); // must be entrant!
+changeRayDirection(some_direction);
+</code></pre><p>Note on the optional parameter <code>const bool skip_changed_check</code> in <code>changeRayDirection()</code>. By default, only one RayBC is allowed to change the trajectory of a <a href="../../source/ray_tracing/Ray.html">Ray</a> that is being traced that intersects a boundary. Said optional parameter sets this requirement. There exist cases when it is appropriate to change the trajectory of a <a href="../../source/ray_tracing/Ray.html">Ray</a> multiple times at a point. See <a href="index.html#hitting-multiple-boundaries">Hitting Multiple Boundaries</a> for more information.</p></section><section class="scrollspy" id="b43ce934-dac2-4808-827e-fb6015a6b03b" data-section-level="2" data-section-text="Hitting Multiple Boundaries"><h2 id="hitting-multiple-boundaries">Hitting Multiple Boundaries</h2><p>When hitting an element vertex in 2D and 3D or an element edge in 3D, it is possible to intersect multiple boundaries at the same point. This is supported and <code>onBoundary()</code> will be called once on each of the boundaries that are hit for every RayBC that is defined on said boundaries. </p><p>The <code>onBoundary()</code> method passes a single argument, <code>num_applying</code>. This argument denotes how many of the <em>same</em> RayBC object are being applied at a point. To explain the necessity of <code>num_applying</code>, consider the following problem:</p><ul class="browser-default"><li><p>Two-dimensional domain with the boundaries <code>left</code>, <code>right</code>, <code>top</code>, and <code>bottom</code>. </p></li><li><p>A single <a href="../../source/ray_bcs/ReflectRayBC.html">ReflectRayBC</a> object is defined on all of the boundaries of the problem. That is, whenever a <a href="../../source/ray_tracing/Ray.html">Ray</a> hits any of the boundaries it will be reflected in a specular manner. </p></li><li><p>One of the traced rays perfectly hits the top-right corner of the domain, at which both the <code>top</code> and <code>right</code> boundaries exist.</p></li></ul><p>The correct specular reflection (inwards to the domain) can be achieved by applying a specular reflection on each of the boundaries, as seen below in Figure 1.</p><div class="card moose-float" style="width:90%;"><div class="card-content"><img src="../../large_media/ray_tracing/raybc_multiple_reflect.png" class="materialboxed moose-image"></img><p class="moose-caption"><span class="moose-caption-text">Figure 1: Example specular reflection on two boundaries.</span></p></div></div><p> Recall that the act of changing a <a href="../../source/ray_tracing/Ray.html">Ray</a> direction, achieved by <code>changeRayDirection()</code>, takes an optional parameter <code>const bool skip_changed_check</code>. In this case, where we want to apply the same <a href="../../source/ray_bcs/ReflectRayBC.html">ReflectRayBC</a> twice, we pass in <code>num_applying &gt; 1</code> as the argument to <code>skip_changed_check</code> to <em>allow</em> the changing of a <a href="../../source/ray_tracing/Ray.html">Ray</a> trajectory multiple times if the same <a href="../../source/ray_bcs/ReflectRayBC.html">ReflectRayBC</a> is applied more than once. This is done in <a href="../../source/ray_bcs/ReflectRayBC.html">ReflectRayBC</a> as follows:</p><pre class="moose-pre"><code class="language-cpp">void
+ReflectRayBC::onBoundary(const unsigned int num_applying)
+{
+  // No need to do anything if the Ray&#x27;s gonna die anyway
+  if (!currentRay()-&gt;shouldContinue())
+    return;
+
+  // The direction this Ray reflects off this boundary
+  const auto &amp; normal = _study.getSideNormal(_current_elem, _current_intersected_side, _tid);
+  const auto reflected_direction = reflectedDirection(currentRay()-&gt;direction(), normal);
+
+  // Change it! Note here the usage of num_applying: if we are at a corner with a reflecting
+  // boundary condition on both sides, we want to allow both boundary conditions to reflect the Ray.
+  // Therefore, we skip the check that another RayBC has changed the Ray&#x27;s trajectory when we are
+  // applying multiple of the same ReflectRayBC at different boundaries at the same point to allow
+  // this. Note that this double (or triple in 3D) reflection will only be allowed when the same
+  // ReflectRayBC object is on both boundaries.
+  changeRayDirection(reflected_direction, /* skip_changed_check = */ num_applying &gt; 1);
+}
+</code></pre><a href="#ce305de1-39af-47b3-9ebb-7523acb6fb33" class="modal-trigger">(modules/ray_tracing/src/ray_bcs/ReflectRayBC.C)</a><div class="modal moose-modal" id="ce305de1-39af-47b3-9ebb-7523acb6fb33"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/modules/ray_tracing/src/ray_bcs/ReflectRayBC.C</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#include &quot;ReflectRayBC.h&quot;
+
+// Local includes
+#include &quot;RayTracingStudy.h&quot;
+
+registerMooseObject(&quot;RayTracingApp&quot;, ReflectRayBC);
+
+InputParameters
+ReflectRayBC::validParams()
+{
+  auto params = GeneralRayBC::validParams();
+  params.addClassDescription(&quot;A RayBC that reflects a Ray in a specular manner on a boundary.&quot;);
+  return params;
+}
+
+ReflectRayBC::ReflectRayBC(const InputParameters &amp; params) : GeneralRayBC(params) {}
+
+void
+ReflectRayBC::onBoundary(const unsigned int num_applying)
+{
+  // No need to do anything if the Ray&#x27;s gonna die anyway
+  if (!currentRay()-&gt;shouldContinue())
+    return;
+
+  // The direction this Ray reflects off this boundary
+  const auto &amp; normal = _study.getSideNormal(_current_elem, _current_intersected_side, _tid);
+  const auto reflected_direction = reflectedDirection(currentRay()-&gt;direction(), normal);
+
+  // Change it! Note here the usage of num_applying: if we are at a corner with a reflecting
+  // boundary condition on both sides, we want to allow both boundary conditions to reflect the Ray.
+  // Therefore, we skip the check that another RayBC has changed the Ray&#x27;s trajectory when we are
+  // applying multiple of the same ReflectRayBC at different boundaries at the same point to allow
+  // this. Note that this double (or triple in 3D) reflection will only be allowed when the same
+  // ReflectRayBC object is on both boundaries.
+  changeRayDirection(reflected_direction, /* skip_changed_check = */ num_applying &gt; 1);
+}
+
+Point
+ReflectRayBC::reflectedDirection(const Point &amp; direction, const Point &amp; normal)
+{
+  Point reflected_direction = direction;
+  reflected_direction -= 2.0 * (reflected_direction * normal) * normal;
+  return reflected_direction;
+}
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="95903c1f-c822-4249-af7f-77221fc152fb" data-section-level="2" data-section-text="Creating a New Ray"><h2 id="creating-a-new-ray">Creating a New Ray</h2><p>It is possible to generate another <a href="../../source/ray_tracing/Ray.html">Ray</a> to be traced from within a RayBC. A <a href="../../source/ray_tracing/Ray.html">Ray</a> that is generated from within a RayBC must satisfy the following requirements:</p><ul class="browser-default"><li><p>It must be continuing (<code>shouldContinue() == true</code>). </p></li><li><p>It must start on <code>_current_elem</code> from <code>_current_intersected_side</code> at <code>_current_intersection_point</code>. </p></li><li><p>Its direction must be entrant into the element.</p></li></ul><p>First, acquire a new <a href="../../source/ray_tracing/Ray.html">Ray</a> using the <code>acquireRay()</code> method, which takes an argument that is the direction for the new <a href="../../source/ray_tracing/Ray.html">Ray</a>. For example:</p><pre class="moose-pre"><code class="language-text">
+const Point some_direction(1, 0, 0); // must be entrant on _current_intersected_side!
+std::shared_ptr&lt;Ray&gt; ray = acquireRay(some_direction);
+</code></pre><p>The acquired <a href="../../source/ray_tracing/Ray.html">Ray</a> will be initialized with the following:</p><ul class="browser-default"><li><p>Zeroed data and aux data, sized as registered by the <code>RayTracingStudy</code>. </p></li><li><p>A starting element that is <code>_current_elem</code>. </p></li><li><p>An incoming side that is <code>_current_intersected_side</code>. </p></li><li><p>A starting point that is <code>_current_intersected_point</code>. </p></li><li><p>A direction as set by the user. </p></li><li><p>A unique ID.</p></li></ul><p>After the <a href="../../source/ray_tracing/Ray.html">Ray</a> has been acquired, you may modify its data members as desired before setting it to be traced. Once the <a href="../../source/ray_tracing/Ray.html">Ray</a> is modified as deisred, do the following to insert it into the buffer to be traced:</p><pre class="moose-pre"><code class="language-text">
+moveRayToBuffer(ray);
+</code></pre></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#6c234fee-acb2-4588-a2c0-2ae4cccc1dea" class="tooltipped" data-position="left" data-tooltip="Using a RayBC">Using a RayBC</a></li><li><a href="#86dd4176-7648-485b-b170-7751351a861e" class="tooltipped" data-position="left" data-tooltip="Killing the Ray">Killing the Ray</a></li><li><a href="#6fca8e01-4976-4fe3-a803-2aedf78b7ef7" class="tooltipped" data-position="left" data-tooltip="Changing the Ray Trajectory">Changing the Ray Trajectory</a></li><li><a href="#b43ce934-dac2-4808-827e-fb6015a6b03b" class="tooltipped" data-position="left" data-tooltip="Hitting Multiple Boundaries">Hitting Multiple Boundaries</a></li><li><a href="#95903c1f-c822-4249-af7f-77221fc152fb" class="tooltipped" data-position="left" data-tooltip="Creating a New Ray">Creating a New Ray</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

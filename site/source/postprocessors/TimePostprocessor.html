@@ -1,0 +1,356 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>TimePostprocessor.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="3f65688b-79c9-4ecd-af67-93996c9bf566"><i class="material-icons">menu</i></a><ul class="sidenav" id="3f65688b-79c9-4ecd-af67-93996c9bf566"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">postprocessors</span><a href="#" class="breadcrumb">TimePostprocessor</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="e230adac-7c8d-4314-9091-2638f611a17d" data-section-level="1" data-section-text="TimePostprocessor"><h1 id="timepostprocessor">TimePostprocessor</h1><p>Reports the current time</p><section class="scrollspy" id="aab79de0-0062-4a2f-9aca-32bf441fdd0b" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="6f88c6ef-6c4a-496c-8d24-7e49f6f129c2" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM TRANSFER</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="bee2381f-99a3-4257-aa29-9ae375484e52" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">allow_duplicate_execution_on_initial</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preaux</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREAUX</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREAUX</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preic</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREIC during initial setup</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREIC during initial setup</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="cbf0bf19-4d36-4c73-abc4-f6ba68d43c2f" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#90a195cb-792b-4001-8ceb-0f035dae331e" class="modal-trigger">test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/picard_sub.i</a></li><li><a href="#8e8cf116-50a7-4abe-b50d-a10cc88aff52" class="modal-trigger">test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/master.i</a></li><li><a href="#bbc3762f-7aea-4575-acd8-9d5d3b91170f" class="modal-trigger">test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/picard_sub2.i</a></li></ul><div class="modal moose-modal" id="90a195cb-792b-4001-8ceb-0f035dae331e"><div class="modal-content"><h4>test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/picard_sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./v]
+  [../]
+[]
+
+[AuxVariables]
+  [./v2]
+  [../]
+  [./v3]
+  [../]
+  [./w]
+  [../]
+[]
+
+[AuxKernels]
+  [./set_w]
+    type = NormalizationAux
+    variable = w
+    source_variable = v
+    normal_factor = 0.1
+  [../]
+[]
+
+[Kernels]
+  [./diff_v]
+    type = Diffusion
+    variable = v
+  [../]
+  [./coupled_force]
+    type = CoupledForce
+    variable = v
+    v = v2
+  [../]
+  [./coupled_force2]
+    type = CoupledForce
+    variable = v
+    v = v3
+  [../]
+  [./td_v]
+    type = TimeDerivative
+    variable = v
+  [../]
+[]
+
+[BCs]
+  [./left_v]
+    type = FunctionDirichletBC
+    variable = v
+    boundary = left
+    function = func
+  [../]
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = right
+    value = 0
+  [../]
+[]
+
+[Functions]
+  [func]
+    type = ParsedFunction
+    value = &#x27;if(t &lt; 2.5, 1, 1 / t)&#x27;
+  []
+[]
+
+[Postprocessors]
+  [./picard_its]
+    type = NumPicardIterations
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [master_time]
+    type = Receiver
+    execute_on = &#x27;timestep_end&#x27;
+  []
+  [master_dt]
+    type = Receiver
+    execute_on = &#x27;timestep_end&#x27;
+  []
+  [time]
+    type = TimePostprocessor
+    execute_on = &#x27;timestep_end&#x27;
+  []
+  [dt]
+    type = TimestepSize
+    execute_on = &#x27;timestep_end&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  picard_max_its = 2 # deliberately make it fail at 2 to test the time step rejection behavior
+  nl_rel_tol = 1e-5 # loose enough to force multiple Picard iterations on this example
+  l_tol = 1e-5 # loose enough to force multiple Picard iterations on this example
+  picard_rel_tol = 1e-8
+  num_steps = 2
+[]
+
+[MultiApps]
+  [./sub2]
+    type = TransientMultiApp
+    positions = &#x27;0 0 0&#x27;
+    input_files = picard_sub2.i
+    execute_on = timestep_end
+  [../]
+[]
+
+[Transfers]
+  [./v_to_v3]
+    type = MultiAppNearestNodeTransfer
+    direction = from_multiapp
+    multi_app = sub2
+    source_variable = v
+    variable = v3
+  [../]
+  [./w]
+    type = MultiAppNearestNodeTransfer
+    direction = to_multiapp
+    multi_app = sub2
+    source_variable = w
+    variable = w
+  [../]
+  [time_to_sub]
+    type = MultiAppPostprocessorTransfer
+    from_postprocessor = time
+    to_postprocessor = sub_time
+    direction = to_multiapp
+    multi_app = sub2
+  []
+  [dt_to_sub]
+    type = MultiAppPostprocessorTransfer
+    from_postprocessor = dt
+    to_postprocessor = sub_dt
+    direction = to_multiapp
+    multi_app = sub2
+  []
+  [matser_time_to_sub]
+    type = MultiAppPostprocessorTransfer
+    from_postprocessor = time
+    to_postprocessor = master_time
+    direction = to_multiapp
+    multi_app = sub2
+  []
+  [master_dt_to_sub]
+    type = MultiAppPostprocessorTransfer
+    from_postprocessor = dt
+    to_postprocessor = master_dt
+    direction = to_multiapp
+    multi_app = sub2
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8e8cf116-50a7-4abe-b50d-a10cc88aff52"><div class="modal-content"><h4>test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[AuxVariables]
+  [./v]
+  [../]
+[]
+
+[AuxKernels]
+  [./set_v]
+    type = FunctionAux
+    variable = v
+    function = &#x27;t&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = CoefDiffusion
+    variable = u
+    coef = 0.1
+  [../]
+  [./coupled_force]
+    type = CoupledForce
+    variable = u
+    v = v
+  [../]
+  [./time]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  num_steps = 2
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  picard_max_its = 1
+  auto_advance = false
+[]
+
+[MultiApps]
+  [./sub1]
+    type = TransientMultiApp
+    positions = &#x27;0 0 0&#x27;
+    input_files = picard_sub.i
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Transfers]
+  [./u_to_v2]
+    type = MultiAppNearestNodeTransfer
+    direction = to_multiapp
+    multi_app = sub1
+    source_variable = u
+    variable = v2
+  [../]
+  [time_to_sub]
+    type = MultiAppPostprocessorTransfer
+    from_postprocessor = time
+    to_postprocessor = master_time
+    direction = to_multiapp
+    multi_app = sub1
+  []
+  [dt_to_sub]
+    type = MultiAppPostprocessorTransfer
+    from_postprocessor = dt
+    to_postprocessor = master_dt
+    direction = to_multiapp
+    multi_app = sub1
+  []
+[]
+
+[Postprocessors]
+  [time]
+    type = TimePostprocessor
+    execute_on = &#x27;timestep_end&#x27;
+  []
+  [dt]
+    type = TimestepSize
+    execute_on = &#x27;timestep_end&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="bbc3762f-7aea-4575-acd8-9d5d3b91170f"><div class="modal-content"><h4>test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/picard_sub2.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./v]
+  [../]
+[]
+
+[AuxVariables]
+  [./w]
+  [../]
+[]
+
+[Kernels]
+  [./diff_v]
+    type = Diffusion
+    variable = v
+  [../]
+  [./td_v]
+    type = TimeDerivative
+    variable = v
+  [../]
+[]
+
+[BCs]
+  [./left_v]
+    type = DirichletBC
+    variable = v
+    boundary = left
+    value = 1
+  [../]
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = right
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  nl_rel_tol = 1e-5 # loose enough to force multiple Picard iterations on this example
+  l_tol = 1e-5 # loose enough to force multiple Picard iterations on this example
+  num_steps = 2
+[]
+
+[Postprocessors]
+  [master_time]
+    type = Receiver
+    execute_on = &#x27;timestep_end&#x27;
+  []
+  [master_dt]
+    type = Receiver
+    execute_on = &#x27;timestep_end&#x27;
+  []
+  [sub_time]
+    type = Receiver
+    execute_on = &#x27;timestep_end&#x27;
+  []
+  [sub_dt]
+    type = Receiver
+    execute_on = &#x27;timestep_end&#x27;
+  []
+  [time]
+    type = TimePostprocessor
+    execute_on = &#x27;timestep_end&#x27;
+  []
+  [dt]
+    type = TimestepSize
+    execute_on = &#x27;timestep_end&#x27;
+  []
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#aab79de0-0062-4a2f-9aca-32bf441fdd0b" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#cbf0bf19-4d36-4c73-abc4-f6ba68d43c2f" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

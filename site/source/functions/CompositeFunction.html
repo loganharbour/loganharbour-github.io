@@ -1,0 +1,269 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>CompositeFunction.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="4b35aaf9-f6f1-43e7-9fd4-75f431597115"><i class="material-icons">menu</i></a><ul class="sidenav" id="4b35aaf9-f6f1-43e7-9fd4-75f431597115"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">functions</span><a href="#" class="breadcrumb">CompositeFunction</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="310811c3-d8a2-445a-8da8-8ae4ecfb3ada" data-section-level="1" data-section-text="CompositeFunction"><h1 id="compositefunction">CompositeFunction</h1><p>Multiplies an arbitrary set of functions together</p><section class="scrollspy" id="70ae2161-ceb8-4706-8052-2eb1fabe3d55" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The <code>CompositeFunction</code> type takes an arbitrary set of functions, provided in the <code>functions</code> parameter, evaluates each of them at the appropriate time and position, and multiplies them together.  The function can optionally be multiplied by a scale factor, which is specified using the <code>scale_factor</code> parameter.</p></section><section class="scrollspy" id="102f6c8d-516a-4738-937c-2cf733e0b71f" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">[Functions]
+  [./ff_1]
+    type = ParsedFunction
+    value = alpha*alpha*pi
+    vars = &#x27;alpha&#x27;
+    vals = &#x27;16&#x27;
+  [../]
+
+  [./ff_2]
+    type = ParsedFunction
+    value = pi*sin(alpha*pi*x)
+    vars = &#x27;alpha&#x27;
+    vals = &#x27;16&#x27;
+  [../]
+
+  [./forcing_func]
+    type = CompositeFunction
+    functions = &#x27;ff_1 ff_2&#x27;
+  [../]
+
+  [./bc_func]
+    type = ParsedFunction
+    value = sin(alpha*pi*x)
+    vars = &#x27;alpha&#x27;
+    vals = &#x27;16&#x27;
+  [../]
+[]
+</code></pre><a href="#91904b0f-e823-4fcc-a734-c4d7cbb1d746" class="modal-trigger">(test/tests/bcs/function_dirichlet_bc/test.i)</a><div class="modal moose-modal" id="91904b0f-e823-4fcc-a734-c4d7cbb1d746"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/bcs/function_dirichlet_bc/test.i</h4><pre class="moose-pre"><code class="language-text">###########################################################
+# This is a test of Boundary Condition System. The
+# FunctionDirichletBC is used to contribute the residuals
+# to the boundary term operators in the weak form.
+#
+# @Requirement F3.40
+###########################################################
+
+[Mesh]
+  [./square]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 32
+    ny = 32
+  [../]
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Functions]
+  [./ff_1]
+    type = ParsedFunction
+    value = alpha*alpha*pi
+    vars = &#x27;alpha&#x27;
+    vals = &#x27;16&#x27;
+  [../]
+
+  [./ff_2]
+    type = ParsedFunction
+    value = pi*sin(alpha*pi*x)
+    vars = &#x27;alpha&#x27;
+    vals = &#x27;16&#x27;
+  [../]
+
+  [./forcing_func]
+    type = CompositeFunction
+    functions = &#x27;ff_1 ff_2&#x27;
+  [../]
+
+  [./bc_func]
+    type = ParsedFunction
+    value = sin(alpha*pi*x)
+    vars = &#x27;alpha&#x27;
+    vals = &#x27;16&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./forcing]
+    type = BodyForce
+    variable = u
+    function = forcing_func
+  [../]
+[]
+
+[BCs]
+  [./all]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = &#x27;left right&#x27;
+    function = bc_func
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  nl_rel_tol = 1e-12
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="56b97988-e61e-4dee-ab7f-72888873f3f7" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="1b00f398-aa0c-4d1d-904e-e8441111d897" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">functions</span><span class="moose-parameter-header-description">The functions to be multiplied together.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<FunctionName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The functions to be multiplied together.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">scale_factor</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">Scale factor to be applied to the ordinate values</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Scale factor to be applied to the ordinate values</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="75421406-b4a8-4e70-8069-93a127b78ef0" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="27b6b4db-f5a2-4be8-ad91-7f2e8b53a3e5" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#8853d50f-5ba4-440a-8802-06112f83e1e6" class="modal-trigger">test/tests/bcs/ad_function_dirichlet_bc/test.i</a></li><li><a href="#9a1699f9-ce7c-453c-84f1-79082697f345" class="modal-trigger">test/tests/bcs/function_dirichlet_bc/test.i</a></li></ul><div class="modal moose-modal" id="8853d50f-5ba4-440a-8802-06112f83e1e6"><div class="modal-content"><h4>test/tests/bcs/ad_function_dirichlet_bc/test.i</h4><pre class="moose-pre"><code class="language-text">###########################################################
+# This is a test of Boundary Condition System. The
+# FunctionDirichletBC is used to contribute the residuals
+# to the boundary term operators in the weak form.
+#
+# @Requirement F3.40
+###########################################################
+
+[Mesh]
+  [./square]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 32
+    ny = 32
+  [../]
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Functions]
+  [./ff_1]
+    type = ParsedFunction
+    value = alpha*alpha*pi
+    vars = &#x27;alpha&#x27;
+    vals = &#x27;16&#x27;
+  [../]
+
+  [./ff_2]
+    type = ParsedFunction
+    value = pi*sin(alpha*pi*x)
+    vars = &#x27;alpha&#x27;
+    vals = &#x27;16&#x27;
+  [../]
+
+  [./forcing_func]
+    type = CompositeFunction
+    functions = &#x27;ff_1 ff_2&#x27;
+  [../]
+
+  [./bc_func]
+    type = ParsedFunction
+    value = sin(alpha*pi*x)
+    vars = &#x27;alpha&#x27;
+    vals = &#x27;16&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = ADDiffusion
+    variable = u
+  [../]
+  [./forcing]
+    type = ADBodyForce
+    variable = u
+    function = forcing_func
+  [../]
+[]
+
+[BCs]
+  [./all]
+    type = ADFunctionDirichletBC
+    variable = u
+    boundary = &#x27;left right&#x27;
+    function = bc_func
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  nl_rel_tol = 1e-12
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9a1699f9-ce7c-453c-84f1-79082697f345"><div class="modal-content"><h4>test/tests/bcs/function_dirichlet_bc/test.i</h4><pre class="moose-pre"><code class="language-text">###########################################################
+# This is a test of Boundary Condition System. The
+# FunctionDirichletBC is used to contribute the residuals
+# to the boundary term operators in the weak form.
+#
+# @Requirement F3.40
+###########################################################
+
+
+[Mesh]
+  [./square]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 32
+    ny = 32
+  [../]
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Functions]
+  [./ff_1]
+    type = ParsedFunction
+    value = alpha*alpha*pi
+    vars = &#x27;alpha&#x27;
+    vals = &#x27;16&#x27;
+  [../]
+
+  [./ff_2]
+    type = ParsedFunction
+    value = pi*sin(alpha*pi*x)
+    vars = &#x27;alpha&#x27;
+    vals = &#x27;16&#x27;
+  [../]
+
+  [./forcing_func]
+    type = CompositeFunction
+    functions = &#x27;ff_1 ff_2&#x27;
+  [../]
+
+  [./bc_func]
+    type = ParsedFunction
+    value = sin(alpha*pi*x)
+    vars = &#x27;alpha&#x27;
+    vals = &#x27;16&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./forcing]
+    type = BodyForce
+    variable = u
+    function = forcing_func
+  [../]
+[]
+
+[BCs]
+  [./all]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = &#x27;left right&#x27;
+    function = bc_func
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  nl_rel_tol = 1e-12
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#70ae2161-ceb8-4706-8052-2eb1fabe3d55" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#102f6c8d-516a-4738-937c-2cf733e0b71f" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#56b97988-e61e-4dee-ab7f-72888873f3f7" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#27b6b4db-f5a2-4be8-ad91-7f2e8b53a3e5" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

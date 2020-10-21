@@ -1,0 +1,378 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>LaplacianJumpIndicator.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="3dd5d0f8-8c0e-4a85-b4f1-1c80c6f9ba2d"><i class="material-icons">menu</i></a><ul class="sidenav" id="3dd5d0f8-8c0e-4a85-b4f1-1c80c6f9ba2d"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">indicators</span><a href="#" class="breadcrumb">LaplacianJumpIndicator</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="8ca06866-8878-47bc-a905-f42898a3f604" data-section-level="1" data-section-text="LaplacianJumpIndicator"><h1 id="laplacianjumpindicator">LaplacianJumpIndicator</h1><p>Compute the jump of the solution laplacian across element bondaries.</p><section class="scrollspy" id="51a405a0-f25b-4733-8c34-fd78f889af1c" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The LaplacianJumpIndicator object computes the error as computed by the change in the Laplacian of a variable across element interfaces.</p><div class="card moose-alert moose-alert-warning"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">warning:</span>LaplacianJumpIndicator requires second derivatives</div><div class="card-content"><div class="moose-alert-content"><p><p>The Laplacian (<span tex="\nabla^2 u" bookmark="moose-equation-e16d36b1-087a-4dd0-930f-bec772063f2c" recursive="True" class="moose-katex-inline-equation" id="moose-equation-e16d36b1-087a-4dd0-930f-bec772063f2c"><script>var element = document.getElementById("moose-equation-e16d36b1-087a-4dd0-930f-bec772063f2c");katex.render("\\nabla^2 u", element, {displayMode:false,throwOnError:false});</script></span> or <span tex="\nabla\cdot\nabla u" bookmark="moose-equation-e06d7aaf-7cf6-4372-8406-c379140cabc5" recursive="True" class="moose-katex-inline-equation" id="moose-equation-e06d7aaf-7cf6-4372-8406-c379140cabc5"><script>var element = document.getElementById("moose-equation-e06d7aaf-7cf6-4372-8406-c379140cabc5");katex.render("\\nabla\\cdot\\nabla u", element, {displayMode:false,throwOnError:false});</script></span>) operator requires second derivaties with respect to the spacial dimensions. As such, the selected finite elements must be at least second order for the calculation to be valid.</p></p></div></div></div></section><section class="scrollspy" id="d23342dd-4608-47a7-b0f3-34a206fe5230" data-section-level="2" data-section-text="Example Input File Syntax"><h2 id="example-input-file-syntax">Example Input File Syntax</h2><p>The following code snippet demonstrates the use of the LaplacianJumpIndicator object within a typical input file.</p><pre class="moose-pre"><code class="language-text">[Adaptivity]
+  [Indicators]
+    [error]
+      type = LaplacianJumpIndicator
+      variable = u
+      scale_by_flux_faces = true
+    []
+  []
+[]
+</code></pre><a href="#06eca8c8-df2c-4845-b11e-86a40a46ea60" class="modal-trigger">(test/tests/indicators/laplacian_jump_indicator/biharmonic.i)</a><div class="modal moose-modal" id="06eca8c8-df2c-4845-b11e-86a40a46ea60"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/indicators/laplacian_jump_indicator/biharmonic.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  # Parameters used by Functions.
+  vars   = &#x27;c&#x27;
+  vals   = &#x27;50&#x27;
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -.5
+  xmax = .5
+  ymin = -.5
+  ymax = .5
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+    order = THIRD
+    family = HERMITE
+  [../]
+[]
+
+[Kernels]
+  [./biharmonic]
+    type = Biharmonic
+    variable = u
+  [../]
+  [./body_force]
+    type = BodyForce
+    variable = u
+    function = forcing_func
+  [../]
+[]
+
+[BCs]
+  active = &#x27;all_value all_flux&#x27;
+  [./all_value]
+    type = FunctionPenaltyDirichletBC
+    variable = u
+    boundary = &#x27;left right top bottom&#x27;
+    function = u_func
+    penalty = 1e10
+  [../]
+  [./all_flux]
+    type = FunctionPenaltyFluxBC
+    variable = u
+    boundary = &#x27;left right top bottom&#x27;
+    function = u_func
+    penalty = 1e10
+  [../]
+  [./all_laplacian]
+    type = BiharmonicLapBC
+    variable = u
+    boundary = &#x27;left right top bottom&#x27;
+    laplacian_function = lapu_func
+  [../]
+[]
+
+[Adaptivity]
+  [Indicators]
+    [error]
+      type = LaplacianJumpIndicator
+      variable = u
+      scale_by_flux_faces = true
+    []
+  []
+[]
+
+[Executioner]
+  type = Steady
+
+  # Note: the unusually tight tolerances here are due to the penalty
+  # BCs (currently the only way of accurately Dirichlet boundary
+  # conditions on Hermite elements in MOOSE).
+  nl_rel_tol = 1.e-15
+  l_tol = 1.e-15
+
+  # We have exact Jacobians
+  solve_type = &#x27;NEWTON&#x27;
+
+  # Use 6x6 quadrature to ensure the forcing function is integrated
+  # accurately.
+  [./Quadrature]
+    type = GAUSS
+    order = ELEVENTH
+  [../]
+[]
+
+[Functions]
+  [./u_func]
+    type   = ParsedGradFunction
+    value  = &#x27;exp(-c*(x^2+y^2))&#x27;
+    grad_x = &#x27;-2*c*exp(-c*(x^2+y^2))*x&#x27;
+    grad_y = &#x27;-2*c*exp(-c*(x^2+y^2))*y&#x27;
+  [../]
+  [./lapu_func]
+    type   = ParsedFunction
+    value  = &#x27;4*c*(c*(x^2+y^2) - 1)*exp(-c*(x^2+y^2))&#x27;
+  [../]
+  [./forcing_func]
+    type   = ParsedFunction
+    value  = &#x27;16*c^2*(c^2*(x^2+y^2)^2 - 4*c*(x^2+y^2) + 2)*exp(-c*(x^2+y^2))&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./l2_error]
+    type = ElementL2Error
+    variable = u
+    function = u_func
+  [../]
+  [./h1_error]
+    type = ElementH1Error
+    variable = u
+    function = u_func
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="b8cd4b4a-9a66-4a2d-90f0-b9c472349391" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="bd4b6ec4-711c-4d17-8fa8-c405151b9a67" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this side indicator applies to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>VariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this side indicator applies to</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="04197625-e4fa-4490-a7b4-5ad9314b8df1" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">scale_by_flux_faces</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not to scale the error values by the number of flux faces.  This attempts to not penalize elements on boundaries for having less neighbors.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not to scale the error values by the number of flux faces.  This attempts to not penalize elements on boundaries for having less neighbors.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="c3945b9c-5670-452d-8401-98ce74b106ae" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="5d949cc3-bbf9-4873-9854-f1871d9e2ab7" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#b94f3cdd-a9b7-4025-a622-95a8b27291f4" class="modal-trigger">test/tests/indicators/laplacian_jump_indicator/biharmonic_transient.i</a></li><li><a href="#fc661427-0ae0-43de-b2ed-f3f74748393f" class="modal-trigger">test/tests/indicators/laplacian_jump_indicator/biharmonic.i</a></li></ul><div class="modal moose-modal" id="b94f3cdd-a9b7-4025-a622-95a8b27291f4"><div class="modal-content"><h4>test/tests/indicators/laplacian_jump_indicator/biharmonic_transient.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  # Parameters used by Functions.
+  vars   = &#x27;c&#x27;
+  vals   = &#x27;50&#x27;
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -.5
+  xmax = .5
+  ymin = -.5
+  ymax = .5
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+    order = THIRD
+    family = HERMITE
+  [../]
+[]
+
+[Kernels]
+  [./biharmonic]
+    type = Biharmonic
+    variable = u
+  [../]
+  [./body_force]
+    type = BodyForce
+    variable = u
+    function = forcing_func
+  [../]
+[]
+
+[BCs]
+  [./all_value]
+    type = FunctionPenaltyDirichletBC
+    variable = u
+    boundary = &#x27;left right top bottom&#x27;
+    function = u_func
+    penalty = 1e10
+  [../]
+  [./all_flux]
+    type = FunctionPenaltyFluxBC
+    variable = u
+    boundary = &#x27;left right top bottom&#x27;
+    function = u_func
+    penalty = 1e10
+  [../]
+[]
+
+[Adaptivity]
+  [./Indicators]
+    [./error]
+      type = LaplacianJumpIndicator
+      variable = u
+      scale_by_flux_faces = true
+    [../]
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 4
+  dt = 0.1
+
+  # Note: the unusually tight tolerances here are due to the penalty
+  # BCs (currently the only way of accurately Dirichlet boundary
+  # conditions on Hermite elements in MOOSE).
+  nl_rel_tol = 1.e-15
+  l_tol = 1.e-15
+
+  # We have exact Jacobians
+  solve_type = &#x27;NEWTON&#x27;
+
+  # Use 6x6 quadrature to ensure the forcing function is integrated
+  # accurately.
+  [./Quadrature]
+    type = GAUSS
+    order = ELEVENTH
+  [../]
+[]
+
+[Functions]
+  [./u_func]
+    type   = ParsedGradFunction
+    value  = &#x27;exp(-c*(x^2+y^2))*exp(-t)&#x27;
+    grad_x = &#x27;-2*c*exp(-c*(x^2+y^2))*x*exp(-t)&#x27;
+    grad_y = &#x27;-2*c*exp(-c*(x^2+y^2))*y*exp(-t)&#x27;
+  [../]
+  [./forcing_func]
+    type   = ParsedFunction
+    value  = &#x27;16*c^2*(c^2*(x^2+y^2)^2 - 4*c*(x^2+y^2) + 2)*exp(-c*(x^2+y^2))*exp(-t)&#x27;
+  [../]
+[]
+
+[ICs]
+  [./u_ic]
+    type = FunctionIC
+    function = u_func
+    variable = u
+  [../]
+[]
+
+[Postprocessors]
+  [./l2_error]
+    type = ElementL2Error
+    variable = u
+    function = u_func
+  [../]
+  [./h1_error]
+    type = ElementH1Error
+    variable = u
+    function = u_func
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fc661427-0ae0-43de-b2ed-f3f74748393f"><div class="modal-content"><h4>test/tests/indicators/laplacian_jump_indicator/biharmonic.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  # Parameters used by Functions.
+  vars   = &#x27;c&#x27;
+  vals   = &#x27;50&#x27;
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -.5
+  xmax = .5
+  ymin = -.5
+  ymax = .5
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+    order = THIRD
+    family = HERMITE
+  [../]
+[]
+
+[Kernels]
+  [./biharmonic]
+    type = Biharmonic
+    variable = u
+  [../]
+  [./body_force]
+    type = BodyForce
+    variable = u
+    function = forcing_func
+  [../]
+[]
+
+[BCs]
+  active = &#x27;all_value all_flux&#x27;
+  [./all_value]
+    type = FunctionPenaltyDirichletBC
+    variable = u
+    boundary = &#x27;left right top bottom&#x27;
+    function = u_func
+    penalty = 1e10
+  [../]
+  [./all_flux]
+    type = FunctionPenaltyFluxBC
+    variable = u
+    boundary = &#x27;left right top bottom&#x27;
+    function = u_func
+    penalty = 1e10
+  [../]
+  [./all_laplacian]
+    type = BiharmonicLapBC
+    variable = u
+    boundary = &#x27;left right top bottom&#x27;
+    laplacian_function = lapu_func
+  [../]
+[]
+
+[Adaptivity]
+  [Indicators]
+    [error]
+      type = LaplacianJumpIndicator
+      variable = u
+      scale_by_flux_faces = true
+    []
+  []
+[]
+
+[Executioner]
+  type = Steady
+
+  # Note: the unusually tight tolerances here are due to the penalty
+  # BCs (currently the only way of accurately Dirichlet boundary
+  # conditions on Hermite elements in MOOSE).
+  nl_rel_tol = 1.e-15
+  l_tol = 1.e-15
+
+  # We have exact Jacobians
+  solve_type = &#x27;NEWTON&#x27;
+
+  # Use 6x6 quadrature to ensure the forcing function is integrated
+  # accurately.
+  [./Quadrature]
+    type = GAUSS
+    order = ELEVENTH
+  [../]
+[]
+
+[Functions]
+  [./u_func]
+    type   = ParsedGradFunction
+    value  = &#x27;exp(-c*(x^2+y^2))&#x27;
+    grad_x = &#x27;-2*c*exp(-c*(x^2+y^2))*x&#x27;
+    grad_y = &#x27;-2*c*exp(-c*(x^2+y^2))*y&#x27;
+  [../]
+  [./lapu_func]
+    type   = ParsedFunction
+    value  = &#x27;4*c*(c*(x^2+y^2) - 1)*exp(-c*(x^2+y^2))&#x27;
+  [../]
+  [./forcing_func]
+    type   = ParsedFunction
+    value  = &#x27;16*c^2*(c^2*(x^2+y^2)^2 - 4*c*(x^2+y^2) + 2)*exp(-c*(x^2+y^2))&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./l2_error]
+    type = ElementL2Error
+    variable = u
+    function = u_func
+  [../]
+  [./h1_error]
+    type = ElementH1Error
+    variable = u
+    function = u_func
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#51a405a0-f25b-4733-8c34-fd78f889af1c" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#d23342dd-4608-47a7-b0f3-34a206fe5230" class="tooltipped" data-position="left" data-tooltip="Example Input File Syntax">Example Input File Syntax</a></li><li><a href="#b8cd4b4a-9a66-4a2d-90f0-b9c472349391" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#5d949cc3-bbf9-4873-9854-f1871d9e2ab7" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

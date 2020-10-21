@@ -1,0 +1,4739 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>VectorFunctionDirichletBC.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="82dddf40-1d7b-4b56-b563-1b35974ee711"><i class="material-icons">menu</i></a><ul class="sidenav" id="82dddf40-1d7b-4b56-b563-1b35974ee711"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">bcs</span><a href="#" class="breadcrumb">VectorFunctionDirichletBC</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="7696a512-89fa-419e-ac6c-27699a7353c7" data-section-level="1" data-section-text="VectorFunctionDirichletBC"><h1 id="vectorfunctiondirichletbc">VectorFunctionDirichletBC</h1><p>Imposes the essential boundary condition <span tex="\vec{u}=\vec{g}" bookmark="moose-equation-755b947d-f053-4e26-befc-b4e45499574f" recursive="True" class="moose-katex-inline-equation" id="moose-equation-755b947d-f053-4e26-befc-b4e45499574f"><script>var element = document.getElementById("moose-equation-755b947d-f053-4e26-befc-b4e45499574f");katex.render("\\vec{u}=\\vec{g}", element, {displayMode:false,throwOnError:false});</script></span>, where <span tex="\vec{g}" bookmark="moose-equation-75fa7c51-aeb6-4b06-8ead-a8ac3a270457" recursive="True" class="moose-katex-inline-equation" id="moose-equation-75fa7c51-aeb6-4b06-8ead-a8ac3a270457"><script>var element = document.getElementById("moose-equation-75fa7c51-aeb6-4b06-8ead-a8ac3a270457");katex.render("\\vec{g}", element, {displayMode:false,throwOnError:false});</script></span> components are calculated with functions.</p><section class="scrollspy" id="677acf40-368e-47b6-a342-1a7cabffcc28" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>VectorFunctionDirichletBC</code> is a generalization of <a href="VectorDirichletBC.html"><code>VectorDirichletBC</code></a> which imposes possibly temporally- and spatially-dependent values for the Lagrange vector components through MOOSE <a href="../../syntax/Functions/index.html"><code>Function</code></a> objects on degrees of freedom that fall on the boundary defined by the <code>boundary</code> parameter. That is, for a PDE of the form</p><p><span class="moose-katex-block-equation"><span tex="\begin{aligned}   -\nabla^2 \vec{u} &= \vec{f} && \quad \in \Omega \\   \vec{u} &= \vec{g(t,\vec{x})} && \quad \in \partial \Omega_D \\   \frac{\partial \vec{u}}{\partial n} &= \vec{h(t,\vec{x})} && \quad \in \partial \Omega_N \end{aligned}" bookmark="moose-equation-08f0ce23-52ed-4f18-9907-4e5c353e618b" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-08f0ce23-52ed-4f18-9907-4e5c353e618b"></span><script>var element = document.getElementById("moose-equation-08f0ce23-52ed-4f18-9907-4e5c353e618b");katex.render("\\begin{aligned}   -\\nabla^2 \\vec{u} &= \\vec{f} && \\quad \\in \\Omega \\\\   \\vec{u} &= \\vec{g(t,\\vec{x})} && \\quad \\in \\partial \\Omega_D \\\\   \\frac{\\partial \\vec{u}}{\\partial n} &= \\vec{h(t,\\vec{x})} && \\quad \\in \\partial \\Omega_N \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span></p><p>where <span tex="\Omega \subset \mathbb{R}^n" bookmark="moose-equation-aa891261-0524-4c58-8043-46bfe10b39d8" recursive="True" class="moose-katex-inline-equation" id="moose-equation-aa891261-0524-4c58-8043-46bfe10b39d8"><script>var element = document.getElementById("moose-equation-aa891261-0524-4c58-8043-46bfe10b39d8");katex.render("\\Omega \\subset \\mathbb{R}^n", element, {displayMode:false,throwOnError:false});</script></span> is the domain, and <span tex="\partial \Omega = \partial \Omega_D \cup \partial \Omega_N" bookmark="moose-equation-d095b7a2-75a9-400a-bddf-b85cef05790a" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d095b7a2-75a9-400a-bddf-b85cef05790a"><script>var element = document.getElementById("moose-equation-d095b7a2-75a9-400a-bddf-b85cef05790a");katex.render("\\partial \\Omega = \\partial \\Omega_D \\cup \\partial \\Omega_N", element, {displayMode:false,throwOnError:false});</script></span> is its boundary. A <code>VectorFunctionDirichletBC</code> object can be used to impose the condition (2) if the function is well-defined for <span tex="\vec{x} \in \partial \Omega_D" bookmark="moose-equation-716661b7-103a-4cf4-a130-f80f0953cd58" recursive="True" class="moose-katex-inline-equation" id="moose-equation-716661b7-103a-4cf4-a130-f80f0953cd58"><script>var element = document.getElementById("moose-equation-716661b7-103a-4cf4-a130-f80f0953cd58");katex.render("\\vec{x} \\in \\partial \\Omega_D", element, {displayMode:false,throwOnError:false});</script></span>. In this case, the <code>function_x</code>, <code>function_y</code>, and <code>function_z</code> parameters correspond to a set of MOOSE <code>Function</code> objects which represent the mathematical function <span tex="\vec{g(t,\vec{x})}" bookmark="moose-equation-de45c7d4-2b10-4481-a106-d87dc43f4ca6" recursive="True" class="moose-katex-inline-equation" id="moose-equation-de45c7d4-2b10-4481-a106-d87dc43f4ca6"><script>var element = document.getElementById("moose-equation-de45c7d4-2b10-4481-a106-d87dc43f4ca6");katex.render("\\vec{g(t,\\vec{x})}", element, {displayMode:false,throwOnError:false});</script></span>, and the user must define one or more sidesets corresponding to the boundary subset <span tex="\partial \Omega_D" bookmark="moose-equation-259d44df-9b53-4527-a1de-3984ad0d1b6c" recursive="True" class="moose-katex-inline-equation" id="moose-equation-259d44df-9b53-4527-a1de-3984ad0d1b6c"><script>var element = document.getElementById("moose-equation-259d44df-9b53-4527-a1de-3984ad0d1b6c");katex.render("\\partial \\Omega_D", element, {displayMode:false,throwOnError:false});</script></span> via the <code>boundary</code> parameter.</p></section><section class="scrollspy" id="266e89e4-ff7d-4b53-b686-b1bb396a345f" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="f4af3113-8bad-4ee0-9577-141c8fd161ee" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this boundary condition applies to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this boundary condition applies to</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="0faf6703-3deb-4001-bb96-59849dd0bc57" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function</span><span class="moose-parameter-header-description">The boundary condition vector function. This cannot be supplied with the component parameters.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The boundary condition vector function. This cannot be supplied with the component parameters.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function_x</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The function for the x component</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The function for the x component</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function_y</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The function for the y component</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The function for the y component</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function_z</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The function for the z component</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The function for the z component</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="b2bce79a-36d9-4873-b97f-184039c05aca" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="5611903f-0562-47a5-a388-3bb4c3b3aed5" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system time</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system time</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">residual</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>residual</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time residual</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="3a6f701d-1903-47f3-abef-e434cb75de57" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#bd82b48a-053b-45b8-a32b-f27d4d424afb" class="modal-trigger">test/tests/kernels/vector_fe/lagrange_vec_1d.i</a></li><li><a href="#0ecf2d30-e8e9-441a-b77e-e59956366b21" class="modal-trigger">modules/navier_stokes/test/tests/ins/lid_driven/ad_lid_driven_stabilized_with_temp.i</a></li><li><a href="#74957454-5a95-431c-98f6-8bcc5262075c" class="modal-trigger">modules/navier_stokes/test/tests/ins/lid_driven/ad_lid_driven_stabilized_with_temp_transient.i</a></li><li><a href="#c26c75e9-4d59-4c09-a522-3bcbf4206558" class="modal-trigger">test/tests/kernels/vector_fe/coupled_vector_gradient.i</a></li><li><a href="#7932e13c-44d7-439a-a43c-8a66c37fcc58" class="modal-trigger">modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_no_parts_steady_stabilized.i</a></li><li><a href="#b4c3cad6-35af-4972-9e3f-1706f4323110" class="modal-trigger">modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_by_parts_steady.i</a></li><li><a href="#50a42650-c6b3-4b42-adcf-c7f68c0cab03" class="modal-trigger">modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_no_parts.i</a></li><li><a href="#eedb6ee6-6d6f-4b5e-9038-cd71fd0c0517" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/steady-action-function.i</a></li><li><a href="#98ff7fac-f8f7-41ee-b4e8-be1ca1e483c4" class="modal-trigger">modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_by_parts_steady_nobcbc.i</a></li><li><a href="#44cc5fef-62e5-4a2f-abe2-ef284ae6ad35" class="modal-trigger">modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_no_parts_steady_nobcbc.i</a></li><li><a href="#672898b3-ebcf-4bcf-9586-39ba19994b84" class="modal-trigger">modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_by_parts_traction_steady_stabilized.i</a></li><li><a href="#7cafbc0c-3340-42a8-b1ee-0e87eb1ca0f3" class="modal-trigger">modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_no_parts_steady.i</a></li><li><a href="#37bce069-bc8b-4945-99b1-3276fb6e9552" class="modal-trigger">modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_by_parts_steady_stabilized.i</a></li><li><a href="#b2a04681-89a7-4c8b-bbde-d5deb9134f3c" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/gravity-object.i</a></li><li><a href="#20adb0a1-d506-44e0-b3f4-6d1a9d57e021" class="modal-trigger">modules/navier_stokes/test/tests/ins/lid_driven/ad_lid_driven.i</a></li><li><a href="#ad00bb39-f56e-4193-b0ce-d91ac158a489" class="modal-trigger">modules/navier_stokes/test/tests/ins/energy_source/steady-var.i</a></li><li><a href="#c7aa5e2c-f3d1-4b02-81b4-ebb16db9b6d3" class="modal-trigger">modules/navier_stokes/test/tests/ins/lid_driven/ad_lid_driven_stabilized.i</a></li><li><a href="#6efb09c9-5210-484a-b99c-6a48351cb57d" class="modal-trigger">modules/navier_stokes/test/tests/ins/wall_convection/steady.i</a></li><li><a href="#bc6c599f-1cb2-4398-a787-d8182fc96d93" class="modal-trigger">modules/navier_stokes/test/tests/ins/lid_driven/ad_lid_driven_mean_zero_pressure.i</a></li><li><a href="#9787dc81-5865-464d-8c57-fc36c0018562" class="modal-trigger">test/tests/kernels/vector_fe/lagrange_vec.i</a></li><li><a href="#6655e51d-e511-4ed8-87f5-12e6c0b83eaf" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/gravity-through-coupled-force.i</a></li><li><a href="#713043df-7dcb-47fd-b06b-6124f76cddc4" class="modal-trigger">modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_no_parts_steady_stabilized_second_order.i</a></li><li><a href="#b069039a-8198-4ed7-bbc8-cc2ccc44bc35" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/gravity-through-coupled-force-action.i</a></li><li><a href="#2d94699a-4a43-4cee-a501-35498f7dd9ff" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/steady.i</a></li><li><a href="#19f2c976-1e58-4346-be2c-60b3ba4d867a" class="modal-trigger">modules/navier_stokes/test/tests/ins/energy_source/steady.i</a></li><li><a href="#cd397a83-19ab-4efd-ab58-384c82fcee26" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/steady-function.i</a></li><li><a href="#efa79caa-4480-48f2-98aa-8cb3740c3eab" class="modal-trigger">modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_by_parts_steady_stabilized_second_order.i</a></li><li><a href="#24768e4c-9f9f-4065-a727-c5d2c54f3131" class="modal-trigger">modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_stab_jac_test.i</a></li><li><a href="#c0fb31b1-71e7-4d69-bfc7-9deda98f6238" class="modal-trigger">modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_by_parts.i</a></li><li><a href="#97e2d8f6-eded-4e3a-80b2-116e6f9a7160" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/steady-action.i</a></li></ul><div class="modal moose-modal" id="bd82b48a-053b-45b8-a32b-f27d4d424afb"><div class="modal-content"><h4>test/tests/kernels/vector_fe/lagrange_vec_1d.i</h4><pre class="moose-pre"><code class="language-text"># This example reproduces the libmesh vector_fe example 1 results
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 15
+  xmin = -1
+  elem_type = EDGE3
+[]
+
+[Variables]
+  [./u]
+    family = LAGRANGE_VEC
+    order = SECOND
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = VectorDiffusion
+    variable = u
+  [../]
+  [./body_force]
+    type = VectorBodyForce
+    variable = u
+    function_x = &#x27;ffx&#x27;
+  [../]
+[]
+
+[BCs]
+  [./bnd]
+    type = VectorFunctionDirichletBC
+    variable = u
+    function_x = &#x27;x_exact_sln&#x27;
+    boundary = &#x27;left right&#x27;
+  [../]
+[]
+
+[Functions]
+  [./x_exact_sln]
+    type = ParsedFunction
+    value = &#x27;cos(.5*pi*x)&#x27;
+  [../]
+  [./ffx]
+    type = ParsedFunction
+    value = &#x27;.25*pi*pi*cos(.5*pi*x)&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./pre]
+    type = SMP
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = NEWTON
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0ecf2d30-e8e9-441a-b77e-e59956366b21"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/lid_driven/ad_lid_driven_stabilized_with_temp.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+  []
+  [./corner_node]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;pinned_node&#x27;
+    nodes = &#x27;0&#x27;
+    input = gen
+  [../]
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+  [temperature][]
+[]
+
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [./mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  [../]
+
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+    integrate_p_by_parts = true
+  [../]
+
+  [./momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  [../]
+
+ [./temperature_advection]
+   type = INSADEnergyAdvection
+   variable = temperature
+ [../]
+
+ [./temperature_conduction]
+   type = ADHeatConduction
+   variable = temperature
+   thermal_conductivity = &#x27;k&#x27;
+ [../]
+
+  [temperature_supg]
+    type = INSADEnergySUPG
+    variable = temperature
+    velocity = velocity
+  []
+[]
+
+[BCs]
+  [./no_slip]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom right left&#x27;
+  [../]
+
+  [./lid]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;top&#x27;
+    function_x = &#x27;lid_function&#x27;
+  [../]
+
+  [./pressure_pin]
+    type = DirichletBC
+    variable = p
+    boundary = &#x27;pinned_node&#x27;
+    value = 0
+  [../]
+
+  [./temperature_hot]
+    type = DirichletBC
+    variable = temperature
+    boundary = &#x27;bottom&#x27;
+    value = 1
+  [../]
+
+  [./temperature_cold]
+    type = DirichletBC
+    variable = temperature
+    boundary = &#x27;top&#x27;
+    value = 0
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu cp k&#x27;
+    prop_values = &#x27;1  1  1  .01&#x27;
+  [../]
+  [ins_mat]
+    type = INSADStabilized3Eqn
+    velocity = velocity
+    pressure = p
+    temperature = temperature
+  []
+[]
+
+[Functions]
+  [./lid_function]
+    # We pick a function that is exactly represented in the velocity
+    # space so that the Dirichlet conditions are the same regardless
+    # of the mesh spacing.
+    type = ParsedFunction
+    value = &#x27;4*x*(1-x)&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm      6                     200&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="74957454-5a95-431c-98f6-8bcc5262075c"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/lid_driven/ad_lid_driven_stabilized_with_temp_transient.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+  []
+  [./corner_node]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;pinned_node&#x27;
+    nodes = &#x27;0&#x27;
+    input = gen
+  [../]
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+  [temperature]
+    [InitialCondition]
+      type = ConstantIC
+      value = 1.0
+    []
+  []
+[]
+
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [./mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  [../]
+
+  [./momentum_time]
+    type = INSADMomentumTimeDerivative
+    variable = velocity
+  [../]
+
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+    integrate_p_by_parts = true
+  [../]
+
+  [./momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  [../]
+
+ [./temperature_advection]
+   type = INSADEnergyAdvection
+   variable = temperature
+ [../]
+
+ [temperature_time]
+   type = INSADHeatConductionTimeDerivative
+   variable = temperature
+ []
+
+ [./temperature_conduction]
+   type = ADHeatConduction
+   variable = temperature
+   thermal_conductivity = &#x27;k&#x27;
+ [../]
+
+  [temperature_supg]
+    type = INSADEnergySUPG
+    variable = temperature
+    velocity = velocity
+  []
+[]
+
+[BCs]
+  [./no_slip]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom right left&#x27;
+  [../]
+
+  [./lid]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;top&#x27;
+    function_x = &#x27;lid_function&#x27;
+  [../]
+
+  [./pressure_pin]
+    type = DirichletBC
+    variable = p
+    boundary = &#x27;pinned_node&#x27;
+    value = 0
+  [../]
+
+  [./temperature_hot]
+    type = DirichletBC
+    variable = temperature
+    boundary = &#x27;bottom&#x27;
+    value = 1
+  [../]
+
+  [./temperature_cold]
+    type = DirichletBC
+    variable = temperature
+    boundary = &#x27;top&#x27;
+    value = 0
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu cp k&#x27;
+    prop_values = &#x27;1  1  1  .01&#x27;
+  [../]
+  [ins_mat]
+    type = INSADStabilized3Eqn
+    velocity = velocity
+    pressure = p
+    temperature = temperature
+  []
+[]
+
+[Functions]
+  [./lid_function]
+    # We pick a function that is exactly represented in the velocity
+    # space so that the Dirichlet conditions are the same regardless
+    # of the mesh spacing.
+    type = ParsedFunction
+    value = &#x27;4*x*(1-x)&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;NEWTON&#x27;
+  # Run for 100+ timesteps to reach steady state.
+  num_steps = 5
+  dt = .5
+  dtmin = .5
+  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm      6                     200&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_abs_tol =  1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c26c75e9-4d59-4c09-a522-3bcbf4206558"><div class="modal-content"><h4>test/tests/kernels/vector_fe/coupled_vector_gradient.i</h4><pre class="moose-pre"><code class="language-text"># This example demonstrates ability to set Dirichlet boundary conditions for LAGRANGE_VEC variables
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+    family = LAGRANGE_VEC
+    order = FIRST
+  [../]
+  [./v]
+    family = LAGRANGE_VEC
+    order = FIRST
+  [../]
+  [./w]
+    family = LAGRANGE_VEC
+    order = FIRST
+  [../]
+  [./s]
+    family = LAGRANGE_VEC
+    order = FIRST
+  [../]
+  [./q]
+  [../]
+[]
+
+[Kernels]
+  [./u_diff]
+    type = VectorDiffusion
+    variable = u
+  [../]
+  [./v_diff]
+    type = VectorDiffusion
+    variable = v
+  [../]
+  [./w_diff]
+    type = VectorDiffusion
+    variable = w
+  [../]
+  [./s_diff]
+    type = VectorDiffusion
+    variable = s
+  [../]
+  [./v_coupled_diff]
+    type = CoupledVectorDiffusion
+    variable = v
+    v = u
+  [../]
+  [./w_coupled_diff]
+    type = CoupledVectorDiffusion
+    variable = w
+    v = u
+    state = old
+  [../]
+  [./s_coupled_diff]
+    type = CoupledVectorDiffusion
+    variable = s
+    v = u
+    state = older
+  [../]
+  [./q_diff]
+    type = Diffusion
+    variable = q
+  [../]
+[]
+
+[BCs]
+  [./left_u]
+    type = VectorDirichletBC
+    variable = u
+    values = &#x27;0 0 0&#x27;
+    boundary = &#x27;left&#x27;
+  [../]
+  [./left_v]
+    type = VectorDirichletBC
+    variable = v
+    values = &#x27;0 0 0&#x27;
+    boundary = &#x27;left&#x27;
+  [../]
+  [./left_w]
+    type = VectorDirichletBC
+    variable = w
+    values = &#x27;0 0 0&#x27;
+    boundary = &#x27;left&#x27;
+  [../]
+  [./left_s]
+    type = VectorDirichletBC
+    variable = s
+    values = &#x27;0 0 0&#x27;
+    boundary = &#x27;left&#x27;
+  [../]
+  [./right_u]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;right&#x27;
+    function_x = &#x27;x_exact&#x27;
+    function_y = &#x27;y_exact&#x27;
+  [../]
+  [./right_v]
+    type = VectorFunctionDirichletBC
+    variable = v
+    boundary = &#x27;right&#x27;
+    function_x = &#x27;x_exact&#x27;
+    function_y = &#x27;y_exact&#x27;
+  [../]
+  [./right_w]
+    type = VectorFunctionDirichletBC
+    variable = w
+    boundary = &#x27;right&#x27;
+    function_x = &#x27;x_exact_old&#x27;
+    function_y = &#x27;y_exact_old&#x27;
+  [../]
+  [./right_s]
+    type = VectorFunctionDirichletBC
+    variable = s
+    boundary = &#x27;right&#x27;
+    function_x = &#x27;x_exact_older&#x27;
+    function_y = &#x27;y_exact_older&#x27;
+  [../]
+  [./left_q]
+    type = DirichletBC
+    variable = q
+    boundary = &#x27;left&#x27;
+    value = 1
+  [../]
+  [./right_q]
+    type = NeumannBC
+    variable = q
+    boundary = &#x27;right&#x27;
+    value = 1
+  [../]
+[]
+
+[Functions]
+  [./x_exact]
+    type = ParsedFunction
+    value = &#x27;t&#x27;
+  [../]
+  [./y_exact]
+    type = ParsedFunction
+    value = &#x27;t&#x27;
+  [../]
+  [./x_exact_old]
+    type = ParsedFunction
+    value = &#x27;if(t &lt; 1, 0, t - 1)&#x27;
+  [../]
+  [./y_exact_old]
+    type = ParsedFunction
+    value = &#x27;if(t &lt; 1, 0, t - 1)&#x27;
+  [../]
+  [./x_exact_older]
+    type = ParsedFunction
+    value = &#x27;if(t &lt; 2, 0, t - 2)&#x27;
+  [../]
+  [./y_exact_older]
+    type = ParsedFunction
+    value = &#x27;if(t &lt; 2, 0, t - 2)&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 1
+  num_steps = 3
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options = &#x27;-ksp_converged_reason -snes_converged_reason&#x27;
+  petsc_options_iname = &#x27;-ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;100&#x27;
+  nl_max_its = 3
+  l_max_its = 100
+  dtmin = 1
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="7932e13c-44d7-439a-a43c-8a66c37fcc58"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_no_parts_steady_stabilized.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  order = FIRST
+  integrate_p_by_parts = false
+[]
+
+[Mesh]
+  file = &#x27;2d_cone.msh&#x27;
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[AuxVariables]
+  [vel_x]
+  []
+  [vel_y]
+  []
+[]
+
+[AuxKernels]
+  [vel_x]
+    type = VectorVariableComponentAux
+    variable = vel_x
+    vector_variable = velocity
+    component = &#x27;x&#x27;
+  []
+  [vel_y]
+    type = VectorVariableComponentAux
+    variable = vel_y
+    vector_variable = velocity
+    component = &#x27;y&#x27;
+  []
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+[]
+
+# Need to set a non-zero initial condition because we have a velocity norm in
+# the denominator for the tau coefficient of the stabilization term
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  []
+
+  [momentum_advection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  []
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+  [../]
+  [momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  []
+[]
+
+[BCs]
+  [p_corner]
+    type = DirichletBC
+    boundary = top_right
+    value = 0
+    variable = p
+  []
+  [inlet]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom&#x27;
+    function_x = 0
+    function_y = &#x27;inlet_func&#x27;
+  [../]
+  [wall]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;right&#x27;
+    function_x = 0
+    function_y = 0
+  []
+  [axis]
+    type = ADVectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;left&#x27;
+    set_y_comp = false
+    function_x = 0
+  []
+[]
+
+[Functions]
+  [./inlet_func]
+    type = ParsedFunction
+    value = &#x27;-4 * x^2 + 1&#x27;
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADTauMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_levels&#x27;
+  petsc_options_value = &#x27;bjacobi  ilu          4&#x27;
+
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  csv = true
+  console = true
+  [./out]
+    type = Exodus
+  [../]
+[]
+
+[Postprocessors]
+  [./flow_in]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;bottom&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./flow_out]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;top&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b4c3cad6-35af-4972-9e3f-1706f4323110"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_by_parts_steady.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  integrate_p_by_parts = true
+[]
+
+[Mesh]
+  file = &#x27;2d_cone.msh&#x27;
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[AuxVariables]
+  [vel_x]
+    order = SECOND
+  []
+  [vel_y]
+    order = SECOND
+  []
+[]
+
+[AuxKernels]
+  [vel_x]
+    type = VectorVariableComponentAux
+    variable = vel_x
+    vector_variable = velocity
+    component = &#x27;x&#x27;
+  []
+  [vel_y]
+    type = VectorVariableComponentAux
+    variable = vel_y
+    vector_variable = velocity
+    component = &#x27;y&#x27;
+  []
+[]
+
+[Variables]
+  [./velocity]
+    order = SECOND
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+  [../]
+[]
+
+[BCs]
+  [inlet]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom&#x27;
+    function_x = 0
+    function_y = &#x27;inlet_func&#x27;
+  [../]
+  [wall]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;right&#x27;
+    function_x = 0
+    function_y = 0
+  []
+  [axis]
+    type = ADVectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;left&#x27;
+    set_y_comp = false
+    function_x = 0
+  []
+[]
+
+[Functions]
+  [./inlet_func]
+    type = ParsedFunction
+    value = &#x27;-4 * x^2 + 1&#x27;
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_levels&#x27;
+  petsc_options_value = &#x27;bjacobi  ilu          4&#x27;
+
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  csv = true
+  console = true
+  [./out]
+    type = Exodus
+  [../]
+[]
+
+[Postprocessors]
+  [./flow_in]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;bottom&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./flow_out]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;top&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="50a42650-c6b3-4b42-adcf-c7f68c0cab03"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_no_parts.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  integrate_p_by_parts = false
+  viscous_form = &#x27;traction&#x27;
+[]
+
+[Mesh]
+  file = &#x27;2d_cone.msh&#x27;
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[Preconditioning]
+  [./SMP_PJFNK]
+    type = SMP
+    full = true
+    solve_type = Newton
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 0.005
+  dtmin = 0.005
+  num_steps = 5
+  l_max_its = 100
+
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_levels&#x27;
+  petsc_options_value = &#x27;bjacobi  ilu          4&#x27;
+
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  csv = true
+  console = true
+  [./out]
+    type = Exodus
+  [../]
+[]
+
+[AuxVariables]
+  [./vel_x]
+    # Velocity in radial (r) direction
+    family = LAGRANGE
+    order = SECOND
+  [../]
+  [./vel_y]
+    # Velocity in axial (z) direction
+    family = LAGRANGE
+    order = SECOND
+  [../]
+[]
+
+[AuxKernels]
+  [vel_x]
+    type = VectorVariableComponentAux
+    variable = vel_x
+    vector_variable = velocity
+    component = &#x27;x&#x27;
+  []
+  [vel_y]
+    type = VectorVariableComponentAux
+    variable = vel_y
+    vector_variable = velocity
+    component = &#x27;y&#x27;
+  []
+[]
+
+[Variables]
+  [velocity]
+    family = LAGRANGE_VEC
+    order = SECOND
+  []
+  [./p]
+    family = LAGRANGE
+    order = FIRST
+  [../]
+[]
+
+[BCs]
+  [./p_corner]
+    # This is required because of the no bcs
+    type = DirichletBC
+    boundary = top_right
+    value = 0
+    variable = p
+  [../]
+  [./velocity_out]
+    type = INSADMomentumNoBCBC
+    boundary = top
+    variable = velocity
+    p = p
+  [../]
+  [./velocity_in]
+    type = VectorFunctionDirichletBC
+    boundary = bottom
+    variable = velocity
+    function_x = 0
+    function_y = &#x27;inlet_func&#x27;
+  [../]
+  [./wall]
+    type = VectorFunctionDirichletBC
+    boundary = &#x27;right&#x27;
+    variable = velocity
+    function_x = 0
+    function_y = 0
+  [../]
+  [./axis]
+    type = ADVectorFunctionDirichletBC
+    boundary = &#x27;left&#x27;
+    variable = velocity
+    set_y_comp = false
+    function_x = 0
+  [../]
+[]
+
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+
+  [./momentum_time]
+    type = INSADMomentumTimeDerivative
+    variable = velocity
+  [../]
+
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+
+[Functions]
+  [./inlet_func]
+    type = ParsedFunction
+    value = &#x27;-4 * x^2 + 1&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./flow_in]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;bottom&#x27;
+    outputs = &#x27;console csv&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./flow_out]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;top&#x27;
+    outputs = &#x27;console csv&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="eedb6ee6-6d6f-4b5e-9038-cd71fd0c0517"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/steady-action-function.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+  []
+[]
+
+[Variables]
+  [u]
+    family = LAGRANGE_VEC
+  []
+[]
+
+[Modules]
+  [IncompressibleNavierStokes]
+    equation_type = steady-state
+
+    velocity_boundary = &#x27;bottom right top left&#x27;
+    velocity_function = &#x27;0 0    0 0   0 0 0 0&#x27;
+    add_standard_velocity_variables_for_ad = false
+
+    pressure_pinned_node = 0
+
+    density_name = rho
+    dynamic_viscosity_name = mu
+
+    use_ad = true
+    laplace = true
+    family = LAGRANGE
+    order = FIRST
+
+    supg = true
+    pspg = true
+
+    has_coupled_force = true
+    coupled_force_vector_function = &#x27;vector_func&#x27;
+  []
+[]
+
+[Kernels]
+  [u_diff]
+    type = VectorDiffusion
+    variable = u
+  []
+[]
+
+[BCs]
+  [u_left]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;left&#x27;
+    function_x = 1
+    function_y = 1
+  []
+
+  [u_right]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;right&#x27;
+    function_x = -1
+    function_y = -1
+  []
+[]
+
+[Materials]
+  [const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  []
+[]
+
+[Preconditioning]
+  [SMP]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm      6                     200&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[Functions]
+  [vector_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;-2*x + 1&#x27;
+    value_y = &#x27;-2*x + 1&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="98ff7fac-f8f7-41ee-b4e8-be1ca1e483c4"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_by_parts_steady_nobcbc.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  integrate_p_by_parts = true
+[]
+
+[Mesh]
+  file = &#x27;2d_cone.msh&#x27;
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[AuxVariables]
+  [vel_x]
+    order = SECOND
+  []
+  [vel_y]
+    order = SECOND
+  []
+[]
+
+[AuxKernels]
+  [vel_x]
+    type = VectorVariableComponentAux
+    variable = vel_x
+    vector_variable = velocity
+    component = &#x27;x&#x27;
+  []
+  [vel_y]
+    type = VectorVariableComponentAux
+    variable = vel_y
+    vector_variable = velocity
+    component = &#x27;y&#x27;
+  []
+[]
+
+[Variables]
+  [./velocity]
+    order = SECOND
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+  [../]
+[]
+
+[BCs]
+  [inlet]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom&#x27;
+    function_x = 0
+    function_y = &#x27;inlet_func&#x27;
+  [../]
+  [wall]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;right&#x27;
+    function_x = 0
+    function_y = 0
+  []
+  [axis]
+    type = ADVectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;left&#x27;
+    set_y_comp = false
+    function_x = 0
+  []
+  [outlet]
+    type = INSADMomentumNoBCBC
+    variable = velocity
+    p = p
+    boundary = &#x27;top&#x27;
+  []
+  # When the NoBCBC is applied on the outlet boundary then there is nothing
+  # constraining the pressure. Thus we must pin the pressure somewhere to ensure
+  # that the problem is not singular. If the below BC is not applied then
+  # -pc_type svd -pc_svd_monitor reveals a singular value
+  [p_corner]
+    type = DirichletBC
+    boundary = top_right
+    value = 0
+    variable = p
+  []
+[]
+
+[Functions]
+  [./inlet_func]
+    type = ParsedFunction
+    value = &#x27;-4 * x^2 + 1&#x27;
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_levels&#x27;
+  petsc_options_value = &#x27;bjacobi  ilu          4&#x27;
+
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  csv = true
+  console = true
+  [./out]
+    type = Exodus
+  [../]
+[]
+
+[Postprocessors]
+  [./flow_in]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;bottom&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./flow_out]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;top&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="44cc5fef-62e5-4a2f-abe2-ef284ae6ad35"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_no_parts_steady_nobcbc.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  integrate_p_by_parts = false
+[]
+
+[Mesh]
+  file = &#x27;2d_cone.msh&#x27;
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[AuxVariables]
+  [vel_x]
+    order = SECOND
+  []
+  [vel_y]
+    order = SECOND
+  []
+[]
+
+[AuxKernels]
+  [vel_x]
+    type = VectorVariableComponentAux
+    variable = vel_x
+    vector_variable = velocity
+    component = &#x27;x&#x27;
+  []
+  [vel_y]
+    type = VectorVariableComponentAux
+    variable = vel_y
+    vector_variable = velocity
+    component = &#x27;y&#x27;
+  []
+[]
+
+[Variables]
+  [./velocity]
+    order = SECOND
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [momentum_advection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  []
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+  [../]
+[]
+
+[BCs]
+  [p_corner]
+    type = DirichletBC
+    boundary = top_right
+    value = 0
+    variable = p
+  []
+  [inlet]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom&#x27;
+    function_x = 0
+    function_y = &#x27;inlet_func&#x27;
+  [../]
+  [wall]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;right&#x27;
+    function_x = 0
+    function_y = 0
+  []
+  [axis]
+    type = ADVectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;left&#x27;
+    set_y_comp = false
+    function_x = 0
+  []
+  [outlet]
+    type = INSADMomentumNoBCBC
+    variable = velocity
+    p = p
+    boundary = &#x27;top&#x27;
+  []
+[]
+
+[Functions]
+  [./inlet_func]
+    type = ParsedFunction
+    value = &#x27;-4 * x^2 + 1&#x27;
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_levels&#x27;
+  petsc_options_value = &#x27;bjacobi  ilu          4&#x27;
+
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  csv = true
+  console = true
+  [./out]
+    type = Exodus
+  [../]
+[]
+
+[Postprocessors]
+  [./flow_in]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;bottom&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./flow_out]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;top&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="672898b3-ebcf-4bcf-9586-39ba19994b84"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_by_parts_traction_steady_stabilized.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  order = FIRST
+  integrate_p_by_parts = true
+  viscous_form = &#x27;traction&#x27;
+[]
+
+[Mesh]
+  file = &#x27;2d_cone.msh&#x27;
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[AuxVariables]
+  [vel_x]
+  []
+  [vel_y]
+  []
+[]
+
+[AuxKernels]
+  [vel_x]
+    type = VectorVariableComponentAux
+    variable = vel_x
+    vector_variable = velocity
+    component = &#x27;x&#x27;
+  []
+  [vel_y]
+    type = VectorVariableComponentAux
+    variable = vel_y
+    vector_variable = velocity
+    component = &#x27;y&#x27;
+  []
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+[]
+
+# Need to set a non-zero initial condition because we have a velocity norm in
+# the denominator for the tau coefficient of the stabilization term
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  []
+
+  [momentum_advection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  []
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+  [../]
+  [momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  []
+[]
+
+[BCs]
+  [inlet]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom&#x27;
+    function_x = 0
+    function_y = &#x27;inlet_func&#x27;
+  [../]
+  [wall]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;right&#x27;
+    function_x = 0
+    function_y = 0
+  []
+  [axis]
+    type = ADVectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;left&#x27;
+    set_y_comp = false
+    function_x = 0
+  []
+[]
+
+[Functions]
+  [./inlet_func]
+    type = ParsedFunction
+    value = &#x27;-4 * x^2 + 1&#x27;
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADTauMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_levels&#x27;
+  petsc_options_value = &#x27;bjacobi  ilu          4&#x27;
+
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  csv = true
+  console = true
+  [./out]
+    type = Exodus
+  [../]
+[]
+
+[Postprocessors]
+  [./flow_in]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;bottom&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./flow_out]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;top&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="7cafbc0c-3340-42a8-b1ee-0e87eb1ca0f3"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_no_parts_steady.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  integrate_p_by_parts = false
+[]
+
+[Mesh]
+  file = &#x27;2d_cone.msh&#x27;
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[AuxVariables]
+  [vel_x]
+    order = SECOND
+  []
+  [vel_y]
+    order = SECOND
+  []
+[]
+
+[AuxKernels]
+  [vel_x]
+    type = VectorVariableComponentAux
+    variable = vel_x
+    vector_variable = velocity
+    component = &#x27;x&#x27;
+  []
+  [vel_y]
+    type = VectorVariableComponentAux
+    variable = vel_y
+    vector_variable = velocity
+    component = &#x27;y&#x27;
+  []
+[]
+
+[Variables]
+  [./velocity]
+    order = SECOND
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [momentum_advection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  []
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+  [../]
+[]
+
+[BCs]
+  [p_corner]
+    type = DirichletBC
+    boundary = top_right
+    value = 0
+    variable = p
+  []
+  [inlet]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom&#x27;
+    function_x = 0
+    function_y = &#x27;inlet_func&#x27;
+  [../]
+  [wall]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;right&#x27;
+    function_x = 0
+    function_y = 0
+  []
+  [axis]
+    type = ADVectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;left&#x27;
+    set_y_comp = false
+    function_x = 0
+  []
+[]
+
+[Functions]
+  [./inlet_func]
+    type = ParsedFunction
+    value = &#x27;-4 * x^2 + 1&#x27;
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_levels&#x27;
+  petsc_options_value = &#x27;bjacobi  ilu          4&#x27;
+
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  csv = true
+  console = true
+  [./out]
+    type = Exodus
+  [../]
+[]
+
+[Postprocessors]
+  [./flow_in]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;bottom&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./flow_out]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;top&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="37bce069-bc8b-4945-99b1-3276fb6e9552"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_by_parts_steady_stabilized.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  order = FIRST
+  integrate_p_by_parts = true
+[]
+
+[Mesh]
+  file = &#x27;2d_cone.msh&#x27;
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[AuxVariables]
+  [vel_x]
+  []
+  [vel_y]
+  []
+[]
+
+[AuxKernels]
+  [vel_x]
+    type = VectorVariableComponentAux
+    variable = vel_x
+    vector_variable = velocity
+    component = &#x27;x&#x27;
+  []
+  [vel_y]
+    type = VectorVariableComponentAux
+    variable = vel_y
+    vector_variable = velocity
+    component = &#x27;y&#x27;
+  []
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+[]
+
+# Need to set a non-zero initial condition because we have a velocity norm in
+# the denominator for the tau coefficient of the stabilization term
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  []
+
+  [momentum_advection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  []
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+  [../]
+  [momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  []
+[]
+
+[BCs]
+  [inlet]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom&#x27;
+    function_x = 0
+    function_y = &#x27;inlet_func&#x27;
+  [../]
+  [wall]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;right&#x27;
+    function_x = 0
+    function_y = 0
+  []
+  [axis]
+    type = ADVectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;left&#x27;
+    set_y_comp = false
+    function_x = 0
+  []
+[]
+
+[Functions]
+  [./inlet_func]
+    type = ParsedFunction
+    value = &#x27;-4 * x^2 + 1&#x27;
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADTauMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_levels&#x27;
+  petsc_options_value = &#x27;bjacobi  ilu          4&#x27;
+
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  csv = true
+  console = true
+  [./out]
+    type = Exodus
+  [../]
+[]
+
+[Postprocessors]
+  [./flow_in]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;bottom&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./flow_out]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;top&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b2a04681-89a7-4c8b-bbde-d5deb9134f3c"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/gravity-object.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+  []
+  [./corner_node]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;pinned_node&#x27;
+    nodes = &#x27;0&#x27;
+    input = gen
+  [../]
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+  [u]
+    family = LAGRANGE_VEC
+  []
+[]
+
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [./mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  [../]
+
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+    integrate_p_by_parts = true
+  [../]
+
+  [momentum_coupled_force]
+    type = INSADMomentumCoupledForce
+    variable = velocity
+    coupled_vector_var = u
+  []
+
+  [gravity]
+    type = INSADGravityForce
+    variable = velocity
+    gravity = &#x27;0 -9.81 0&#x27;
+  []
+
+  [./momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  [../]
+
+  [u_diff]
+    type = VectorDiffusion
+    variable = u
+  []
+[]
+
+[BCs]
+  [./no_slip]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom right left top&#x27;
+  [../]
+
+  [./pressure_pin]
+    type = DirichletBC
+    variable = p
+    boundary = &#x27;pinned_node&#x27;
+    value = 0
+  [../]
+
+  [u_left]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;left&#x27;
+    function_x = 1
+    function_y = 1
+  []
+
+  [u_right]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;right&#x27;
+    function_x = -1
+    function_y = -1
+  []
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADTauMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm      6                     200&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="20adb0a1-d506-44e0-b3f4-6d1a9d57e021"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/lid_driven/ad_lid_driven.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+    elem_type = QUAD9
+  []
+  [./corner_node]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;pinned_node&#x27;
+    nodes = &#x27;0&#x27;
+    input = gen
+  [../]
+[]
+
+[AuxVariables]
+  [vel_x]
+    order = SECOND
+  []
+  [vel_y]
+    order = SECOND
+  []
+[]
+
+[AuxKernels]
+  [vel_x]
+    type = VectorVariableComponentAux
+    variable = vel_x
+    vector_variable = velocity
+    component = &#x27;x&#x27;
+  []
+  [vel_y]
+    type = VectorVariableComponentAux
+    variable = vel_y
+    vector_variable = velocity
+    component = &#x27;y&#x27;
+  []
+[]
+
+[Variables]
+  [./velocity]
+    order = SECOND
+    family = LAGRANGE_VEC
+  [../]
+
+  [./T]
+    order = SECOND
+    [./InitialCondition]
+      type = ConstantIC
+      value = 1.0
+    [../]
+  [../]
+
+  [./p]
+  [../]
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+
+  [./momentum_time]
+    type = INSADMomentumTimeDerivative
+    variable = velocity
+  [../]
+
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+    integrate_p_by_parts = true
+  [../]
+
+ [./temperature_time]
+   type = INSADHeatConductionTimeDerivative
+   variable = T
+ [../]
+
+ [./temperature_advection]
+   type = INSADEnergyAdvection
+   variable = T
+ [../]
+
+ [./temperature_conduction]
+   type = ADHeatConduction
+   variable = T
+   thermal_conductivity = &#x27;k&#x27;
+ [../]
+[]
+
+[BCs]
+  [./no_slip]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom right left&#x27;
+  [../]
+
+  [./lid]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;top&#x27;
+    function_x = &#x27;lid_function&#x27;
+  [../]
+
+  [./T_hot]
+    type = DirichletBC
+    variable = T
+    boundary = &#x27;bottom&#x27;
+    value = 1
+  [../]
+
+  [./T_cold]
+    type = DirichletBC
+    variable = T
+    boundary = &#x27;top&#x27;
+    value = 0
+  [../]
+
+  [./pressure_pin]
+    type = DirichletBC
+    variable = p
+    boundary = &#x27;pinned_node&#x27;
+    value = 0
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu cp k&#x27;
+    prop_values = &#x27;1  1  1  .01&#x27;
+  [../]
+  [ins_mat]
+    type = INSAD3Eqn
+    velocity = velocity
+    pressure = p
+    temperature = T
+  []
+[]
+
+[Functions]
+  [./lid_function]
+    # We pick a function that is exactly represented in the velocity
+    # space so that the Dirichlet conditions are the same regardless
+    # of the mesh spacing.
+    type = ParsedFunction
+    value = &#x27;4*x*(1-x)&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  # Run for 100+ timesteps to reach steady state.
+  num_steps = 5
+  dt = .5
+  dtmin = .5
+  petsc_options_iname = &#x27;-pc_type -pc_asm_overlap -sub_pc_type -sub_pc_factor_levels&#x27;
+  petsc_options_value = &#x27;asm      2               ilu          4&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-13
+  nl_max_its = 6
+  l_tol = 1e-6
+  l_max_its = 500
+[]
+
+[Outputs]
+  file_base = lid_driven_out
+  exodus = true
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ad00bb39-f56e-4193-b0ce-d91ac158a489"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/energy_source/steady-var.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+  []
+  [./corner_node]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;pinned_node&#x27;
+    nodes = &#x27;0&#x27;
+    input = gen
+  [../]
+[]
+
+[AuxVariables]
+  [u]
+    initial_condition = 1
+  []
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+  [temperature][]
+[]
+
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [./mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  [../]
+
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+    integrate_p_by_parts = true
+  [../]
+
+  [./momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  [../]
+
+ [./temperature_advection]
+   type = INSADEnergyAdvection
+   variable = temperature
+ [../]
+
+  [./temperature_conduction]
+    type = ADHeatConduction
+    variable = temperature
+    thermal_conductivity = &#x27;k&#x27;
+  [../]
+
+  [temperature_source]
+    type = INSADEnergySource
+    variable = temperature
+    source_variable = u
+  []
+
+  [temperature_supg]
+    type = INSADEnergySUPG
+    variable = temperature
+    velocity = velocity
+  []
+[]
+
+[BCs]
+  [./no_slip]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom right left&#x27;
+  [../]
+
+  [./lid]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;top&#x27;
+    function_x = &#x27;lid_function&#x27;
+  [../]
+
+  [./pressure_pin]
+    type = DirichletBC
+    variable = p
+    boundary = &#x27;pinned_node&#x27;
+    value = 0
+  [../]
+
+  [./temperature_hot]
+    type = DirichletBC
+    variable = temperature
+    boundary = &#x27;bottom&#x27;
+    value = 1
+  [../]
+
+  [./temperature_cold]
+    type = DirichletBC
+    variable = temperature
+    boundary = &#x27;top&#x27;
+    value = 0
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu cp k&#x27;
+    prop_values = &#x27;1  1  1  .01&#x27;
+  [../]
+  [ins_mat]
+    type = INSADStabilized3Eqn
+    velocity = velocity
+    pressure = p
+    temperature = temperature
+  []
+[]
+
+[Functions]
+  [./lid_function]
+    # We pick a function that is exactly represented in the velocity
+    # space so that the Dirichlet conditions are the same regardless
+    # of the mesh spacing.
+    type = ParsedFunction
+    value = &#x27;4*x*(1-x)&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm      6                     200&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  [out]
+    type = Exodus
+    hide = &#x27;u&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c7aa5e2c-f3d1-4b02-81b4-ebb16db9b6d3"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/lid_driven/ad_lid_driven_stabilized.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 64
+    ny = 64
+  []
+  [./corner_node]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;pinned_node&#x27;
+    nodes = &#x27;0&#x27;
+    input = gen
+  [../]
+[]
+
+[AuxVariables]
+  [vel_x]
+  []
+  [vel_y]
+  []
+[]
+
+[AuxKernels]
+  [vel_x]
+    type = VectorVariableComponentAux
+    variable = vel_x
+    vector_variable = velocity
+    component = &#x27;x&#x27;
+  []
+  [vel_y]
+    type = VectorVariableComponentAux
+    variable = vel_y
+    vector_variable = velocity
+    component = &#x27;y&#x27;
+  []
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+[]
+
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [./mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  [../]
+
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+    integrate_p_by_parts = true
+  [../]
+
+  [./momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  [../]
+[]
+
+[BCs]
+  [./no_slip]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom right left&#x27;
+  [../]
+
+  [./lid]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;top&#x27;
+    function_x = &#x27;lid_function&#x27;
+  [../]
+
+  [./pressure_pin]
+    type = DirichletBC
+    variable = p
+    boundary = &#x27;pinned_node&#x27;
+    value = 0
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADTauMaterial
+    velocity = velocity
+    pressure = p
+    alpha = .1
+  []
+[]
+
+[Functions]
+  [./lid_function]
+    # We pick a function that is exactly represented in the velocity
+    # space so that the Dirichlet conditions are the same regardless
+    # of the mesh spacing.
+    type = ParsedFunction
+    value = &#x27;4*x*(1-x)&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  petsc_options_iname = &#x27;-pc_type&#x27;
+  petsc_options_value = &#x27;lu&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-13
+  nl_max_its = 6
+  l_tol = 1e-6
+  l_max_its = 500
+[]
+
+[Outputs]
+  exodus = true
+  file_base = lid_driven_stabilized_out
+[]
+
+[Postprocessors]
+  [lin]
+    type = NumLinearIterations
+  []
+  [nl]
+    type = NumNonlinearIterations
+  []
+  [lin_tot]
+    type = CumulativeValuePostprocessor
+    postprocessor = &#x27;lin&#x27;
+  []
+  [nl_tot]
+    type = CumulativeValuePostprocessor
+    postprocessor = &#x27;nl&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6efb09c9-5210-484a-b99c-6a48351cb57d"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/wall_convection/steady.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+  []
+  [./corner_node]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;pinned_node&#x27;
+    nodes = &#x27;0&#x27;
+    input = gen
+  [../]
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+  [temperature][]
+[]
+
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [./mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  [../]
+
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+    integrate_p_by_parts = true
+  [../]
+
+  [./momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  [../]
+
+ [./temperature_advection]
+   type = INSADEnergyAdvection
+   variable = temperature
+ [../]
+
+  [./temperature_conduction]
+    type = ADHeatConduction
+    variable = temperature
+    thermal_conductivity = &#x27;k&#x27;
+  [../]
+
+  [temperature_ambient_convection]
+    type = INSADEnergyAmbientConvection
+    variable = temperature
+    alpha = 1
+    T_ambient = 0.5
+  []
+
+  [temperature_supg]
+    type = INSADEnergySUPG
+    variable = temperature
+    velocity = velocity
+  []
+[]
+
+[BCs]
+  [./no_slip]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom right left&#x27;
+  [../]
+
+  [./lid]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;top&#x27;
+    function_x = &#x27;lid_function&#x27;
+  [../]
+
+  [./pressure_pin]
+    type = DirichletBC
+    variable = p
+    boundary = &#x27;pinned_node&#x27;
+    value = 0
+  [../]
+
+  [./temperature_hot]
+    type = DirichletBC
+    variable = temperature
+    boundary = &#x27;bottom&#x27;
+    value = 1
+  [../]
+
+  [./temperature_cold]
+    type = DirichletBC
+    variable = temperature
+    boundary = &#x27;top&#x27;
+    value = 0
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu cp k&#x27;
+    prop_values = &#x27;1  1  1  .01&#x27;
+  [../]
+  [ins_mat]
+    type = INSADStabilized3Eqn
+    velocity = velocity
+    pressure = p
+    temperature = temperature
+  []
+[]
+
+[Functions]
+  [./lid_function]
+    # We pick a function that is exactly represented in the velocity
+    # space so that the Dirichlet conditions are the same regardless
+    # of the mesh spacing.
+    type = ParsedFunction
+    value = &#x27;4*x*(1-x)&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm      6                     200&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="bc6c599f-1cb2-4398-a787-d8182fc96d93"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/lid_driven/ad_lid_driven_mean_zero_pressure.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+    elem_type = QUAD9
+  []
+[]
+
+[AuxVariables]
+  [vel_x]
+    order = SECOND
+  []
+  [vel_y]
+    order = SECOND
+  []
+[]
+
+[AuxKernels]
+  [vel_x]
+    type = VectorVariableComponentAux
+    variable = vel_x
+    vector_variable = velocity
+    component = &#x27;x&#x27;
+  []
+  [vel_y]
+    type = VectorVariableComponentAux
+    variable = vel_y
+    vector_variable = velocity
+    component = &#x27;y&#x27;
+  []
+[]
+
+[Variables]
+  [./velocity]
+    order = SECOND
+    family = LAGRANGE_VEC
+  [../]
+
+  [./T]
+    order = SECOND
+    [./InitialCondition]
+      type = ConstantIC
+      value = 1.0
+    [../]
+  [../]
+
+  [./p]
+  [../]
+
+  [./lambda]
+    family = SCALAR
+    order = FIRST
+  [../]
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+
+  [./momentum_time]
+    type = INSADMomentumTimeDerivative
+    variable = velocity
+  [../]
+
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+    integrate_p_by_parts = true
+  [../]
+
+ [./temperature_time]
+   type = INSADHeatConductionTimeDerivative
+   variable = T
+ [../]
+
+ [./temperature_advection]
+   type = INSADEnergyAdvection
+   variable = T
+ [../]
+
+ [./temperature_conduction]
+   type = ADHeatConduction
+   variable = T
+   thermal_conductivity = &#x27;k&#x27;
+ [../]
+
+ [./mean_zero_pressure]
+    type = ScalarLagrangeMultiplier
+    variable = p
+    lambda = lambda
+  [../]
+[]
+
+[ScalarKernels]
+  [./mean_zero_pressure_lm]
+    type = AverageValueConstraint
+    variable = lambda
+    pp_name = pressure_integral
+    value = 0
+  [../]
+[]
+
+[BCs]
+  [./no_slip]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom right left&#x27;
+  [../]
+
+  [./lid]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;top&#x27;
+    function_x = &#x27;lid_function&#x27;
+  [../]
+
+  [./T_hot]
+    type = DirichletBC
+    variable = T
+    boundary = &#x27;bottom&#x27;
+    value = 1
+  [../]
+
+  [./T_cold]
+    type = DirichletBC
+    variable = T
+    boundary = &#x27;top&#x27;
+    value = 0
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu cp k&#x27;
+    prop_values = &#x27;1  1  1  .01&#x27;
+  [../]
+  [ins_mat]
+    type = INSAD3Eqn
+    velocity = velocity
+    pressure = p
+    temperature = T
+  []
+[]
+
+[Postprocessors]
+  [./pressure_integral]
+    type = ElementIntegralVariablePostprocessor
+    variable = p
+    execute_on = linear
+  [../]
+[]
+
+[Functions]
+  [./lid_function]
+    # We pick a function that is exactly represented in the velocity
+    # space so that the Dirichlet conditions are the same regardless
+    # of the mesh spacing.
+    type = ParsedFunction
+    value = &#x27;4*x*(1-x)&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  # Run for 100+ timesteps to reach steady state.
+  num_steps = 5
+  dt = .5
+  dtmin = .5
+  petsc_options_iname = &#x27;-pc_type -pc_asm_overlap -sub_pc_type -sub_pc_factor_levels&#x27;
+  petsc_options_value = &#x27;asm      2               ilu          4&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-13
+  nl_max_its = 6
+  l_tol = 1e-6
+  l_max_its = 500
+[]
+
+[Outputs]
+  exodus = true
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9787dc81-5865-464d-8c57-fc36c0018562"><div class="modal-content"><h4>test/tests/kernels/vector_fe/lagrange_vec.i</h4><pre class="moose-pre"><code class="language-text"># This example reproduces the libmesh vector_fe example 1 results
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 15
+  ny = 15
+  xmin = -1
+  ymin = -1
+  elem_type = QUAD9
+[]
+
+[Variables]
+  [./u]
+    family = LAGRANGE_VEC
+    order = SECOND
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = VectorDiffusion
+    variable = u
+  [../]
+  [./body_force]
+    type = VectorBodyForce
+    variable = u
+    function_x = &#x27;ffx&#x27;
+    function_y = &#x27;ffy&#x27;
+  [../]
+[]
+
+[BCs]
+  [./bnd]
+    type = VectorFunctionDirichletBC
+    variable = u
+    function_x = &#x27;x_exact_sln&#x27;
+    function_y = &#x27;y_exact_sln&#x27;
+    function_z = &#x27;0&#x27;
+    boundary = &#x27;left right top bottom&#x27;
+  [../]
+[]
+
+[Functions]
+  [./x_exact_sln]
+    type = ParsedFunction
+    value = &#x27;cos(.5*pi*x)*sin(.5*pi*y)&#x27;
+  [../]
+  [./y_exact_sln]
+    type = ParsedFunction
+    value = &#x27;sin(.5*pi*x)*cos(.5*pi*y)&#x27;
+  [../]
+  [./ffx]
+    type = ParsedFunction
+    value = &#x27;.5*pi*pi*cos(.5*pi*x)*sin(.5*pi*y)&#x27;
+  [../]
+  [./ffy]
+    type = ParsedFunction
+    value = &#x27;.5*pi*pi*sin(.5*pi*x)*cos(.5*pi*y)&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./pre]
+    type = SMP
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6655e51d-e511-4ed8-87f5-12e6c0b83eaf"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/gravity-through-coupled-force.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+  []
+  [./corner_node]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;pinned_node&#x27;
+    nodes = &#x27;0&#x27;
+    input = gen
+  [../]
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+  [u]
+    family = LAGRANGE_VEC
+  []
+[]
+
+[AuxVariables]
+  [gravity]
+    family = LAGRANGE_VEC
+  []
+[]
+
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+  [gravity]
+    type = VectorConstantIC
+    x_value = &#x27;0&#x27;
+    y_value = &#x27;-9.81&#x27;
+    variable = gravity
+  []
+[]
+
+[Kernels]
+  inactive = &#x27;momentum_coupled_forces_two_vars momentum_coupled_forces_two_funcs&#x27;
+
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [./mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  [../]
+
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+    integrate_p_by_parts = true
+  [../]
+
+  [momentum_coupled_forces_var_and_func]
+    type = INSADMomentumCoupledForce
+    variable = velocity
+    coupled_vector_var = u
+    vector_function = &#x27;vector_gravity_func&#x27;
+  []
+
+  [momentum_coupled_forces_two_vars]
+    type = INSADMomentumCoupledForce
+    variable = velocity
+    coupled_vector_var = &#x27;u gravity&#x27;
+  []
+
+  [momentum_coupled_forces_two_funcs]
+    type = INSADMomentumCoupledForce
+    variable = velocity
+    vector_function = &#x27;vector_func vector_gravity_func&#x27;
+  []
+
+  [./momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  [../]
+
+  [u_diff]
+    type = VectorDiffusion
+    variable = u
+  []
+[]
+
+[BCs]
+  [./no_slip]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom right left top&#x27;
+  [../]
+
+  [./pressure_pin]
+    type = DirichletBC
+    variable = p
+    boundary = &#x27;pinned_node&#x27;
+    value = 0
+  [../]
+
+  [u_left]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;left&#x27;
+    function_x = 1
+    function_y = 1
+  []
+
+  [u_right]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;right&#x27;
+    function_x = -1
+    function_y = -1
+  []
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADTauMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm      6                     200&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  [out]
+    type = Exodus
+    hide = &#x27;gravity&#x27;
+  []
+[]
+
+[Functions]
+  [vector_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;-2*x + 1&#x27;
+    value_y = &#x27;-2*x + 1&#x27;
+  []
+  [vector_gravity_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;0&#x27;
+    value_y = &#x27;-9.81&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="713043df-7dcb-47fd-b06b-6124f76cddc4"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_no_parts_steady_stabilized_second_order.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  order = SECOND
+  integrate_p_by_parts = false
+[]
+
+[Mesh]
+  file = &#x27;2d_cone.msh&#x27;
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[AuxVariables]
+  [vel_x]
+  []
+  [vel_y]
+  []
+[]
+
+[AuxKernels]
+  [vel_x]
+    type = VectorVariableComponentAux
+    variable = vel_x
+    vector_variable = velocity
+    component = &#x27;x&#x27;
+  []
+  [vel_y]
+    type = VectorVariableComponentAux
+    variable = vel_y
+    vector_variable = velocity
+    component = &#x27;y&#x27;
+  []
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+    order = FIRST
+  [../]
+[]
+
+# Need to set a non-zero initial condition because we have a velocity norm in
+# the denominator for the tau coefficient of the stabilization term
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  []
+
+  [momentum_advection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  []
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+  [../]
+  [momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  []
+[]
+
+[BCs]
+  [p_corner]
+    type = DirichletBC
+    boundary = top_right
+    value = 0
+    variable = p
+  []
+  [inlet]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom&#x27;
+    function_x = 0
+    function_y = &#x27;inlet_func&#x27;
+  [../]
+  [wall]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;right&#x27;
+    function_x = 0
+    function_y = 0
+  []
+  [axis]
+    type = ADVectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;left&#x27;
+    set_y_comp = false
+    function_x = 0
+  []
+[]
+
+[Functions]
+  [./inlet_func]
+    type = ParsedFunction
+    value = &#x27;-4 * x^2 + 1&#x27;
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADTauMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_levels&#x27;
+  petsc_options_value = &#x27;bjacobi  ilu          4&#x27;
+
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  csv = true
+  console = true
+  [./out]
+    type = Exodus
+  [../]
+[]
+
+[Postprocessors]
+  [./flow_in]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;bottom&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./flow_out]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;top&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b069039a-8198-4ed7-bbc8-cc2ccc44bc35"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/gravity-through-coupled-force-action.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+  []
+[]
+
+[Variables]
+  [u]
+    family = LAGRANGE_VEC
+  []
+[]
+
+[AuxVariables]
+  [gravity]
+    family = LAGRANGE_VEC
+  []
+[]
+
+[ICs]
+  [gravity]
+    type = VectorConstantIC
+    x_value = &#x27;0&#x27;
+    y_value = &#x27;-9.81&#x27;
+    variable = gravity
+  []
+[]
+
+[Modules]
+  [IncompressibleNavierStokes]
+    equation_type = steady-state
+
+    velocity_boundary = &#x27;bottom right top left&#x27;
+    velocity_function = &#x27;0 0    0 0   0 0 0 0&#x27;
+    add_standard_velocity_variables_for_ad = false
+
+    pressure_pinned_node = 0
+
+    density_name = rho
+    dynamic_viscosity_name = mu
+
+    use_ad = true
+    laplace = true
+    family = LAGRANGE
+    order = FIRST
+
+    supg = true
+    pspg = true
+
+    has_coupled_force = true
+  []
+[]
+
+[Kernels]
+  [u_diff]
+    type = VectorDiffusion
+    variable = u
+  []
+[]
+
+[BCs]
+  [u_left]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;left&#x27;
+    function_x = 1
+    function_y = 1
+  []
+
+  [u_right]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;right&#x27;
+    function_x = -1
+    function_y = -1
+  []
+[]
+
+[Materials]
+  [const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  []
+[]
+
+[Preconditioning]
+  [SMP]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm      6                     200&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  [out]
+    type = Exodus
+    hide = &#x27;gravity&#x27;
+  []
+[]
+
+[Functions]
+  [vector_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;-2*x + 1&#x27;
+    value_y = &#x27;-2*x + 1&#x27;
+  []
+  [vector_gravity_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;0&#x27;
+    value_y = &#x27;-9.81&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2d94699a-4a43-4cee-a501-35498f7dd9ff"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/steady.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+  []
+  [./corner_node]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;pinned_node&#x27;
+    nodes = &#x27;0&#x27;
+    input = gen
+  [../]
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+  [u]
+    family = LAGRANGE_VEC
+  []
+[]
+
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [./mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  [../]
+
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+    integrate_p_by_parts = true
+  [../]
+
+  [momentum_coupled_force]
+    type = INSADMomentumCoupledForce
+    variable = velocity
+    coupled_vector_var = u
+  []
+
+  [./momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  [../]
+
+  [u_diff]
+    type = VectorDiffusion
+    variable = u
+  []
+[]
+
+[BCs]
+  [./no_slip]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom right left top&#x27;
+  [../]
+
+  [./pressure_pin]
+    type = DirichletBC
+    variable = p
+    boundary = &#x27;pinned_node&#x27;
+    value = 0
+  [../]
+
+  [u_left]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;left&#x27;
+    function_x = 1
+    function_y = 1
+  []
+
+  [u_right]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;right&#x27;
+    function_x = -1
+    function_y = -1
+  []
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADTauMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm      6                     200&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="19f2c976-1e58-4346-be2c-60b3ba4d867a"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/energy_source/steady.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+  []
+  [./corner_node]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;pinned_node&#x27;
+    nodes = &#x27;0&#x27;
+    input = gen
+  [../]
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+  [temperature][]
+[]
+
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [./mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  [../]
+
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+    integrate_p_by_parts = true
+  [../]
+
+  [./momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  [../]
+
+ [./temperature_advection]
+   type = INSADEnergyAdvection
+   variable = temperature
+ [../]
+
+  [./temperature_conduction]
+    type = ADHeatConduction
+    variable = temperature
+    thermal_conductivity = &#x27;k&#x27;
+  [../]
+
+  [temperature_source]
+    type = INSADEnergySource
+    variable = temperature
+    source_function = 1
+  []
+
+  [temperature_supg]
+    type = INSADEnergySUPG
+    variable = temperature
+    velocity = velocity
+  []
+[]
+
+[BCs]
+  [./no_slip]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom right left&#x27;
+  [../]
+
+  [./lid]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;top&#x27;
+    function_x = &#x27;lid_function&#x27;
+  [../]
+
+  [./pressure_pin]
+    type = DirichletBC
+    variable = p
+    boundary = &#x27;pinned_node&#x27;
+    value = 0
+  [../]
+
+  [./temperature_hot]
+    type = DirichletBC
+    variable = temperature
+    boundary = &#x27;bottom&#x27;
+    value = 1
+  [../]
+
+  [./temperature_cold]
+    type = DirichletBC
+    variable = temperature
+    boundary = &#x27;top&#x27;
+    value = 0
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu cp k&#x27;
+    prop_values = &#x27;1  1  1  .01&#x27;
+  [../]
+  [ins_mat]
+    type = INSADStabilized3Eqn
+    velocity = velocity
+    pressure = p
+    temperature = temperature
+  []
+[]
+
+[Functions]
+  [./lid_function]
+    # We pick a function that is exactly represented in the velocity
+    # space so that the Dirichlet conditions are the same regardless
+    # of the mesh spacing.
+    type = ParsedFunction
+    value = &#x27;4*x*(1-x)&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm      6                     200&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="cd397a83-19ab-4efd-ab58-384c82fcee26"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/steady-function.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+  []
+  [./corner_node]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;pinned_node&#x27;
+    nodes = &#x27;0&#x27;
+    input = gen
+  [../]
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+  [u]
+    family = LAGRANGE_VEC
+  []
+[]
+
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [./mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  [../]
+
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+    integrate_p_by_parts = true
+  [../]
+
+  [momentum_coupled_force]
+    type = INSADMomentumCoupledForce
+    variable = velocity
+    vector_function = &#x27;vector_func&#x27;
+  []
+
+  [./momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  [../]
+
+  [u_diff]
+    type = VectorDiffusion
+    variable = u
+  []
+[]
+
+[BCs]
+  [./no_slip]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom right left top&#x27;
+  [../]
+
+  [./pressure_pin]
+    type = DirichletBC
+    variable = p
+    boundary = &#x27;pinned_node&#x27;
+    value = 0
+  [../]
+
+  [u_left]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;left&#x27;
+    function_x = 1
+    function_y = 1
+  []
+
+  [u_right]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;right&#x27;
+    function_x = -1
+    function_y = -1
+  []
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADTauMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm      6                     200&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[Functions]
+  [vector_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;-2*x + 1&#x27;
+    value_y = &#x27;-2*x + 1&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="efa79caa-4480-48f2-98aa-8cb3740c3eab"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_by_parts_steady_stabilized_second_order.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  order = SECOND
+  integrate_p_by_parts = true
+[]
+
+[Mesh]
+  file = &#x27;2d_cone.msh&#x27;
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[AuxVariables]
+  [vel_x]
+  []
+  [vel_y]
+  []
+[]
+
+[AuxKernels]
+  [vel_x]
+    type = VectorVariableComponentAux
+    variable = vel_x
+    vector_variable = velocity
+    component = &#x27;x&#x27;
+  []
+  [vel_y]
+    type = VectorVariableComponentAux
+    variable = vel_y
+    vector_variable = velocity
+    component = &#x27;y&#x27;
+  []
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+    order = FIRST
+  [../]
+[]
+
+# Need to set a non-zero initial condition because we have a velocity norm in
+# the denominator for the tau coefficient of the stabilization term
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  []
+
+  [momentum_advection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  []
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+  [../]
+  [momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  []
+[]
+
+[BCs]
+  [inlet]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom&#x27;
+    function_x = 0
+    function_y = &#x27;inlet_func&#x27;
+  [../]
+  [wall]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;right&#x27;
+    function_x = 0
+    function_y = 0
+  []
+  [axis]
+    type = ADVectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;left&#x27;
+    set_y_comp = false
+    function_x = 0
+  []
+[]
+
+[Functions]
+  [./inlet_func]
+    type = ParsedFunction
+    value = &#x27;-4 * x^2 + 1&#x27;
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADTauMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_levels&#x27;
+  petsc_options_value = &#x27;bjacobi  ilu          4&#x27;
+
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  csv = true
+  console = true
+  [./out]
+    type = Exodus
+  [../]
+[]
+
+[Postprocessors]
+  [./flow_in]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;bottom&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./flow_out]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;top&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="24768e4c-9f9f-4065-a727-c5d2c54f3131"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_stab_jac_test.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  order = SECOND
+  integrate_p_by_parts = true
+[]
+
+[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 2
+    ny = 2
+    xmin = 0
+    xmax = 1.1
+    ymin = -1.1
+    ymax = 1.1
+    elem_type = QUAD9
+  []
+  [./corner_node]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;pinned_node&#x27;
+    nodes = &#x27;0&#x27;
+    input = gen
+  [../]
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[Preconditioning]
+  [./SMP_PJFNK]
+    type = SMP
+    full = true
+    solve_type = NEWTON
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+  dt = 1.1
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+    order = FIRST
+  [../]
+[]
+
+
+# Need to set a non-zero initial condition because we have a velocity norm in
+# the denominator for the tau coefficient of the stabilization term
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  []
+
+  [momentum_time]
+    type = INSADMomentumTimeDerivative
+    variable = velocity
+  []
+  [momentum_advection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  []
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+  [../]
+  [momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  []
+[]
+
+[BCs]
+  [inlet]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom&#x27;
+    function_x = 0
+    function_y = 1
+  [../]
+  [wall]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;right&#x27;
+    function_x = 0
+    function_y = 0
+  []
+  [axis]
+    type = ADVectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;left&#x27;
+    set_y_comp = false
+    function_x = 0
+  []
+  [outlet]
+    type = INSADMomentumNoBCBC
+    variable = velocity
+    p = p
+    boundary = &#x27;top&#x27;
+  []
+  # When the NoBCBC is applied on the outlet boundary then there is nothing
+  # constraining the pressure. Thus we must pin the pressure somewhere to ensure
+  # that the problem is not singular. If the below BC is not applied then
+  # -pc_type svd -pc_svd_monitor reveals a singular value
+  [p_corner]
+    type = DirichletBC
+    boundary = pinned_node
+    value = 0
+    variable = p
+  []
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1.1 1.1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADTauMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c0fb31b1-71e7-4d69-bfc7-9deda98f6238"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/RZ_cone/ad_rz_cone_by_parts.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  file = &#x27;2d_cone.msh&#x27;
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[AuxVariables]
+  [vel_x]
+    order = SECOND
+  []
+  [vel_y]
+    order = SECOND
+  []
+[]
+
+[AuxKernels]
+  [vel_x]
+    type = VectorVariableComponentAux
+    variable = vel_x
+    vector_variable = velocity
+    component = &#x27;x&#x27;
+  []
+  [vel_y]
+    type = VectorVariableComponentAux
+    variable = vel_y
+    vector_variable = velocity
+    component = &#x27;y&#x27;
+  []
+[]
+
+[Variables]
+  [./velocity]
+    order = SECOND
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+
+  [./momentum_time]
+    type = INSADMomentumTimeDerivative
+    variable = velocity
+  [../]
+
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+    integrate_p_by_parts = true
+  [../]
+[]
+
+[BCs]
+  [inlet]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom&#x27;
+    function_x = 0
+    function_y = &#x27;inlet_func&#x27;
+  [../]
+  [wall]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;right&#x27;
+    function_x = 0
+    function_y = 0
+  []
+  [axis]
+    type = ADVectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;left&#x27;
+    set_y_comp = false
+    function_x = 0
+  []
+[]
+
+[Functions]
+  [./inlet_func]
+    type = ParsedFunction
+    value = &#x27;-4 * x^2 + 1&#x27;
+  [../]
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 0.005
+  dtmin = 0.005
+  num_steps = 5
+  l_max_its = 100
+
+  # Note: The Steady executioner can be used for this problem, if you
+  # drop the INSMomentumTimeDerivative kernels and use the following
+  # direct solver options.
+  # petsc_options_iname = &#x27;-pc_type -pc_factor_shift_type -pc_factor_shift_amount -ksp_type&#x27;
+  # petsc_options_value = &#x27;lu NONZERO 1.e-10 preonly&#x27;
+
+  # Block Jacobi works well for this problem, as does &quot;-pc_type asm
+  # -pc_asm_overlap 2&quot;, but an overlap of 1 does not work for some
+  # reason?
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_levels&#x27;
+  petsc_options_value = &#x27;bjacobi  ilu          4&#x27;
+
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  csv = true
+  console = true
+  [./out]
+    type = Exodus
+  [../]
+[]
+
+[Postprocessors]
+  [./flow_in]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;bottom&#x27;
+    outputs = &#x27;console csv&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./flow_out]
+    type = VolumetricFlowRate
+    vel_x = vel_x
+    vel_y = vel_y
+    boundary = &#x27;top&#x27;
+    outputs = &#x27;console csv&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="97e2d8f6-eded-4e3a-80b2-116e6f9a7160"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/steady-action.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+  []
+[]
+
+[Variables]
+  [u]
+    family = LAGRANGE_VEC
+  []
+[]
+
+[Modules]
+  [IncompressibleNavierStokes]
+    equation_type = steady-state
+
+    velocity_boundary = &#x27;bottom right top left&#x27;
+    velocity_function = &#x27;0 0    0 0   0 0 0 0&#x27;
+    add_standard_velocity_variables_for_ad = false
+
+    pressure_pinned_node = 0
+
+    density_name = rho
+    dynamic_viscosity_name = mu
+
+    use_ad = true
+    laplace = true
+    family = LAGRANGE
+    order = FIRST
+
+    supg = true
+    pspg = true
+
+    has_coupled_force = true
+    coupled_force_var = u
+  []
+[]
+
+[Kernels]
+  [u_diff]
+    type = VectorDiffusion
+    variable = u
+  []
+[]
+
+[BCs]
+  [u_left]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;left&#x27;
+    function_x = 1
+    function_y = 1
+  []
+
+  [u_right]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;right&#x27;
+    function_x = -1
+    function_y = -1
+  []
+[]
+
+[Materials]
+  [const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  []
+[]
+
+[Preconditioning]
+  [SMP]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm      6                     200&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#677acf40-368e-47b6-a342-1a7cabffcc28" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#266e89e4-ff7d-4b53-b686-b1bb396a345f" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#3a6f701d-1903-47f3-abef-e434cb75de57" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

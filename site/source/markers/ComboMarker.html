@@ -1,0 +1,759 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>ComboMarker.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="29a17132-bcca-4a93-a3a6-7a73f42ea048"><i class="material-icons">menu</i></a><ul class="sidenav" id="29a17132-bcca-4a93-a3a6-7a73f42ea048"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">markers</span><a href="#" class="breadcrumb">ComboMarker</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="bca73b70-94d4-4b6a-960b-7764ef86ea02" data-section-level="1" data-section-text="ComboMarker"><h1 id="combomarker">ComboMarker</h1><p>A marker that converts many markers into a single marker by considering the maximum value of the listed markers (i.e., refinement takes precedent).</p><section class="scrollspy" id="4d309971-0d99-488e-9b1e-ac7df3d8ff95" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The <code>ComboMarker</code> is used to combine multiple markers into a single marker. This is done by taking the maximum value of the marker value from the supplied markers. Therefore, refinement of an element takes precedence.</p></section><section class="scrollspy" id="d0800d11-ef4f-4096-9729-0a81884a1ac6" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">[Adaptivity]
+  [./Markers]
+    [./box]
+      type = BoxMarker
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      top_right = &#x27;0.6 0.6 0&#x27;
+      inside = refine
+      outside = do_nothing
+    [../]
+    [./combo]
+      type = ComboMarker
+      markers = &#x27;box box2&#x27;
+    [../]
+    [./box2]
+      type = BoxMarker
+      bottom_left = &#x27;0.5 0.5 0&#x27;
+      top_right = &#x27;0.8 0.8 0&#x27;
+      inside = refine
+      outside = coarsen
+    [../]
+  [../]
+[]
+</code></pre><a href="#7d4e2d77-5c6a-4a4d-831a-b6948a86c6e4" class="modal-trigger">(test/tests/markers/combo_marker/combo_marker_test.i)</a><div class="modal moose-modal" id="7d4e2d77-5c6a-4a4d-831a-b6948a86c6e4"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/markers/combo_marker/combo_marker_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 2
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Adaptivity]
+  [./Markers]
+    [./box]
+      type = BoxMarker
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      top_right = &#x27;0.6 0.6 0&#x27;
+      inside = refine
+      outside = do_nothing
+    [../]
+    [./combo]
+      type = ComboMarker
+      markers = &#x27;box box2&#x27;
+    [../]
+    [./box2]
+      type = BoxMarker
+      bottom_left = &#x27;0.5 0.5 0&#x27;
+      top_right = &#x27;0.8 0.8 0&#x27;
+      inside = refine
+      outside = coarsen
+    [../]
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="f3270352-80c9-49f9-b033-b98f9ce1b020" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="d4e3b6a1-dd58-40d4-b81e-3ab79b8d1be5" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">markers</span><span class="moose-parameter-header-description">A list of marker names to combine into a single marker.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<MarkerName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A list of marker names to combine into a single marker.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="2ad2b68f-be36-4f53-a386-6c14fc446a0e" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="9aaa8b94-7b18-4326-bedf-207aca44807e" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="0932383c-aea1-46f9-8cb8-7d37c0f9efd6" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#5cfb2c04-5ca6-455c-8ef0-17e4f26d4381" class="modal-trigger">test/tests/dirackernels/point_caching/point_caching_adaptive_refinement.i</a></li><li><a href="#bb654852-4f9e-4e94-b080-a9f8297814f2" class="modal-trigger">test/tests/executioners/adapt_and_modify/adapt_and_modify.i</a></li><li><a href="#44160958-ff5e-474b-bf59-0786e1a6ea58" class="modal-trigger">test/tests/markers/combo_marker/combo_marker_test.i</a></li><li><a href="#92feacbf-8e3b-4bb4-bf13-095124e19f6c" class="modal-trigger">modules/phase_field/examples/nucleation/refine.i</a></li><li><a href="#2783b615-4472-4b24-8056-18393441ac97" class="modal-trigger">test/tests/executioners/adapt_and_modify/adapt_and_modify_heavy.i</a></li><li><a href="#98aaf4e3-49a3-4f2a-a13e-af8d90fe9533" class="modal-trigger">test/tests/markers/dont_mark/dont_mark_test.i</a></li></ul><div class="modal moose-modal" id="5cfb2c04-5ca6-455c-8ef0-17e4f26d4381"><div class="modal-content"><h4>test/tests/dirackernels/point_caching/point_caching_adaptive_refinement.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  nx = 2
+  ny = 2
+  elem_type = QUAD4
+  uniform_refine = 2
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  active = &#x27;diff&#x27;
+
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[DiracKernels]
+  active = &#x27;point_source&#x27;
+
+  [./point_source]
+    type = CachingPointSource
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 3
+    value = 0
+  [../]
+
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Adaptivity]
+  steps = 3
+  marker = &#x27;combo&#x27;
+
+  [./Markers]
+    [./combo]
+      # In a real problem you would want to mark based on an error
+      # indicator, but we want this test to run consistently in
+      # parallel, so we just mark elements within a box for
+      # refinement.  The boxes here are based on the 8x8
+      # uniformly-refined initial grid.
+      type = ComboMarker
+      markers = &#x27;box1 box2 box3&#x27;
+    [../]
+
+    [./box1]
+      type = BoxMarker
+      bottom_left = &#x27;0.125 0.625 0&#x27;
+      top_right = &#x27;0.375 0.875 0&#x27;
+      inside = refine
+      outside = dont_mark
+    [../]
+
+    [./box2]
+      type = BoxMarker
+      bottom_left = &#x27;0.625 0.625 0&#x27;
+      top_right = &#x27;0.875 0.875 0&#x27;
+      inside = refine
+      outside = dont_mark
+    [../]
+
+    [./box3]
+      type = BoxMarker
+      bottom_left = &#x27;0.625 0.125 0&#x27;
+      top_right = &#x27;0.875 0.375 0&#x27;
+      inside = refine
+      outside = dont_mark
+    [../]
+  [../]
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="bb654852-4f9e-4e94-b080-a9f8297814f2"><div class="modal-content"><h4>test/tests/executioners/adapt_and_modify/adapt_and_modify.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 15
+  ny = 15
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./td]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[UserObjects]
+  [./rh_uo]
+    type = RandomHitUserObject
+    execute_on = &#x27;initial timestep_begin&#x27;
+    num_hits = 1
+  [../]
+  [./rhsm]
+    type = RandomHitSolutionModifier
+    execute_on = &#x27;custom&#x27;
+    modify = u
+    random_hits = rh_uo
+    amount = 1000
+  [../]
+[]
+
+[Executioner]
+  type = AdaptAndModify
+  num_steps = 4
+  dt = 1e-3
+
+  solve_type = &#x27;PJFNK&#x27;
+  nl_rel_tol = 1e-15
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  adapt_cycles = 2
+[]
+
+[Adaptivity]
+  marker = rhm # Switch to combo to get the effect of both
+  [./Indicators]
+    [./gji]
+      type = GradientJumpIndicator
+      variable = u
+    [../]
+  [../]
+  [./Markers]
+    [./rhm]
+      type = RandomHitMarker
+      random_hits = rh_uo
+    [../]
+    [./efm]
+      type = ErrorFractionMarker
+      coarsen = 0.001
+      indicator = gji
+      refine = 0.8
+    [../]
+    [./combo]
+      type = ComboMarker
+      markers = &#x27;efm rhm&#x27;
+    [../]
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="44160958-ff5e-474b-bf59-0786e1a6ea58"><div class="modal-content"><h4>test/tests/markers/combo_marker/combo_marker_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 2
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Adaptivity]
+  [./Markers]
+    [./box]
+      type = BoxMarker
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      top_right = &#x27;0.6 0.6 0&#x27;
+      inside = refine
+      outside = do_nothing
+    [../]
+    [./combo]
+      type = ComboMarker
+      markers = &#x27;box box2&#x27;
+    [../]
+    [./box2]
+      type = BoxMarker
+      bottom_left = &#x27;0.5 0.5 0&#x27;
+      top_right = &#x27;0.8 0.8 0&#x27;
+      inside = refine
+      outside = coarsen
+    [../]
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="92feacbf-8e3b-4bb4-bf13-095124e19f6c"><div class="modal-content"><h4>modules/phase_field/examples/nucleation/refine.i</h4><pre class="moose-pre"><code class="language-text">#
+# Example derived from cahn_hilliard.i demonstrating the use of Adaptivity
+# with the DiscreteNucleation system. The DiscreteNucleationMarker triggers
+# mesh refinement for the nucleus geometry. It is up to the user to specify
+# refinement for the physics. In this example this is done using a GradientJumpIndicator
+# with a ValueThresholdMarker. The nucleation system marker and the physics marker
+# must be combined using a ComboMarker to combine their effect.
+#
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  xmax = 500
+  ymax = 500
+  elem_type = QUAD
+[]
+
+[Modules]
+  [./PhaseField]
+    [./Conserved]
+      [./c]
+        free_energy = F
+        mobility = M
+        kappa = kappa_c
+        solve_type = REVERSE_SPLIT
+      [../]
+    [../]
+  [../]
+[]
+
+[ICs]
+  [./c_IC]
+    type = ConstantIC
+    variable = c
+    value = 0.2
+  [../]
+[]
+
+[Materials]
+  [./pfmobility]
+    type = GenericConstantMaterial
+    prop_names  = &#x27;M kappa_c&#x27;
+    prop_values = &#x27;1 25&#x27;
+  [../]
+  [./chemical_free_energy]
+    # simple double well free energy
+    type = DerivativeParsedMaterial
+    f_name = Fc
+    args = &#x27;c&#x27;
+    constant_names       = &#x27;barr_height  cv_eq&#x27;
+    constant_expressions = &#x27;0.1          0&#x27;
+    function = 16*barr_height*c^2*(1-c)^2 # +0.01*(c*plog(c,0.005)+(1-c)*plog(1-c,0.005))
+    derivative_order = 2
+    outputs = exodus
+  [../]
+  [./probability]
+    # This is a made up toy nucleation rate it should be replaced by
+    # classical nucleation theory in a real simulation.
+    type = ParsedMaterial
+    f_name = P
+    args = c
+    function = &#x27;if(c&lt;0.21,c*1e-8,0)&#x27;
+    outputs = exodus
+  [../]
+  [./nucleation]
+    # The nucleation material is configured to insert nuclei into the free energy
+    # tht force the concentration to go to 0.95, and holds this enforcement for 500
+    # time units.
+    type = DiscreteNucleation
+    f_name = Fn
+    op_names  = c
+    op_values = 0.90
+    penalty = 5
+    penalty_mode = MIN
+    map = map
+    outputs = exodus
+  [../]
+  [./free_energy]
+    # add the chemical and nucleation free energy contributions together
+    type = DerivativeSumMaterial
+    derivative_order = 2
+    args = c
+    sum_materials = &#x27;Fc Fn&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./inserter]
+    # The inserter runs at the end of each time step to add nucleation events
+    # that happend during the timestep (if it converged) to the list of nuclei
+    type = DiscreteNucleationInserter
+    hold_time = 50
+    probability = P
+  [../]
+  [./map]
+    # The map UO runs at the beginning of a timestep and generates a per-element/qp
+    # map of nucleus locations. The map is only regenerated if the mesh changed or
+    # the list of nuclei was modified.
+    # The map converts the nucleation points into finite area objects with a given radius.
+    type = DiscreteNucleationMap
+    radius = 10
+    periodic = c
+    inserter = inserter
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[BCs]
+  [./Periodic]
+    [./all]
+      auto_direction = &#x27;x y&#x27;
+    [../]
+  [../]
+[]
+
+[Postprocessors]
+  [./dt]
+    type = TimestepSize
+  [../]
+  [./ndof]
+    type = NumDOFs
+  [../]
+  [./rate]
+    type = DiscreteNucleationData
+    value = RATE
+    inserter = inserter
+  [../]
+  [./dtnuc]
+    type = DiscreteNucleationTimeStep
+    inserter = inserter
+    p2nucleus = 0.0005
+    dt_max = 10
+  [../]
+  [./update]
+    type = DiscreteNucleationData
+    value = UPDATE
+    inserter = inserter
+  [../]
+  [./count]
+    type = DiscreteNucleationData
+    value = COUNT
+    inserter = inserter
+  [../]
+[]
+
+[Adaptivity]
+  [./Indicators]
+    [./jump]
+      type = GradientJumpIndicator
+      variable = c
+    [../]
+  [../]
+  [./Markers]
+    [./nuc]
+      type = DiscreteNucleationMarker
+      map = map
+    [../]
+    [./grad]
+      type = ValueThresholdMarker
+      variable = jump
+      coarsen = 0.1
+      refine = 0.2
+    [../]
+    [./combo]
+      type = ComboMarker
+      markers = &#x27;nuc grad&#x27;
+    [../]
+  [../]
+  marker = combo
+  cycles_per_step = 3
+  recompute_markers_during_cycles = true
+  max_h_level = 3
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type&#x27;
+  petsc_options_value = &#x27;asm      lu          &#x27;
+
+  nl_max_its = 20
+  l_tol = 1.0e-4
+  nl_rel_tol = 1.0e-10
+  nl_abs_tol = 1.0e-10
+  start_time = 0.0
+  num_steps = 120
+
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 10
+    growth_factor = 1.5
+    cutback_factor = 0.5
+    optimal_iterations = 8
+    iteration_window = 2
+    timestep_limiting_postprocessor = dtnuc
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+  print_linear_residuals = false
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2783b615-4472-4b24-8056-18393441ac97"><div class="modal-content"><h4>test/tests/executioners/adapt_and_modify/adapt_and_modify_heavy.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  # This example uses Adaptivity Indicators, which are written out as
+  # CONSTANT MONOMIAL variables, which don&#x27;t currently work correctly
+  # 2122 for more information.
+  type = GeneratedMesh
+  dim = 2
+  nx = 15
+  ny = 15
+#  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[AuxVariables]
+  [./elem]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./td]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./elem]
+    type = UniqueIDAux
+    variable = elem
+    execute_on = timestep_begin
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[UserObjects]
+  [./rh_uo]
+    type = RandomHitUserObject
+    execute_on = timestep_begin
+    num_hits = 1
+  [../]
+  [./rhsm]
+    type = RandomHitSolutionModifier
+    execute_on = custom
+    modify = u
+    random_hits = rh_uo
+    amount = 10
+  [../]
+[]
+
+[Executioner]
+  type = AdaptAndModify
+  num_steps = 400
+  dt = 2e-4
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  adapt_cycles = 2
+[]
+
+[Adaptivity]
+  marker = rhm # Switch to combo to get the effect of both
+  [./Indicators]
+    [./gji]
+      type = GradientJumpIndicator
+      variable = u
+    [../]
+  [../]
+  [./Markers]
+    [./rhm]
+      type = RandomHitMarker
+      random_hits = rh_uo
+    [../]
+    [./efm]
+      type = ErrorFractionMarker
+      coarsen = 0.2
+      indicator = gji
+      refine = 0.8
+    [../]
+    [./combo]
+      type = ComboMarker
+      markers = &#x27;efm rhm&#x27;
+    [../]
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="98aaf4e3-49a3-4f2a-a13e-af8d90fe9533"><div class="modal-content"><h4>test/tests/markers/dont_mark/dont_mark_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 2
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Adaptivity]
+  [./Markers]
+    [./box]
+      type = BoxMarker
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      top_right = &#x27;0.6 0.6 0&#x27;
+      inside = refine
+      outside = coarsen
+    [../]
+    [./combo]
+      type = ComboMarker
+      markers = &#x27;box box2&#x27;
+    [../]
+    [./box2]
+      type = BoxMarker
+      bottom_left = &#x27;0.5 0.5 0&#x27;
+      top_right = &#x27;0.8 0.8 0&#x27;
+      inside = dont_mark
+      outside = refine
+    [../]
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#4d309971-0d99-488e-9b1e-ac7df3d8ff95" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#d0800d11-ef4f-4096-9729-0a81884a1ac6" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#f3270352-80c9-49f9-b033-b98f9ce1b020" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#0932383c-aea1-46f9-8cb8-7d37c0f9efd6" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

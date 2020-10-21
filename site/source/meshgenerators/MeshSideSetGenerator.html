@@ -1,0 +1,93 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>MeshSideSetGenerator.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="30d25129-3367-43ac-bf51-82f9d587e1ef"><i class="material-icons">menu</i></a><ul class="sidenav" id="30d25129-3367-43ac-bf51-82f9d587e1ef"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">meshgenerators</span><a href="#" class="breadcrumb">MeshSideSetGenerator</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="f43cb9ab-31a1-483a-a665-2da0a493582b" data-section-level="1" data-section-text="MeshSideSetGenerator"><h1 id="meshsidesetgenerator">MeshSideSetGenerator</h1><p>Add lower dimensional elements along the faces contained in a side set to set up mixed dimensional problems</p><section class="scrollspy" id="a0dd2550-4b19-40ca-a53e-3fbf6a2ad74c" data-section-level="2" data-section-text="Overview"><h2 id="overview">Overview</h2><p>Element sides are not explicitly meshed in MOOSE/libMesh, i.e. no shape functions live on the lower dimensional sides. To run kernels on lower dimensional manifolds they need to be explicitly meshed. That can be accomplished in a mesh generation tool like Cubit, or using this MeshGenerator.</p><p>In 3D simulations, the appropriate 2D elements (for 2D simulations, 1D elements) will be meshed in at selected side sets (boundaries). The choice of lower dimensional side elements is dictated by the higher dimensional volume element types.</p></section><section class="scrollspy" id="11df5c0f-1d02-4d98-8204-11e28a6eb94e" data-section-level="2" data-section-text="Coupling between side and volume meshes"><h2 id="coupling-between-side-and-volume-meshes">Coupling between side and volume meshes</h2><p>The newly-generated lower dimensional side elements will share nodes with the higher dimensional volume&#x27;s elements. Coupling to the variables from volume elements &quot;just works&quot;.</p><p>Coupling in the other direction is not as straight forward. The lower dimensional variables exist on some nodes of the adjacent volume elements. The volume kernels will run on the volume quadrature points at which <em>tapered off</em> values from the adjacent edges can be found. Use at your own risk.</p></section><section class="scrollspy" id="bf3edb59-ad68-4e2c-a26d-56223fac0fca" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="781f7175-a537-4a95-9b2a-75aeac2a6ec0" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block_id</span><span class="moose-parameter-header-description">Subdomain id to set for the new elements along the boundary</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned short</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Subdomain id to set for the new elements along the boundary</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundaries</span><span class="moose-parameter-header-description">The name of the boundary to mesh</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the boundary to mesh</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">input</span><span class="moose-parameter-header-description">The mesh we want to modify</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MeshGeneratorName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The mesh we want to modify</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="2fade912-afe5-4997-984a-3d1cb15ba33d" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block_name</span><span class="moose-parameter-header-description">Subdomain name to set for the new elements along the boundary (optional)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>SubdomainName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Subdomain name to set for the new elements along the boundary (optional)</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="5f88b89c-9de0-4789-9f69-07914aea4248" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="bcf14c33-70f8-4eab-8f62-a719b8ee94d3" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#07bf93f5-fc83-4132-b8f7-2d7b9b12e41e" class="modal-trigger">test/tests/meshgenerators/mesh_side_set_generator/mesh_side_set_generator.i</a></li></ul><div class="modal moose-modal" id="07bf93f5-fc83-4132-b8f7-2d7b9b12e41e"><div class="modal-content"><h4>test/tests/meshgenerators/mesh_side_set_generator/mesh_side_set_generator.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [./gmg]
+    type = GeneratedMeshGenerator
+    dim = 3
+    nx = 4
+    ny = 4
+    nz = 4
+    elem_type = TET4
+  []
+
+  [./left_block]
+    type = SubdomainBoundingBoxGenerator
+    input = gmg
+    block_id = 1
+    block_name = left_block
+    bottom_left = &#x27;0 0 0&#x27;
+    top_right = &#x27;0.5 1 1&#x27;
+  []
+
+  [./right_block]
+    type = SubdomainBoundingBoxGenerator
+    input = left_block
+    block_id = 2
+    block_name = right_block
+    bottom_left = &#x27;0.5 0 0&#x27;
+    top_right = &#x27;1 1 1&#x27;
+  []
+
+  [./center_side_set]
+    type = SideSetsBetweenSubdomainsGenerator
+    input = right_block
+    primary_block = left_block
+    paired_block = right_block
+    new_boundary = center_side_set
+  []
+
+  [./center_mesh]
+    type = MeshSideSetGenerator
+    input = center_side_set
+    boundaries = center_side_set
+    block_id = 10
+    block_name = center_mesh
+  []
+[]
+
+[Variables]
+  [./c_volume]
+    [./InitialCondition]
+      type = FunctionIC
+      function = &#x27;1-(x-0.5)^2+(y-0.5)^2+(z-0.5)^2&#x27;
+    [../]
+  [../]
+  [./c_plane]
+    block = &#x27;center_mesh&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./volume_diff]
+    type = Diffusion
+    variable = c_volume
+    block = &#x27;left_block right_block&#x27;
+  [../]
+  [./volume_dt]
+    type = TimeDerivative
+    variable = c_volume
+    block = &#x27;left_block right_block&#x27;
+  [../]
+
+  # couple the lower dimensional variable to the volume variable
+  [./plane_reaction]
+    type = Reaction
+    variable = c_plane
+    block = &#x27;center_mesh&#x27;
+  [../]
+  [./plane_coupled]
+    type = CoupledForce
+    variable = c_plane
+    v = c_volume
+    block = &#x27;center_mesh&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 0.01
+  num_steps = 2
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#a0dd2550-4b19-40ca-a53e-3fbf6a2ad74c" class="tooltipped" data-position="left" data-tooltip="Overview">Overview</a></li><li><a href="#11df5c0f-1d02-4d98-8204-11e28a6eb94e" class="tooltipped" data-position="left" data-tooltip="Coupling between side and volume meshes">Coupling between side and volume meshes</a></li><li><a href="#bf3edb59-ad68-4e2c-a26d-56223fac0fca" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#bcf14c33-70f8-4eab-8f62-a719b8ee94d3" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

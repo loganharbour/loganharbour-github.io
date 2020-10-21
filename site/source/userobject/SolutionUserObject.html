@@ -1,0 +1,3313 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>SolutionUserObject.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="186af277-77e0-41b8-aff2-08f613f94ef3"><i class="material-icons">menu</i></a><ul class="sidenav" id="186af277-77e0-41b8-aff2-08f613f94ef3"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">userobject</span><a href="#" class="breadcrumb">SolutionUserObject</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="d50fa04e-ca1f-4353-8213-efc2edb8e35b" data-section-level="1" data-section-text="SolutionUserObject"><h1 id="solutionuserobject">SolutionUserObject</h1><p>Reads a variable from a mesh in one simulation to another</p><section class="scrollspy" id="879ef139-c392-417c-a5e9-3c0b35cba7c2" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>A solution user object reads a variable from a mesh in one simulation to another.  In order to use a <code>SolutionUserObject</code> three additional parameters are required, an <a href="../../syntax/AuxVariables/index.html">AuxVariable</a> , a <a href="../../syntax/Functions/index.html">Function</a> and an <a href="../../syntax/AuxKernels/index.html">AuxKernel</a>.  The <code>AuxVariable</code> represents the variable to be read by the solution user object.  The <code>SolutionUserObject</code> is set up to read the old output file.  A <code>SolutionFunction</code> is required to interpolate in time and space the data from the <code>SolutionUserObject</code>.  Finally, the <code>Function</code> is required that will query the function and write the value into the <code>AuxVariable</code>.</p></section><section class="scrollspy" id="ce55bc1f-586b-4fd0-bc91-d92c14302082" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource.e
+    system_variables = source_nodal
+  [../]
+[]
+</code></pre><a href="#93e8ee1e-3cdc-45ff-9abd-eb39bf3364dc" class="modal-trigger">(test/tests/auxkernels/solution_aux/solution_aux_exodus_interp.i)</a><div class="modal moose-modal" id="93e8ee1e-3cdc-45ff-9abd-eb39bf3364dc"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/auxkernels/solution_aux/solution_aux_exodus_interp.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = FileMesh
+  file = cubesource.e
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+    type = SolutionAux
+    variable = nn
+    solution = soln
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource.e
+    system_variables = source_nodal
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 50
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="64cfb535-d984-4ec1-8767-3cc510f1bbd9" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="02983969-3a4a-448c-9c3f-f2adea93e04f" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">mesh</span><span class="moose-parameter-header-description">The name of the mesh file (must be xda or exodusII file).</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MeshFileName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the mesh file (must be xda or exodusII file).</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="332ebd6e-9abf-47d2-8d4a-9237d63912da" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">es</span><span class="moose-parameter-header-default"><not supplied></span><span class="moose-parameter-header-description">The name of the file holding the equation system info in xda format (xda only).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span><not supplied></p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FileName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the file holding the equation system info in xda format (xda only).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">rotation0_angle</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">Anticlockwise rotation angle (in degrees) to use for rotation about rotation0_vector.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Anticlockwise rotation angle (in degrees) to use for rotation about rotation0_vector.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">rotation0_vector</span><span class="moose-parameter-header-default">0 0 1</span><span class="moose-parameter-header-description">Vector about which to rotate points of the simulation.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0 0 1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>libMesh::VectorValue<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector about which to rotate points of the simulation.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">rotation1_angle</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">Anticlockwise rotation angle (in degrees) to use for rotation about rotation1_vector.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Anticlockwise rotation angle (in degrees) to use for rotation about rotation1_vector.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">rotation1_vector</span><span class="moose-parameter-header-default">0 0 1</span><span class="moose-parameter-header-description">Vector about which to rotate points of the simulation.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0 0 1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>libMesh::VectorValue<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector about which to rotate points of the simulation.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">scale</span><span class="moose-parameter-header-default">1 1 1 </span><span class="moose-parameter-header-description">Scale factor for points in the simulation</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1 1 1 </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Scale factor for points in the simulation</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">scale_multiplier</span><span class="moose-parameter-header-default">1 1 1 </span><span class="moose-parameter-header-description">Scale multiplying factor for points in the simulation</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1 1 1 </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Scale multiplying factor for points in the simulation</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">system</span><span class="moose-parameter-header-default">nl0</span><span class="moose-parameter-header-description">The name of the system to pull values out of (xda only).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nl0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the system to pull values out of (xda only).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">system_variables</span><span class="moose-parameter-header-description">The name of the nodal and elemental variables from the file you want to use for values</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the nodal and elemental variables from the file you want to use for values</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">timestep</span><span class="moose-parameter-header-description">Index of the single timestep used or "LATEST" for the last timestep (exodusII only).  If not supplied, time interpolation will occur.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Index of the single timestep used or "LATEST" for the last timestep (exodusII only).  If not supplied, time interpolation will occur.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">transformation_order</span><span class="moose-parameter-header-default">translation scale</span><span class="moose-parameter-header-description">The order to perform the operations in.  Define R0 to be the rotation matrix encoded by rotation0_vector and rotation0_angle.  Similarly for R1.  Denote the scale by s, the scale_multiplier by m, and the translation by t.  Then, given a point x in the simulation, if transformation_order = 'rotation0 scale_multiplier translation scale rotation1' then form p = R1*(R0*x*m - t)/s.  Then the values provided by the SolutionUserObject at point x in the simulation are the variable values at point p in the mesh.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>translation scale</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>rotation0 translation scale rotation1 scale_multiplier</p><p class="moose-parameter-description"><span>Description:</span>The order to perform the operations in.  Define R0 to be the rotation matrix encoded by rotation0_vector and rotation0_angle.  Similarly for R1.  Denote the scale by s, the scale_multiplier by m, and the translation by t.  Then, given a point x in the simulation, if transformation_order = 'rotation0 scale_multiplier translation scale rotation1' then form p = R1*(R0*x*m - t)/s.  Then the values provided by the SolutionUserObject at point x in the simulation are the variable values at point p in the mesh.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">translation</span><span class="moose-parameter-header-default">0 0 0 </span><span class="moose-parameter-header-description">Translation factors for x,y,z coordinates of the simulation</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0 0 0 </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Translation factors for x,y,z coordinates of the simulation</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="9f7b0563-aa1e-46bc-ad42-6f8a09b43f1a" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">allow_duplicate_execution_on_initial</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preaux</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREAUX</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREAUX</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preic</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREIC during initial setup</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREIC during initial setup</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="62bb440c-900a-44bf-8cd5-7191214ca6ae" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#8556b9a2-d3c6-4cc6-99ea-b53933cd55b9" class="modal-trigger">test/tests/auxkernels/solution_aux/output_error.i</a></li><li><a href="#02a1aa7e-a76c-421e-91f8-f9a34356d2a1" class="modal-trigger">test/tests/functions/solution_function/solution_function_test.i</a></li><li><a href="#519c2ef8-a3ee-4f33-8fb2-a123ebb49ce1" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_restart2.i</a></li><li><a href="#f8b46ccc-51f5-45fa-9f4c-b4be0aa9acc5" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_direct.i</a></li><li><a href="#b90cddac-8f30-44eb-8078-7fae4e94130c" class="modal-trigger">test/tests/auxkernels/solution_scalar_aux/solution_scalar_aux.i</a></li><li><a href="#a07911bc-fb56-49c3-ab98-3b44605c03f4" class="modal-trigger">test/tests/functions/solution_function/solution_function_exodus_test.i</a></li><li><a href="#607d934c-f35e-4fb3-a1d8-d42a0d1a1c9b" class="modal-trigger">test/tests/functions/solution_function/solution_function_rot2.i</a></li><li><a href="#1aafc5e9-e4a7-4e7b-8eb8-1f04960154d6" class="modal-trigger">test/tests/functions/solution_function/solution_function_scale_mult.i</a></li><li><a href="#0db8a730-af72-4526-bf1a-e12b4ffdd447" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_restart1.i</a></li><li><a href="#64a471b3-c2ec-4c92-9845-cfa7838685a1" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux.i</a></li><li><a href="#e35c5205-34a8-457c-9f6e-f662296ef2d0" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_scale.i</a></li><li><a href="#6253553c-1092-4da7-bb2f-ecc17db7202a" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_direct.i</a></li><li><a href="#210269dd-6e8b-4927-bfea-06739e6fcb6a" class="modal-trigger">examples/ex14_pps/ex14_compare_solutions_2.i</a></li><li><a href="#6c374ef4-b082-4d1e-8a7b-826bc2971a64" class="modal-trigger">test/tests/auxkernels/solution_aux/aux_nonlinear_solution_xdr.i</a></li><li><a href="#59859de9-afdd-4e99-849b-735a5b6ab4eb" class="modal-trigger">modules/porous_flow/examples/restart/gas_injection_new_mesh.i</a></li><li><a href="#27fdb64f-73ef-4275-b0a4-0657fd60ddad" class="modal-trigger">test/tests/auxkernels/solution_aux/thread_xda.i</a></li><li><a href="#0cc8f2f2-f24d-4bde-a9f7-29feb3dfe09b" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_direct.i</a></li><li><a href="#766b7d89-f070-4086-8d50-2f5e67bff903" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus.i</a></li><li><a href="#c1862171-18c7-4d55-8296-80e0e1b1106a" class="modal-trigger">test/tests/functions/solution_function/solution_function_grad_p2.i</a></li><li><a href="#e9da3caf-3fbb-46da-b088-0080ff589361" class="modal-trigger">test/tests/functions/solution_function/solution_function_rot4.i</a></li><li><a href="#d9d525a9-31fd-4a09-bf48-e06a3a640ec1" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_elemental_only.i</a></li><li><a href="#e2743407-3eb5-4e09-a526-25f5b8f65d93" class="modal-trigger">test/tests/functions/solution_function/solution_function_rot3.i</a></li><li><a href="#ff417038-1dc2-4e61-aa78-d8a6f1098f44" class="modal-trigger">test/tests/functions/solution_function/solution_function_rot1.i</a></li><li><a href="#2e06d368-93b9-4b0d-aba5-6dbdc855ff05" class="modal-trigger">test/tests/auxkernels/solution_aux/aux_nonlinear_solution_xda.i</a></li><li><a href="#22ae7204-3824-462b-93a9-f5cca887fab5" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_file_extension.i</a></li><li><a href="#04341d80-3809-48e6-9815-70a9951e4ce2" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_multi_var.i</a></li><li><a href="#06871bf6-0169-4254-8c8d-a80ebd84c1b0" class="modal-trigger">test/tests/auxkernels/solution_aux/aux_nonlinear_solution_adapt_xda.i</a></li><li><a href="#4ee7adcd-e9d3-4365-ac0a-0d687b59ce1e" class="modal-trigger">test/tests/userobjects/solution_user_object/discontinuous_value_solution_uo_p2.i</a></li><li><a href="#74edd53b-3780-46c5-924f-e332020eb96c" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_elemental.i</a></li><li><a href="#0a947245-d4b7-4d7d-a8f0-1c895e8ee216" class="modal-trigger">modules/combined/test/tests/axisymmetric_2d3d_solution_function/3dy.i</a></li><li><a href="#e7d7026c-8f7b-4996-a084-e8fd11887401" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_elem_map.i</a></li><li><a href="#d514e78f-470d-4bfc-9cdd-1feb61414d2c" class="modal-trigger">test/tests/functions/solution_function/solution_function_scale_transl.i</a></li><li><a href="#c8f23ef6-353d-4911-b407-0f64cb2368e3" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_multi_err.i</a></li><li><a href="#05dbf0b9-6eef-4e4d-b319-99bcae17bf93" class="modal-trigger">test/tests/functions/solution_function/solution_function_exodus_interp_test.i</a></li><li><a href="#7bf2e510-05be-49d8-a5a6-dfd1535b1659" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_interp.i</a></li></ul><div class="modal moose-modal" id="8556b9a2-d3c6-4cc6-99ea-b53933cd55b9"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/output_error.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 2
+  ny = 2
+  xmin = 1
+  xmax = 4
+  ymin = 1
+  ymax = 3
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./u_aux]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./initial_cond_aux]
+    type = SolutionAux
+    solution = xda_soln
+    execute_on = initial
+    variable = u_aux
+    direct = false
+  [../]
+[]
+
+[UserObjects]
+  [./xda_soln]
+    type = SolutionUserObject
+    mesh = build_out_0001_mesh.xda
+    es = build_out_0001.xda
+    system_variables = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;PJFNK&#x27;
+  nl_rel_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+  xda = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="02a1aa7e-a76c-421e-91f8-f9a34356d2a1"><div class="modal-content"><h4>test/tests/functions/solution_function/solution_function_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [./square]
+    type = GeneratedMeshGenerator
+    nx = 2
+    ny = 2
+    dim = 2
+  [../]
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = FunctionIC
+      function = initial_cond_func
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  [./u_aux]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = FunctionIC
+      function = initial_cond_func
+    [../]
+  [../]
+[]
+
+[Functions]
+  [./initial_cond_func]
+    type = SolutionFunction
+    solution = ex_soln
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 3
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 1
+  [../]
+[]
+
+[UserObjects]
+  [./ex_soln]
+    type = SolutionUserObject
+    system_variables = u
+    mesh = build_out_0001_mesh.xda
+    es = build_out_0001.xda
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  nl_rel_tol = 1e-10
+[]
+
+[Outputs]
+  file_base = out
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="519c2ef8-a3ee-4f33-8fb2-a123ebb49ce1"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_restart2.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  type = FileMesh
+  file = cubesource.e
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+    type = SolutionAux
+    variable = nn
+    solution = soln
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource.e
+    system_variables = source_nodal
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 5
+  start_time = 2.5
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+
+[Problem]
+  restart_file_base = solution_aux_exodus_interp_restart1_out_cp/0005
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f8b46ccc-51f5-45fa-9f4c-b4be0aa9acc5"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_direct.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = FileMesh
+  file = cubesource.e
+  # The SolutionUserObject uses the copy_nodal_solution() capability
+  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
+  # has been renumbered (it will be reunumbered if you are running with
+  # DistributedMesh in parallel).  Hence, we restrict this test to run with
+  # ReplicatedMesh only.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+    type = SolutionAux
+    variable = nn
+    solution = soln
+    direct = true
+    from_variable = source_nodal
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource.e
+    system_variables = source_nodal
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 50
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b90cddac-8f30-44eb-8078-7fae4e94130c"><div class="modal-content"><h4>test/tests/auxkernels/solution_scalar_aux/solution_scalar_aux.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  type = GeneratedMesh
+  dim = 1
+  nx = 1
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./a]
+    family = SCALAR
+    order = FIRST
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxScalarKernels]
+  [./a_sk]
+    type = SolutionScalarAux
+    variable = a
+    solution = solution_uo
+    from_variable = a
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./solution_uo]
+    type = SolutionUserObject
+    mesh = build_out.e
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 2
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 3
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;NEWTON&#x27;
+  nl_rel_tol = 1e-10
+  dt = 1
+  num_steps = 3
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a07911bc-fb56-49c3-ab98-3b44605c03f4"><div class="modal-content"><h4>test/tests/functions/solution_function/solution_function_exodus_test.i</h4><pre class="moose-pre"><code class="language-text"># [Executioner]
+# type = Steady
+# petsc_options = &#x27;-snes&#x27;
+# l_max_its = 800
+# nl_rel_tol = 1e-10
+# []
+
+[Mesh]
+  type = FileMesh
+  file = cubesource.e
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  # [./ne]
+  # order = FIRST
+  # family = LAGRANGE
+  # [../]
+  # [./ee]
+  # order = CONSTANT
+  # family = MONOMIAL
+  # [../]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./en]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Functions]
+  # [./sourcee]
+  # type = SolutionFunction
+  # file_type = exodusII
+  # mesh = cubesource.e
+  # variable = source_element
+  # [../]
+  [./sourcen]
+    type = SolutionFunction
+    scale_factor = 2.0
+    solution = cube_soln
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  # [./ne]
+  # type = FunctionAux
+  # variable = ne
+  # function = sourcee
+  # [../]
+  # [./ee]
+  # type = FunctionAux
+  # variable = ee
+  # function = sourcee
+  # [../]
+  [./nn]
+    type = FunctionAux
+    variable = nn
+    function = sourcen
+  [../]
+  [./en]
+    type = FunctionAux
+    variable = en
+    function = sourcen
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+[]
+
+[UserObjects]
+  [./cube_soln]
+    type = SolutionUserObject
+    timestep = 2
+    system_variables = source_nodal
+    mesh = cubesource.e
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 50
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="607d934c-f35e-4fb3-a1d8-d42a0d1a1c9b"><div class="modal-content"><h4>test/tests/functions/solution_function/solution_function_rot2.i</h4><pre class="moose-pre"><code class="language-text"># checking rotation of points by 45 deg about y axis in a SolutionUserObject
+[Mesh]
+  # this is chosen so when i rotate through 45deg i get a length of &quot;1&quot; along the x or y or z direction
+  type = GeneratedMesh
+  dim = 3
+  xmin = -0.70710678
+  xmax = 0.70710678
+  nx = 3
+  ymin = -0.70710678
+  ymax = 0.70710678
+  ny = 3
+  zmin = -0.70710678
+  zmax = 0.70710678
+  nz = 3
+[]
+
+[UserObjects]
+  [./solution_uo]
+    type = SolutionUserObject
+    mesh = cube_with_u_equals_x.e
+    timestep = 1
+    system_variables = u
+    rotation0_vector = &#x27;0 1 0&#x27;
+    rotation0_angle = 45
+    transformation_order = rotation0
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[ICs]
+  [./u_init]
+    type = FunctionIC
+    variable = u
+    function = solution_fcn
+  [../]
+[]
+
+[Functions]
+  [./solution_fcn]
+    type = SolutionFunction
+    from_variable = u
+    solution = solution_uo
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 1
+  end_time = 1
+  dt = 1
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  file_base = solution_function_rot2
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1aafc5e9-e4a7-4e7b-8eb8-1f04960154d6"><div class="modal-content"><h4>test/tests/functions/solution_function/solution_function_scale_mult.i</h4><pre class="moose-pre"><code class="language-text"># checking scale_multiplier
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -1
+  xmax = 1
+  nx = 3
+  ymin = -1
+  ymax = 1
+  ny = 3
+[]
+
+[UserObjects]
+  [./solution_uo]
+    type = SolutionUserObject
+    mesh = square_with_u_equals_x.e
+    timestep = 1
+    system_variables = u
+    scale_multiplier = &#x27;2 2 0&#x27;
+    transformation_order = scale_multiplier
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[ICs]
+  [./u_init]
+    type = FunctionIC
+    variable = u
+    function = solution_fcn
+  [../]
+[]
+
+[Functions]
+  [./solution_fcn]
+    type = SolutionFunction
+    from_variable = u
+    solution = solution_uo
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 1
+  end_time = 1
+  dt = 1
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  file_base = solution_function_scale_mult
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0db8a730-af72-4526-bf1a-e12b4ffdd447"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_restart1.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  type = FileMesh
+  file = cubesource.e
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+    type = SolutionAux
+    variable = nn
+    solution = soln
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource.e
+    system_variables = source_nodal
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 5
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+  checkpoint = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="64a471b3-c2ec-4c92-9845-cfa7838685a1"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [./square]
+    type = GeneratedMeshGenerator
+    nx = 2
+    ny = 2
+    dim = 2
+  [../]
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./u_aux]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./initial_cond_aux]
+    type = SolutionAux
+    solution = xda_soln
+    execute_on = initial
+    variable = u_aux
+  [../]
+[]
+
+[UserObjects]
+  [./xda_soln]
+    type = SolutionUserObject
+    mesh = build_out_0001_mesh.xda
+    es = build_out_0001.xda
+    system_variables = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 3
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  nl_rel_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+  [./xda]
+    type = XDA
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e35c5205-34a8-457c-9f6e-f662296ef2d0"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_scale.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 2
+  ny = 2
+  xmin = 1
+  xmax = 4
+  ymin = 1
+  ymax = 3
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./u_aux]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./initial_cond_aux]
+    type = SolutionAux
+    solution = xda_soln
+    execute_on = initial
+    variable = u_aux
+  [../]
+[]
+
+[UserObjects]
+  [./xda_soln]
+    type = SolutionUserObject
+    mesh = build_out_0001_mesh.xda
+    es = build_out_0001.xda
+    system_variables = u
+    scale = &#x27;3 2 1&#x27;
+    translation = &#x27;1 1 0&#x27;
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;PJFNK&#x27;
+  nl_rel_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+  xda = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6253553c-1092-4da7-bb2f-ecc17db7202a"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_direct.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = FileMesh
+  file = cubesource.e
+  # The SolutionUserObject uses the copy_nodal_solution() capability
+  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
+  # has been renumbered (it will be reunumbered if you are running with
+  # DistributedMesh in parallel).  Hence, we restrict this test to run with
+  # ReplicatedMesh only.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+    type = SolutionAux
+    solution = soln
+    variable = nn
+    scale_factor = 2.0
+    direct = true
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource.e
+    system_variables = source_nodal
+    timestep = 2
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 50
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="210269dd-6e8b-4927-bfea-06739e6fcb6a"><div class="modal-content"><h4>examples/ex14_pps/ex14_compare_solutions_2.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 11
+  ny = 11
+  xmin = 0.0
+  xmax = 1.0
+  ymin = 0.0
+  ymax = 1.0
+[]
+
+[Variables]
+  [./forced]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = forced
+  [../]
+
+  [./forcing]
+    type = BodyForce
+    variable = forced
+    function = &#x27;x*x+y*y&#x27; # Any object expecting a function name can also receive a ParsedFunction string
+  [../]
+[]
+
+[BCs]
+  [./all]
+    type = DirichletBC
+    variable = forced
+    boundary = &#x27;bottom right top left&#x27;
+    value = 0
+  [../]
+[]
+
+[UserObjects]
+  [./fine_solution]
+    # Read in the fine grid solution
+    type = SolutionUserObject
+    system_variables = forced
+    mesh = ex14_compare_solutions_1_out_0000_mesh.xda
+    es = ex14_compare_solutions_1_out_0000.xda
+  [../]
+[]
+
+[Functions]
+  [./fine_function]
+    # Create a Function out of the fine grid solution
+    # Note: This references the SolutionUserObject above
+    type = SolutionFunction
+    solution = fine_solution
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+
+  [./Quadrature]
+    # The integration of the error happens on the coarse mesh
+    # To reduce integration error of the finer solution we can
+    # raise the integration order.
+    # Note: This will slow down the calculation a bit
+    order = SIXTH
+  [../]
+[]
+
+[Postprocessors]
+  [./error]
+    # Compute the error between the computed solution and the fine-grid solution
+    type = ElementL2Error
+    variable = forced
+    function = fine_function
+  [../]
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6c374ef4-b082-4d1e-8a7b-826bc2971a64"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/aux_nonlinear_solution_xdr.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  type = GeneratedMesh
+  parallel_type = replicated
+  dim = 2
+  nx = 2
+  ny = 2
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./u_aux]
+  [../]
+[]
+
+[Functions]
+  [./u_xdr_func]
+    type = SolutionFunction
+    solution = xdr_u
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./aux_xdr_kernel]
+    type = SolutionAux
+    variable = u_aux
+    solution = xdr_u_aux
+    execute_on = initial
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 1
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 2
+    value = 2
+  [../]
+[]
+
+[UserObjects]
+  [./xdr_u_aux]
+    type = SolutionUserObject
+    system = aux0
+    mesh = aux_nonlinear_solution_xdr_0001_mesh.xdr
+    es = aux_nonlinear_solution_xdr_0001.xdr
+    execute_on = initial
+  [../]
+  [./xdr_u]
+    type = SolutionUserObject
+    system = nl0
+    mesh = aux_nonlinear_solution_xdr_0001_mesh.xdr
+    es = aux_nonlinear_solution_xdr_0001.xdr
+    execute_on = initial
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  nl_rel_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[ICs]
+  [./u_func_ic]
+    function = u_xdr_func
+    variable = u
+    type = FunctionIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="59859de9-afdd-4e99-849b-735a5b6ab4eb"><div class="modal-content"><h4>modules/porous_flow/examples/restart/gas_injection_new_mesh.i</h4><pre class="moose-pre"><code class="language-text"># Using the results from the equilibrium run to provide the initial condition for
+# porepressure, we now inject a gas phase into the brine-saturated reservoir. In this
+# example, the mesh is not identical to the mesh used in gravityeq.i. Rather, it is
+# generated so that it is more refined near the injection boundary and at the top of
+# the model, as that is where the gas plume will be present.
+#
+# To use the hydrostatic pressure calculated using the gravity equilibrium run as the initial
+# condition for the pressure, a SolutionUserObject is used, along with a SolutionFunction to
+# interpolate the pressure from the gravity equilibrium run to the initial condition for liqiud
+# porepressure in this example.
+#
+# Even though the gravity equilibrium is established using a 2D mesh, in this example,
+# we use a mesh shifted 0.1 m to the right and rotate it about the Y axis to make a 2D radial
+# model.
+#
+# Methane injection takes place over the surface of the hole created by rotating the mesh,
+# and hence the injection area is 2 pi r h. We can calculate this using an AreaPostprocessor,
+# and then use this in a ParsedFunction to calculate the injection rate so that 10 kg/s of
+# methane is injected.
+#
+# Note: as this example uses the results from a previous simulation, gravityeq.i MUST be
+# run before running this input file.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  ny = 25
+  nx = 50
+  ymax = 100
+  xmin = 0.1
+  xmax = 5000
+  bias_x = 1.05
+  bias_y = 0.95
+[]
+
+[Problem]
+  coord_type = RZ
+  rz_coord_axis = Y
+[]
+
+[GlobalParams]
+  PorousFlowDictator = dictator
+  gravity = &#x27;0 -9.81 0&#x27;
+  temperature_unit = Celsius
+[]
+
+[Variables]
+  [./pp_liq]
+  [../]
+  [./sat_gas]
+    initial_condition = 0
+  [../]
+[]
+
+[ICs]
+  [./ppliq_ic]
+    type = FunctionIC
+    variable = pp_liq
+    function = ppliq_ic
+  [../]
+[]
+
+[AuxVariables]
+  [./temperature]
+    initial_condition = 50
+  [../]
+  [./xnacl]
+    initial_condition = 0.1
+  [../]
+  [./brine_density]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./methane_density]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./massfrac_ph0_sp0]
+    initial_condition = 1
+  [../]
+  [./massfrac_ph1_sp0]
+    initial_condition = 0
+  [../]
+  [./pp_gas]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./sat_liq]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+[]
+
+[Kernels]
+  [./mass0]
+    type = PorousFlowMassTimeDerivative
+    variable = pp_liq
+  [../]
+  [./flux0]
+    type = PorousFlowAdvectiveFlux
+    variable = pp_liq
+  [../]
+  [./mass1]
+    type = PorousFlowMassTimeDerivative
+    variable = sat_gas
+    fluid_component = 1
+  [../]
+  [./flux1]
+    type = PorousFlowAdvectiveFlux
+    variable = sat_gas
+    fluid_component = 1
+  [../]
+[]
+
+[AuxKernels]
+  [./brine_density]
+    type = PorousFlowPropertyAux
+    property = density
+    variable = brine_density
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./methane_density]
+    type = PorousFlowPropertyAux
+    property = density
+    variable = methane_density
+    phase = 1
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./pp_gas]
+    type = PorousFlowPropertyAux
+    property = pressure
+    phase = 1
+    variable = pp_gas
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./sat_liq]
+    type = PorousFlowPropertyAux
+    property = saturation
+    variable = sat_liq
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[BCs]
+  [./gas_injection]
+    type = PorousFlowSink
+    boundary = left
+    variable = sat_gas
+    flux_function = injection_rate
+    fluid_phase = 1
+  [../]
+  [./brine_out]
+    type = PorousFlowPiecewiseLinearSink
+    boundary = right
+    variable = pp_liq
+    multipliers = &#x27;0 1e9&#x27;
+    pt_vals = &#x27;0 1e9&#x27;
+    fluid_phase = 0
+    flux_function = 1e-6
+    use_mobility = true
+    use_relperm = true
+    mass_fraction_component = 0
+  [../]
+[]
+
+[Functions]
+  [./injection_rate]
+    type = ParsedFunction
+    vals = injection_area
+    vars = area
+    value = &#x27;-1/area&#x27;
+  [../]
+  [./ppliq_ic]
+    type = SolutionFunction
+    solution = soln
+  [../]
+[]
+
+[UserObjects]
+  [./dictator]
+    type = PorousFlowDictator
+    porous_flow_vars = &#x27;pp_liq sat_gas&#x27;
+    number_fluid_phases = 2
+    number_fluid_components = 2
+  [../]
+  [./pc]
+    type = PorousFlowCapillaryPressureVG
+    alpha = 1e-5
+    m = 0.5
+    sat_lr = 0.2
+    pc_max = 1e7
+  [../]
+  [./soln]
+    type = SolutionUserObject
+    mesh = gravityeq_out.e
+    system_variables = porepressure
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./brine]
+      type = BrineFluidProperties
+    [../]
+    [./methane]
+      type = MethaneFluidProperties
+    [../]
+    [./methane_tab]
+      type = TabulatedFluidProperties
+      fp = methane
+      save_file = false
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./temperature]
+    type = PorousFlowTemperature
+    temperature = temperature
+  [../]
+  [./ps]
+    type = PorousFlow2PhasePS
+    phase0_porepressure = pp_liq
+    phase1_saturation = sat_gas
+    capillary_pressure = pc
+  [../]
+  [./massfrac]
+    type = PorousFlowMassFraction
+    mass_fraction_vars = &#x27;massfrac_ph0_sp0 massfrac_ph1_sp0&#x27;
+  [../]
+  [./brine]
+    type = PorousFlowBrine
+    compute_enthalpy = false
+    compute_internal_energy = false
+    xnacl = xnacl
+    phase = 0
+  [../]
+  [./methane]
+    type = PorousFlowSingleComponentFluid
+    compute_enthalpy = false
+    compute_internal_energy = false
+    fp = methane_tab
+    phase = 1
+  [../]
+  [./porosity]
+    type = PorousFlowPorosityConst
+    porosity = 0.1
+  [../]
+  [./permeability]
+    type = PorousFlowPermeabilityConst
+    permeability = &#x27;1e-13 0 0 0 5e-14 0  0 0 1e-13&#x27;
+  [../]
+  [./relperm_liq]
+    type = PorousFlowRelativePermeabilityCorey
+    n = 2
+    phase = 0
+    s_res = 0.2
+    sum_s_res = 0.3
+  [../]
+  [./relperm_gas]
+    type = PorousFlowRelativePermeabilityCorey
+    n = 2
+    phase = 1
+    s_res = 0.1
+    sum_s_res = 0.3
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type&#x27;
+    petsc_options_value = &#x27; asm      lu           NONZERO&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  end_time = 1e8
+  nl_abs_tol = 1e-12
+  nl_rel_tol = 1e-06
+  nl_max_its = 20
+  dtmax = 1e6
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 1e1
+    growth_factor = 1.5
+  [../]
+[]
+
+[Postprocessors]
+  [./mass_ph0]
+    type = PorousFlowFluidMass
+    fluid_component = 0
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./mass_ph1]
+    type = PorousFlowFluidMass
+    fluid_component = 1
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./injection_area]
+    type = AreaPostprocessor
+    boundary = left
+    execute_on = initial
+  [../]
+[]
+
+[Outputs]
+  execute_on = &#x27;initial timestep_end&#x27;
+  exodus = true
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="27fdb64f-73ef-4275-b0a4-0657fd60ddad"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/thread_xda.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  # This test uses SolutionUserObject which doesn&#x27;t work with ParallelMesh.
+  type = GeneratedMesh
+  parallel_type = REPLICATED
+  dim = 2
+  nx = 2
+  ny = 2
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Functions]
+  [./u_xda_func]
+    type = SolutionFunction
+    solution = xda_u
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 1
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 2
+    value = 2
+  [../]
+[]
+
+[UserObjects]
+  [./xda_u]
+    type = SolutionUserObject
+    system = nl0
+    mesh = aux_nonlinear_solution_out_0001_mesh.xda
+    es = aux_nonlinear_solution_out_0001.xda
+    system_variables = u
+    execute_on = initial
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  nl_rel_tol = 1e-10
+[]
+
+[Postprocessors]
+  [./unorm]
+    type = ElementL2Norm
+    variable = u
+  [../]
+  [./uerror]
+    type = ElementL2Error
+    variable = u
+    function = u_xda_func
+  [../]
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0cc8f2f2-f24d-4bde-a9f7-29feb3dfe09b"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_direct.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = FileMesh
+  file = build_out_0001_mesh.xda
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./u_aux]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./initial_cond_aux]
+    type = SolutionAux
+    solution = soln
+    variable = u_aux
+    execute_on = initial
+    direct = true
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = build_out_0001_mesh.xda
+    es = build_out_0001.xda
+    system_variables = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 3
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  nl_rel_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="766b7d89-f070-4086-8d50-2f5e67bff903"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  file = cubesource.e
+  # The SolutionUserObject uses the copy_nodal_solution() capability
+  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
+  # has been renumbered (it will be reunumbered if you are running with
+  # DistributedMesh in parallel).  Hence, we restrict this test to run with
+  # ReplicatedMesh only.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./en]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+    type = SolutionAux
+    solution = soln
+    variable = nn
+    scale_factor = 2.0
+  [../]
+  [./en]
+    type = SolutionAux
+    solution = soln
+    variable = en
+    scale_factor = 2.0
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource.e
+    system_variables = source_nodal
+    timestep = 2
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 50
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c1862171-18c7-4d55-8296-80e0e1b1106a"><div class="modal-content"><h4>test/tests/functions/solution_function/solution_function_grad_p2.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  xmin = 0.0
+  xmax = 1.0
+  ymin = 0.0
+  ymax = 1.0
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./test_variable_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./test_variable_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxKernels]
+  [./test_variable_x_aux]
+    type = FunctionGradAux
+    variable = test_variable_x
+    dimension_index = x
+    function = solution_function
+  [../]
+  [./test_variable_y_aux]
+    type = FunctionGradAux
+    variable = test_variable_y
+    dimension_index = y
+    function = solution_function
+  [../]
+[]
+
+[UserObjects]
+  [./ex_soln]
+    type = SolutionUserObject
+    system_variables = test_variable
+    mesh = solution_function_grad_p1.e
+  [../]
+[]
+
+[Functions]
+  [./solution_function]
+    type = SolutionFunction
+    solution = ex_soln
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 2
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  nl_rel_tol = 1e-10
+[]
+
+[Outputs]
+  file_base = solution_function_grad_p2
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e9da3caf-3fbb-46da-b088-0080ff589361"><div class="modal-content"><h4>test/tests/functions/solution_function/solution_function_rot4.i</h4><pre class="moose-pre"><code class="language-text"># checking rotation of points by 45 deg about z axis in a SolutionUserObject for a 2D situation
+[Mesh]
+  # this is chosen so when i rotate through 45deg i get a length of &quot;1&quot; along the x or y direction
+  type = GeneratedMesh
+  dim = 2
+  xmin = -0.70710678
+  xmax = 0.70710678
+  nx = 3
+  ymin = -0.70710678
+  ymax = 0.70710678
+  ny = 3
+[]
+
+[UserObjects]
+  [./solution_uo]
+    type = SolutionUserObject
+    mesh = square_with_u_equals_x.e
+    timestep = 1
+    system_variables = u
+    rotation0_vector = &#x27;0 0 1&#x27;
+    rotation0_angle = 45
+    transformation_order = rotation0
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[ICs]
+  [./u_init]
+    type = FunctionIC
+    variable = u
+    function = solution_fcn
+  [../]
+[]
+
+[Functions]
+  [./solution_fcn]
+    type = SolutionFunction
+    from_variable = u
+    solution = solution_uo
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 1
+  end_time = 1
+  dt = 1
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  file_base = solution_function_rot4
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d9d525a9-31fd-4a09-bf48-e06a3a640ec1"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_elemental_only.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  file = cubesource.e
+  # The SolutionUserObject uses the copy_nodal_solution() capability
+  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
+  # has been renumbered (it will be reunumbered if you are running with
+  # DistributedMesh in parallel).  Hence, we restrict this test to run with
+  # ReplicatedMesh only.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./en]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./en]
+    type = SolutionAux
+    solution = soln
+    variable = en
+    scale_factor = 2.0
+    from_variable = source_element
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource.e
+    system_variables = &#x27;source_element&#x27;
+    timestep = 2
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;NEWTON&#x27;
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 50
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e2743407-3eb5-4e09-a526-25f5b8f65d93"><div class="modal-content"><h4>test/tests/functions/solution_function/solution_function_rot3.i</h4><pre class="moose-pre"><code class="language-text"># checking rotation of points by 90 deg about z axis, then 45 deg about x axis in a SolutionUserObject
+[Mesh]
+  # this is chosen so when i rotate through 45deg i get a length of &quot;1&quot; along the x or y or z direction
+  type = GeneratedMesh
+  dim = 3
+  xmin = -0.70710678
+  xmax = 0.70710678
+  nx = 3
+  ymin = -0.70710678
+  ymax = 0.70710678
+  ny = 3
+  zmin = -0.70710678
+  zmax = 0.70710678
+  nz = 3
+[]
+
+[UserObjects]
+  [./solution_uo]
+    type = SolutionUserObject
+    mesh = cube_with_u_equals_x.e
+    timestep = 1
+    system_variables = u
+    # the following takes:
+    # (0.7, 0.7, +/-0.7) -&gt; (-0.7, 0.7, +/-0.7)
+    # (-0.7, 0.7, +/-0.7) -&gt; (-0.7, -0.7, +/-0.7)
+    # (0.7, -0.7, +/-0.7) -&gt; (0.7, 0.7, +/-0.7)
+    # (-0.7, -0.7, +/-0.7) -&gt; (0.7, -0.7, +/-0.7)
+    rotation0_vector = &#x27;0 0 1&#x27;
+    rotation0_angle = 90
+    # then the following takes:
+    # (+/-0.7, 0.7, 0.7) -&gt; (+/-0.7, 0, 1)
+    # (+/-0.7, 0.7, -0.7) -&gt; (+/-0.7, 1, 0)
+    # (+/-0.7, -0.7, 0.7) -&gt; (+/-0.7, -1, 0)
+    # (+/-0.7, -0.7, -0.7) -&gt; (+/-0.7, 0, -1)
+    rotation1_vector = &#x27;1 0 0&#x27;
+    rotation1_angle = 45
+    # so, in total: a point y = +/-0.7 takes values from x = -/+0.7, so solution_function_rot3 should have u = -y
+    transformation_order = &#x27;rotation0 rotation1&#x27;
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[ICs]
+  [./u_init]
+    type = FunctionIC
+    variable = u
+    function = solution_fcn
+  [../]
+[]
+
+[Functions]
+  [./solution_fcn]
+    type = SolutionFunction
+    from_variable = u
+    solution = solution_uo
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 1
+  end_time = 1
+  dt = 1
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  file_base = solution_function_rot3
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ff417038-1dc2-4e61-aa78-d8a6f1098f44"><div class="modal-content"><h4>test/tests/functions/solution_function/solution_function_rot1.i</h4><pre class="moose-pre"><code class="language-text"># checking rotation of points by 45 deg about z axis in a SolutionUserObject
+[Mesh]
+  # this is chosen so when i rotate through 45deg i get a length of &quot;1&quot; along the x or y or z direction
+  type = GeneratedMesh
+  dim = 3
+  xmin = -0.70710678
+  xmax = 0.70710678
+  nx = 3
+  ymin = -0.70710678
+  ymax = 0.70710678
+  ny = 3
+  zmin = -0.70710678
+  zmax = 0.70710678
+  nz = 3
+[]
+
+[UserObjects]
+  [./solution_uo]
+    type = SolutionUserObject
+    mesh = cube_with_u_equals_x.e
+    timestep = LATEST
+    system_variables = u
+    rotation0_vector = &#x27;0 0 1&#x27;
+    rotation0_angle = 45
+    transformation_order = rotation0
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[ICs]
+  [./u_init]
+    type = FunctionIC
+    variable = u
+    function = solution_fcn
+  [../]
+[]
+
+[Functions]
+  [./solution_fcn]
+    type = SolutionFunction
+    from_variable = u
+    solution = solution_uo
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 1
+  end_time = 1
+  dt = 1
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  file_base = solution_function_rot1
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2e06d368-93b9-4b0d-aba5-6dbdc855ff05"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/aux_nonlinear_solution_xda.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  type = GeneratedMesh
+  parallel_type = replicated
+  dim = 2
+  nx = 2
+  ny = 2
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./u_aux]
+  [../]
+[]
+
+[Functions]
+  [./u_xda_func]
+    type = SolutionFunction
+    solution = xda_u
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./aux_xda_kernel]
+    type = SolutionAux
+    variable = u_aux
+    solution = xda_u_aux
+    execute_on = initial
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 1
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 2
+    value = 2
+  [../]
+[]
+
+[UserObjects]
+  [./xda_u_aux]
+    type = SolutionUserObject
+    system = aux0
+    mesh = aux_nonlinear_solution_out_0001_mesh.xda
+    es = aux_nonlinear_solution_out_0001.xda
+    system_variables = u_aux
+    execute_on = initial
+  [../]
+  [./xda_u]
+    type = SolutionUserObject
+    system = nl0
+    mesh = aux_nonlinear_solution_out_0001_mesh.xda
+    es = aux_nonlinear_solution_out_0001.xda
+    system_variables = u
+    execute_on = initial
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  nl_rel_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[ICs]
+  [./u_func_ic]
+    function = u_xda_func
+    variable = u
+    type = FunctionIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="22ae7204-3824-462b-93a9-f5cca887fab5"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_file_extension.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  file = cubesource.e
+  # The SolutionUserObject uses the copy_nodal_solution() capability
+  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
+  # has been renumbered (it will be reunumbered if you are running with
+  # DistributedMesh in parallel).  Hence, we restrict this test to run with
+  # ReplicatedMesh only.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./en]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+    type = SolutionAux
+    solution = soln
+    variable = nn
+    scale_factor = 2.0
+  [../]
+  [./en]
+    type = SolutionAux
+    solution = soln
+    variable = en
+    scale_factor = 2.0
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource.e-s003
+    system_variables = source_nodal
+    timestep = 2
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 50
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="04341d80-3809-48e6-9815-70a9951e4ce2"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_multi_var.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  file = cubesource.e
+  # The SolutionUserObject uses the copy_nodal_solution() capability
+  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
+  # has been renumbered (it will be reunumbered if you are running with
+  # DistributedMesh in parallel).  Hence, we restrict this test to run with
+  # ReplicatedMesh only.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./en]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+    type = SolutionAux
+    solution = soln
+    variable = nn
+    scale_factor = 2.0
+    from_variable = nodal_10
+    add_factor = -20
+  [../]
+  [./en]
+    type = SolutionAux
+    solution = soln
+    variable = en
+    scale_factor = 2.0
+    from_variable = source_nodal
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource_added.e
+    timestep = 2
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 50
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="06871bf6-0169-4254-8c8d-a80ebd84c1b0"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/aux_nonlinear_solution_adapt_xda.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  type = FileMesh
+  file = aux_nonlinear_solution_adapt_out_0004_mesh.xda
+  parallel_type = replicated
+[]
+
+[Adaptivity]
+  marker = error_frac
+  steps = 2
+  [./Indicators]
+    [./jump_indicator]
+      type = GradientJumpIndicator
+      variable = u
+    [../]
+  [../]
+  [./Markers]
+    [./error_frac]
+      type = ErrorFractionMarker
+      indicator = jump_indicator
+      refine = 0.7
+    [../]
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./u_aux]
+  [../]
+[]
+
+[Functions]
+  [./u_xda_func]
+    type = SolutionFunction
+    solution = xda_u
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./aux_xda_kernel]
+    type = SolutionAux
+    variable = u_aux
+    solution = xda_u_aux
+    execute_on = initial
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 1
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 2
+    value = 2
+  [../]
+[]
+
+[UserObjects]
+  [./xda_u_aux]
+    type = SolutionUserObject
+    system = aux0
+    mesh = aux_nonlinear_solution_adapt_out_0004_mesh.xda
+    es = aux_nonlinear_solution_adapt_out_0004.xda
+    system_variables = u_aux
+    execute_on = initial
+  [../]
+  [./xda_u]
+    type = SolutionUserObject
+    system = nl0
+    mesh = aux_nonlinear_solution_adapt_out_0004_mesh.xda
+    es = aux_nonlinear_solution_adapt_out_0004.xda
+    system_variables = u
+    execute_on = initial
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  nl_rel_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[ICs]
+  [./u_func_ic]
+    function = u_xda_func
+    variable = u
+    type = FunctionIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4ee7adcd-e9d3-4365-ac0a-0d687b59ce1e"><div class="modal-content"><h4>test/tests/userobjects/solution_user_object/discontinuous_value_solution_uo_p2.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  nx = 2
+  ny = 2
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./one]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;right top bottom&#x27;
+    value = 1
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = discontinuous_value_solution_uo_p1.e
+    system_variables = &#x27;discontinuous_variable continuous_variable&#x27;
+  [../]
+[]
+
+[Postprocessors]
+
+  [./discontinuous_value_left]
+    type = TestDiscontinuousValuePP
+    variable = discontinuous_variable
+    point = &#x27;0.25 0.25 0.0&#x27;
+    solution = soln
+  [../]
+  [./discontinuous_value_face]
+    type = TestDiscontinuousValuePP
+    variable = discontinuous_variable
+    point = &#x27;0.5 0.25 0.0&#x27;
+    solution = soln
+  [../]
+  [./discontinuous_value_right]
+    type = TestDiscontinuousValuePP
+    variable = discontinuous_variable
+    point = &#x27;0.75 0.25 0.0&#x27;
+    solution = soln
+  [../]
+
+  [./continuous_gradient_left]
+    type = TestDiscontinuousValuePP
+    variable = continuous_variable
+    evaluate_gradient = true
+    gradient_component = x
+    point = &#x27;0.25 0.25 0.0&#x27;
+    solution = soln
+  [../]
+  [./continuous_gradient_value_face]
+    type = TestDiscontinuousValuePP
+    variable = continuous_variable
+    evaluate_gradient = true
+    gradient_component = x
+    point = &#x27;0.5 0.25 0.0&#x27;
+    solution = soln
+  [../]
+  [./continuous_gradient_right]
+    type = TestDiscontinuousValuePP
+    variable = continuous_variable
+    evaluate_gradient = true
+    gradient_component = x
+    point = &#x27;0.75 0.25 0.0&#x27;
+    solution = soln
+  [../]
+
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  file_base = discontinuous_value_solution_uo_p2
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="74edd53b-3780-46c5-924f-e332020eb96c"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_elemental.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  file = cubesource.e
+  # The SolutionUserObject uses the copy_nodal_solution() capability
+  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
+  # has been renumbered (it will be reunumbered if you are running with
+  # DistributedMesh in parallel).  Hence, we restrict this test to run with
+  # ReplicatedMesh only.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./en]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+    type = SolutionAux
+    solution = soln
+    variable = nn
+    scale_factor = 2.0
+    from_variable = source_nodal
+  [../]
+  [./en]
+    type = SolutionAux
+    solution = soln
+    variable = en
+    scale_factor = 2.0
+    from_variable = source_element
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource.e
+    system_variables = &#x27;source_nodal source_element&#x27;
+    timestep = 2
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;NEWTON&#x27;
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 50
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0a947245-d4b7-4d7d-a8f0-1c895e8ee216"><div class="modal-content"><h4>modules/combined/test/tests/axisymmetric_2d3d_solution_function/3dy.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  order = FIRST
+  family = LAGRANGE
+  disp_x = disp_x
+  disp_y = disp_y
+  disp_z = disp_z
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Mesh]
+  file = 3dy.e
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+  [./disp_z]
+  [../]
+[]
+
+[AuxVariables]
+  [./temp]
+  [../]
+  [./hoop_stress]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = 2d_out.e
+    system_variables = &#x27;disp_x disp_y temp&#x27;
+  [../]
+[]
+
+[Functions]
+  [./soln_func_temp]
+    type = Axisymmetric2D3DSolutionFunction
+    solution = soln
+    from_variables = &#x27;temp&#x27;
+  [../]
+  [./soln_func_disp_x]
+    type = Axisymmetric2D3DSolutionFunction
+    solution = soln
+    from_variables = &#x27;disp_x disp_y&#x27;
+    component = 0
+  [../]
+  [./soln_func_disp_y]
+    type = Axisymmetric2D3DSolutionFunction
+    solution = soln
+    from_variables = &#x27;disp_x disp_y&#x27;
+    component = 1
+  [../]
+  [./soln_func_disp_z]
+    type = Axisymmetric2D3DSolutionFunction
+    solution = soln
+    from_variables = &#x27;disp_x disp_y&#x27;
+    component = 2
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./all]
+    volumetric_locking_correction = true
+    add_variables  = true
+    incremental = true
+    strain = FINITE
+    eigenstrain_names = thermal_expansion
+    generate_output = &#x27;stress_xx stress_yy stress_zz vonmises_stress hydrostatic_stress&#x27;
+  [../]
+[]
+
+[AuxKernels]
+  [./t_soln_aux]
+    type = FunctionAux
+    variable = temp
+    block = &#x27;1 2&#x27;
+    function = soln_func_temp
+  [../]
+  [./hoop_stress]
+    type = RankTwoScalarAux
+    rank_two_tensor = stress
+    variable = hoop_stress
+    scalar_type = HoopStress
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./x_soln_bc]
+    type = FunctionDirichletBC
+    variable = disp_x
+    preset = false
+    boundary = &#x27;1 2&#x27;
+    function = soln_func_disp_x
+  [../]
+  [./y_soln_bc]
+    type = FunctionDirichletBC
+    variable = disp_y
+    preset = false
+    boundary = &#x27;1 2&#x27;
+    function = soln_func_disp_y
+  [../]
+  [./z_soln_bc]
+    type = FunctionDirichletBC
+    variable = disp_z
+    preset = false
+    boundary = &#x27;1 2&#x27;
+    function = soln_func_disp_z
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    block = &#x27;1 2&#x27;
+    youngs_modulus = 193.05e9
+    poissons_ratio = 0.3
+  [../]
+
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+    block = &#x27;1 2&#x27;
+  [../]
+
+  [./thermal_expansion]
+    type = ComputeThermalExpansionEigenstrain
+    block = &#x27;1 2&#x27;
+    thermal_expansion_coeff = 13e-6
+    stress_free_temperature = 295.00
+    temperature = temp
+    eigenstrain_name = thermal_expansion
+  [../]
+
+  [./density]
+    type = Density
+    block = &#x27;1&#x27;
+    density = 8000.0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options = &#x27;-ksp_snes_ew&#x27;
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
+  petsc_options_value = &#x27; 201                hypre    boomeramg      4&#x27;
+  line_search = &#x27;none&#x27;
+  l_max_its = 25
+  nl_max_its = 20
+  nl_rel_tol = 1e-10
+  l_tol = 1e-2
+
+  start_time = 0.0
+  dt = 1
+  end_time = 1
+  dtmin = 1
+[]
+
+[Outputs]
+  file_base = 3dy_out
+  exodus = true
+  [./console]
+    type = Console
+    max_rows = 25
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e7d7026c-8f7b-4996-a084-e8fd11887401"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_elem_map.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  file = elem_map.e
+  # The SolutionUserObject uses the copy_nodal_solution() capability
+  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
+  # has been renumbered (it will be reunumbered if you are running with
+  # DistributedMesh in parallel).  Hence, we restrict this test to run with
+  # ReplicatedMesh only.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./matid]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./matid]
+    type = SolutionAux
+    solution = soln
+    variable = matid
+    scale_factor = 1.0
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = elem_map.e
+    system_variables = MatID
+    timestep = LATEST
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1&#x27;
+    value = 1.0
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d514e78f-470d-4bfc-9cdd-1feb61414d2c"><div class="modal-content"><h4>test/tests/functions/solution_function/solution_function_scale_transl.i</h4><pre class="moose-pre"><code class="language-text"># checking scale and translation, with ordering scale first, then translation second
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  xmin = -1
+  xmax = 1
+  nx = 3
+  ymin = -1
+  ymax = 1
+  ny = 3
+  zmin = -1
+  zmax = 1
+  nz = 3
+[]
+
+[UserObjects]
+  [./solution_uo]
+    type = SolutionUserObject
+    mesh = cube_with_u_equals_x.e
+    timestep = 1
+    system_variables = u
+    scale = &#x27;0.5 1 1&#x27;
+    translation = &#x27;2 0 0&#x27;
+    transformation_order = &#x27;scale translation&#x27;
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[ICs]
+  [./u_init]
+    type = FunctionIC
+    variable = u
+    function = solution_fcn
+  [../]
+[]
+
+[Functions]
+  [./solution_fcn]
+    type = SolutionFunction
+    from_variable = u
+    solution = solution_uo
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 1
+  end_time = 1
+  dt = 1
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  file_base = solution_function_scale_transl
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c8f23ef6-353d-4911-b407-0f64cb2368e3"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_multi_err.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  file = cubesource.e
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./en]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+    type = SolutionAux
+    solution = soln
+    variable = nn
+    scale_factor = 2.0
+    #from_variable = source_nodal
+    #add_factor = -10teg
+  [../]
+  [./en]
+    type = SolutionAux
+    solution = soln
+    variable = en
+    scale_factor = 2.0
+    #from_variable = source_nodal
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource_added.e
+    system_variables = &#x27;source_nodal nodal_10&#x27;
+    timestep = 2
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 50
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="05dbf0b9-6eef-4e4d-b319-99bcae17bf93"><div class="modal-content"><h4>test/tests/functions/solution_function/solution_function_exodus_interp_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  file = cubesource.e
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+#  [./ne]
+#    order = FIRST
+#    family = LAGRANGE
+#  [../]
+  [./en]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+#  [./ee]
+#    order = CONSTANT
+#    family = MONOMIAL
+#  [../]
+[]
+
+[Functions]
+  [./sourcen]
+    type = SolutionFunction
+    solution = cube_soln
+  [../]
+#  [./sourcee]
+#    type = SolutionFunction
+#    file_type = exodusII
+#    mesh = cubesource.e
+#    variable = source_element
+#  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+     type = FunctionAux
+     variable = nn
+     function = sourcen
+  [../]
+#  [./ne]
+#     type = FunctionAux
+#     variable = ne
+#     function = sourcee
+#  [../]
+  [./en]
+     type = FunctionAux
+     variable = en
+     function = sourcen
+  [../]
+#  [./ee]
+#     type = FunctionAux
+#     variable = ee
+#     function = sourcee
+#  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+[]
+
+[UserObjects]
+  [./cube_soln]
+    type = SolutionUserObject
+    mesh = cubesource.e
+    system_variables = source_nodal
+  [../]
+[]
+
+#[Executioner]
+#  type = Steady
+#  petsc_options = &#x27;-snes&#x27;
+#  l_max_its = 800
+#  nl_rel_tol = 1e-10
+#[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 50
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="7bf2e510-05be-49d8-a5a6-dfd1535b1659"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_interp.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = FileMesh
+  file = cubesource.e
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+    type = SolutionAux
+    variable = nn
+    solution = soln
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource.e
+    system_variables = source_nodal
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 50
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#879ef139-c392-417c-a5e9-3c0b35cba7c2" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#ce55bc1f-586b-4fd0-bc91-d92c14302082" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#64cfb535-d984-4ec1-8767-3cc510f1bbd9" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#62bb440c-900a-44bf-8cd5-7191214ca6ae" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

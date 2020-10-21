@@ -1,0 +1,541 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>SinDirichletBC.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="0ff8895b-b6d2-4239-8024-c86b161c3878"><i class="material-icons">menu</i></a><ul class="sidenav" id="0ff8895b-b6d2-4239-8024-c86b161c3878"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">bcs</span><a href="#" class="breadcrumb">SinDirichletBC</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="9f5f4620-d760-424e-941a-5a172ead64c5" data-section-level="1" data-section-text="SinDirichletBC"><h1 id="sindirichletbc">SinDirichletBC</h1><p>Imposes a time-varying essential boundary condition <span tex="u=g(t)" bookmark="moose-equation-70e94fd2-4ab1-4029-9d28-85a2183fb36e" recursive="True" class="moose-katex-inline-equation" id="moose-equation-70e94fd2-4ab1-4029-9d28-85a2183fb36e"><script>var element = document.getElementById("moose-equation-70e94fd2-4ab1-4029-9d28-85a2183fb36e");katex.render("u=g(t)", element, {displayMode:false,throwOnError:false});</script></span>, where <span tex="g(t)" bookmark="moose-equation-59037bcf-8e85-42a0-b01a-0d184ccb34c1" recursive="True" class="moose-katex-inline-equation" id="moose-equation-59037bcf-8e85-42a0-b01a-0d184ccb34c1"><script>var element = document.getElementById("moose-equation-59037bcf-8e85-42a0-b01a-0d184ccb34c1");katex.render("g(t)", element, {displayMode:false,throwOnError:false});</script></span> varies from an given initial value at time <span tex="t=0" bookmark="moose-equation-cfecc29f-9c4a-4b58-88bc-6d109187591c" recursive="True" class="moose-katex-inline-equation" id="moose-equation-cfecc29f-9c4a-4b58-88bc-6d109187591c"><script>var element = document.getElementById("moose-equation-cfecc29f-9c4a-4b58-88bc-6d109187591c");katex.render("t=0", element, {displayMode:false,throwOnError:false});</script></span> to a given final value over a specified duration.</p><section class="scrollspy" id="2b082d2b-ee75-46cf-b7a1-582b8b12a63b" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>SinDirichletBC</code> is a <code>NodalBC</code> which imposes a time-varying boundary value of the form</p><p><span class="moose-katex-block-equation"><span tex="g(t) = \left\{   \begin{array}{ll}     g_0 + (g_T - g_0) \sin \left( \frac{\pi t}{2T} \right), & 0 < t \leq T \\     g_T, & t \geq T   \end{array}   \right." bookmark="moose-equation-addc9ed7-b1c1-427c-b239-a65e802f93eb" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-addc9ed7-b1c1-427c-b239-a65e802f93eb"></span><script>var element = document.getElementById("moose-equation-addc9ed7-b1c1-427c-b239-a65e802f93eb");katex.render("  g(t) = \\left\\{   \\begin{array}{ll}     g_0 + (g_T - g_0) \\sin \\left( \\frac{\\pi t}{2T} \\right), & 0 < t \\leq T \\\\     g_T, & t \\geq T   \\end{array}   \\right.", element, {displayMode:true,throwOnError:false});</script></span></p><p>where <span tex="g_0" bookmark="moose-equation-541ea22d-edd6-45ba-8e9c-c3693ccf5fd7" recursive="True" class="moose-katex-inline-equation" id="moose-equation-541ea22d-edd6-45ba-8e9c-c3693ccf5fd7"><script>var element = document.getElementById("moose-equation-541ea22d-edd6-45ba-8e9c-c3693ccf5fd7");katex.render("g_0", element, {displayMode:false,throwOnError:false});</script></span> and <span tex="g_T" bookmark="moose-equation-5836fb5e-a5f5-4989-964f-965e7f201baa" recursive="True" class="moose-katex-inline-equation" id="moose-equation-5836fb5e-a5f5-4989-964f-965e7f201baa"><script>var element = document.getElementById("moose-equation-5836fb5e-a5f5-4989-964f-965e7f201baa");katex.render("g_T", element, {displayMode:false,throwOnError:false});</script></span> are the initial and final values of <span tex="g" bookmark="moose-equation-ccae8f95-786a-4e22-8447-9355ff0e75bd" recursive="True" class="moose-katex-inline-equation" id="moose-equation-ccae8f95-786a-4e22-8447-9355ff0e75bd"><script>var element = document.getElementById("moose-equation-ccae8f95-786a-4e22-8447-9355ff0e75bd");katex.render("g", element, {displayMode:false,throwOnError:false});</script></span>, respectively, and <span tex="T" bookmark="moose-equation-6db80dc7-d6ef-40f0-a80d-a0e656285953" recursive="True" class="moose-katex-inline-equation" id="moose-equation-6db80dc7-d6ef-40f0-a80d-a0e656285953"><script>var element = document.getElementById("moose-equation-6db80dc7-d6ef-40f0-a80d-a0e656285953");katex.render("T", element, {displayMode:false,throwOnError:false});</script></span> is the final time. These values are controlled by the <code>initial</code>, <code>final</code>, and <code>duration</code> parameters, respectively. The value is applied on one or more sidesets specified by the <code>boundary</code> parameter and does not vary in space. This type of boundary condition is applicable to time-varying PDEs, for example:</p><p><span class="moose-katex-block-equation"><span tex="\begin{aligned}   \frac{\partial u}{\partial t} -\nabla^2 u &= f && \quad \in \Omega \\   u &= g(t) && \quad \in \partial \Omega \end{aligned}" bookmark="moose-equation-816b70af-c2dc-428e-b6f8-852c461e3129" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-816b70af-c2dc-428e-b6f8-852c461e3129"></span><script>var element = document.getElementById("moose-equation-816b70af-c2dc-428e-b6f8-852c461e3129");katex.render("\\begin{aligned}   \\frac{\\partial u}{\\partial t} -\\nabla^2 u &= f && \\quad \\in \\Omega \\\\   u &= g(t) && \\quad \\in \\partial \\Omega \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span></p><p>and is frequently used to &quot;ramp&quot; a difficult boundary condition to its final value over a short time interval, rather than imposing it instantaneously at time <span tex="t=0" bookmark="moose-equation-56c40d6b-f5ca-4ec6-9139-4ad1a4302064" recursive="True" class="moose-katex-inline-equation" id="moose-equation-56c40d6b-f5ca-4ec6-9139-4ad1a4302064"><script>var element = document.getElementById("moose-equation-56c40d6b-f5ca-4ec6-9139-4ad1a4302064");katex.render("t=0", element, {displayMode:false,throwOnError:false});</script></span>.  This approach can make nonlinear solvers more robust by improving the initial guess used by the Newton iterations, as well as preventing the solver from converging to non-physical solutions in nonlinear PDEs.</p></section><section class="scrollspy" id="6027664e-8668-4ae6-8f05-06d380c71bc8" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">[BCs]
+  active = &#x27;left right&#x27;
+
+  [./left]
+    type = SinDirichletBC
+    variable = u
+    boundary = 3
+    initial = 0.0
+    final = 1.0
+    duration = 10.0
+  [../]
+
+  [./right]
+    type = SinDirichletBC
+    variable = u
+    boundary = 1
+    initial = 1.0
+    final = 0.0
+    duration = 10.0
+  [../]
+[]
+</code></pre><a href="#488a002c-94b8-4e05-bf45-ed2d90f4eb2c" class="modal-trigger">(test/tests/bcs/sin_bc/sin_dirichlet_test.i)</a><div class="modal moose-modal" id="488a002c-94b8-4e05-bf45-ed2d90f4eb2c"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/bcs/sin_bc/sin_dirichlet_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmin = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Functions]
+  [./initial_value]
+    type = ParsedFunction
+    value = &#x27;x&#x27;
+  [../]
+[]
+
+[Variables]
+  active = &#x27;u&#x27;
+
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+
+    [./InitialCondition]
+      type = FunctionIC
+      function = initial_value
+    [../]
+  [../]
+[]
+
+[Kernels]
+  active = &#x27;diff ie&#x27;
+
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./ie]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left right&#x27;
+
+  [./left]
+    type = SinDirichletBC
+    variable = u
+    boundary = 3
+    initial = 0.0
+    final = 1.0
+    duration = 10.0
+  [../]
+
+  [./right]
+    type = SinDirichletBC
+    variable = u
+    boundary = 1
+    initial = 1.0
+    final = 0.0
+    duration = 10.0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  num_steps = 10
+  dt = 1.0
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="023af70b-bddc-4731-80f8-a57413a5243c" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="cf94815c-0ccd-4347-9eb7-32cbd1d5c551" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this boundary condition applies to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this boundary condition applies to</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="282f4ac6-6638-4798-adb6-ee06ae427d30" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">duration</span><span class="moose-parameter-header-default">0</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"></p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">final</span><span class="moose-parameter-header-default">0</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"></p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">initial</span><span class="moose-parameter-header-default">0</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"></p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="63229c43-98b3-402c-99cc-7598c38ddaf4" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="edf6b2dc-a6d9-4fea-becb-7105cc12416c" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system time</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system time</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">residual</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>residual</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time residual</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="c43d18bd-53e5-4813-8585-700c13d328a9" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#c3d2f88c-497c-4bcd-b8de-5679eb80b952" class="modal-trigger">modules/chemical_reactions/examples/calcium_bicarbonate/calcium_bicarbonate.i</a></li><li><a href="#115ae570-1acf-4d96-aedb-a5da02a8cdb6" class="modal-trigger">test/tests/bcs/misc_bcs/weak_gradient_bc_test.i</a></li><li><a href="#e501cb7e-d0a8-447c-b2f0-d291b92e5457" class="modal-trigger">test/tests/bcs/sin_bc/sin_dirichlet_test.i</a></li></ul><div class="modal moose-modal" id="c3d2f88c-497c-4bcd-b8de-5679eb80b952"><div class="modal-content"><h4>modules/chemical_reactions/examples/calcium_bicarbonate/calcium_bicarbonate.i</h4><pre class="moose-pre"><code class="language-text"># Example of reactive transport model with precipitation and dissolution.
+# Calcium (ca2) and bicarbonate (hco3) reaction to form calcite (CaCO3).
+# Models bicarbonate injection following calcium injection, so that a
+# moving reaction front forms a calcite precipitation zone. As the front moves,
+# the upstream side of the front continues to form calcite via precipitation,
+# while at the downstream side, dissolution of the solid calcite occurs.
+#
+# The reaction network considered is as follows:
+# Aqueous equilibrium reactions:
+# a)  h+ + hco3- = CO2(aq),             Keq = 10^(6.341)
+# b)  hco3- = h+ + CO23-,               Keq = 10^(-10.325)
+# c)  ca2+ + hco3- = h+ + CaCO3(aq),    Keq = 10^(-7.009)
+# d)  ca2+ + hco3- = cahco3+,           Keq = 10^(-0.653)
+# e)  ca2+ = h+ + CaOh+,                Keq = 10^(-12.85)
+# f)  - h+ = oh-,                       Keq = 10^(-13.991)
+#
+# Kinetic reactions
+# g)  ca2+ + hco3- = h+ + CaCO3(s),     A = 0.461 m^2/L, k = 6.456542e-2 mol/m^2 s,
+#                                       Keq = 10^(1.8487)
+#
+# The primary chemical species are h+, hco3- and ca2+. The pressure gradient is fixed,
+# and a conservative tracer is also included.
+#
+# This example is taken from:
+# Guo et al, A parallel, fully coupled, fully implicit solution to reactive
+# transport in porous media using the preconditioned Jacobian-Free Newton-Krylov
+# Method, Advances in Water Resources, 53, 101-108 (2013).
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 100
+  xmax = 1
+  ymax = 0.25
+[]
+
+[Variables]
+  [./tracer]
+  [../]
+  [./ca2+]
+  [../]
+  [./h+]
+    initial_condition = 1.0e-7
+    scaling = 1e6
+  [../]
+  [./hco3-]
+  [../]
+[]
+
+[AuxVariables]
+  [./pressure]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[ICs]
+  [./pressure_ic]
+    type = FunctionIC
+    variable = pressure
+    function = pic
+  [../]
+  [./hco3_ic]
+    type = BoundingBoxIC
+    variable = hco3-
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 0.25
+    inside = 5.0e-2
+    outside = 1.0e-6
+  [../]
+  [./ca2_ic]
+    type = BoundingBoxIC
+    variable = ca2+
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 0.25
+    inside = 1.0e-6
+    outside = 5.0e-2
+  [../]
+  [./tracer_ic]
+    type = BoundingBoxIC
+    variable = tracer
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 0.25
+    inside = 1.0
+    outside = 0.0
+  [../]
+[]
+
+[Functions]
+  [./pic]
+    type = ParsedFunction
+    value = 60-50*x
+  [../]
+[]
+
+[ReactionNetwork]
+  [./AqueousEquilibriumReactions]
+    primary_species = &#x27;ca2+ hco3- h+&#x27;
+    secondary_species = &#x27;co2_aq co32- caco3_aq cahco3+ caoh+ oh-&#x27;
+    pressure = pressure
+    reactions = &#x27;h+ + hco3- = co2_aq 6.341,
+                 hco3- - h+ = co32- -10.325,
+                 ca2+ + hco3- - h+ = caco3_aq -7.009,
+                 ca2+ + hco3- = cahco3+ -0.653,
+                 ca2+ - h+ = caoh+ -12.85,
+                 - h+ = oh- -13.991&#x27;
+  [../]
+  [./SolidKineticReactions]
+    primary_species = &#x27;ca2+ hco3- h+&#x27;
+    kin_reactions = &#x27;ca2+ + hco3- - h+ = caco3_s&#x27;
+    secondary_species = caco3_s
+    log10_keq = 1.8487
+    reference_temperature = 298.15
+    system_temperature = 298.15
+    gas_constant = 8.314
+    specific_reactive_surface_area = 4.61e-4
+    kinetic_rate_constant = 6.456542e-7
+    activation_energy = 1.5e4
+  [../]
+[]
+
+[Kernels]
+  [./tracer_ie]
+    type = PrimaryTimeDerivative
+    variable = tracer
+  [../]
+  [./tracer_pd]
+    type = PrimaryDiffusion
+    variable = tracer
+  [../]
+  [./tracer_conv]
+    type = PrimaryConvection
+    variable = tracer
+    p = pressure
+  [../]
+  [./ca2+_ie]
+    type = PrimaryTimeDerivative
+    variable = ca2+
+  [../]
+  [./ca2+_pd]
+    type = PrimaryDiffusion
+    variable = ca2+
+  [../]
+  [./ca2+_conv]
+    type = PrimaryConvection
+    variable = ca2+
+    p = pressure
+  [../]
+  [./h+_ie]
+    type = PrimaryTimeDerivative
+    variable = h+
+  [../]
+  [./h+_pd]
+    type = PrimaryDiffusion
+    variable = h+
+  [../]
+  [./h+_conv]
+    type = PrimaryConvection
+    variable = h+
+    p = pressure
+  [../]
+  [./hco3-_ie]
+    type = PrimaryTimeDerivative
+    variable = hco3-
+  [../]
+  [./hco3-_pd]
+    type = PrimaryDiffusion
+    variable = hco3-
+  [../]
+  [./hco3-_conv]
+    type = PrimaryConvection
+    variable = hco3-
+    p = pressure
+  [../]
+[]
+
+[BCs]
+  [./tracer_left]
+    type = DirichletBC
+    variable = tracer
+    boundary = left
+    value = 1.0
+  [../]
+  [./tracer_right]
+    type = ChemicalOutFlowBC
+    variable = tracer
+    boundary = right
+  [../]
+  [./ca2+_left]
+    type = SinDirichletBC
+    variable = ca2+
+    boundary = left
+    initial = 5.0e-2
+    final = 1.0e-6
+    duration = 1
+  [../]
+  [./ca2+_right]
+    type = ChemicalOutFlowBC
+    variable = ca2+
+    boundary = right
+  [../]
+  [./hco3-_left]
+    type = SinDirichletBC
+    variable = hco3-
+    boundary = left
+    initial = 1.0e-6
+    final = 5.0e-2
+    duration = 1
+  [../]
+  [./hco3-_right]
+    type = ChemicalOutFlowBC
+    variable = hco3-
+    boundary = right
+  [../]
+  [./h+_left]
+    type = DirichletBC
+    variable = h+
+    boundary = left
+    value = 1.0e-7
+  [../]
+  [./h+_right]
+    type = ChemicalOutFlowBC
+    variable = h+
+    boundary = right
+  [../]
+[]
+
+[Materials]
+  [./porous]
+    type = GenericConstantMaterial
+    prop_names = &#x27;diffusivity conductivity porosity&#x27;
+    prop_values = &#x27;1e-7 2e-4 0.2&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  l_max_its = 50
+  l_tol = 1e-5
+  nl_max_its = 10
+  nl_rel_tol = 1e-5
+  end_time = 10
+  [./TimeStepper]
+    type = ConstantDT
+    dt = 0.1
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Outputs]
+  perf_graph = true
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="115ae570-1acf-4d96-aedb-a5da02a8cdb6"><div class="modal-content"><h4>test/tests/bcs/misc_bcs/weak_gradient_bc_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmin = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Functions]
+  [./initial_value]
+    type = ParsedFunction
+    value = &#x27;x&#x27;
+  [../]
+[]
+
+[Variables]
+  active = &#x27;u&#x27;
+
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+
+    [./InitialCondition]
+      type = FunctionIC
+      function = initial_value
+    [../]
+  [../]
+[]
+
+[Kernels]
+  active = &#x27;diff ie&#x27;
+
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./ie]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left right top bottom&#x27;
+
+  [./left]
+    type = SinDirichletBC
+    variable = u
+    boundary = 3
+    initial = 0.0
+    final = 1.0
+    duration = 10.0
+  [../]
+
+  [./right]
+    type = SinDirichletBC
+    variable = u
+    boundary = 1
+    initial = 1.0
+    final = 0.0
+    duration = 10.0
+  [../]
+
+  # Explicit Natural Boundary Conditions
+  [./top]
+    type = WeakGradientBC
+    variable = u
+    boundary = 2
+  [../]
+
+  [./bottom]
+    type = WeakGradientBC
+    variable = u
+    boundary = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  num_steps = 10
+  dt = 1.0
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e501cb7e-d0a8-447c-b2f0-d291b92e5457"><div class="modal-content"><h4>test/tests/bcs/sin_bc/sin_dirichlet_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmin = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Functions]
+  [./initial_value]
+    type = ParsedFunction
+    value = &#x27;x&#x27;
+  [../]
+[]
+
+[Variables]
+  active = &#x27;u&#x27;
+
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+
+    [./InitialCondition]
+      type = FunctionIC
+      function = initial_value
+    [../]
+  [../]
+[]
+
+[Kernels]
+  active = &#x27;diff ie&#x27;
+
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./ie]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left right&#x27;
+
+  [./left]
+    type = SinDirichletBC
+    variable = u
+    boundary = 3
+    initial = 0.0
+    final = 1.0
+    duration = 10.0
+  [../]
+
+  [./right]
+    type = SinDirichletBC
+    variable = u
+    boundary = 1
+    initial = 1.0
+    final = 0.0
+    duration = 10.0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  num_steps = 10
+  dt = 1.0
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#2b082d2b-ee75-46cf-b7a1-582b8b12a63b" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#6027664e-8668-4ae6-8f05-06d380c71bc8" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#023af70b-bddc-4731-80f8-a57413a5243c" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#c43d18bd-53e5-4813-8585-700c13d328a9" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

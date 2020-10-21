@@ -1,0 +1,207 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>NumRelationshipManagers.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="d069d22c-6031-4bbc-9f12-047e6d1dfc45"><i class="material-icons">menu</i></a><ul class="sidenav" id="d069d22c-6031-4bbc-9f12-047e6d1dfc45"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">postprocessors</span><a href="#" class="breadcrumb">NumRelationshipManagers</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="c7b0d97f-4b94-4dd7-9f7a-5cc64892dcc0" data-section-level="1" data-section-text="NumRelationshipManagers"><h1 id="numrelationshipmanagers">NumRelationshipManagers</h1><p>The <code>NumRelationshipManagers</code> class outputs the total number of relationship mangagers present in the simulation. The type of relationship managers counted can be controlled with the <code>rm_type</code> parameter. Available options are (case-insesitive): &#x27;geometric, &#x27;algebraic&#x27;, &#x27;coupling&#x27;, and &#x27;all&#x27;. The default is &#x27;all&#x27;.</p><section class="scrollspy" id="61fc9de5-75ff-4ca1-982f-9b6a8ae3cf38" data-section-level="2" data-section-text="Syntax and Description"><h2 id="syntax-and-description">Syntax and Description</h2><p>Return the number of relationship managers active.</p></section><section class="scrollspy" id="acb8c6f5-b379-414c-8852-91ce8057db89" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="b4d1665f-cd64-4f17-b470-1d69f6310799" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM TRANSFER</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">rm_type</span><span class="moose-parameter-header-default">ALL</span><span class="moose-parameter-header-description">The type of relationship managers to include in the relationship manager count</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>ALL</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>GEOMETRIC ALGEBRAIC COUPLING ALL</p><p class="moose-parameter-description"><span>Description:</span>The type of relationship managers to include in the relationship manager count</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="71132fe2-df38-42b5-8ab7-f9d75b792d4a" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">allow_duplicate_execution_on_initial</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preaux</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREAUX</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREAUX</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preic</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREIC during initial setup</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREIC during initial setup</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="676a050c-b00b-470d-a716-2f313f5a4fc6" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#3f6f9a72-ed31-482d-b8de-9c6dca08c813" class="modal-trigger">test/tests/dgkernels/2d_diffusion_dg/no_mallocs_with_action.i</a></li><li><a href="#31f26417-d4eb-4810-9f5d-9699296f774d" class="modal-trigger">test/tests/dgkernels/2d_diffusion_dg/no_functor_additions.i</a></li></ul><div class="modal moose-modal" id="3f6f9a72-ed31-482d-b8de-9c6dca08c813"><div class="modal-content"><h4>test/tests/dgkernels/2d_diffusion_dg/no_mallocs_with_action.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 2
+  ny = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = MONOMIAL
+    [./InitialCondition]
+      type = ConstantIC
+      value = 1
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  [v]
+    order = FIRST
+    family = MONOMIAL
+  []
+[]
+
+[Functions]
+  [./forcing_fn]
+    type = ParsedFunction
+    value = 2*pow(e,-x-(y*y))*(1-2*y*y)
+  [../]
+  [./exact_fn]
+    type = ParsedGradFunction
+    value = pow(e,-x-(y*y))
+    grad_x = -pow(e,-x-(y*y))
+    grad_y = -2*y*pow(e,-x-(y*y))
+
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./abs]          # u * v
+    type = Reaction
+    variable = u
+  [../]
+  [./forcing]
+    type = BodyForce
+    variable = u
+    function = forcing_fn
+  [../]
+[]
+
+[DGDiffusionAction]
+  variable = u
+  epsilon = -1
+  sigma = 6
+  # We couple in an auxiliary variable in order to ensure that we&#x27;ve properly
+  # ghosted  both non-linear and auxiliary solution vectors
+  coupled_var = v
+[]
+
+[BCs]
+  [./all]
+    type = DGFunctionDiffusionDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    function = exact_fn
+    epsilon = -1
+    sigma = 6
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+[]
+
+[Problem]
+  error_on_jacobian_nonzero_reallocation = true
+[]
+
+[Postprocessors]
+  active = &#x27;num_rm&#x27;
+  [num_rm]
+    type = NumRelationshipManagers
+  []
+  [num_internal_sides]
+    type = NumInternalSides
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="31f26417-d4eb-4810-9f5d-9699296f774d"><div class="modal-content"><h4>test/tests/dgkernels/2d_diffusion_dg/no_functor_additions.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 2
+  ny = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = MONOMIAL
+    [./InitialCondition]
+      type = ConstantIC
+      value = 1
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  [v]
+    order = FIRST
+    family = MONOMIAL
+  []
+[]
+
+[Functions]
+  [./forcing_fn]
+    type = ParsedFunction
+    value = 2*pow(e,-x-(y*y))*(1-2*y*y)
+  [../]
+  [./exact_fn]
+    type = ParsedGradFunction
+    value = pow(e,-x-(y*y))
+    grad_x = -pow(e,-x-(y*y))
+    grad_y = -2*y*pow(e,-x-(y*y))
+
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./abs]          # u * v
+    type = Reaction
+    variable = u
+  [../]
+  [./forcing]
+    type = BodyForce
+    variable = u
+    function = forcing_fn
+  [../]
+[]
+
+[DGKernels]
+  [regular_dg_diffusion]
+    type = DGDiffusion
+    variable = u
+    epsilon = -1
+    sigma = 6
+  []
+[]
+
+[DGDiffusionAction]
+  variable = u
+  kernels_to_add = &#x27;COUPLED&#x27;
+  coupled_var = v
+[]
+
+[BCs]
+  [./all]
+    type = DGFunctionDiffusionDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    function = exact_fn
+    epsilon = -1
+    sigma = 6
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+[]
+
+[Problem]
+  error_on_jacobian_nonzero_reallocation = true
+[]
+
+[Postprocessors]
+  [num_rm]
+    type = NumRelationshipManagers
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="5518f7ea-28ec-4034-975b-7d8cf5f3d827" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#61fc9de5-75ff-4ca1-982f-9b6a8ae3cf38" class="tooltipped" data-position="left" data-tooltip="Syntax and Description">Syntax and Description</a></li><li><a href="#acb8c6f5-b379-414c-8852-91ce8057db89" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#676a050c-b00b-470d-a716-2f313f5a4fc6" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li><li><a href="#5518f7ea-28ec-4034-975b-7d8cf5f3d827" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

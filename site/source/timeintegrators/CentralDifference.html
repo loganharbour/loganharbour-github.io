@@ -1,0 +1,1502 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>CentralDifference.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="b26f9534-2008-4b33-8fd7-a1660a879ad2"><i class="material-icons">menu</i></a><ul class="sidenav" id="b26f9534-2008-4b33-8fd7-a1660a879ad2"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">timeintegrators</span><a href="#" class="breadcrumb">CentralDifference</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="83eb4c8d-a6c6-425e-b1a4-f2665032aeaf" data-section-level="1" data-section-text="CentralDifference"><h1 id="centraldifference">CentralDifference</h1><p>Implementation of explicit, Central Difference integration without invoking any of the nonlinear solver</p><section class="scrollspy" id="3ff15a95-8b27-4ff5-832f-9b1d78868a2b" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>Central difference integration is a common explicit integration scheme, typically used in structural dynamics. For a variable, <span tex="u" bookmark="moose-equation-696449b8-3795-424a-b866-be8f4ffd8045" recursive="True" class="moose-katex-inline-equation" id="moose-equation-696449b8-3795-424a-b866-be8f4ffd8045"><script>var element = document.getElementById("moose-equation-696449b8-3795-424a-b866-be8f4ffd8045");katex.render("u", element, {displayMode:false,throwOnError:false});</script></span>, at time <span tex="t" bookmark="moose-equation-ace8eb54-b701-4791-9165-f2823834e2fe" recursive="True" class="moose-katex-inline-equation" id="moose-equation-ace8eb54-b701-4791-9165-f2823834e2fe"><script>var element = document.getElementById("moose-equation-ace8eb54-b701-4791-9165-f2823834e2fe");katex.render("t", element, {displayMode:false,throwOnError:false});</script></span> with a time step, <span tex="\Delta t" bookmark="moose-equation-bafc0a16-bfc9-4e27-803f-bc6327da264b" recursive="True" class="moose-katex-inline-equation" id="moose-equation-bafc0a16-bfc9-4e27-803f-bc6327da264b"><script>var element = document.getElementById("moose-equation-bafc0a16-bfc9-4e27-803f-bc6327da264b");katex.render("\\Delta t", element, {displayMode:false,throwOnError:false});</script></span>, the central difference approximations for the first and second time derivatives, <span tex="\dot{u}" bookmark="moose-equation-31371315-cd93-41f0-b2eb-73e5e4dab861" recursive="True" class="moose-katex-inline-equation" id="moose-equation-31371315-cd93-41f0-b2eb-73e5e4dab861"><script>var element = document.getElementById("moose-equation-31371315-cd93-41f0-b2eb-73e5e4dab861");katex.render("\\dot{u}", element, {displayMode:false,throwOnError:false});</script></span> and <span tex="\ddot{u}" bookmark="moose-equation-716135bc-a715-4a4e-91de-d4b84c58c326" recursive="True" class="moose-katex-inline-equation" id="moose-equation-716135bc-a715-4a4e-91de-d4b84c58c326"><script>var element = document.getElementById("moose-equation-716135bc-a715-4a4e-91de-d4b84c58c326");katex.render("\\ddot{u}", element, {displayMode:false,throwOnError:false});</script></span>, are given as,</p><p><span class="moose-katex-block-equation"><span tex="\begin{aligned} \mathbf{\dot{u}}(t) &=& \frac{\mathbf{u}(t+\Delta t)-\mathbf{u}(t-\Delta t)}{2 \Delta t} \\ \mathbf{\ddot{u}}(t) &=& \frac{\mathbf{u}(t+\Delta t)-2\mathbf{u}(t)+\mathbf{u}(t-\Delta t)}{\Delta t^2} \end{aligned}" bookmark="moose-equation-f08ebbc4-4e2e-4a12-8436-8b6c4b0fd065" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-f08ebbc4-4e2e-4a12-8436-8b6c4b0fd065"></span><script>var element = document.getElementById("moose-equation-f08ebbc4-4e2e-4a12-8436-8b6c4b0fd065");katex.render("\\begin{aligned} \\mathbf{\\dot{u}}(t) &=& \\frac{\\mathbf{u}(t+\\Delta t)-\\mathbf{u}(t-\\Delta t)}{2 \\Delta t} \\\\ \\mathbf{\\ddot{u}}(t) &=& \\frac{\\mathbf{u}(t+\\Delta t)-2\\mathbf{u}(t)+\\mathbf{u}(t-\\Delta t)}{\\Delta t^2} \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span></p><p>The central difference time integrator derives from the <a href="ActuallyExplicitEuler.html"><code>ActuallyExplicitEuler</code></a> class and therefore circumvents the nonlinear solver. It can be used with <code>consistent</code>, <code>lumped</code> or <code>lump_preconditioned</code>, <code>solve_type</code> options. Information on these solve options can be found on the <a href="ActuallyExplicitEuler.html"><code>ActuallyExplicitEuler</code></a> page.</p></section><section class="scrollspy" id="c82ada72-d196-430d-8fad-7544b13cead2" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="215c91f4-5989-48cb-9b6b-577a59f5fd7b" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">solve_type</span><span class="moose-parameter-header-default">consistent</span><span class="moose-parameter-header-description">The way to solve the system.  A 'consistent' solve uses the full mass matrix and actually needs to use a linear solver to solve the problem.  'lumped' uses a lumped mass matrix with a simple inversion - incredibly fast but may be less accurate.  'lump_preconditioned' uses the lumped mass matrix as a preconditioner for the 'consistent' solve</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>consistent</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>consistent lumped lump_preconditioned</p><p class="moose-parameter-description"><span>Description:</span>The way to solve the system.  A 'consistent' solve uses the full mass matrix and actually needs to use a linear solver to solve the problem.  'lumped' uses a lumped mass matrix with a simple inversion - incredibly fast but may be less accurate.  'lump_preconditioned' uses the lumped mass matrix as a preconditioner for the 'consistent' solve</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="a6f09c41-ba85-407b-8bbd-a8863b7297c6" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="c274ec8b-1a1a-4544-98b1-9a826c7123f7" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#dcd4000b-5cf2-4b0d-9cca-57b23a498132" class="modal-trigger">modules/tensor_mechanics/test/tests/central_difference/lumped/2D/2d_nodalmass_explicit.i</a></li><li><a href="#c19cba48-1dbd-4c64-8bbd-813fe40373e4" class="modal-trigger">modules/tensor_mechanics/test/tests/central_difference/lumped/2D/2d_lumped_explicit.i</a></li><li><a href="#698bde14-8522-4da7-aac9-509a6ee4a8a6" class="modal-trigger">modules/tensor_mechanics/test/tests/central_difference/lumped/1D/1d_lumped_explicit.i</a></li><li><a href="#493bb676-f6a8-4187-aad8-0bf84e9051b7" class="modal-trigger">modules/tensor_mechanics/test/tests/central_difference/consistent/2D/2d_consistent_explicit.i</a></li><li><a href="#d3ec22a3-e37a-42b6-8183-fc90fe819f10" class="modal-trigger">modules/tensor_mechanics/test/tests/central_difference/lumped/3D/3d_lumped_explicit.i</a></li><li><a href="#5ba8c9bd-e8f1-4772-9537-aebf7815c265" class="modal-trigger">test/tests/time_integrators/central-difference/central_difference.i</a></li><li><a href="#0f98e23e-69c2-4865-80d9-e0e5e18eb420" class="modal-trigger">modules/tensor_mechanics/test/tests/central_difference/lumped/3D/3d_nodalmass_explicit.i</a></li><li><a href="#2d11a3ee-b8bf-46b1-a22a-3e36e21e298a" class="modal-trigger">modules/tensor_mechanics/test/tests/central_difference/lumped/1D/1d_nodalmass_explicit.i</a></li><li><a href="#f6e54cb0-0eb0-4f30-b3c7-be1bbf87d502" class="modal-trigger">modules/tensor_mechanics/test/tests/central_difference/consistent/1D/1d_consistent_explicit.i</a></li><li><a href="#af08855c-3f3e-48c1-ac01-7bd1f341d6fb" class="modal-trigger">modules/tensor_mechanics/test/tests/central_difference/consistent/3D/3d_consistent_explicit.i</a></li></ul><div class="modal moose-modal" id="dcd4000b-5cf2-4b0d-9cca-57b23a498132"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/central_difference/lumped/2D/2d_nodalmass_explicit.i</h4><pre class="moose-pre"><code class="language-text"># One element test to test the central difference time integrator.
+
+[Mesh]
+  [./generated_mesh]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1
+    ymin = 0
+    ymax = 2
+    nx = 1
+    ny = 2
+  [../]
+  [./all_nodes]
+    type = BoundingBoxNodeSetGenerator
+    new_boundary = &#x27;all&#x27;
+    input = &#x27;generated_mesh&#x27;
+    top_right = &#x27;1 2 0&#x27;
+    bottom_left = &#x27;0 0 0&#x27;
+  [../]
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+[]
+
+[AuxVariables]
+  [./accel_x]
+  [../]
+  [./vel_x]
+  [../]
+  [./accel_y]
+  [../]
+  [./vel_y]
+  [../]
+[]
+
+[AuxKernels]
+  [./accel_x]
+    type = TestNewmarkTI
+    variable = accel_x
+    displacement = disp_x
+    first = false
+  [../]
+  [./vel_x]
+    type = TestNewmarkTI
+    variable = vel_x
+    displacement = disp_x
+  [../]
+  [./accel_y]
+    type = TestNewmarkTI
+    variable = accel_y
+    displacement = disp_y
+    first = false
+  [../]
+  [./vel_y]
+    type = TestNewmarkTI
+    variable = vel_y
+    displacement = disp_y
+  [../]
+[]
+
+[Kernels]
+  [./DynamicTensorMechanics]
+    displacements = &#x27;disp_x disp_y&#x27;
+  [../]
+[]
+
+[BCs]
+  [./y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  [../]
+  [./x_bot]
+    type = FunctionDirichletBC
+    boundary = bottom
+    variable = disp_x
+    function = disp
+    preset = false
+  [../]
+[]
+
+[Functions]
+  [./disp]
+    type = PiecewiseLinear
+    x = &#x27;0.0 1.0 2.0 3.0 4.0&#x27; # time
+    y = &#x27;0.0 1.0 0.0 -1.0 0.0&#x27;  # displacement
+  [../]
+[]
+
+[NodalKernels]
+  [./nodal_mass_x]
+    type = NodalTranslationalInertia
+    variable = &#x27;disp_x&#x27;
+    nodal_mass_file = &#x27;nodal_mass_file.csv&#x27;
+    boundary = &#x27;all&#x27;
+  [../]
+  [./nodal_mass_y]
+    type = NodalTranslationalInertia
+    variable = &#x27;disp_y&#x27;
+    nodal_mass_file = &#x27;nodal_mass_file.csv&#x27;
+    boundary = &#x27;all&#x27;
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor_block]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e6
+    poissons_ratio = 0.25
+    block = 0
+  [../]
+  [./strain_block]
+    type = ComputeIncrementalSmallStrain
+    block = 0
+    displacements = &#x27;disp_x disp_y&#x27;
+    implicit = false
+  [../]
+  [./stress_block]
+    type = ComputeFiniteStrainElasticStress
+    block = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  start_time = 0
+  end_time = 0.1
+  dt = 0.005
+  timestep_tolerance = 1e-6
+  [./TimeIntegrator]
+    type = CentralDifference
+  [../]
+[]
+
+[Postprocessors]
+  [./accel_2x]
+    type = PointValue
+    point = &#x27;1.0 2.0 0.0&#x27;
+    variable = accel_x
+  [../]
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c19cba48-1dbd-4c64-8bbd-813fe40373e4"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/central_difference/lumped/2D/2d_lumped_explicit.i</h4><pre class="moose-pre"><code class="language-text"># Tests for the central difference time integrator for 2D elements
+
+[Mesh]
+  [./generated_mesh]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1
+    ymin = 0
+    ymax = 2
+    nx = 1
+    ny = 2
+  [../]
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+[]
+
+[AuxVariables]
+  [./accel_x]
+  [../]
+  [./vel_x]
+  [../]
+  [./accel_y]
+  [../]
+  [./vel_y]
+  [../]
+[]
+
+[AuxKernels]
+  [./accel_x]
+    type = TestNewmarkTI
+    variable = accel_x
+    displacement = disp_x
+    first = false
+  [../]
+  [./vel_x]
+    type = TestNewmarkTI
+    variable = vel_x
+    displacement = disp_x
+  [../]
+  [./accel_y]
+    type = TestNewmarkTI
+    variable = accel_y
+    displacement = disp_y
+    first = false
+  [../]
+  [./vel_y]
+    type = TestNewmarkTI
+    variable = vel_y
+    displacement = disp_y
+  [../]
+[]
+
+[Kernels]
+  [./DynamicTensorMechanics]
+    displacements = &#x27;disp_x disp_y&#x27;
+  [../]
+  [./inertia_x]
+    type = InertialForce
+    variable = disp_x
+  [../]
+  [./inertia_y]
+    type = InertialForce
+    variable = disp_y
+  [../]
+[]
+
+[BCs]
+  [./y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  [../]
+  [./x_bot]
+    type = FunctionDirichletBC
+    boundary = bottom
+    variable = disp_x
+    function = disp
+    preset = false
+  [../]
+[]
+
+[Functions]
+  [./disp]
+    type = PiecewiseLinear
+    x = &#x27;0.0 1.0 2.0 3.0 4.0&#x27; # time
+    y = &#x27;0.0 1.0 0.0 -1.0 0.0&#x27;  # displacement
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor_block]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e6
+    poissons_ratio = 0.25
+    block = 0
+  [../]
+  [./strain_block]
+    type = ComputeIncrementalSmallStrain
+    block = 0
+    displacements = &#x27;disp_x disp_y&#x27;
+    implicit = false
+  [../]
+  [./stress_block]
+    type = ComputeFiniteStrainElasticStress
+    block = 0
+  [../]
+  [./density]
+    type = GenericConstantMaterial
+    block = 0
+    prop_names = density
+    prop_values = 1e4
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  start_time = 0
+  end_time = 0.1
+  dt = 0.005
+  timestep_tolerance = 1e-6
+  [./TimeIntegrator]
+    type = CentralDifference
+    solve_type = lumped
+  [../]
+[]
+
+[Postprocessors]
+  [./accel_2x]
+    type = PointValue
+    point = &#x27;1.0 2.0 0.0&#x27;
+    variable = accel_x
+  [../]
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="698bde14-8522-4da7-aac9-509a6ee4a8a6"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/central_difference/lumped/1D/1d_lumped_explicit.i</h4><pre class="moose-pre"><code class="language-text"># Test for central difference integration for a 1D element
+
+[Mesh]
+  [./generated_mesh]
+    type = GeneratedMeshGenerator
+    xmin = 0
+    xmax = 10
+    nx = 5
+    dim = 1
+  [../]
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+[]
+
+[AuxVariables]
+  [./accel_x]
+  [../]
+  [./vel_x]
+  [../]
+[]
+
+[AuxKernels]
+  [./accel_x]
+    type = TestNewmarkTI
+    variable = accel_x
+    displacement = disp_x
+    first = false
+  [../]
+  [./vel_x]
+    type = TestNewmarkTI
+    variable = vel_x
+    displacement = disp_x
+  [../]
+[]
+
+[Kernels]
+  [./DynamicTensorMechanics]
+    displacements = &#x27;disp_x&#x27;
+  [../]
+  [./inertia_x]
+    type = InertialForce
+    variable = disp_x
+  [../]
+[]
+
+[NodalKernels]
+  [./force_x]
+    type = UserForcingFunctionNodalKernel
+    variable = disp_x
+    boundary = right
+    function = force_x
+  [../]
+[]
+
+[Functions]
+  [./force_x]
+    type = PiecewiseLinear
+    x = &#x27;0.0 1.0 2.0 3.0 4.0&#x27; # time
+    y = &#x27;0.0 1.0 0.0 -1.0 0.0&#x27;  # force
+    scale_factor = 1e3
+  [../]
+[]
+
+[BCs]
+  [./fixx1]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor_block]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e6
+    poissons_ratio = 0.25
+    block = 0
+  [../]
+  [./strain_block]
+    type = ComputeIncrementalSmallStrain
+    block = 0
+    displacements = &#x27;disp_x&#x27;
+    implicit = false
+  [../]
+  [./stress_block]
+    type = ComputeFiniteStrainElasticStress
+    block = 0
+  [../]
+  [./density]
+    type = GenericConstantMaterial
+    block = 0
+    prop_names = density
+    prop_values = 2500
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  start_time = -0.01
+  end_time = 0.1
+  timestep_tolerance = 2e-10
+  dt = 0.005
+  [./TimeIntegrator]
+    type = CentralDifference
+    solve_type = lumped
+  [../]
+[]
+
+[Postprocessors]
+  [./accel_x]
+    type = PointValue
+    point = &#x27;10.0 0.0 0.0&#x27;
+    variable = accel_x
+  [../]
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="493bb676-f6a8-4187-aad8-0bf84e9051b7"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/central_difference/consistent/2D/2d_consistent_explicit.i</h4><pre class="moose-pre"><code class="language-text"># Test for the central difference time integrator for a 2D mesh
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 1
+  ny = 2
+  xmin = 0.0
+  xmax = 1.0
+  ymin = 0.0
+  ymax = 2.0
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+[]
+
+[AuxVariables]
+  [./vel_x]
+  [../]
+  [./accel_x]
+  [../]
+  [./vel_y]
+  [../]
+  [./accel_y]
+  [../]
+[]
+
+[Kernels]
+  [./DynamicTensorMechanics]
+    displacements = &#x27;disp_x disp_y&#x27;
+  [../]
+  [./inertia_x]
+    type = InertialForce
+    variable = disp_x
+  [../]
+  [./inertia_y]
+    type = InertialForce
+    variable = disp_y
+  [../]
+[]
+
+[AuxKernels]
+  [./accel_x]
+    type = TestNewmarkTI
+    variable = accel_x
+    displacement = disp_x
+    first = false
+  [../]
+  [./vel_x]
+    type = TestNewmarkTI
+    variable = vel_x
+    displacement = disp_x
+  [../]
+  [./accel_y]
+    type = TestNewmarkTI
+    variable = accel_y
+    displacement = disp_y
+    first = false
+  [../]
+  [./vel_y]
+    type = TestNewmarkTI
+    variable = vel_y
+    displacement = disp_y
+  [../]
+[]
+
+[BCs]
+  [./y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  [../]
+  [./x_bot]
+    type = FunctionDirichletBC
+    boundary = bottom
+    variable = disp_x
+    function = disp
+    preset = false
+  [../]
+[]
+
+[Functions]
+  [./disp]
+    type = PiecewiseLinear
+    x = &#x27;0.0 1.0 2.0 3.0 4.0&#x27; # time
+    y = &#x27;0.0 1.0 0.0 -1.0 0.0&#x27;  # displacement
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor_block]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e6
+    poissons_ratio = 0.25
+    block = 0
+  [../]
+  [./strain_block]
+    type = ComputeIncrementalSmallStrain
+    block = 0
+    displacements = &#x27;disp_x disp_y&#x27;
+    implicit = false
+  [../]
+  [./stress_block]
+    type = ComputeFiniteStrainElasticStress
+    block = 0
+  [../]
+  [./density]
+    type = GenericConstantMaterial
+    block = 0
+    prop_names = density
+    prop_values = 1e4
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  start_time = 0
+  end_time = 0.1
+  dt = 0.005
+  timestep_tolerance = 1e-6
+  [./TimeIntegrator]
+    type = CentralDifference
+  [../]
+[]
+
+[Postprocessors]
+  [./_dt]
+    type = TimestepSize
+  [../]
+  [./accel_2x]
+    type = PointValue
+    point = &#x27;1.0 2.0 0.0&#x27;
+    variable = accel_x
+  [../]
+  [./accel_2y]
+    type = PointValue
+    point = &#x27;1.0 2.0 0.0&#x27;
+    variable = accel_y
+  [../]
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d3ec22a3-e37a-42b6-8183-fc90fe819f10"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/central_difference/lumped/3D/3d_lumped_explicit.i</h4><pre class="moose-pre"><code class="language-text"># Test for the central difference time integrator in 3D.
+
+[Mesh]
+  [./generated_mesh]
+    type = GeneratedMeshGenerator
+    dim = 3
+    nx = 1
+    ny = 1
+    nz = 2
+    xmin = 0.0
+    xmax = 1
+    ymin = 0.0
+    ymax = 1
+    zmin = 0.0
+    zmax = 2
+  [../]
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+  [./disp_z]
+  [../]
+[]
+
+[AuxVariables]
+  [./vel_x]
+  [../]
+  [./accel_x]
+  [../]
+  [./vel_y]
+  [../]
+  [./accel_y]
+  [../]
+  [./vel_z]
+  [../]
+  [./accel_z]
+  [../]
+[]
+
+[AuxKernels]
+  [./accel_x]
+    type = TestNewmarkTI
+    variable = accel_x
+    displacement = disp_x
+    first = false
+  [../]
+  [./vel_x]
+    type = TestNewmarkTI
+    variable = vel_x
+    displacement = disp_x
+  [../]
+  [./accel_y]
+    type = TestNewmarkTI
+    variable = accel_y
+    displacement = disp_y
+    first = false
+  [../]
+  [./vel_y]
+    type = TestNewmarkTI
+    variable = vel_y
+    displacement = disp_x
+  [../]
+  [./accel_z]
+    type = TestNewmarkTI
+    variable = accel_z
+    displacement = disp_z
+    first = false
+  [../]
+  [./vel_z]
+    type = TestNewmarkTI
+    variable = vel_z
+    displacement = disp_z
+  [../]
+[]
+
+[Kernels]
+  [./DynamicTensorMechanics]
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+  [../]
+  [./inertia_x]
+    type = InertialForce
+    variable = disp_x
+  [../]
+  [./inertia_y]
+    type = InertialForce
+    variable = disp_y
+  [../]
+  [./inertia_z]
+    type = InertialForce
+    variable = disp_z
+  [../]
+[]
+
+[BCs]
+  [./x_bot]
+    type = FunctionDirichletBC
+    variable = disp_x
+    boundary = &#x27;back&#x27;
+    function = dispx
+    preset = false
+  [../]
+  [./y_bot]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = &#x27;back&#x27;
+    function = dispy
+    preset = false
+  [../]
+  [./z_bot]
+    type = FunctionDirichletBC
+    variable = disp_z
+    boundary = &#x27;back&#x27;
+    function = dispz
+    preset = false
+  [../]
+[]
+
+[Functions]
+  [./dispx]
+    type = PiecewiseLinear
+    x = &#x27;0.0 1.0 2.0 3.0 4.0&#x27; # time
+    y = &#x27;0.0 1.0 0.0 -1.0 0.0&#x27;  # displacement
+  [../]
+  [./dispy]
+    type = ParsedFunction
+    value = 0.1*t*t*sin(10*t)
+  [../]
+  [./dispz]
+    type = ParsedFunction
+    value = 0.1*t*t*sin(20*t)
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor_block]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e6
+    poissons_ratio = 0.25
+    block = 0
+  [../]
+  [./strain_block]
+    type = ComputeIncrementalSmallStrain
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    implicit = false
+  [../]
+  [./stress_block]
+    type = ComputeFiniteStrainElasticStress
+    block = 0
+  [../]
+  [./density]
+    type = GenericConstantMaterial
+    block = 0
+    prop_names = density
+    prop_values = 1e4
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  start_time = -0.01
+  end_time = 0.1
+  dt = 0.005
+  timestep_tolerance = 1e-6
+  [./TimeIntegrator]
+    type = CentralDifference
+    solve_type = lumped
+  [../]
+[]
+
+[Postprocessors]
+  [./accel_10x]
+    type = NodalVariableValue
+    nodeid = 10
+    variable = accel_x
+  [../]
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5ba8c9bd-e8f1-4772-9537-aebf7815c265"><div class="modal-content"><h4>test/tests/time_integrators/central-difference/central_difference.i</h4><pre class="moose-pre"><code class="language-text">###########################################################
+# This is a simple test with a time-dependent problem
+# demonstrating the use of the TimeIntegrator system.
+#
+# Testing that the first and second time derivatives
+# are calculated correctly using the Newmark-Beta method
+#
+# @Requirement F1.30
+###########################################################
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -1
+  xmax = 1
+  ymin = -1
+  ymax = 1
+  nx = 1
+  ny = 1
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Functions]
+  [./forcing_fn]
+    type = PiecewiseLinear
+    x = &#x27;0.0 0.1 0.2    0.3  0.4    0.5  0.6&#x27;
+    y = &#x27;0.0 0.0 0.0025 0.01 0.0175 0.02 0.02&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./ie]
+    type = TimeDerivative
+    variable = u
+  [../]
+
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = &#x27;left&#x27;
+    function = forcing_fn
+    preset = false
+  [../]
+  [./right]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = &#x27;right&#x27;
+    function = forcing_fn
+    preset = false
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  [./TimeIntegrator]
+    type = CentralDifference
+  []
+
+  start_time = 0.0
+  num_steps = 6
+  dt = 0.1
+[]
+
+[Postprocessors]
+  [./udot]
+    type = ElementAverageTimeDerivative
+    variable = u
+  [../]
+  [./udotdot]
+    type = ElementAverageSecondTimeDerivative
+    variable = u
+  [../]
+  [./u]
+    type = ElementAverageValue
+    variable = u
+  [../]
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0f98e23e-69c2-4865-80d9-e0e5e18eb420"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/central_difference/lumped/3D/3d_nodalmass_explicit.i</h4><pre class="moose-pre"><code class="language-text"># Test for the CentralDifference time integrator
+
+[Mesh]
+  [./generated_mesh]
+    type = GeneratedMeshGenerator
+    dim = 3
+    nx = 1
+    ny = 1
+    nz = 2
+    xmin = 0.0
+    xmax = 1
+    ymin = 0.0
+    ymax = 1
+    zmin = 0.0
+    zmax = 2
+  [../]
+  [./all_nodes]
+    type = BoundingBoxNodeSetGenerator
+    new_boundary = &#x27;all&#x27;
+    input = &#x27;generated_mesh&#x27;
+    top_right = &#x27;1 1 2&#x27;
+    bottom_left = &#x27;0 0 0&#x27;
+  [../]
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+  [./disp_z]
+  [../]
+[]
+
+[AuxVariables]
+  [./vel_x]
+  [../]
+  [./accel_x]
+  [../]
+  [./vel_y]
+  [../]
+  [./accel_y]
+  [../]
+  [./vel_z]
+  [../]
+  [./accel_z]
+  [../]
+[]
+
+[Kernels]
+  [./DynamicTensorMechanics]
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+  [../]
+[]
+
+[AuxKernels]
+  [./accel_x]
+    type = TestNewmarkTI
+    variable = accel_x
+    displacement = disp_x
+    first = false
+  [../]
+  [./vel_x]
+    type = TestNewmarkTI
+    variable = vel_x
+    displacement = disp_x
+  [../]
+  [./accel_y]
+    type = TestNewmarkTI
+    variable = accel_y
+    displacement = disp_y
+    first = false
+  [../]
+  [./vel_y]
+    type = TestNewmarkTI
+    variable = vel_y
+    displacement = disp_y
+  [../]
+  [./accel_z]
+    type = TestNewmarkTI
+    variable = accel_z
+    displacement = disp_z
+    first = false
+  [../]
+  [./vel_z]
+    type = TestNewmarkTI
+    variable = vel_z
+    displacement = disp_z
+  [../]
+[]
+
+[BCs]
+  [./x_bot]
+    type = FunctionDirichletBC
+    boundary = &#x27;back&#x27;
+    variable = disp_x
+    function = dispx
+    preset = false
+  [../]
+  [./y_bot]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = back
+    function = dispy
+    preset = false
+  [../]
+  [./z_bot]
+    type = FunctionDirichletBC
+    variable = disp_z
+    boundary = back
+    function = dispz
+    preset = false
+  [../]
+[]
+
+[Functions]
+  [./dispx]
+    type = PiecewiseLinear
+    x = &#x27;0.0 1.0 2.0 3.0 4.0&#x27; # time
+    y = &#x27;0.0 1.0 0.0 -1.0 0.0&#x27;  # displacement
+  [../]
+  [./dispy]
+    type = ParsedFunction
+    value = 0.1*t*t*sin(10*t)
+  [../]
+  [./dispz]
+    type = ParsedFunction
+    value = 0.1*t*t*sin(20*t)
+  [../]
+[]
+
+[NodalKernels]
+  [./nodal_mass_x]
+    type = NodalTranslationalInertia
+    boundary = &#x27;all&#x27;
+    nodal_mass_file = &#x27;nodal_mass_file.csv&#x27;
+    variable = &#x27;disp_x&#x27;
+  [../]
+  [./nodal_mass_y]
+    type = NodalTranslationalInertia
+    boundary = &#x27;all&#x27;
+    nodal_mass_file = &#x27;nodal_mass_file.csv&#x27;
+    variable = &#x27;disp_y&#x27;
+  [../]
+  [./nodal_mass_z]
+    type = NodalTranslationalInertia
+    boundary = &#x27;all&#x27;
+    nodal_mass_file = &#x27;nodal_mass_file.csv&#x27;
+    variable = &#x27;disp_z&#x27;
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor_block]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e6
+    poissons_ratio = 0.25
+    block = 0
+  [../]
+  [./strain_block]
+    type = ComputeIncrementalSmallStrain
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    implicit = false
+  [../]
+  [./stress_block]
+    type = ComputeFiniteStrainElasticStress
+    block = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  start_time = -0.01
+  end_time = 0.1
+  dt = 0.005
+  timestep_tolerance = 1e-6
+  [./TimeIntegrator]
+    type = CentralDifference
+  [../]
+[]
+
+[Postprocessors]
+  [./accel_10x]
+    type = NodalVariableValue
+    nodeid = 10
+    variable = accel_x
+  [../]
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2d11a3ee-b8bf-46b1-a22a-3e36e21e298a"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/central_difference/lumped/1D/1d_nodalmass_explicit.i</h4><pre class="moose-pre"><code class="language-text"># Test for central difference integration for 1D elements
+
+[Mesh]
+  [./generated_mesh]
+    type = GeneratedMeshGenerator
+    xmin = 0
+    xmax = 10
+    nx = 5
+    dim = 1
+  [../]
+  [./all_nodes]
+    type = BoundingBoxNodeSetGenerator
+    new_boundary = &#x27;all&#x27;
+    input = &#x27;generated_mesh&#x27;
+    top_right = &#x27;10 0 0&#x27;
+    bottom_left = &#x27;0 0 0&#x27;
+  [../]
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+[]
+
+[AuxVariables]
+  [./accel_x]
+  [../]
+  [./vel_x]
+  [../]
+[]
+
+[AuxKernels]
+  [./accel_x]
+    type = TestNewmarkTI
+    variable = accel_x
+    displacement = disp_x
+    first = false
+  [../]
+  [./vel_x]
+    type = TestNewmarkTI
+    variable = vel_x
+    displacement = disp_x
+  [../]
+[]
+
+[Kernels]
+  [./DynamicTensorMechanics]
+    displacements = &#x27;disp_x&#x27;
+  [../]
+[]
+
+[NodalKernels]
+  [./force_x]
+    type = UserForcingFunctionNodalKernel
+    variable = disp_x
+    boundary = right
+    function = force_x
+  [../]
+  [./nodal_masses]
+    type = NodalTranslationalInertia
+    nodal_mass_file = &#x27;nodal_mass_file.csv&#x27;
+    variable = &#x27;disp_x&#x27;
+    boundary = &#x27;all&#x27;
+  [../]
+[]
+
+[Functions]
+  [./force_x]
+    type = PiecewiseLinear
+    x = &#x27;0.0 1.0 2.0 3.0 4.0&#x27; # time
+    y = &#x27;0.0 1.0 0.0 -1.0 0.0&#x27; # force
+    scale_factor = 1e3
+  [../]
+[]
+
+[BCs]
+  [./fixx1]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor_block]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e6
+    poissons_ratio = 0.25
+    block = 0
+  [../]
+  [./strain_block]
+    type = ComputeIncrementalSmallStrain
+    block = 0
+    displacements = &#x27;disp_x&#x27;
+    implicit = false
+  [../]
+  [./stress_block]
+    type = ComputeFiniteStrainElasticStress
+    block = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  start_time = -0.01
+  end_time = 0.1
+  dt = 0.005
+  timestep_tolerance = 2e-10
+  [./TimeIntegrator]
+    type = CentralDifference
+  [../]
+[]
+
+[Postprocessors]
+  [./accel_x]
+    type = PointValue
+    point = &#x27;10.0 0.0 0.0&#x27;
+    variable = accel_x
+  [../]
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f6e54cb0-0eb0-4f30-b3c7-be1bbf87d502"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/central_difference/consistent/1D/1d_consistent_explicit.i</h4><pre class="moose-pre"><code class="language-text"># Test for central difference integration for a 1D element
+# Consistent mass matrix
+
+[Mesh]
+  type = GeneratedMesh
+  xmin = 0
+  xmax = 10
+  nx = 5
+  dim = 1
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./accel_x]
+  [../]
+  [./vel_x]
+  [../]
+[]
+
+[AuxKernels]
+  [./accel_x]
+    type = TestNewmarkTI
+    variable = accel_x
+    displacement = disp_x
+    first = false
+  [../]
+  [./vel_x]
+    type = TestNewmarkTI
+    variable = vel_x
+    displacement = disp_x
+  [../]
+[]
+
+[Kernels]
+  [./DynamicTensorMechanics]
+    displacements = &#x27;disp_x&#x27;
+  [../]
+  [./inertia_x]
+    type = InertialForce
+    variable = disp_x
+  [../]
+[]
+
+[NodalKernels]
+  [./force_x]
+    type = UserForcingFunctionNodalKernel
+    variable = disp_x
+    boundary = right
+    function = force_x
+  [../]
+[]
+
+[Functions]
+  [./force_x]
+    type = PiecewiseLinear
+    x = &#x27;0.0 1.0 2.0 3.0 4.0&#x27; # time
+    y = &#x27;0.0 1.0 0.0 -1.0 0.0&#x27;  # force
+    scale_factor = 1e3
+  [../]
+[]
+
+[BCs]
+  [./fixx1]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor_block]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e6
+    poissons_ratio = 0.25
+    block = 0
+  [../]
+  [./strain_block]
+    type = ComputeIncrementalSmallStrain
+    block = 0
+    displacements = &#x27;disp_x&#x27;
+    implicit = false
+  [../]
+  [./stress_block]
+    type = ComputeFiniteStrainElasticStress
+    block = 0
+  [../]
+  [./density]
+    type = GenericConstantMaterial
+    block = 0
+    prop_names = density
+    prop_values = 2500
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  start_time = -0.005
+  end_time = 0.1
+  dt = 0.005
+  timestep_tolerance = 1e-6
+  l_tol = 1e-10
+  [./TimeIntegrator]
+    type = CentralDifference
+  [../]
+[]
+
+[Postprocessors]
+  [./disp_x]
+    type = NodalVariableValue
+    nodeid = 1
+    variable = disp_x
+  [../]
+  [./vel_x]
+    type = NodalVariableValue
+    nodeid = 1
+    variable = vel_x
+  [../]
+  [./accel_x]
+    type = NodalVariableValue
+    nodeid = 1
+    variable = accel_x
+  [../]
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+  perf_graph = false
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="af08855c-3f3e-48c1-ac01-7bd1f341d6fb"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/central_difference/consistent/3D/3d_consistent_explicit.i</h4><pre class="moose-pre"><code class="language-text"># One element test to test the central difference time integrator in 3D.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 1
+  ny = 1
+  nz = 2
+  xmin = 0.0
+  xmax = 1
+  ymin = 0.0
+  ymax = 1
+  zmin = 0.0
+  zmax = 2
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+  [./disp_z]
+  [../]
+[]
+
+[AuxVariables]
+  [./vel_x]
+  [../]
+  [./accel_x]
+  [../]
+  [./vel_y]
+  [../]
+  [./accel_y]
+  [../]
+  [./vel_z]
+  [../]
+  [./accel_z]
+  [../]
+[]
+
+[AuxKernels]
+  [./accel_x]
+    type = TestNewmarkTI
+    variable = accel_x
+    displacement = disp_x
+    first = false
+  [../]
+  [./vel_x]
+    type = TestNewmarkTI
+    variable = vel_x
+    displacement = disp_x
+  [../]
+  [./accel_y]
+    type = TestNewmarkTI
+    variable = accel_y
+    displacement = disp_y
+    first = false
+  [../]
+  [./vel_y]
+    type = TestNewmarkTI
+    variable = vel_y
+    displacement = disp_x
+  [../]
+  [./accel_z]
+    type = TestNewmarkTI
+    variable = accel_z
+    displacement = disp_z
+    first = false
+  [../]
+  [./vel_z]
+    type = TestNewmarkTI
+    variable = vel_z
+    displacement = disp_z
+  [../]
+[]
+
+[Kernels]
+  [./DynamicTensorMechanics]
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+  [../]
+  [./inertia_x]
+    type = InertialForce
+    variable = disp_x
+  [../]
+  [./inertia_y]
+    type = InertialForce
+    variable = disp_y
+  [../]
+  [./inertia_z]
+    type = InertialForce
+    variable = disp_z
+  [../]
+[]
+
+[BCs]
+  [./x_bot]
+    type = FunctionDirichletBC
+    variable = disp_x
+    boundary = &#x27;back&#x27;
+    function = dispx
+    preset = false
+  [../]
+  [./y_bot]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = &#x27;back&#x27;
+    function = dispy
+    preset = false
+  [../]
+  [./z_bot]
+    type = FunctionDirichletBC
+    variable = disp_z
+    boundary = &#x27;back&#x27;
+    function = dispz
+    preset = false
+  [../]
+  [./Periodic]
+    [./x_dir]
+      variable = &#x27;disp_x disp_y disp_z&#x27;
+      primary = &#x27;left&#x27;
+      secondary = &#x27;right&#x27;
+      translation = &#x27;1.0 0.0 0.0&#x27;
+    [../]
+    [./y_dir]
+      variable = &#x27;disp_x disp_y disp_z&#x27;
+      primary = &#x27;bottom&#x27;
+      secondary = &#x27;top&#x27;
+      translation = &#x27;0.0 1.0 0.0&#x27;
+    [../]
+  [../]
+[]
+
+[Functions]
+  [./dispx]
+    type = PiecewiseLinear
+    x = &#x27;0.0 1.0 2.0 3.0 4.0&#x27; # time
+    y = &#x27;0.0 1.0 0.0 -1.0 0.0&#x27;  # displacement
+  [../]
+  [./dispy]
+    type = ParsedFunction
+    value = 0.1*t*t*sin(10*t)
+  [../]
+  [./dispz]
+    type = ParsedFunction
+    value = 0.1*t*t*sin(20*t)
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor_block]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e6
+    poissons_ratio = 0.25
+    block = 0
+  [../]
+  [./strain_block]
+    type = ComputeIncrementalSmallStrain
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    implicit = false
+  [../]
+  [./stress_block]
+    type = ComputeFiniteStrainElasticStress
+    block = 0
+  [../]
+  [./density]
+    type = GenericConstantMaterial
+    block = 0
+    prop_names = density
+    prop_values = 1e4
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  start_time = -0.01
+  end_time = 0.1
+  dt = 0.005
+  timestep_tolerance = 1e-6
+  [./TimeIntegrator]
+    type = CentralDifference
+  [../]
+[]
+
+[Postprocessors]
+  [./accel_6x]
+    type = NodalVariableValue
+    nodeid = 6
+    variable = accel_x
+  [../]
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#3ff15a95-8b27-4ff5-832f-9b1d78868a2b" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#c82ada72-d196-430d-8fad-7544b13cead2" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#c274ec8b-1a1a-4544-98b1-9a826c7123f7" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

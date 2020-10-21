@@ -1,0 +1,1575 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>EigenDirichletBC.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="5d8000cb-8f00-4824-932a-f0722ae9bd0f"><i class="material-icons">menu</i></a><ul class="sidenav" id="5d8000cb-8f00-4824-932a-f0722ae9bd0f"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">bcs</span><a href="#" class="breadcrumb">EigenDirichletBC</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="064ac2ee-da05-488a-b71a-49d09ad3a211" data-section-level="1" data-section-text="EigenDirichletBC"><h1 id="eigendirichletbc">EigenDirichletBC</h1><p>EigenDirichletBC is provided for Eigenvalue solvers to handle Dirichlet boundary conditions for the right hand side. It is different from the regular Dirichlet BC. EigenDirichletBC will always return 0 regardless of the residual, and for the Jacobian matrix, the corresponding rows are totally zeroed out without adding one to the matrix diagonal.</p><p>Dirichlet BC for eigenvalue solvers</p><section class="scrollspy" id="c2c5de85-f4f7-4e46-948d-d6c803357a59" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="6203b104-72fe-4240-a049-c73284555664" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this boundary condition applies to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this boundary condition applies to</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="e458e498-d18c-496c-9915-16ae9f8db90e" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="f498847c-43c5-4669-92e6-68055e3bfaf3" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="e75fadcf-0fd9-4521-86f9-eaae36846744" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">eigen</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>eigen</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system time eigen</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">eigen</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>eigen</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time residual eigen</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="ad2bef93-c876-4837-9017-241f963b3fc1" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#d987bd3c-0c3c-4f84-a0d2-b0640dc85aca" class="modal-trigger">test/tests/problems/eigen_problem/eigensolvers/ne_coupled_picard.i</a></li><li><a href="#f920ef8f-ea57-4f8a-ab4d-03323eea7260" class="modal-trigger">test/tests/problems/eigen_problem/eigensolvers/ne_coupled_picard_subT_sub.i</a></li><li><a href="#74b219d8-88e6-4bf6-89d4-7c8a20d1b933" class="modal-trigger">test/tests/problems/eigen_problem/eigensolvers/ne_coupled_scaled.i</a></li><li><a href="#bbe88831-608b-4dcd-a75d-4831eefd7333" class="modal-trigger">test/tests/problems/eigen_problem/eigensolvers/ane.i</a></li><li><a href="#7d18915f-82f4-4edb-91da-df3160ee543f" class="modal-trigger">test/tests/problems/eigen_problem/eigensolvers/ne_hmg.i</a></li><li><a href="#06004306-0682-4c88-b6d6-2070a1be7ab7" class="modal-trigger">test/tests/problems/eigen_problem/eigensolvers/gipm.i</a></li><li><a href="#8503e77d-90cb-4391-9e6f-bffd5b20bde6" class="modal-trigger">test/tests/problems/eigen_problem/eigensolvers/gipm_ibc.i</a></li><li><a href="#2895efe7-4b48-4f4d-aa4d-369cbe5e5b2b" class="modal-trigger">test/tests/problems/eigen_problem/arraykernels/ne_two_variables.i</a></li><li><a href="#003e228a-2a18-467c-b345-bf9ca022e86f" class="modal-trigger">test/tests/problems/eigen_problem/eigensolvers/ne-coupled-scaling.i</a></li><li><a href="#62c351ae-49ad-4633-a9b1-b5ad529ff714" class="modal-trigger">test/tests/problems/eigen_problem/eigensolvers/ne-coupled-resid-scaling.i</a></li><li><a href="#df50851f-7a96-4784-bc58-d0d6a2ea8539" class="modal-trigger">test/tests/problems/eigen_problem/preconditioners/ne_pbp.i</a></li><li><a href="#297def2c-7749-4128-a118-255471b8958b" class="modal-trigger">test/tests/problems/eigen_problem/eigensolvers/ne_deficient_b.i</a></li><li><a href="#6528de71-997c-4b34-9c6a-f870d9113637" class="modal-trigger">test/tests/problems/eigen_problem/eigensolvers/ne_coupled.i</a></li><li><a href="#19f29aef-054d-4543-a682-9d7660f2a7d0" class="modal-trigger">test/tests/problems/eigen_problem/eigensolvers/ne.i</a></li></ul><div class="modal moose-modal" id="d987bd3c-0c3c-4f84-a0d2-b0640dc85aca"><div class="modal-content"><h4>test/tests/problems/eigen_problem/eigensolvers/ne_coupled_picard.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 10
+  ymin = 0
+  ymax = 10
+  elem_type = QUAD4
+  nx = 8
+  ny = 8
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    # set this so that the Picard initial norm is not zero
+    initial_condition = 1
+  [../]
+[]
+
+[AuxVariables]
+  [./T]
+    order = FIRST
+    family = LAGRANGE
+    # set this so that the Picard initial norm is not zero
+    initial_condition = 1
+  [../]
+  [./power]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = DiffMKernel
+    variable = u
+    mat_prop = diffusion
+    offset = 0.0
+  [../]
+
+  [./rhs]
+    type = Reaction
+    variable = u
+    extra_vector_tags = &#x27;eigen&#x27;
+  [../]
+[]
+
+[AuxKernels]
+  [./power_ak]
+    type = NormalizationAux
+    variable = power
+    source_variable = u
+    normalization = unorm
+    # this coefficient will affect the eigenvalue.
+    normal_factor = 10
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./homogeneous]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+
+  [./eigenU]
+    type = EigenDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+[]
+
+[Materials]
+  [./dc]
+    type = VarCouplingMaterial
+    var = T
+    block = 0
+    base = 1.0
+    coef = 1.0
+  [../]
+[]
+
+[Executioner]
+  type = Eigenvalue
+  matrix_free = true
+  solve_type = NEWTON
+  eigen_problem_type = GEN_NON_HERMITIAN
+  picard_max_its = 10
+  picard_rel_tol = 1e-6
+[]
+
+[Postprocessors]
+  [./unorm]
+    type = ElementIntegralVariablePostprocessor
+    variable = u
+    execute_on = linear
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./eigenvalues]
+    type = Eigenvalues
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  execute_on = &#x27;timestep_end&#x27;
+[]
+
+[MultiApps]
+  [./sub]
+    type = FullSolveMultiApp
+    input_files = ne_coupled_picard_sub.i
+    execute_on = timestep_end
+  [../]
+[]
+
+[Transfers]
+  [./T_from_sub]
+    type = MultiAppNearestNodeTransfer
+    direction = from_multiapp
+    multi_app = sub
+    source_variable = T
+    variable = T
+  [../]
+  [./power_to_sub]
+    type = MultiAppNearestNodeTransfer
+    direction = to_multiapp
+    multi_app = sub
+    source_variable = power
+    variable = power
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f920ef8f-ea57-4f8a-ab4d-03323eea7260"><div class="modal-content"><h4>test/tests/problems/eigen_problem/eigensolvers/ne_coupled_picard_subT_sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 10
+  ymin = 0
+  ymax = 10
+  elem_type = QUAD4
+  nx = 8
+  ny = 8
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./T]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./power]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = DiffMKernel
+    variable = u
+    mat_prop = diffusion
+    offset = 0.0
+  [../]
+
+  [./rhs]
+    type = Reaction
+    variable = u
+    extra_vector_tags = &#x27;eigen&#x27;
+  [../]
+[]
+
+[AuxKernels]
+  [./power_ak]
+    type = NormalizationAux
+    variable = power
+    source_variable = u
+    normalization = unorm
+    normal_factor = 10
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./homogeneous]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+
+  [./eigenU]
+    type = EigenDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+[]
+
+[Materials]
+  [./dc]
+    type = VarCouplingMaterial
+    var = T
+    block = 0
+    base = 1.0
+    coef = 1.0
+  [../]
+[]
+
+[Executioner]
+  type = Eigenvalue
+  matrix_free = true
+  solve_type = NEWTON
+  eigen_problem_type = GEN_NON_HERMITIAN
+[]
+
+[Postprocessors]
+  [./power]
+    type = ElementIntegralVariablePostprocessor
+    variable = power
+    execute_on = timestep_end
+  [../]
+  [./unorm]
+    type = ElementIntegralVariablePostprocessor
+    variable = u
+    execute_on = linear
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./eigenvalues]
+    type = Eigenvalues
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  execute_on = &#x27;timestep_end&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="74b219d8-88e6-4bf6-89d4-7c8a20d1b933"><div class="modal-content"><h4>test/tests/problems/eigen_problem/eigensolvers/ne_coupled_scaled.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 10
+  ymin = 0
+  ymax = 10
+  elem_type = QUAD4
+  nx = 8
+  ny = 8
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    # Make sure that system knows this is part of the eigenvector to be scaled
+    eigen = true
+  [../]
+
+  [./T]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./power]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = DiffMKernel
+    variable = u
+    mat_prop = diffusion
+    offset = 0.0
+  [../]
+
+  [./rhs]
+    type = CoefReaction
+    variable = u
+    coefficient = -1.0
+    extra_vector_tags = &#x27;eigen&#x27;
+  [../]
+
+  [./diff_T]
+    type = Diffusion
+    variable = T
+  [../]
+  [./src_T]
+    type = CoupledForce
+    variable = T
+    v = power
+  [../]
+[]
+
+[AuxKernels]
+  [./power_ak]
+    type = NormalizationAux
+    variable = power
+    source_variable = u
+    normalization = unorm
+    # this coefficient will affect the eigenvalue.
+    normal_factor = 10
+    execute_on = linear
+  [../]
+[]
+
+[BCs]
+  [./homogeneous]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+
+  [./eigenU]
+    type = EigenDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+
+  [./homogeneousT]
+    type = DirichletBC
+    variable = T
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+
+  [./eigenT]
+    type = EigenDirichletBC
+    variable = T
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+[]
+
+[Materials]
+  [./dc]
+    type = VarCouplingMaterial
+    var = T
+    block = 0
+    base = 1.0
+    coef = 1.0
+  [../]
+[]
+
+[Executioner]
+  type = Eigenvalue
+  solve_type = NEWTON
+  matrix_free = true
+  eigen_problem_type = GEN_NON_HERMITIAN
+
+  # Postprocessor value to normalize
+  normalization = unorm
+  # Value to set normilization to
+  normal_factor = 17
+[]
+
+[Postprocessors]
+  [./unorm]
+    type = ElementIntegralVariablePostprocessor
+    variable = u
+    execute_on = linear
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  execute_on = &#x27;timestep_end&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="bbe88831-608b-4dcd-a75d-4831eefd7333"><div class="modal-content"><h4>test/tests/problems/eigen_problem/eigensolvers/ane.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 10
+  ymin = 0
+  ymax = 10
+  elem_type = QUAD4
+  nx = 8
+  ny = 8
+[]
+
+# the minimum eigenvalue is (2*PI*(p-1)^(1/p)/a/p/sin(PI/p))^p;
+# Its inverse is 35.349726539758187. Here a is equal to 10.
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+
+[Kernels]
+  [./diff]
+    type = PHarmonic
+    variable = u
+    p = 3
+  [../]
+
+  [./rhs]
+    type = PMassKernel
+    extra_vector_tags = &#x27;eigen&#x27;
+    variable = u
+    coefficient = -1.0
+    p = 3
+  [../]
+[]
+
+[BCs]
+  [./homogeneous]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;0 2&#x27;
+    value = 0
+  [../]
+  [./eigen]
+    type = EigenDirichletBC
+    variable = u
+    boundary = &#x27;0 2&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Eigenvalue
+  matrix_free = false
+  solve_type = NEWTON
+  eigen_problem_type = GEN_NON_HERMITIAN
+[]
+
+[VectorPostprocessors]
+  [./eigenvalues]
+    type = Eigenvalues
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  file_base = ane
+  execute_on = &#x27;timestep_end&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="7d18915f-82f4-4edb-91da-df3160ee543f"><div class="modal-content"><h4>test/tests/problems/eigen_problem/eigensolvers/ne_hmg.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 10
+  ymin = 0
+  ymax = 10
+  elem_type = QUAD4
+  nx = 8
+  ny = 8
+[]
+
+# the minimum eigenvalue of this problem is 2*(PI/a)^2;
+# Its inverse is 0.5*(a/PI)^2 = 5.0660591821169. Here a is equal to 10.
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./v]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./rhs]
+    type = CoefReaction
+    variable = u
+    coefficient = -1.0
+    extra_vector_tags = &#x27;eigen&#x27;
+  [../]
+
+  [./diffv]
+    type = Diffusion
+    variable = v
+  [../]
+
+  [./rhsv]
+    type = CoefReaction
+    variable = v
+    coefficient = -1.0
+    extra_vector_tags = &#x27;eigen&#x27;
+  [../]
+[]
+
+[BCs]
+  [./homogeneous]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+  [./eigen]
+    type = EigenDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+
+  [./homogeneousv]
+    type = DirichletBC
+    variable = v
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+  [./eigenv]
+    type = EigenDirichletBC
+    variable = v
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Eigenvalue
+  matrix_free = true
+  solve_type = NEWTON
+  eigen_problem_type = GEN_NON_HERMITIAN
+  petsc_options_iname = &#x27;-init_eps_power_pc_type
+                         -init_eps_power_pc_hmg_use_subspace_coarsening
+                         -eps_power_pc_type
+                         -eps_power_pc_hmg_use_subspace_coarsening&#x27;
+  petsc_options_value = &#x27;hmg true hmg true&#x27;
+  petsc_options = &#x27;-init_eps_view -eps_view&#x27;
+[]
+
+[VectorPostprocessors]
+  [./eigenvalues]
+    type = Eigenvalues
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  file_base = monolith_newton
+  execute_on = &#x27;timestep_end&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="06004306-0682-4c88-b6d6-2070a1be7ab7"><div class="modal-content"><h4>test/tests/problems/eigen_problem/eigensolvers/gipm.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 100
+  ymin = 0
+  ymax = 100
+  elem_type = QUAD4
+  nx = 64
+  ny = 64
+
+  displacements = &#x27;x_disp y_disp&#x27;
+[]
+
+#The minimum eigenvalue for this problem is 2*(pi/a)^2 + 2 with a = 100.
+#Its inverse will be 0.49950700634518.
+
+[Variables]
+  [./u]
+    order = first
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./x_disp]
+  [../]
+  [./y_disp]
+  [../]
+[]
+
+[AuxKernels]
+  [./x_disp]
+    type = FunctionAux
+    variable = x_disp
+    function = x_disp_func
+  [../]
+  [./y_disp]
+    type = FunctionAux
+    variable = y_disp
+    function = y_disp_func
+  [../]
+[]
+
+[Functions]
+  [./x_disp_func]
+    type = ParsedFunction
+    value = 0
+  [../]
+  [./y_disp_func]
+    type = ParsedFunction
+    value = 0
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+    use_displaced_mesh = true
+  [../]
+
+  [./rea]
+    type = CoefReaction
+    variable = u
+    coefficient = 2.0
+    use_displaced_mesh = true
+  [../]
+
+  [./rhs]
+    type = CoefReaction
+    variable = u
+    coefficient = -1.0
+    use_displaced_mesh = true
+    extra_vector_tags = &#x27;eigen&#x27;
+  [../]
+[]
+
+[BCs]
+  [./homogeneous]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+    use_displaced_mesh = true
+  [../]
+  [./eigen_bc]
+    type = EigenDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    use_displaced_mesh = true
+  [../]
+[]
+
+[Executioner]
+  type = Eigenvalue
+  eigen_problem_type = gen_non_hermitian
+  which_eigen_pairs = SMALLEST_MAGNITUDE
+  n_eigen_pairs = 1
+  n_basis_vectors = 18
+  solve_type = jacobi_davidson
+  petsc_options = &#x27;-eps_view&#x27;
+[]
+
+[VectorPostprocessors]
+  [./eigenvalues]
+    type = Eigenvalues
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  execute_on = &#x27;timestep_end&#x27;
+  [./console]
+    type = Console
+    outlier_variable_norms = false
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8503e77d-90cb-4391-9e6f-bffd5b20bde6"><div class="modal-content"><h4>test/tests/problems/eigen_problem/eigensolvers/gipm_ibc.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 100
+  ymin = 0
+  ymax = 100
+  elem_type = QUAD4
+  nx = 64
+  ny = 64
+
+  displacements = &#x27;x_disp y_disp&#x27;
+[]
+
+[Variables]
+  [./u]
+    order = first
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./x_disp]
+  [../]
+  [./y_disp]
+  [../]
+[]
+
+[AuxKernels]
+  [./x_disp]
+    type = FunctionAux
+    variable = x_disp
+    function = x_disp_func
+  [../]
+  [./y_disp]
+    type = FunctionAux
+    variable = y_disp
+    function = y_disp_func
+  [../]
+[]
+
+[Functions]
+  [./x_disp_func]
+    type = ParsedFunction
+    value = 0
+  [../]
+  [./y_disp_func]
+    type = ParsedFunction
+    value = 0
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+    use_displaced_mesh = true
+  [../]
+
+  [./rea]
+    type = CoefReaction
+    variable = u
+    coefficient = 2.0
+    use_displaced_mesh = true
+  [../]
+
+  [./rhs]
+    type = CoefReaction
+    variable = u
+    use_displaced_mesh = true
+    coefficient = -1.0
+    extra_vector_tags = &#x27;eigen&#x27;
+  [../]
+[]
+
+[BCs]
+  [./nbc_homogeneous]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;0&#x27;
+    value = 0
+    use_displaced_mesh = true
+  [../]
+
+  [./nbc_eigen]
+    type = EigenDirichletBC
+    variable = u
+    boundary = &#x27;0&#x27;
+    use_displaced_mesh = true
+  [../]
+
+  [./ibc]
+    type = VacuumBC
+    variable = u
+    boundary = &#x27;1 2 3&#x27;
+    extra_vector_tags = &#x27;eigen&#x27;
+    use_displaced_mesh = true
+  []
+[]
+
+[Executioner]
+  type = Eigenvalue
+  eigen_problem_type = gen_non_hermitian
+  which_eigen_pairs = SMALLEST_MAGNITUDE
+  n_eigen_pairs = 1
+  n_basis_vectors = 18
+  solve_type = jacobi_davidson
+  petsc_options = &#x27;-eps_view&#x27;
+[]
+
+[VectorPostprocessors]
+  [./eigenvalues]
+    type = Eigenvalues
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  execute_on = &#x27;timestep_end&#x27;
+  [./console]
+    type = Console
+    outlier_variable_norms = false
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2895efe7-4b48-4f4d-aa4d-369cbe5e5b2b"><div class="modal-content"><h4>test/tests/problems/eigen_problem/arraykernels/ne_two_variables.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 10
+  ymin = 0
+  ymax = 10
+  elem_type = QUAD4
+  nx = 8
+  ny = 8
+[]
+
+# the minimum eigenvalue of this problem is 2*(PI/a)^2;
+# Its inverse is 0.5*(a/PI)^2 = 5.0660591821169. Here a is equal to 10.
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./v]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diffu]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./diffv]
+    type = Diffusion
+    variable = v
+  [../]
+
+  [./rhsu]
+    type = CoefReaction
+    variable = u
+    coefficient = -1.0
+    extra_vector_tags = &#x27;eigen&#x27;
+  [../]
+
+  [./rhsv]
+    type = CoefReaction
+    variable = v
+    coefficient = -1.0
+    extra_vector_tags = &#x27;eigen&#x27;
+  [../]
+[]
+
+[BCs]
+  [./homogeneousu]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+  [./homogeneousv]
+    type = DirichletBC
+    variable = v
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+
+  [./eigenu]
+    type = EigenDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+  [./eigenv]
+    type = EigenDirichletBC
+    variable = v
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Eigenvalue
+  matrix_free = true
+  solve_type = NEWTON
+  eigen_problem_type = GEN_NON_HERMITIAN
+[]
+
+[VectorPostprocessors]
+  [./eigenvalues]
+    type = Eigenvalues
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  execute_on = &#x27;timestep_end&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="003e228a-2a18-467c-b345-bf9ca022e86f"><div class="modal-content"><h4>test/tests/problems/eigen_problem/eigensolvers/ne-coupled-scaling.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 10
+  ymin = 0
+  ymax = 10
+  elem_type = QUAD4
+  nx = 8
+  ny = 8
+[]
+
+[Variables]
+  [u][]
+  [T][]
+[]
+
+[AuxVariables]
+  [power][]
+[]
+
+[Kernels]
+  [./diff]
+    type = DiffMKernel
+    variable = u
+    mat_prop = diffusion
+    offset = 0.0
+  [../]
+
+  [./rhs]
+    type = CoefReaction
+    variable = u
+    coefficient = -1.0
+    extra_vector_tags = &#x27;eigen&#x27;
+  [../]
+
+  [./diff_T]
+    type = CoefDiffusion
+    variable = T
+    coef = 1e30
+  [../]
+  [./src_T]
+    type = CoupledForce
+    variable = T
+    v = power
+    coef = 1e30
+  [../]
+[]
+
+[AuxKernels]
+  [./power_ak]
+    type = NormalizationAux
+    variable = power
+    source_variable = u
+    normalization = unorm
+    # this coefficient will affect the eigenvalue.
+    normal_factor = 10
+    execute_on = linear
+  [../]
+[]
+
+[BCs]
+  [./homogeneous]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+
+  [./eigenU]
+    type = EigenDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+
+  [./homogeneousT]
+    type = DirichletBC
+    variable = T
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+
+  [./eigenT]
+    type = EigenDirichletBC
+    variable = T
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+[]
+
+[Materials]
+  [./dc]
+    type = VarCouplingMaterial
+    var = T
+    block = 0
+    base = 1.0
+    coef = 1.0
+  [../]
+[]
+
+[Executioner]
+  type = Eigenvalue
+  matrix_free = true
+  solve_type = NEWTON
+  eigen_problem_type = GEN_NON_HERMITIAN
+  automatic_scaling = true
+  petsc_options = &#x27;-eps_power_pc_svd_monitor&#x27;
+  petsc_options_iname = &#x27;-eps_power_pc_type&#x27;
+  petsc_options_value = &#x27;svd&#x27;
+  verbose = true
+[]
+
+[Postprocessors]
+  [./unorm]
+    type = ElementIntegralVariablePostprocessor
+    variable = u
+    execute_on = linear
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./eigenvalues]
+    type = Eigenvalues
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+  execute_on = &#x27;timestep_end&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="62c351ae-49ad-4633-a9b1-b5ad529ff714"><div class="modal-content"><h4>test/tests/problems/eigen_problem/eigensolvers/ne-coupled-resid-scaling.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 10
+  ymin = 0
+  ymax = 10
+  elem_type = QUAD4
+  nx = 8
+  ny = 8
+[]
+
+[Variables]
+  [u]
+    initial_condition = 1
+  []
+  [T]
+    initial_condition = 1
+  []
+[]
+
+[AuxVariables]
+  [power][]
+[]
+
+[Kernels]
+  [./diff]
+    type = DiffMKernel
+    variable = u
+    mat_prop = diffusion
+    offset = 0.0
+  [../]
+
+  [./rhs]
+    type = CoefReaction
+    variable = u
+    coefficient = -1.0
+    extra_vector_tags = &#x27;eigen&#x27;
+  [../]
+
+  [./diff_T]
+    type = CoefDiffusion
+    variable = T
+    coef = 1e30
+  [../]
+  [./src_T]
+    type = CoupledForce
+    variable = T
+    v = power
+    coef = 1e30
+  [../]
+[]
+
+[AuxKernels]
+  [./power_ak]
+    type = NormalizationAux
+    variable = power
+    source_variable = u
+    normalization = unorm
+    # this coefficient will affect the eigenvalue.
+    normal_factor = 10
+    execute_on = linear
+  [../]
+[]
+
+[BCs]
+  [./homogeneous]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+
+  [./eigenU]
+    type = EigenDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+
+  [./homogeneousT]
+    type = DirichletBC
+    variable = T
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+
+  [./eigenT]
+    type = EigenDirichletBC
+    variable = T
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+[]
+
+[Materials]
+  [./dc]
+    type = VarCouplingMaterial
+    var = T
+    block = 0
+    base = 1.0
+    coef = 1.0
+  [../]
+[]
+
+[Executioner]
+  type = Eigenvalue
+  matrix_free = true
+  solve_type = NEWTON
+  eigen_problem_type = GEN_NON_HERMITIAN
+  automatic_scaling = true
+  petsc_options = &#x27;-eps_power_pc_svd_monitor&#x27;
+  petsc_options_iname = &#x27;-eps_power_pc_type&#x27;
+  petsc_options_value = &#x27;svd&#x27;
+  verbose = true
+  resid_vs_jac_scaling_param = 1
+[]
+
+[Postprocessors]
+  [./unorm]
+    type = ElementIntegralVariablePostprocessor
+    variable = u
+    execute_on = linear
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./eigenvalues]
+    type = Eigenvalues
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+  execute_on = &#x27;timestep_end&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="df50851f-7a96-4784-bc58-d0d6a2ea8539"><div class="modal-content"><h4>test/tests/problems/eigen_problem/preconditioners/ne_pbp.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 10
+  ymin = 0
+  ymax = 10
+  elem_type = QUAD4
+  nx = 8
+  ny = 8
+[]
+
+# the minimum eigenvalue of this problem is 2*(PI/a)^2;
+# Its inverse is 0.5*(a/PI)^2 = 5.0660591821169. Here a is equal to 10.
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+
+  [./v]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diffu]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./difv]
+    type = Diffusion
+    variable = v
+  [../]
+
+  [./rhsu]
+    type = CoefReaction
+    variable = u
+    coefficient = -1.0
+    extra_vector_tags = &#x27;eigen&#x27;
+  [../]
+
+  [./rhsv]
+    type = CoefReaction
+    variable = v
+    coefficient = -1.0
+    extra_vector_tags = &#x27;eigen&#x27;
+  [../]
+[]
+
+[BCs]
+  [./homogeneousu]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+
+  [./homogeneousv]
+    type = DirichletBC
+    variable = v
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+
+  [./eigenu]
+    type = EigenDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+
+  [./eigenv]
+    type = EigenDirichletBC
+    variable = v
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Eigenvalue
+  matrix_free = true
+  solve_type = NEWTON
+  eigen_problem_type = GEN_NON_HERMITIAN
+[]
+
+[VectorPostprocessors]
+  [./eigenvalues]
+    type = Eigenvalues
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  execute_on = &#x27;timestep_end&#x27;
+[]
+
+[Preconditioning]
+  [./PBP]
+    type = PBP
+    solve_order = &#x27;u v&#x27;
+    preconditioner  = &#x27;LU LU&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="297def2c-7749-4128-a118-255471b8958b"><div class="modal-content"><h4>test/tests/problems/eigen_problem/eigensolvers/ne_deficient_b.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 10
+  ymin = 0
+  ymax = 10
+  elem_type = QUAD4
+  nx = 8
+  ny = 8
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./v]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+  [./diff_v]
+    type = Diffusion
+    variable = v
+  [../]
+
+  [./rhs]
+    type = CoupledForce
+    variable = u
+    v = v
+    extra_vector_tags = &#x27;eigen&#x27;
+  [../]
+  [./src_v]
+    type = CoupledForce
+    variable = v
+    v = u
+  [../]
+[]
+
+[BCs]
+  [./homogeneous_u]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+  [./homogeneous_v]
+    type = DirichletBC
+    variable = v
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+  [./eigenBC_u]
+    type = EigenDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+  [./eigenBC_v]
+    type = EigenDirichletBC
+    variable = v
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Eigenvalue
+  matrix_free = true
+  solve_type = NEWTON
+  eigen_problem_type = GEN_NON_HERMITIAN
+[]
+
+[VectorPostprocessors]
+  [./eigenvalues]
+    type = Eigenvalues
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  file_base = ne_deficient_b
+  execute_on = &#x27;timestep_end&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6528de71-997c-4b34-9c6a-f870d9113637"><div class="modal-content"><h4>test/tests/problems/eigen_problem/eigensolvers/ne_coupled.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 10
+  ymin = 0
+  ymax = 10
+  elem_type = QUAD4
+  nx = 8
+  ny = 8
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+
+  [./T]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./power]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = DiffMKernel
+    variable = u
+    mat_prop = diffusion
+    offset = 0.0
+  [../]
+
+  [./rhs]
+    type = CoefReaction
+    variable = u
+    coefficient = -1.0
+    extra_vector_tags = &#x27;eigen&#x27;
+  [../]
+
+  [./diff_T]
+    type = Diffusion
+    variable = T
+  [../]
+  [./src_T]
+    type = CoupledForce
+    variable = T
+    v = power
+  [../]
+[]
+
+[AuxKernels]
+  [./power_ak]
+    type = NormalizationAux
+    variable = power
+    source_variable = u
+    normalization = unorm
+    # this coefficient will affect the eigenvalue.
+    normal_factor = 10
+    execute_on = linear
+  [../]
+[]
+
+[BCs]
+  [./homogeneous]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+
+  [./eigenU]
+    type = EigenDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+
+  [./homogeneousT]
+    type = DirichletBC
+    variable = T
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+
+  [./eigenT]
+    type = EigenDirichletBC
+    variable = T
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+[]
+
+[Materials]
+  [./dc]
+    type = VarCouplingMaterial
+    var = T
+    block = 0
+    base = 1.0
+    coef = 1.0
+  [../]
+[]
+
+[Executioner]
+  type = Eigenvalue
+  matrix_free = true
+  solve_type = NEWTON
+  eigen_problem_type = GEN_NON_HERMITIAN
+[]
+
+[Postprocessors]
+  [./unorm]
+    type = ElementIntegralVariablePostprocessor
+    variable = u
+    execute_on = linear
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./eigenvalues]
+    type = Eigenvalues
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  file_base = ne_coupled
+  execute_on = &#x27;timestep_end&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="19f29aef-054d-4543-a682-9d7660f2a7d0"><div class="modal-content"><h4>test/tests/problems/eigen_problem/eigensolvers/ne.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 10
+  ymin = 0
+  ymax = 10
+  elem_type = QUAD4
+  nx = 8
+  ny = 8
+[]
+
+# the minimum eigenvalue of this problem is 2*(PI/a)^2;
+# Its inverse is 0.5*(a/PI)^2 = 5.0660591821169. Here a is equal to 10.
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./rhs]
+    type = CoefReaction
+    variable = u
+    coefficient = -1.0
+    extra_vector_tags = &#x27;eigen&#x27;
+  [../]
+[]
+
+[BCs]
+  [./homogeneous]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    value = 0
+  [../]
+  [./eigen]
+    type = EigenDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Eigenvalue
+  matrix_free = true
+  solve_type = NEWTON
+  eigen_problem_type = GEN_NON_HERMITIAN
+[]
+
+[VectorPostprocessors]
+  [./eigenvalues]
+    type = Eigenvalues
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  file_base = monolith_newton
+  execute_on = &#x27;timestep_end&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="1c5b0ff5-9ecc-4ffd-8e75-33d6a6460723" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#c2c5de85-f4f7-4e46-948d-d6c803357a59" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#ad2bef93-c876-4837-9017-241f963b3fc1" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li><li><a href="#1c5b0ff5-9ecc-4ffd-8e75-33d6a6460723" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

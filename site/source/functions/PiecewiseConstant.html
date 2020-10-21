@@ -1,0 +1,2122 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>PiecewiseConstant.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="3095d216-4d16-41af-94c2-f40dd8602aa3"><i class="material-icons">menu</i></a><ul class="sidenav" id="3095d216-4d16-41af-94c2-f40dd8602aa3"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">functions</span><a href="#" class="breadcrumb">PiecewiseConstant</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="67ac9903-bdf0-4609-aeec-e0eb414803f1" data-section-level="1" data-section-text="PiecewiseConstant"><h1 id="piecewiseconstant">PiecewiseConstant</h1><p>Defines data using a set of x-y data pairs</p><section class="scrollspy" id="164d535b-3400-4174-bb72-d5c9fb5dbd2f" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The <code>PiecewiseConstant</code> function defines the data using a set of x-y data pairs.  Instead of linearly interpolating between the values, however, the <code>PiecewiseConstant</code> function is constant when the abscissa is between the values provided by the user.  The <code>direction</code> parameter controls whether the function takes the value of the abscissa of the user-provided point to the right or left of the value at which the function is evaluated.</p></section><section class="scrollspy" id="ab08b4da-15ac-4707-b0d7-afa9c68bd249" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">[Functions]
+  [./a]
+    type = PiecewiseConstant
+    xy_data = &#x27;0.5 0.1
+               1.0 0.2
+               1.5 0.1&#x27;
+    direction = left
+  [../]
+  [./b]
+    type = PiecewiseConstant
+    x = &#x27;0.5 1.0 1.5&#x27;
+    y = &#x27;0.1 0.2 0.1&#x27;
+    direction = right
+  [../]
+  [./c]
+    type = PiecewiseConstant
+    data_file = pc.csv
+    direction = left
+    format = columns
+  [../]
+  [./d]
+    type = PiecewiseConstant
+    data_file = pc.csv
+    direction = right
+    format = columns
+  [../]
+[]
+</code></pre><a href="#df13372e-a502-441b-9f83-d52d6e567865" class="modal-trigger">(test/tests/functions/piecewise_constant/piecewise_constant.i)</a><div class="modal moose-modal" id="df13372e-a502-441b-9f83-d52d6e567865"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/functions/piecewise_constant/piecewise_constant.i</h4><pre class="moose-pre"><code class="language-text"># This tests the PiecewiseConstant function.
+# There are four variables and four functions: a,b,c, and d.  The diffusion equation is &quot;solved&quot;
+# for each of these variables with a boundary condition of type FunctionDirchletBC applied to a boundary
+# (i.e. node set) that includes every node in the element, so the solution is the boundary condition defined by the function.
+#  Each boundary condition uses a function of type PiecewiseConstant.
+#
+# The value of the variables should correspond to the function.
+
+[Mesh]
+  file = cube.e
+  # This problem only has 1 element, so using DistributedMesh in parallel
+  # isn&#x27;t really an option, and we don&#x27;t care that much about DistributedMesh
+  # in serial.
+  parallel_type = replicated
+[]
+
+[Variables]
+
+  [./aVar]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.1
+  [../]
+  [./bVar]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.1
+  [../]
+  [./cVar]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.1
+  [../]
+  [./dVar]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.1
+  [../]
+[]
+
+[Functions]
+  [./a]
+    type = PiecewiseConstant
+    xy_data = &#x27;0.5 0.1
+               1.0 0.2
+               1.5 0.1&#x27;
+    direction = left
+  [../]
+  [./b]
+    type = PiecewiseConstant
+    x = &#x27;0.5 1.0 1.5&#x27;
+    y = &#x27;0.1 0.2 0.1&#x27;
+    direction = right
+  [../]
+  [./c]
+    type = PiecewiseConstant
+    data_file = pc.csv
+    direction = left
+    format = columns
+  [../]
+  [./d]
+    type = PiecewiseConstant
+    data_file = pc.csv
+    direction = right
+    format = columns
+  [../]
+[]
+
+[Kernels]
+  [./diffa]
+    type = Diffusion
+    variable = aVar
+  [../]
+  [./diffb]
+    type = Diffusion
+    variable = bVar
+  [../]
+  [./diffc]
+    type = Diffusion
+    variable = cVar
+  [../]
+  [./diffd]
+    type = Diffusion
+    variable = dVar
+  [../]
+[]
+
+[BCs]
+  [./a]
+    type = FunctionDirichletBC
+    variable = aVar
+    boundary = &#x27;1&#x27;
+    function = a
+  [../]
+  [./b]
+    type = FunctionDirichletBC
+    variable = bVar
+    boundary = &#x27;1&#x27;
+    function = b
+  [../]
+  [./c]
+    type = FunctionDirichletBC
+    variable = cVar
+    boundary = &#x27;1&#x27;
+    function = c
+  [../]
+  [./d]
+    type = FunctionDirichletBC
+    variable = dVar
+    boundary = &#x27;1&#x27;
+    function = d
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 0.2
+  end_time = 3
+  nl_rel_tol = 1e-12
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="fe7c289b-378d-45f4-af35-37099eb530da" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="6d214df9-7dcf-4740-9bf3-6b49c68b3165" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">axis</span><span class="moose-parameter-header-description">The axis used (x, y, or z) if this is to be a function of position</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>x y z</p><p class="moose-parameter-description"><span>Description:</span>The axis used (x, y, or z) if this is to be a function of position</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">data_file</span><span class="moose-parameter-header-description">File holding CSV data</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FileName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>File holding CSV data</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">direction</span><span class="moose-parameter-header-default">left</span><span class="moose-parameter-header-description">Direction to look to find value: left right</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>left</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>left right</p><p class="moose-parameter-description"><span>Description:</span>Direction to look to find value: left right</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">format</span><span class="moose-parameter-header-default">rows</span><span class="moose-parameter-header-description">Format of csv data file that is in either in columns or rows</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>rows</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>columns rows</p><p class="moose-parameter-description"><span>Description:</span>Format of csv data file that is in either in columns or rows</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">scale_factor</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">Scale factor to be applied to the ordinate values</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Scale factor to be applied to the ordinate values</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">x</span><span class="moose-parameter-header-description">The abscissa values</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The abscissa values</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">x_index_in_file</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The abscissa index in the data file</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The abscissa index in the data file</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">xy_data</span><span class="moose-parameter-header-description">All function data, supplied in abscissa, ordinate pairs</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>All function data, supplied in abscissa, ordinate pairs</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">xy_in_file_only</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">If the data file only contains abscissa and ordinate data</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>If the data file only contains abscissa and ordinate data</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">y</span><span class="moose-parameter-header-description">The ordinate values</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The ordinate values</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">y_index_in_file</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">The ordinate index in the data file</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The ordinate index in the data file</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="2702fa3f-da66-4442-8bc8-98ede5ed8e39" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="2ef1d0bd-7d95-480f-8bab-d1722bf33a6b" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#17dfb2ff-9b4f-4798-b9f8-fd71bc2bdb85" class="modal-trigger">modules/porous_flow/test/tests/dirackernels/frompps.i</a></li><li><a href="#4d315d00-11e0-463c-b9a2-30bd3cc61ca7" class="modal-trigger">test/tests/time_steppers/function_dt/function_dt_no_interpolation.i</a></li><li><a href="#12abd5cc-c1e9-497d-80ca-3abd55be0501" class="modal-trigger">test/tests/postprocessors/element_extreme_material_property/element_extreme_material_property.i</a></li><li><a href="#ff597e89-53a8-42c7-80a7-7608ba8ae3c2" class="modal-trigger">test/tests/multiapps/sub_cycling_failure/sub_gold.i</a></li><li><a href="#899148b9-f4a2-4e45-a5f8-d927048c8f08" class="modal-trigger">modules/porous_flow/examples/flow_through_fractured_media/fine_thick_fracture_transient.i</a></li><li><a href="#d6fe7081-331f-4fc1-b222-49d4aa1e83e3" class="modal-trigger">test/tests/functions/piecewise_constant/piecewise_constant.i</a></li><li><a href="#0a961ed3-ad37-4a06-8414-bae1306588a9" class="modal-trigger">modules/rdg/test/tests/advection_1d/1d_aefv_square_wave.i</a></li><li><a href="#f93eeae3-92ed-4c51-aff9-99e67835a675" class="modal-trigger">test/tests/postprocessors/element_average_material_property/element_average_material_property.i</a></li><li><a href="#064caeee-e553-441d-a5fb-086754927906" class="modal-trigger">modules/porous_flow/examples/flow_through_fractured_media/fine_transient.i</a></li><li><a href="#31c36852-8498-4c01-8e3a-51e9431e4fa5" class="modal-trigger">modules/rdg/test/tests/advection_1d/block_restrictable.i</a></li><li><a href="#1dda123e-08dd-476d-b4fe-317a13a606f4" class="modal-trigger">modules/tensor_mechanics/test/tests/rom_stress_update/verification.i</a></li><li><a href="#1531f3d0-c231-44e4-bb3c-a445e15edb9d" class="modal-trigger">test/tests/dgkernels/1d_advection_dg/1d_advection_dg.i</a></li><li><a href="#a1014d7e-1461-48c8-9ba9-f4ce38969bff" class="modal-trigger">modules/tensor_mechanics/test/tests/czm/czm_patch_test.i</a></li><li><a href="#712a88ae-7cb5-4b0c-8034-6871be596ff1" class="modal-trigger">test/tests/time_steppers/iteration_adaptive/adapt_tstep_reject_large_dt.i</a></li></ul><div class="modal moose-modal" id="17dfb2ff-9b4f-4798-b9f8-fd71bc2bdb85"><div class="modal-content"><h4>modules/porous_flow/test/tests/dirackernels/frompps.i</h4><pre class="moose-pre"><code class="language-text"># Test PorousFlowPointSourceFromPostprocessor DiracKernel
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  bias_x = 1.1
+  bias_y = 1.1
+[]
+
+[GlobalParams]
+  PorousFlowDictator = dictator
+[]
+
+[Functions]
+  [./mass_flux_fn]
+    type = PiecewiseConstant
+    direction = left
+    xy_data = &#x27;
+      0    0
+      100  -0.1
+      300  0
+      600  -0.1
+      1400 0
+      1500 0.2
+      2000 0.2&#x27;
+  [../]
+[]
+
+[Variables]
+  [./pp]
+  [../]
+[]
+
+[Kernels]
+  [./mass0]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 0
+    variable = pp
+  [../]
+[]
+
+[UserObjects]
+  [./dictator]
+    type = PorousFlowDictator
+    porous_flow_vars = pp
+    number_fluid_phases = 1
+    number_fluid_components = 1
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./simple_fluid]
+      type = SimpleFluidProperties
+      bulk_modulus = 2e9
+      density0 = 1000
+      thermal_expansion = 0
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./temperature]
+    type = PorousFlowTemperature
+  [../]
+  [./ppss]
+    type = PorousFlow1PhaseFullySaturated
+    porepressure = pp
+  [../]
+  [./massfrac]
+    type = PorousFlowMassFraction
+  [../]
+  [./simple_fluid]
+    type = PorousFlowSingleComponentFluid
+    fp = simple_fluid
+    phase = 0
+  [../]
+  [./porosity]
+    type = PorousFlowPorosityConst
+    porosity = 0.2
+  [../]
+[]
+
+[Postprocessors]
+  [./total_mass]
+    type = PorousFlowFluidMass
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+
+  [./mass_flux_in]
+    type = FunctionValuePostprocessor
+    function = mass_flux_fn
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  nl_abs_tol = 1e-14
+  dt = 100
+  end_time = 2000
+[]
+
+[Outputs]
+  perf_graph = true
+  csv = true
+  execute_on = &#x27;initial timestep_end&#x27;
+  file_base = frompps
+[]
+
+[ICs]
+  [./PressureIC]
+    variable = pp
+    type = ConstantIC
+    value = 20e6
+  [../]
+[]
+
+[DiracKernels]
+  [./source]
+    type = PorousFlowPointSourceFromPostprocessor
+    variable = pp
+    mass_flux = mass_flux_in
+    point = &#x27;0.5 0.5 0&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4d315d00-11e0-463c-b9a2-30bd3cc61ca7"><div class="modal-content"><h4>test/tests/time_steppers/function_dt/function_dt_no_interpolation.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -1
+  xmax =  1
+  ymin = -1
+  ymax =  1
+  nx = 2
+  ny = 2
+  elem_type = QUAD9
+[]
+
+[Functions]
+  [./exact_fn]
+    type = ParsedFunction
+    value = t*t*(x*x+y*y)
+  [../]
+
+  [./forcing_fn]
+    type = ParsedFunction
+    value = 2*t*(x*x+y*y)-4*t*t
+  [../]
+
+  [./dts]
+    type = PiecewiseConstant
+    x = &#x27;0  4  8 12  20&#x27;
+    y = &#x27;0  1  2  4  8&#x27;
+    direction = right
+  [../]
+[]
+
+[Variables]
+  [./u]
+    family = LAGRANGE
+    order = SECOND
+  [../]
+[]
+
+[ICs]
+  [./u_var]
+    type = FunctionIC
+    variable = u
+    function = exact_fn
+  [../]
+[]
+
+[Kernels]
+  [./td]
+    type = TimeDerivative
+    variable = u
+  [../]
+
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./ffn]
+    type = BodyForce
+    variable = u
+    function = forcing_fn
+  [../]
+[]
+
+[BCs]
+  [./all]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = &#x27;left right top bottom&#x27;
+    function = exact_fn
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  start_time = 0
+  end_time = 20
+  [./TimeStepper]
+    type = FunctionDT
+    function = dts
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="12abd5cc-c1e9-497d-80ca-3abd55be0501"><div class="modal-content"><h4>test/tests/postprocessors/element_extreme_material_property/element_extreme_material_property.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 4
+  xmin = 0
+  xmax = 1
+[]
+
+[Functions]
+  [./fn]
+    type = PiecewiseConstant
+    axis = x
+    x = &#x27;0 0.25 0.50 0.75&#x27;
+    y = &#x27;5 2 3 4&#x27;
+  [../]
+[]
+
+[Materials]
+  [./mat]
+    type = GenericFunctionMaterial
+    prop_names = &#x27;mat_prop&#x27;
+    prop_values = &#x27;fn&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./min]
+    type = ElementExtremeMaterialProperty
+    mat_prop = mat_prop
+    value_type = min
+    execute_on = &#x27;INITIAL&#x27;
+  [../]
+  [./max]
+    type = ElementExtremeMaterialProperty
+    mat_prop = mat_prop
+    value_type = max
+    execute_on = &#x27;INITIAL&#x27;
+  [../]
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Outputs]
+  csv = true
+  execute_on = &#x27;INITIAL&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ff597e89-53a8-42c7-80a7-7608ba8ae3c2"><div class="modal-content"><h4>test/tests/multiapps/sub_cycling_failure/sub_gold.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Functions]
+  [./dts]
+    # These mimic the behavior of the failing solve
+    type = PiecewiseConstant
+    x = &#x27;0     0.1    0.105&#x27;
+    y = &#x27;0.01  0.005  0.01&#x27;
+  [../]
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./td]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 4
+  dt = 0.01
+
+  [./TimeStepper]
+    type = FunctionDT
+    function = dts
+  [../]
+
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="899148b9-f4a2-4e45-a5f8-d927048c8f08"><div class="modal-content"><h4>modules/porous_flow/examples/flow_through_fractured_media/fine_thick_fracture_transient.i</h4><pre class="moose-pre"><code class="language-text"># Using a single-dimensional mesh
+# Transient flow and solute transport along a fracture in a porous matrix
+# advective dominated flow in the fracture and diffusion into the porous matrix
+#
+# Note that fine_thick_fracture_steady.i must be run to initialise the porepressure properly
+
+[Mesh]
+  file = &#x27;gold/fine_thick_fracture_steady_out.e&#x27;
+[]
+
+[GlobalParams]
+  PorousFlowDictator = dictator
+  gravity = &#x27;0 0 0&#x27;
+[]
+
+[Variables]
+  [./pp]
+    initial_from_file_var = pp
+    initial_from_file_timestep = 1
+  [../]
+  [./massfrac0]
+  [../]
+[]
+
+[AuxVariables]
+  [./velocity_x]
+    family = MONOMIAL
+    order = CONSTANT
+    block = fracture
+  [../]
+  [./velocity_y]
+    family = MONOMIAL
+    order = CONSTANT
+    block = fracture
+  [../]
+[]
+
+[AuxKernels]
+  [./velocity_x]
+    type = PorousFlowDarcyVelocityComponent
+    variable = velocity_x
+    component = x
+  [../]
+  [./velocity_y]
+    type = PorousFlowDarcyVelocityComponent
+    variable = velocity_y
+    component = y
+  [../]
+[]
+
+[ICs]
+  [./massfrac0]
+    type = ConstantIC
+    variable = massfrac0
+    value = 0
+  [../]
+[]
+
+[BCs]
+  [./top]
+    type = DirichletBC
+    value = 0
+    variable = massfrac0
+    boundary = top
+  [../]
+  [./bottom]
+    type = DirichletBC
+    value = 1
+    variable = massfrac0
+    boundary = bottom
+  [../]
+  [./ptop]
+    type = DirichletBC
+    variable = pp
+    boundary =  top
+    value = 1e6
+  [../]
+  [./pbottom]
+    type = DirichletBC
+    variable = pp
+    boundary = bottom
+    value = 1.002e6
+  [../]
+[]
+
+[Kernels]
+  [./mass0]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 0
+    variable = pp
+  [../]
+  [./adv0]
+    type = PorousFlowAdvectiveFlux
+    fluid_component = 0
+    variable = pp
+  [../]
+  [./diff0]
+    type = PorousFlowDispersiveFlux
+    fluid_component = 0
+    variable = pp
+    disp_trans = 0
+    disp_long = 0
+  [../]
+  [./mass1]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 1
+    variable = massfrac0
+  [../]
+  [./adv1]
+    type = PorousFlowAdvectiveFlux
+    fluid_component = 1
+    variable = massfrac0
+  [../]
+  [./diff1]
+    type = PorousFlowDispersiveFlux
+    fluid_component = 1
+    variable = massfrac0
+    disp_trans = 0
+    disp_long = 0
+  [../]
+[]
+
+[UserObjects]
+  [./dictator]
+    type = PorousFlowDictator
+    porous_flow_vars = &#x27;pp massfrac0&#x27;
+    number_fluid_phases = 1
+    number_fluid_components = 2
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./simple_fluid]
+      type = SimpleFluidProperties
+      bulk_modulus = 2e9
+      density0 = 1000
+      thermal_expansion = 0
+      viscosity = 1e-3
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./temperature]
+    type = PorousFlowTemperature
+  [../]
+  [./ppss]
+    type = PorousFlow1PhaseFullySaturated
+    porepressure = pp
+  [../]
+  [./massfrac]
+    type = PorousFlowMassFraction
+    mass_fraction_vars = massfrac0
+  [../]
+  [./simple_fluid]
+    type = PorousFlowSingleComponentFluid
+    fp = simple_fluid
+    phase = 0
+  [../]
+  [./poro_fracture]
+    type = PorousFlowPorosityConst
+    porosity = 1.0    # this is the true porosity of the fracture
+    block = &#x27;fracture&#x27;
+  [../]
+  [./poro_matrix]
+    type = PorousFlowPorosityConst
+    porosity = 0.1
+    block = &#x27;matrix1 matrix2&#x27;
+  [../]
+  [./diff1]
+    type = PorousFlowDiffusivityConst
+    diffusion_coeff = &#x27;1e-9 1e-9&#x27;
+    tortuosity = 1.0
+    block = &#x27;fracture&#x27;
+  [../]
+  [./diff2]
+    type = PorousFlowDiffusivityConst
+    diffusion_coeff = &#x27;1e-9 1e-9&#x27;
+    tortuosity = 0.1
+    block = &#x27;matrix1 matrix2&#x27;
+  [../]
+  [./relp]
+    type = PorousFlowRelativePermeabilityConst
+    phase = 0
+  [../]
+  [./permeability1]
+    type = PorousFlowPermeabilityConst
+    permeability = &#x27;3e-8 0 0 0 3e-8 0 0 0 3e-8&#x27; # this is the true permeability of the fracture
+    block = &#x27;fracture&#x27;
+  [../]
+  [./permeability2]
+    type = PorousFlowPermeabilityConst
+    permeability = &#x27;1e-20 0 0 0 1e-20 0 0 0 1e-20&#x27;
+    block = &#x27;matrix1 matrix2&#x27;
+  [../]
+[]
+
+[Functions]
+  [./dt_controller]
+     type = PiecewiseConstant
+     x = &#x27;0    30   40 100 200 83200&#x27;
+     y = &#x27;0.01 0.1  1  10  100 32&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./mumps_is_best_for_parallel_jobs]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-ksp_type -pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27;gmres      asm      lu           NONZERO                   2             &#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  end_time = 86400
+  #dt = 0.01
+
+  [./TimeStepper]
+    type = FunctionDT
+    function = dt_controller
+  [../]
+
+# controls for nonlinear iterations
+  nl_max_its = 15
+  nl_rel_tol = 1e-14
+  nl_abs_tol = 1e-9
+[]
+
+
+[VectorPostprocessors]
+  [./xmass]
+    type = LineValueSampler
+    start_point = &#x27;0.4 0 0&#x27;
+    end_point = &#x27;0.5 0 0&#x27;
+    sort_by = x
+    num_points = 167
+    variable = massfrac0
+  [../]
+[]
+
+[Outputs]
+  perf_graph = true
+  console = true
+  csv = true
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d6fe7081-331f-4fc1-b222-49d4aa1e83e3"><div class="modal-content"><h4>test/tests/functions/piecewise_constant/piecewise_constant.i</h4><pre class="moose-pre"><code class="language-text"># This tests the PiecewiseConstant function.
+# There are four variables and four functions: a,b,c, and d.  The diffusion equation is &quot;solved&quot;
+# for each of these variables with a boundary condition of type FunctionDirchletBC applied to a boundary
+# (i.e. node set) that includes every node in the element, so the solution is the boundary condition defined by the function.
+#  Each boundary condition uses a function of type PiecewiseConstant.
+#
+# The value of the variables should correspond to the function.
+
+[Mesh]
+  file = cube.e
+  # This problem only has 1 element, so using DistributedMesh in parallel
+  # isn&#x27;t really an option, and we don&#x27;t care that much about DistributedMesh
+  # in serial.
+  parallel_type = replicated
+[]
+
+[Variables]
+
+  [./aVar]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.1
+  [../]
+  [./bVar]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.1
+  [../]
+  [./cVar]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.1
+  [../]
+  [./dVar]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.1
+  [../]
+[]
+
+[Functions]
+  [./a]
+    type = PiecewiseConstant
+    xy_data = &#x27;0.5 0.1
+               1.0 0.2
+               1.5 0.1&#x27;
+    direction = left
+  [../]
+  [./b]
+    type = PiecewiseConstant
+    x = &#x27;0.5 1.0 1.5&#x27;
+    y = &#x27;0.1 0.2 0.1&#x27;
+    direction = right
+  [../]
+  [./c]
+    type = PiecewiseConstant
+    data_file = pc.csv
+    direction = left
+    format = columns
+  [../]
+  [./d]
+    type = PiecewiseConstant
+    data_file = pc.csv
+    direction = right
+    format = columns
+  [../]
+[]
+
+[Kernels]
+  [./diffa]
+    type = Diffusion
+    variable = aVar
+  [../]
+  [./diffb]
+    type = Diffusion
+    variable = bVar
+  [../]
+  [./diffc]
+    type = Diffusion
+    variable = cVar
+  [../]
+  [./diffd]
+    type = Diffusion
+    variable = dVar
+  [../]
+[]
+
+[BCs]
+  [./a]
+    type = FunctionDirichletBC
+    variable = aVar
+    boundary = &#x27;1&#x27;
+    function = a
+  [../]
+  [./b]
+    type = FunctionDirichletBC
+    variable = bVar
+    boundary = &#x27;1&#x27;
+    function = b
+  [../]
+  [./c]
+    type = FunctionDirichletBC
+    variable = cVar
+    boundary = &#x27;1&#x27;
+    function = c
+  [../]
+  [./d]
+    type = FunctionDirichletBC
+    variable = dVar
+    boundary = &#x27;1&#x27;
+    function = d
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 0.2
+  end_time = 3
+  nl_rel_tol = 1e-12
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0a961ed3-ad37-4a06-8414-bae1306588a9"><div class="modal-content"><h4>modules/rdg/test/tests/advection_1d/1d_aefv_square_wave.i</h4><pre class="moose-pre"><code class="language-text">############################################################
+[GlobalParams]
+  order = CONSTANT
+  family = MONOMIAL
+  u = u
+  slope_limiting = lslope
+  implicit = false
+[]
+############################################################
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmin = 0
+  xmax = 1
+  nx = 100
+[]
+############################################################
+[Functions]
+  [./ic_u]
+    type = PiecewiseConstant
+    axis = x
+    direction = right
+    xy_data = &#x27;0.1 0.5
+               0.6 1.0
+               1.0 0.5&#x27;
+  [../]
+[]
+############################################################
+[UserObjects]
+  [./lslope]
+    type = AEFVSlopeLimitingOneD
+    execute_on = &#x27;linear&#x27;
+    scheme = &#x27;none&#x27; #none | minmod | mc | superbee
+  [../]
+
+  [./internal_side_flux]
+    type = AEFVUpwindInternalSideFlux
+    execute_on = &#x27;linear&#x27;
+  [../]
+
+  [./free_outflow_bc]
+    type = AEFVFreeOutflowBoundaryFlux
+    execute_on = &#x27;linear&#x27;
+  [../]
+[]
+############################################################
+[Variables]
+  [./u]
+  [../]
+[]
+############################################################
+[ICs]
+  [./u_ic]
+    type = FunctionIC
+    variable = &#x27;u&#x27;
+    function = ic_u
+  [../]
+[]
+############################################################
+[Kernels]
+  [./time_u]
+    implicit = true
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+############################################################
+[DGKernels]
+  [./concentration]
+    type = AEFVKernel
+    variable = u
+    component = &#x27;concentration&#x27;
+    flux = internal_side_flux
+  [../]
+[]
+############################################################
+[BCs]
+  [./concentration]
+    type = AEFVBC
+    boundary = &#x27;left right&#x27;
+    variable = u
+    component = &#x27;concentration&#x27;
+    flux = free_outflow_bc
+  [../]
+[]
+############################################################
+[Materials]
+  [./aefv]
+    type = AEFVMaterial
+    block = 0
+  [../]
+[]
+############################################################
+[Executioner]
+  type = Transient
+  [./TimeIntegrator]
+    type = ExplicitMidpoint
+  [../]
+  solve_type = &#x27;LINEAR&#x27;
+
+  l_tol = 1e-4
+  nl_rel_tol = 1e-20
+  nl_abs_tol = 1e-8
+  nl_max_its = 60
+
+  start_time = 0.0
+  num_steps = 4 # 4 | 400 for complete run
+  dt = 5e-4
+  dtmin = 1e-6
+[]
+
+[Outputs]
+  [./Exodus]
+    type = Exodus
+    file_base = 1d_aefv_square_wave_none_out
+    interval = 2
+  [../]
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f93eeae3-92ed-4c51-aff9-99e67835a675"><div class="modal-content"><h4>test/tests/postprocessors/element_average_material_property/element_average_material_property.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 4
+  xmin = 0
+  xmax = 1
+[]
+
+[Functions]
+  [./fn]
+    type = PiecewiseConstant
+    axis = x
+    x = &#x27;0 0.25 0.50 0.75&#x27;
+    y = &#x27;5 2 3 6&#x27;
+  [../]
+[]
+
+[Materials]
+  [./mat]
+    type = GenericFunctionMaterial
+    prop_names = &#x27;mat_prop&#x27;
+    prop_values = &#x27;fn&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./avg]
+    type = ElementAverageMaterialProperty
+    mat_prop = mat_prop
+    execute_on = &#x27;INITIAL&#x27;
+  [../]
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Outputs]
+  csv = true
+  execute_on = &#x27;INITIAL&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="064caeee-e553-441d-a5fb-086754927906"><div class="modal-content"><h4>modules/porous_flow/examples/flow_through_fractured_media/fine_transient.i</h4><pre class="moose-pre"><code class="language-text"># Using a mixed-dimensional mesh
+# Transient flow and solute transport along a fracture in a porous matrix
+# advective dominated flow in the fracture and diffusion into the porous matrix
+#
+# Note that fine_steady.i must be run to initialise the porepressure properly
+
+[Mesh]
+  file = &#x27;gold/fine_steady_out.e&#x27;
+[]
+
+[GlobalParams]
+  PorousFlowDictator = dictator
+  gravity = &#x27;0 0 0&#x27;
+[]
+
+[Variables]
+  [./pp]
+    initial_from_file_var = pp
+    initial_from_file_timestep = 1
+  [../]
+  [./massfrac0]
+  [../]
+[]
+
+[AuxVariables]
+  [./velocity_x]
+    family = MONOMIAL
+    order = CONSTANT
+    block = fracture
+  [../]
+  [./velocity_y]
+    family = MONOMIAL
+    order = CONSTANT
+    block = fracture
+  [../]
+[]
+
+[AuxKernels]
+  [./velocity_x]
+    type = PorousFlowDarcyVelocityComponentLowerDimensional
+    variable = velocity_x
+    component = x
+    aperture = 6E-4
+  [../]
+  [./velocity_y]
+    type = PorousFlowDarcyVelocityComponentLowerDimensional
+    variable = velocity_y
+    component = y
+    aperture = 6E-4
+  [../]
+[]
+
+[ICs]
+  [./massfrac0]
+    type = ConstantIC
+    variable = massfrac0
+    value = 0
+  [../]
+[]
+
+[BCs]
+  [./top]
+    type = DirichletBC
+    value = 0
+    variable = massfrac0
+    boundary = top
+  [../]
+  [./bottom]
+    type = DirichletBC
+    value = 1
+    variable = massfrac0
+    boundary = bottom
+  [../]
+  [./ptop]
+    type = DirichletBC
+    variable = pp
+    boundary =  top
+    value = 1e6
+  [../]
+  [./pbottom]
+    type = DirichletBC
+    variable = pp
+    boundary = bottom
+    value = 1.002e6
+  [../]
+[]
+
+[Kernels]
+  [./mass0]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 0
+    variable = pp
+  [../]
+  [./adv0]
+    type = PorousFlowAdvectiveFlux
+    fluid_component = 0
+    variable = pp
+  [../]
+  [./diff0]
+    type = PorousFlowDispersiveFlux
+    fluid_component = 0
+    variable = pp
+    disp_trans = 0
+    disp_long = 0
+  [../]
+  [./mass1]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 1
+    variable = massfrac0
+  [../]
+  [./adv1]
+    type = PorousFlowAdvectiveFlux
+    fluid_component = 1
+    variable = massfrac0
+  [../]
+  [./diff1]
+    type = PorousFlowDispersiveFlux
+    fluid_component = 1
+    variable = massfrac0
+    disp_trans = 0
+    disp_long = 0
+  [../]
+[]
+
+[UserObjects]
+  [./dictator]
+    type = PorousFlowDictator
+    porous_flow_vars = &#x27;pp massfrac0&#x27;
+    number_fluid_phases = 1
+    number_fluid_components = 2
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./simple_fluid]
+      type = SimpleFluidProperties
+      bulk_modulus = 2e9
+      density0 = 1000
+      thermal_expansion = 0
+      viscosity = 1e-3
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./temperature]
+    type = PorousFlowTemperature
+  [../]
+  [./ppss]
+    type = PorousFlow1PhaseFullySaturated
+    porepressure = pp
+  [../]
+  [./massfrac]
+    type = PorousFlowMassFraction
+    mass_fraction_vars = massfrac0
+  [../]
+  [./simple_fluid]
+    type = PorousFlowSingleComponentFluid
+    fp = simple_fluid
+    phase = 0
+  [../]
+  [./poro_fracture]
+    type = PorousFlowPorosityConst
+    porosity = 6e-4   # = a * phif
+    block = &#x27;fracture&#x27;
+  [../]
+  [./poro_matrix]
+    type = PorousFlowPorosityConst
+    porosity = 0.1
+    block = &#x27;matrix1 matrix2&#x27;
+  [../]
+  [./diff1]
+    type = PorousFlowDiffusivityConst
+    diffusion_coeff = &#x27;1e-9 1e-9&#x27;
+    tortuosity = 1.0
+    block = &#x27;fracture&#x27;
+  [../]
+  [./diff2]
+    type = PorousFlowDiffusivityConst
+    diffusion_coeff = &#x27;1e-9 1e-9&#x27;
+    tortuosity = 0.1
+    block = &#x27;matrix1 matrix2&#x27;
+  [../]
+  [./relp]
+    type = PorousFlowRelativePermeabilityConst
+    phase = 0
+  [../]
+  [./permeability_fracture]
+    type = PorousFlowPermeabilityConst
+    permeability = &#x27;1.8e-11 0 0 0 1.8e-11 0 0 0 1.8e-11&#x27; # kf=3e-8, a=6e-4m.  1.8e-11 = kf * a
+    block = &#x27;fracture&#x27;
+  [../]
+  [./permeability_matrix]
+    type = PorousFlowPermeabilityConst
+    permeability = &#x27;1e-20 0 0 0 1e-20 0 0 0 1e-20&#x27;
+    block = &#x27;matrix1 matrix2&#x27;
+  [../]
+[]
+
+[Functions]
+  [./dt_controller]
+     type = PiecewiseConstant
+     x = &#x27;0    30   40 100 200 83200&#x27;
+     y = &#x27;0.01 0.1  1  10  100 32&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./mumps_is_best_for_parallel_jobs]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-ksp_type -pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27;gmres      asm      lu           NONZERO                   2             &#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  end_time = 86400
+
+  [./TimeStepper]
+    type = FunctionDT
+    function = dt_controller
+  [../]
+
+# controls for nonlinear iterations
+  nl_max_its = 15
+  nl_rel_tol = 1e-14
+  nl_abs_tol = 1e-9
+[]
+
+
+[VectorPostprocessors]
+  [./xmass]
+    type = LineValueSampler
+    start_point = &#x27;0.4 0 0&#x27;
+    end_point = &#x27;0.5 0 0&#x27;
+    sort_by = x
+    num_points = 167
+    variable = massfrac0
+  [../]
+[]
+
+[Outputs]
+  perf_graph = true
+  console = true
+  csv = true
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="31c36852-8498-4c01-8e3a-51e9431e4fa5"><div class="modal-content"><h4>modules/rdg/test/tests/advection_1d/block_restrictable.i</h4><pre class="moose-pre"><code class="language-text">############################################################
+[GlobalParams]
+  order = CONSTANT
+  family = MONOMIAL
+  u = u
+  slope_limiting = lslope
+  implicit = false
+[]
+############################################################
+[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 1
+    xmin = 0
+    xmax = 1
+    nx = 100
+  []
+  [./subdomain1]
+    type = SubdomainBoundingBoxGenerator
+    bottom_left = &#x27;0.5 0 0&#x27;
+    block_id = 1
+    top_right = &#x27;1.0 1.0 0&#x27;
+    input = gen
+  [../]
+  [./interface]
+    type = SideSetsBetweenSubdomainsGenerator
+    primary_block = &#x27;0&#x27;
+    paired_block = &#x27;1&#x27;
+    new_boundary = &#x27;primary0_interface&#x27;
+    input = subdomain1
+  [../]
+  [./interface_again]
+    type = SideSetsBetweenSubdomainsGenerator
+    primary_block = &#x27;1&#x27;
+    paired_block = &#x27;0&#x27;
+    new_boundary = &#x27;primary1_interface&#x27;
+    input = interface
+  [../]
+[]
+############################################################
+[Functions]
+  [./ic_u]
+    type = PiecewiseConstant
+    axis = x
+    direction = right
+    xy_data = &#x27;0.1 0.5
+               0.4 1.0
+               0.5 0.5&#x27;
+  [../]
+[]
+############################################################
+[UserObjects]
+  [./lslope]
+    type = AEFVSlopeLimitingOneD
+    execute_on = &#x27;linear&#x27;
+    scheme = &#x27;superbee&#x27; #none | minmod | mc | superbee
+    block = 0
+  [../]
+
+  [./internal_side_flux]
+    type = AEFVUpwindInternalSideFlux
+    execute_on = &#x27;linear&#x27;
+  [../]
+
+  [./free_outflow_bc]
+    type = AEFVFreeOutflowBoundaryFlux
+    execute_on = &#x27;linear&#x27;
+  [../]
+[]
+############################################################
+[Variables]
+  [./u]
+    block = 0
+  [../]
+  [./v]
+    block = 1
+    family = LAGRANGE
+    order = FIRST
+  [../]
+[]
+############################################################
+[ICs]
+  [./u_ic]
+    type = FunctionIC
+    variable = &#x27;u&#x27;
+    function = ic_u
+  [../]
+[]
+############################################################
+[Kernels]
+  [./time_u]
+    implicit = true
+    type = TimeDerivative
+    variable = u
+    block = 0
+  [../]
+  [./diff_v]
+    implicit = true
+    type = Diffusion
+    variable = v
+    block = 1
+  [../]
+  [./time_v]
+    implicit = true
+    type = TimeDerivative
+    variable = v
+    block = 1
+  [../]
+[]
+############################################################
+[DGKernels]
+  [./concentration]
+    type = AEFVKernel
+    variable = u
+    component = &#x27;concentration&#x27;
+    flux = internal_side_flux
+    block = 0
+  [../]
+[]
+############################################################
+[BCs]
+  [./concentration]
+    type = AEFVBC
+    boundary = &#x27;left primary0_interface&#x27;
+    variable = u
+    component = &#x27;concentration&#x27;
+    flux = free_outflow_bc
+  [../]
+  [./v_left]
+    type = DirichletBC
+    boundary = &#x27;primary1_interface&#x27;
+    variable = v
+    value = 1
+  [../]
+  [./v_right]
+    type = DirichletBC
+    boundary = &#x27;right&#x27;
+    variable = v
+    value = 0
+  [../]
+[]
+############################################################
+[Materials]
+  [./aefv]
+    type = AEFVMaterial
+    block = 0
+  [../]
+  [./dummy_1]
+    type = GenericConstantMaterial
+    block = 1
+    prop_names = &#x27;&#x27;
+    prop_values = &#x27;&#x27;
+  [../]
+[]
+############################################################
+[Executioner]
+  type = Transient
+  [./TimeIntegrator]
+    type = ExplicitMidpoint
+  [../]
+  solve_type = &#x27;LINEAR&#x27;
+
+  l_tol = 1e-4
+  nl_rel_tol = 1e-20
+  nl_abs_tol = 1e-8
+  nl_max_its = 60
+
+  start_time = 0.0
+  num_steps = 4 # 4 | 400 for complete run
+  dt = 5e-4
+  dtmin = 1e-6
+[]
+
+[Outputs]
+  [./out]
+    type = Exodus
+    interval = 2
+  [../]
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1dda123e-08dd-476d-b4fe-317a13a606f4"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/rom_stress_update/verification.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[AuxVariables]
+  [./temperature]
+  [../]
+[]
+
+[AuxKernels]
+  [./temp_aux]
+    type = FunctionAux
+    variable = temperature
+    function = temp_fcn
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+[]
+
+[Functions]
+  [./rhom_fcn]
+    type = PiecewiseConstant
+    data_file = ss316_verification_data.csv
+    x_index_in_file = 0
+    y_index_in_file = 1
+    format = columns
+    xy_in_file_only = false
+    direction = right
+  [../]
+  [./rhoi_fcn]
+    type = PiecewiseConstant
+    data_file = ss316_verification_data.csv
+    x_index_in_file = 0
+    y_index_in_file = 2
+    format = columns
+    xy_in_file_only = false
+    direction = right
+  [../]
+  [./vmJ2_fcn]
+    type = PiecewiseConstant
+    data_file = ss316_verification_data.csv
+    x_index_in_file = 0
+    y_index_in_file = 3
+    format = columns
+    xy_in_file_only = false
+    direction = right
+  [../]
+  [./evm_fcn]
+    type = PiecewiseConstant
+    data_file = ss316_verification_data.csv
+    x_index_in_file = 0
+    y_index_in_file = 4
+    format = columns
+    xy_in_file_only = false
+    direction = right
+  [../]
+  [./temp_fcn]
+    type = PiecewiseConstant
+    data_file = ss316_verification_data.csv
+    x_index_in_file = 0
+    y_index_in_file = 5
+    format = columns
+    xy_in_file_only = false
+    direction = right
+  [../]
+
+  [./rhom_soln_fcn]
+    type = PiecewiseConstant
+    data_file = ss316_verification_data.csv
+    x_index_in_file = 0
+    y_index_in_file = 7
+    format = columns
+    xy_in_file_only = false
+    direction = right
+  [../]
+  [./rhoi_soln_fcn]
+    type = PiecewiseConstant
+    data_file = ss316_verification_data.csv
+    x_index_in_file = 0
+    y_index_in_file = 8
+    format = columns
+    xy_in_file_only = false
+    direction = right
+  [../]
+  [./creep_rate_soln_fcn]
+    type = PiecewiseConstant
+    data_file = ss316_verification_data.csv
+    x_index_in_file = 0
+    y_index_in_file = 10
+    format = columns
+    xy_in_file_only = false
+    direction = right
+  [../]
+
+  [./rhom_diff_fcn]
+    type = ParsedFunction
+    vars = &#x27;rhom_soln rhom&#x27;
+    vals = &#x27;rhom_soln rhom&#x27;
+    value = &#x27;abs(rhom_soln - rhom) / rhom_soln&#x27;
+  [../]
+  [./rhoi_diff_fcn]
+    type = ParsedFunction
+    vars = &#x27;rhoi_soln rhoi&#x27;
+    vals = &#x27;rhoi_soln rhoi&#x27;
+    value = &#x27;abs(rhoi_soln - rhoi) / rhoi_soln&#x27;
+  [../]
+  [./creep_rate_diff_fcn]
+    type = ParsedFunction
+    vars = &#x27;creep_rate_soln creep_rate&#x27;
+    vals = &#x27;creep_rate_soln creep_rate&#x27;
+    value = &#x27;abs(creep_rate_soln - creep_rate) / creep_rate_soln&#x27;
+  [../]
+[]
+
+
+[Modules/TensorMechanics/Master]
+  [./all]
+    strain = FINITE
+    add_variables = true
+    generate_output = &#x27;vonmises_stress&#x27;
+    use_automatic_differentiation = true
+  [../]
+[]
+
+[BCs]
+  [./symmx]
+    type = ADDirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./symmy]
+    type = ADDirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./symmz]
+    type = ADDirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0
+  [../]
+  [./pressure_x]
+    type = ADPressure
+    variable = disp_x
+    component = 0
+    boundary = right
+    function = vmJ2_fcn
+    constant = 0.5e6
+  [../]
+  [./pressure_y]
+    type = ADPressure
+    variable = disp_y
+    component = 1
+    boundary = top
+    function = vmJ2_fcn
+    constant = -0.5e6
+  [../]
+  [./pressure_z]
+    type = ADPressure
+    variable = disp_z
+    component = 2
+    boundary = front
+    function = vmJ2_fcn
+    constant = -0.5e6
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ADComputeIsotropicElasticityTensor
+    youngs_modulus = 1e11
+    poissons_ratio = 0.3
+  [../]
+  [./stress]
+    type = ADComputeMultipleInelasticStress
+    inelastic_models = rom_stress_prediction
+  [../]
+  [./rom_stress_prediction]
+    type = SS316HLAROMANCEStressUpdateTest
+    temperature = temperature
+    effective_inelastic_strain_name = effective_creep_strain
+    internal_solve_full_iteration_history = true
+    outputs = all
+    wall_dislocation_density_forcing_function = rhoi_fcn
+    cell_dislocation_density_forcing_function = rhom_fcn
+    old_creep_strain_forcing_function = evm_fcn
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  petsc_options = &#x27;-snes_ksp_ew -snes_converged_reason -ksp_converged_reason&#x27;# -ksp_error_if_not_converged -snes_error_if_not_converged&#x27;
+  petsc_options_iname = &#x27;-pc_type&#x27;
+  petsc_options_value = &#x27;lu&#x27;
+  line_search = &#x27;none&#x27;
+  automatic_scaling = true
+  compute_scaling_once = false
+
+  nl_abs_tol = 1e-10
+
+  dt = 1e-3
+  end_time = 1e-2
+[]
+
+[Postprocessors]
+  [./effective_strain_avg]
+    type = ElementAverageValue
+    variable = effective_creep_strain
+    outputs = console
+  [../]
+  [./temperature]
+    type = ElementAverageValue
+    variable = temperature
+    outputs = console
+  [../]
+  [./rhom]
+    type = ElementAverageValue
+    variable = cell_dislocations
+  [../]
+  [./rhoi]
+    type = ElementAverageValue
+    variable = wall_dislocations
+  [../]
+  [./vonmises_stress]
+    type = ElementAverageValue
+    variable = vonmises_stress
+    outputs = console
+  [../]
+  [./creep_rate]
+    type = ElementAverageValue
+    variable = creep_rate
+  [../]
+  [./rhom_in]
+    type = FunctionValuePostprocessor
+    function = rhom_fcn
+    execute_on = &#x27;TIMESTEP_END initial&#x27;
+    outputs = console
+  [../]
+  [./rhoi_in]
+    type = FunctionValuePostprocessor
+    function = rhoi_fcn
+    execute_on = &#x27;TIMESTEP_END initial&#x27;
+    outputs = console
+  [../]
+  [./vmJ2_in]
+    type = FunctionValuePostprocessor
+    function = vmJ2_fcn
+    execute_on = &#x27;TIMESTEP_END initial&#x27;
+    outputs = console
+  [../]
+  [./rhom_soln]
+    type = FunctionValuePostprocessor
+    function = rhom_soln_fcn
+    outputs = console
+  [../]
+  [./rhoi_soln]
+    type = FunctionValuePostprocessor
+    function = rhoi_soln_fcn
+    outputs = console
+  [../]
+  [./creep_rate_soln]
+    type = FunctionValuePostprocessor
+    function = creep_rate_soln_fcn
+    outputs = console
+  [../]
+
+  [./rhom_diff]
+    type = FunctionValuePostprocessor
+    function = rhom_diff_fcn
+    outputs = console
+  [../]
+  [./rhoi_diff]
+    type = FunctionValuePostprocessor
+    function = rhoi_diff_fcn
+    outputs = console
+  [../]
+  [./creep_rate_diff]
+    type = FunctionValuePostprocessor
+    function = creep_rate_diff_fcn
+    outputs = console
+  [../]
+
+  [./rhom_max_diff]
+    type = TimeExtremeValue
+    postprocessor = rhom_diff
+    outputs = console
+  [../]
+  [./rhoi_max_diff]
+    type = TimeExtremeValue
+    postprocessor = rhoi_diff
+    outputs = console
+  [../]
+  [./creep_rate_max_diff]
+    type = TimeExtremeValue
+    postprocessor = creep_rate_diff
+    outputs = console
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  file_base = &#x27;verification_1e-3_out&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1531f3d0-c231-44e4-bb3c-a445e15edb9d"><div class="modal-content"><h4>test/tests/dgkernels/1d_advection_dg/1d_advection_dg.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 100
+  xmin = 0
+  xmax = 1
+[]
+
+[Functions]
+  [./ic_u]
+    type = PiecewiseConstant
+    axis = x
+    direction = right
+    xy_data = &#x27;0.1 0.0
+               0.6 1.0
+               1.0 0.0&#x27;
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./time_u]
+    type = TimeDerivative
+    variable = u
+  [../]
+
+  [./adv_u]
+    implicit = false
+    type = ConservativeAdvection
+    variable = u
+    velocity = &#x27;1 0 0&#x27;
+  [../]
+[]
+
+[DGKernels]
+  [./dg_advection_u]
+    implicit = false
+    type = DGConvection
+    variable = u
+    velocity = &#x27;1 0 0&#x27;
+  [../]
+[]
+
+[ICs]
+  [./u_ic]
+    type = FunctionIC
+    variable = u
+    function = ic_u
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  [./TimeIntegrator]
+    type = ExplicitMidpoint
+  [../]
+  solve_type = &#x27;LINEAR&#x27;
+  num_steps = 4
+  dt = 2e-4
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a1014d7e-1461-48c8-9ba9-f4ce38969bff"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/czm/czm_patch_test.i</h4><pre class="moose-pre"><code class="language-text"># Patch test for cohesive zone modeling to check convergence
+[Mesh]
+  [./msh]
+  type = FileMeshGenerator
+  file = patch_mesh.e
+  []
+  [./transform]
+  type = TransformGenerator
+  input = msh
+  transform = TRANSLATE
+  vector_value = &#x27;-0.5 -0.5 -0.5&#x27;
+  []
+  [./split]
+    type = BreakMeshByBlockGenerator
+    input = transform
+  []
+  [./add_surfaces]
+    type = SideSetsFromNormalsGenerator
+    input = split
+    normals = &#x27;0  0  1
+               0  1  0
+               1  0  0
+               0  0 -1
+               0 -1  0
+              -1  0  0&#x27;
+    fixed_normal = true
+    new_boundary = &#x27;front top right back bottom left&#x27;
+  []
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Modules]
+  [./TensorMechanics]
+    [./Master]
+      [./all]
+        strain = FINITE
+        add_variables = true
+        use_finite_deform_jacobian = true
+        use_automatic_differentiation = true
+      [../]
+    [../]
+  [../]
+[]
+
+
+[Functions]
+  [./angles]
+    type = PiecewiseLinear
+    x = &#x27;0 1&#x27;
+    y = &#x27;0 0&#x27;
+  [../]
+
+  [./stretch]
+    type = PiecewiseLinear
+    x = &#x27;0 1&#x27;
+    y = &#x27;0 0.01&#x27;
+  [../]
+
+  [./move_y]
+    type = ParsedFunction
+    value = &#x27;y*cos(theta) - z * (1 + a)*sin(theta) - y&#x27;
+    vars = &#x27;a theta&#x27;
+    vals = &#x27;stretch angles&#x27;
+  [../]
+
+  [./move_z]
+    type = ParsedFunction
+    value = &#x27;y*sin(theta) + z*(1+a)*cos(theta) - z&#x27;
+    vars = &#x27;a theta&#x27;
+    vals = &#x27;stretch angles&#x27;
+  [../]
+
+  [./dt_fun]
+    type = PiecewiseConstant
+    x = &#x27;0 1&#x27;
+    y = &#x27;0.25 0.25&#x27;
+  []
+[]
+
+[BCs]
+  [./fix]
+    type = DirichletBC
+    preset = true
+    value = 0.0
+    boundary = left
+    variable = disp_x
+  [../]
+
+  [./front_y]
+    type = FunctionDirichletBC
+    boundary = front
+    variable = disp_y
+    function = move_y
+    preset = true
+  [../]
+
+  [./back_y]
+    type = FunctionDirichletBC
+    boundary = back
+    variable = disp_y
+    function = move_y
+    preset = true
+  [../]
+
+  [./front_z]
+    type = FunctionDirichletBC
+    boundary = front
+    variable = disp_z
+    function = move_z
+    preset = true
+  [../]
+
+  [./back_z]
+    type = FunctionDirichletBC
+    boundary = back
+    variable = disp_z
+    function = move_z
+    preset = true
+  [../]
+
+[]
+
+
+[Modules/TensorMechanics/CohesiveZoneMaster]
+  [./czm_ik]
+    boundary = &#x27;interface&#x27;
+  [../]
+[]
+
+[Materials]
+  [./stress]
+    type = ADComputeFiniteStrainElasticStress
+  [../]
+  [./elasticity_tensor]
+    type = ADComputeElasticityTensor
+    fill_method = symmetric9
+    C_ijkl = &#x27;1.684e5 0.176e5 0.176e5 1.684e5 0.176e5 1.684e5 0.754e5 0.754e5 0.754e5&#x27;
+  [../]
+  [./czm_mat]
+    boundary = &#x27;interface&#x27;
+  [../]
+[]
+
+
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;newton&#x27;
+  line_search = none
+
+  petsc_options_iname = &#x27;-pc_type&#x27;
+  petsc_options_value = &#x27;lu&#x27;
+
+  l_max_its = 2
+  l_tol = 1e-14
+  nl_max_its = 15
+  nl_rel_tol = 1e-10
+  nl_abs_tol = 1e-10
+  start_time = 0.0
+  dt = 0.25
+  end_time = 1
+[]
+
+[Postprocessors]
+  [./nonlin]
+    type = NumNonlinearIterations
+  [../]
+[]
+
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="712a88ae-7cb5-4b0c-8034-6871be596ff1"><div class="modal-content"><h4>test/tests/time_steppers/iteration_adaptive/adapt_tstep_reject_large_dt.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 50
+  ny = 2
+  xmax = 5
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Functions]
+  [./timestep_fn]
+    type = PiecewiseConstant
+    x = &#x27;0.   10.0&#x27;
+    y = &#x27;10.0 1.0&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./dt]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 10
+  [../]
+  [./right]
+    type = NeumannBC
+    variable = u
+    boundary = right
+    value = -1
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  start_time = 0.0
+  end_time = 12.0
+  dtmax = 10.0
+  dtmin = 0.1
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    timestep_limiting_postprocessor = timestep_pp
+    reject_large_step = true
+    reject_large_step_threshold = 0.5
+    dt = 3.0
+    growth_factor = 1.0
+  [../]
+[]
+
+[Postprocessors]
+  [./_dt]
+    type = TimestepSize
+  [../]
+
+# Just use a simple postprocessor to test capability to limit the time step length to the postprocessor value
+  [./timestep_pp]
+    type = FunctionValuePostprocessor
+    function = timestep_fn
+  [../]
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+  checkpoint = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#164d535b-3400-4174-bb72-d5c9fb5dbd2f" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#ab08b4da-15ac-4707-b0d7-afa9c68bd249" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#fe7c289b-378d-45f4-af35-37099eb530da" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#2ef1d0bd-7d95-480f-8bab-d1722bf33a6b" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

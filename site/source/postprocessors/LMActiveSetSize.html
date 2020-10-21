@@ -1,0 +1,1570 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>LMActiveSetSize.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="14f1209a-0779-4811-83be-5f7bf2036aa6"><i class="material-icons">menu</i></a><ul class="sidenav" id="14f1209a-0779-4811-83be-5f7bf2036aa6"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">postprocessors</span><a href="#" class="breadcrumb">LMActiveSetSize</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="1ac67c52-3744-4771-9f8d-627fab187f5b" data-section-level="1" data-section-text="NumVars"><h1 id="numvars">NumVars</h1><p>The NumVars Postprocessor provides information about the number of variables in the simulation. This postprocessor is capable of providing the number of variables in either the Nonlinear system (the system of PDEs you are solving), the Auxiliary system, the system containing only explicit calculations, or both together.</p><section class="scrollspy" id="4c14af1e-984e-44ee-a7d5-a9d0bf188234" data-section-level="2" data-section-text="Syntax and Description"><h2 id="syntax-and-description">Syntax and Description</h2><p>Return the number of variables from either the NL, Aux, or both systems.</p></section><section class="scrollspy" id="4d6bcae9-b711-4b92-8ded-f552f9744f37" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="62a52af9-cdb0-4372-83a4-0ee31c70e3a7" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM TRANSFER</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">system</span><span class="moose-parameter-header-default">ALL</span><span class="moose-parameter-header-description">The system(s) for which you want to retrieve the number of variables (NL, AUX, ALL). Default == ALL</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>ALL</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NL AUX ALL</p><p class="moose-parameter-description"><span>Description:</span>The system(s) for which you want to retrieve the number of variables (NL, AUX, ALL). Default == ALL</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="b4132464-3427-4a70-a1de-880c5d261d75" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">allow_duplicate_execution_on_initial</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preaux</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREAUX</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREAUX</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preic</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREIC during initial setup</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREIC during initial setup</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="99720d7a-6839-48da-aa7d-e0ce37ecb3d2" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#29296698-00e1-4aff-af73-9be0fa87656a" class="modal-trigger">test/tests/postprocessors/num_vars/num_vars.i</a></li><li><a href="#df871eed-03ff-469d-b9ba-d2427aafeba6" class="modal-trigger">test/tests/outputs/exodus/exodus_nodal.i</a></li><li><a href="#4ecc5bc1-4af4-4df5-b5a4-1849e921d768" class="modal-trigger">test/tests/outputs/postprocessor/postprocessor_console.i</a></li><li><a href="#78bcd6b8-ec27-4f93-99a1-1fe3230b3ae0" class="modal-trigger">test/tests/outputs/common/console.i</a></li><li><a href="#8a02cbab-b7eb-43a9-9e59-319e7843b35c" class="modal-trigger">test/tests/outputs/csv/csv_align.i</a></li><li><a href="#3bf7209f-235b-4aed-b3af-9f5535df61ce" class="modal-trigger">test/tests/actions/setup_postprocessor_data/setup_postprocessor_data.i</a></li><li><a href="#db5a4b72-d6a0-489a-868f-f66934937557" class="modal-trigger">test/tests/outputs/csv/csv.i</a></li><li><a href="#36fff082-de01-4f3d-b1c9-5e4fac8866e6" class="modal-trigger">test/tests/outputs/console/console.i</a></li><li><a href="#e11f9d28-16b3-473d-8179-91b4d54c8cd0" class="modal-trigger">test/tests/outputs/console/console_warning.i</a></li><li><a href="#e925f7b0-c2d2-4546-a4fd-217c303a7776" class="modal-trigger">test/tests/outputs/exodus/invalid_hide_variables.i</a></li><li><a href="#133411e1-5ab9-43d8-99a3-7c297faf5ce4" class="modal-trigger">test/tests/outputs/exodus/variable_toggles.i</a></li><li><a href="#f7d47a0a-f961-44cd-a4ae-9c491896153d" class="modal-trigger">test/tests/outputs/postprocessor/postprocessor.i</a></li><li><a href="#5eff9cb5-b072-4f68-9ec4-eba433e734f5" class="modal-trigger">test/tests/outputs/postprocessor/postprocessor_invalid.i</a></li><li><a href="#99f6256f-017c-49b9-aee5-aa1b48e788a6" class="modal-trigger">test/tests/outputs/csv/csv_sort.i</a></li><li><a href="#ce9733a4-8a43-4c44-9ee1-b6b5022ba384" class="modal-trigger">test/tests/outputs/exodus/hide_variables.i</a></li></ul><div class="modal moose-modal" id="29296698-00e1-4aff-af73-9be0fa87656a"><div class="modal-content"><h4>test/tests/postprocessors/num_vars/num_vars.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -1
+  xmax = 1
+  ymin = -1
+  ymax = 1
+  nx = 10
+  ny = 10
+  elem_type = QUAD9
+[]
+
+[Functions]
+  [./forcing_fnu]
+    type = ParsedFunction
+    value = -6*(x+y)+x*x+y*y
+  [../]
+  [./forcing_fnv]
+    type = ParsedFunction
+    value = -4+x*x*x-x+y*y*y-y
+  [../]
+  [./bc_fnut]
+    type = ParsedFunction
+    value = 3*y*y-1
+  [../]
+  [./bc_fnub]
+    type = ParsedFunction
+    value = -3*y*y+1
+  [../]
+  [./bc_fnul]
+    type = ParsedFunction
+    value = -3*x*x+1
+  [../]
+  [./bc_fnur]
+    type = ParsedFunction
+    value = 3*x*x-1
+  [../]
+  [./slnu]
+    type = ParsedGradFunction
+    value = x*x*x-x+y*y*y-y
+    grad_x = 3*x*x-1
+    grad_y = 3*y*y-1
+  [../]
+  [./slnv]
+    type = ParsedGradFunction
+    value = x*x+y*y
+    grad_x = 2*x
+    grad_y = 2*y
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = THIRD
+    family = HIERARCHIC
+  [../]
+  [./v]
+    order = SECOND
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff1]
+    type = Diffusion
+    variable = u
+  [../]
+  [./diff2]
+    type = Diffusion
+    variable = v
+  [../]
+  [./forceu]
+    type = BodyForce
+    variable = u
+    function = forcing_fnu
+  [../]
+  [./forcev]
+    type = BodyForce
+    variable = v
+    function = forcing_fnv
+  [../]
+[]
+
+[BCs]
+  # active = &#x27;bc_u bc_v&#x27;
+  # [./bc_u]
+  # type = FunctionDirichletBC
+  # variable = u
+  # function = slnu
+  # boundary = &#x27;top left right bottom&#x27;
+  # [../]
+  [./bc_ut]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = top
+    function = bc_fnut
+  [../]
+  [./bc_ub]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = bottom
+    function = bc_fnub
+  [../]
+  [./bc_ul]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = left
+    function = bc_fnul
+  [../]
+  [./bc_ur]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = right
+    function = bc_fnur
+  [../]
+  [./bc_v]
+    type = FunctionDirichletBC
+    variable = v
+    function = slnv
+    boundary = &#x27;top left right bottom&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./prec]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Postprocessors]
+  active = &#x27;num_vars&#x27;
+  [./dofs]
+    type = NumDOFs
+  [../]
+  [./h]
+    type = AverageElementSize
+  [../]
+  [./L2u]
+    type = ElementL2Error
+    variable = u
+    function = slnu
+  [../]
+  [./L2v]
+    type = ElementL2Error
+    variable = v
+    function = slnv
+  [../]
+  [./H1error]
+    type = ElementH1Error
+    variable = u
+    function = solution
+  [../]
+  [./H1Semierror]
+    type = ElementH1SemiError
+    variable = u
+    function = solution
+  [../]
+  [./num_vars]
+    type = NumVars
+    system = &#x27;NL&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = NEWTON
+  nl_rel_tol = 1e-15
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre    boomeramg&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="df871eed-03ff-469d-b9ba-d2427aafeba6"><div class="modal-content"><h4>test/tests/outputs/exodus/exodus_nodal.i</h4><pre class="moose-pre"><code class="language-text">##
+# \file exodus/exodus_nodal.i
+# \example exodus/exodus_nodal.i
+# Input file for testing nodal data output
+#
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+  [./v]
+  [../]
+[]
+
+[AuxVariables]
+  [./aux0]
+    order = SECOND
+    family = SCALAR
+  [../]
+  [./aux1]
+    family = SCALAR
+    initial_condition = 5
+  [../]
+  [./aux2]
+    family = SCALAR
+    initial_condition = 10
+  [../]
+  [./aux3]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+[]
+
+[Kernels]
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+  [./diff_v]
+    type = CoefDiffusion
+    variable = v
+    coef = 2
+  [../]
+[]
+
+[BCs]
+  [./right_u]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left_u]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = right
+    value = 3
+  [../]
+  [./left_v]
+    type = DirichletBC
+    variable = v
+    boundary = left
+    value = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./num_vars]
+    type = NumVars
+    system = &#x27;NL&#x27;
+  [../]
+  [./num_aux]
+    type = NumVars
+    system = &#x27;AUX&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  [./out]
+    type = Exodus
+    hide = &#x27;u v aux0 aux1&#x27;
+    scalar_as_nodal = true
+    elemental_as_nodal = true
+    execute_elemental_on = none
+    execute_scalars_on = none
+    execute_postprocessors_on = none
+  [../]
+[]
+
+[ICs]
+  [./aux0_IC]
+    variable = aux0
+    values = &#x27;12 13&#x27;
+    type = ScalarComponentIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4ecc5bc1-4af4-4df5-b5a4-1849e921d768"><div class="modal-content"><h4>test/tests/outputs/postprocessor/postprocessor_console.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+  [./v]
+  [../]
+[]
+
+[Kernels]
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+  [./diff_v]
+    type = CoefDiffusion
+    variable = v
+    coef = 2
+  [../]
+[]
+
+[BCs]
+  [./right_u]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left_u]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = right
+    value = 3
+  [../]
+  [./left_v]
+    type = DirichletBC
+    variable = v
+    boundary = left
+    value = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./var1]
+    type = NumVars
+    system = &#x27;NL&#x27;
+  [../]
+  [./var2]
+    type = NumVars
+    system = &#x27;NL&#x27;
+    outputs = &#x27;console&#x27;
+    execute_on = &#x27;timestep_begin timestep_end&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="78bcd6b8-ec27-4f93-99a1-1fe3230b3ae0"><div class="modal-content"><h4>test/tests/outputs/common/console.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+  [./v]
+  [../]
+[]
+
+[AuxVariables]
+  [./aux0]
+    order = SECOND
+    family = SCALAR
+  [../]
+  [./aux1]
+    family = SCALAR
+    initial_condition = 5
+  [../]
+  [./aux2]
+    family = SCALAR
+    initial_condition = 10
+  [../]
+[]
+
+[Kernels]
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+  [./diff_v]
+    type = CoefDiffusion
+    variable = v
+    coef = 2
+  [../]
+[]
+
+[BCs]
+  [./right_u]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left_u]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = right
+    value = 3
+  [../]
+  [./left_v]
+    type = DirichletBC
+    variable = v
+    boundary = left
+    value = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./num_vars]
+    type = NumVars
+    system = &#x27;NL&#x27;
+  [../]
+  [./num_aux]
+    type = NumVars
+    system = &#x27;AUX&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+[]
+
+[ICs]
+  [./aux0_IC]
+    variable = aux0
+    values = &#x27;12 13&#x27;
+    type = ScalarComponentIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8a02cbab-b7eb-43a9-9e59-319e7843b35c"><div class="modal-content"><h4>test/tests/outputs/csv/csv_align.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[AuxVariables]
+  [./aux0]
+    order = SECOND
+    family = SCALAR
+  [../]
+  [./aux1]
+    family = SCALAR
+    initial_condition = 5
+  [../]
+  [./aux2]
+    family = SCALAR
+    initial_condition = 10
+  [../]
+[]
+
+[Kernels]
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+  [./time]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./right_u]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left_u]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+
+[]
+
+[Postprocessors]
+  [./num_vars]
+    type = NumVars
+    system = &#x27;NL&#x27;
+  [../]
+  [./num_aux]
+    type = NumVars
+    system = &#x27;AUX&#x27;
+  [../]
+  [./norm]
+    type = ElementL2Norm
+    variable = u
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 0.1
+  num_steps = 4
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  [./out]
+    type = CSV
+    align = true
+    delimiter = &#x27;, &#x27;
+    sync_times = &#x27;0.123456789123412 0.15 0.2&#x27;
+    precision = 8
+  [../]
+[]
+
+[ICs]
+  [./aux0_IC]
+    variable = aux0
+    values = &#x27;12 13&#x27;
+    type = ScalarComponentIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3bf7209f-235b-4aed-b3af-9f5535df61ce"><div class="modal-content"><h4>test/tests/actions/setup_postprocessor_data/setup_postprocessor_data.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Functions]
+  [./tester]
+    type = TestSetupPostprocessorDataActionFunction
+    postprocessor = num_vars
+  [../]
+[]
+
+[Postprocessors]
+  [./num_vars]
+    type = NumVars
+    system = &#x27;NL&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="db5a4b72-d6a0-489a-868f-f66934937557"><div class="modal-content"><h4>test/tests/outputs/csv/csv.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+  [./v]
+  [../]
+[]
+
+[AuxVariables]
+  [./aux0]
+    order = SECOND
+    family = SCALAR
+  [../]
+  [./aux1]
+    family = SCALAR
+    initial_condition = 5
+  [../]
+  [./aux2]
+    family = SCALAR
+    initial_condition = 10
+  [../]
+[]
+
+[Kernels]
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+  [./diff_v]
+    type = CoefDiffusion
+    variable = v
+    coef = 2
+  [../]
+[]
+
+[BCs]
+  [./right_u]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left_u]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = right
+    value = 3
+  [../]
+  [./left_v]
+    type = DirichletBC
+    variable = v
+    boundary = left
+    value = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./num_vars]
+    type = NumVars
+    system = &#x27;NL&#x27;
+  [../]
+  [./num_aux]
+    type = NumVars
+    system = &#x27;AUX&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  csv = true
+[]
+
+[ICs]
+  [./aux0_IC]
+    variable = aux0
+    values = &#x27;12 13&#x27;
+    type = ScalarComponentIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="36fff082-de01-4f3d-b1c9-5e4fac8866e6"><div class="modal-content"><h4>test/tests/outputs/console/console.i</h4><pre class="moose-pre"><code class="language-text">###########################################################
+# This test exercises console Output control. Various
+# controls are implemented using this input file including
+# turning off color, changing Postprocessor output,
+# toggling the performance logging, and verifying
+# simulation information on the console.
+#
+# @Requirement U1.40
+###########################################################
+
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+  [./v]
+  [../]
+[]
+
+[AuxVariables]
+  [./aux0]
+    order = SECOND
+    family = SCALAR
+  [../]
+  [./aux1]
+    family = SCALAR
+    initial_condition = 5
+  [../]
+  [./aux2]
+    family = SCALAR
+    initial_condition = 10
+  [../]
+[]
+
+[Kernels]
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+  [./diff_v]
+    type = CoefDiffusion
+    variable = v
+    coef = 2
+  [../]
+[]
+
+[BCs]
+  [./right_u]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left_u]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = right
+    value = 3
+  [../]
+  [./left_v]
+    type = DirichletBC
+    variable = v
+    boundary = left
+    value = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./num_vars]
+    type = NumVars
+    system = &#x27;NL&#x27;
+  [../]
+  [./num_aux]
+    type = NumVars
+    system = &#x27;AUX&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  color = false
+  [./screen]
+    type = Console
+    fit_mode = 40
+  [../]
+[]
+
+[ICs]
+  [./aux0_IC]
+    variable = aux0
+    values = &#x27;12 13&#x27;
+    type = ScalarComponentIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e11f9d28-16b3-473d-8179-91b4d54c8cd0"><div class="modal-content"><h4>test/tests/outputs/console/console_warning.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+  [./v]
+  [../]
+[]
+
+[AuxVariables]
+  [./aux0]
+    order = SECOND
+    family = SCALAR
+  [../]
+  [./aux1]
+    family = SCALAR
+    initial_condition = 5
+  [../]
+  [./aux2]
+    family = SCALAR
+    initial_condition = 10
+  [../]
+[]
+
+[Kernels]
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+  [./diff_v]
+    type = CoefDiffusion
+    variable = v
+    coef = 2
+  [../]
+[]
+
+[BCs]
+  [./right_u]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left_u]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = right
+    value = 3
+  [../]
+  [./left_v]
+    type = DirichletBC
+    variable = v
+    boundary = left
+    value = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./num_vars]
+    type = NumVars
+    system = &#x27;NL&#x27;
+  [../]
+  [./num_aux]
+    type = NumVars
+    system = &#x27;AUX&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  [./screen]
+    type = Console
+  [../]
+  [./screen2]
+    type = Console
+  [../]
+  [./screen3]
+    type = Console
+  [../]
+[]
+
+[ICs]
+  [./aux0_IC]
+    variable = aux0
+    values = &#x27;12 13&#x27;
+    type = ScalarComponentIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e925f7b0-c2d2-4546-a4fd-217c303a7776"><div class="modal-content"><h4>test/tests/outputs/exodus/invalid_hide_variables.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+  [./v]
+  [../]
+[]
+
+[AuxVariables]
+  [./aux0]
+    order = SECOND
+    family = SCALAR
+  [../]
+  [./aux1]
+    family = SCALAR
+    initial_condition = 5
+  [../]
+  [./aux2]
+    family = SCALAR
+    initial_condition = 10
+  [../]
+[]
+
+[Kernels]
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+  [./diff_v]
+    type = CoefDiffusion
+    variable = v
+    coef = 2
+  [../]
+[]
+
+[BCs]
+  [./right_u]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left_u]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = right
+    value = 3
+  [../]
+  [./left_v]
+    type = DirichletBC
+    variable = v
+    boundary = left
+    value = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./num_vars]
+    type = NumVars
+    system = &#x27;NL&#x27;
+  [../]
+  [./num_aux]
+    type = NumVars
+    system = &#x27;AUX&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  [./exodus]
+    type = Exodus
+    hide = &#x27;aux27 v num_aux&#x27;
+  [../]
+[]
+
+[ICs]
+  [./aux0_IC]
+    variable = aux0
+    values = &#x27;12 13&#x27;
+    type = ScalarComponentIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="133411e1-5ab9-43d8-99a3-7c297faf5ce4"><div class="modal-content"><h4>test/tests/outputs/exodus/variable_toggles.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+  [./v]
+  [../]
+[]
+
+[AuxVariables]
+  [./aux0]
+    order = SECOND
+    family = SCALAR
+  [../]
+  [./aux1]
+    family = SCALAR
+    initial_condition = 5
+  [../]
+  [./aux2]
+    family = SCALAR
+    initial_condition = 10
+  [../]
+[]
+
+[Kernels]
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+  [./diff_v]
+    type = CoefDiffusion
+    variable = v
+    coef = 2
+  [../]
+[]
+
+[BCs]
+  [./right_u]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left_u]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = right
+    value = 3
+  [../]
+  [./left_v]
+    type = DirichletBC
+    variable = v
+    boundary = left
+    value = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./num_vars]
+    type = NumVars
+    system = &#x27;NL&#x27;
+  [../]
+  [./num_aux]
+    type = NumVars
+    system = &#x27;AUX&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  [./out]
+    type = Exodus
+  [../]
+[]
+
+[ICs]
+  [./aux0_IC]
+    variable = aux0
+    values = &#x27;12 13&#x27;
+    type = ScalarComponentIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f7d47a0a-f961-44cd-a4ae-9c491896153d"><div class="modal-content"><h4>test/tests/outputs/postprocessor/postprocessor.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+  [./v]
+  [../]
+[]
+
+[AuxVariables]
+  [./aux0]
+    order = SECOND
+    family = SCALAR
+  [../]
+  [./aux1]
+    family = SCALAR
+    initial_condition = 5
+  [../]
+  [./aux2]
+    family = SCALAR
+    initial_condition = 10
+  [../]
+[]
+
+[Kernels]
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+  [./diff_v]
+    type = CoefDiffusion
+    variable = v
+    coef = 2
+  [../]
+[]
+
+[BCs]
+  [./right_u]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left_u]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = right
+    value = 3
+  [../]
+  [./left_v]
+    type = DirichletBC
+    variable = v
+    boundary = left
+    value = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./num_vars]
+    type = NumVars
+    system = &#x27;ALL&#x27;
+    outputs = &#x27;exodus2 console&#x27;
+  [../]
+  [./num_aux]
+    type = NumVars
+    system = &#x27;AUX&#x27;
+    outputs = &#x27;exodus&#x27;
+  [../]
+  [./num_nonlinear]
+    type = NumVars
+    system = &#x27;NL&#x27;
+    outputs = &#x27;all&#x27;
+  [../]
+  [./num_dofs]
+    type = NumDOFs
+    outputs = &#x27;none&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  [./exodus]
+    type = Exodus
+  [../]
+  [./exodus2]
+    type = Exodus
+  [../]
+[]
+
+[ICs]
+  [./aux0_IC]
+    variable = aux0
+    values = &#x27;12 13&#x27;
+    type = ScalarComponentIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5eff9cb5-b072-4f68-9ec4-eba433e734f5"><div class="modal-content"><h4>test/tests/outputs/postprocessor/postprocessor_invalid.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+  [./v]
+  [../]
+[]
+
+[AuxVariables]
+  [./aux0]
+    order = SECOND
+    family = SCALAR
+  [../]
+  [./aux1]
+    family = SCALAR
+    initial_condition = 5
+  [../]
+  [./aux2]
+    family = SCALAR
+    initial_condition = 10
+  [../]
+[]
+
+[Kernels]
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+  [./diff_v]
+    type = CoefDiffusion
+    variable = v
+    coef = 2
+  [../]
+[]
+
+[BCs]
+  [./right_u]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left_u]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = right
+    value = 3
+  [../]
+  [./left_v]
+    type = DirichletBC
+    variable = v
+    boundary = left
+    value = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./num_vars]
+    type = NumVars
+    system = &#x27;NL&#x27;
+    outputs = &#x27;exodus2 console&#x27;
+  [../]
+  [./num_aux]
+    type = NumVars
+    system = &#x27;AUX&#x27;
+    outputs = &#x27;exodus&#x27;
+  [../]
+  [./num_nonlinear]
+    type = NumVars
+    system = &#x27;NL&#x27;
+    outputs = &#x27;all&#x27;
+  [../]
+  [./num_dofs]
+    type = NumDOFs
+    outputs = &#x27;none&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  [./exodus]
+    type = Exodus
+  [../]
+  [./exodus2]
+    type = Exodus
+  [../]
+[]
+
+[ICs]
+  [./aux0_IC]
+    variable = aux0
+    values = &#x27;12 13&#x27;
+    type = ScalarComponentIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="99f6256f-017c-49b9-aee5-aa1b48e788a6"><div class="modal-content"><h4>test/tests/outputs/csv/csv_sort.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+  [./v]
+  [../]
+[]
+
+[AuxVariables]
+  [./aux0]
+    order = SECOND
+    family = SCALAR
+  [../]
+  [./aux1]
+    family = SCALAR
+    initial_condition = 5
+  [../]
+  [./aux2]
+    family = SCALAR
+    initial_condition = 10
+  [../]
+[]
+
+[Kernels]
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+  [./diff_v]
+    type = CoefDiffusion
+    variable = v
+    coef = 2
+  [../]
+[]
+
+[BCs]
+  [./right_u]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left_u]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = right
+    value = 3
+  [../]
+  [./left_v]
+    type = DirichletBC
+    variable = v
+    boundary = left
+    value = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./num_vars]
+    type = NumVars
+    system = &#x27;NL&#x27;
+  [../]
+  [./num_aux]
+    type = NumVars
+    system = &#x27;AUX&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  [./out]
+    type = CSV
+    sort_columns = true
+  [../]
+[]
+
+[ICs]
+  [./aux0_IC]
+    variable = aux0
+    values = &#x27;12 13&#x27;
+    type = ScalarComponentIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ce9733a4-8a43-4c44-9ee1-b6b5022ba384"><div class="modal-content"><h4>test/tests/outputs/exodus/hide_variables.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+  [./v]
+  [../]
+[]
+
+[AuxVariables]
+  [./aux0]
+    order = SECOND
+    family = SCALAR
+  [../]
+  [./aux1]
+    family = SCALAR
+    initial_condition = 5
+  [../]
+  [./aux2]
+    family = SCALAR
+    initial_condition = 10
+  [../]
+[]
+
+[Kernels]
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+  [./diff_v]
+    type = CoefDiffusion
+    variable = v
+    coef = 2
+  [../]
+[]
+
+[BCs]
+  [./right_u]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left_u]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = right
+    value = 3
+  [../]
+  [./left_v]
+    type = DirichletBC
+    variable = v
+    boundary = left
+    value = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./num_vars]
+    type = NumVars
+    system = &#x27;NL&#x27;
+  [../]
+  [./num_aux]
+    type = NumVars
+    system = &#x27;AUX&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  [./out]
+    type = Exodus
+    hide = &#x27;aux2 v num_aux&#x27;
+  [../]
+[]
+
+[ICs]
+  [./aux0_IC]
+    variable = aux0
+    values = &#x27;12 13&#x27;
+    type = ScalarComponentIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="718a02e4-5d6d-4eae-a0a1-f881ac658511" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#4c14af1e-984e-44ee-a7d5-a9d0bf188234" class="tooltipped" data-position="left" data-tooltip="Syntax and Description">Syntax and Description</a></li><li><a href="#4d6bcae9-b711-4b92-8ded-f552f9744f37" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#99720d7a-6839-48da-aa7d-e0ce37ecb3d2" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li><li><a href="#718a02e4-5d6d-4eae-a0a1-f881ac658511" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

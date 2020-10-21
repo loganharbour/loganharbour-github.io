@@ -1,0 +1,3689 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>BoxMarker.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="95777982-519c-425b-96c2-eee8267c13ee"><i class="material-icons">menu</i></a><ul class="sidenav" id="95777982-519c-425b-96c2-eee8267c13ee"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">markers</span><a href="#" class="breadcrumb">BoxMarker</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="649a508d-79ed-4d21-8b0d-17e6897d5232" data-section-level="1" data-section-text="BoxMarker"><h1 id="boxmarker">BoxMarker</h1><p>Marks the region inside and outside of a &#x27;box&#x27; domain for refinement or coarsening.</p><section class="scrollspy" id="24eb4ff8-4c00-43c7-8182-c09c3484e291" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The <code>BoxMarker</code> is a stand-alone marker that marks all elements inside and outside for coarsening or refinement. The marker operates using a bounding box that is specified by lower and upper extents of the bounding box, in 3 dimensions regardless of the dimensions of the problem.</p></section><section class="scrollspy" id="a708f03a-000a-42b7-bb1a-7ee60ce0a61c" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">[Adaptivity]
+  [./Markers]
+    [./box]
+      type = BoxMarker
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      top_right = &#x27;0.6 0.6 0&#x27;
+      inside = refine
+      outside = do_nothing
+    [../]
+  [../]
+[]
+</code></pre><a href="#f6d86f75-3a27-4549-9711-3b26872327a3" class="modal-trigger">(test/tests/markers/box_marker/box_marker_test.i)</a><div class="modal moose-modal" id="f6d86f75-3a27-4549-9711-3b26872327a3"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/markers/box_marker/box_marker_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 2
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Adaptivity]
+  [./Markers]
+    [./box]
+      type = BoxMarker
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      top_right = &#x27;0.6 0.6 0&#x27;
+      inside = refine
+      outside = do_nothing
+    [../]
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="7151da1a-bef2-4a47-9b28-19f7112d7fd3" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="193d5d80-9e6e-407a-9802-ed9b32b01261" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">bottom_left</span><span class="moose-parameter-header-description">The bottom left point (in x,y,z with spaces in-between).</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>libMesh::VectorValue<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The bottom left point (in x,y,z with spaces in-between).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">inside</span><span class="moose-parameter-header-description">How to mark elements inside the box.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>DONT_MARK COARSEN DO_NOTHING REFINE</p><p class="moose-parameter-description"><span>Description:</span>How to mark elements inside the box.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outside</span><span class="moose-parameter-header-description">How to mark elements outside the box.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>DONT_MARK COARSEN DO_NOTHING REFINE</p><p class="moose-parameter-description"><span>Description:</span>How to mark elements outside the box.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">top_right</span><span class="moose-parameter-header-description">The bottom left point (in x,y,z with spaces in-between).</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>libMesh::VectorValue<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The bottom left point (in x,y,z with spaces in-between).</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="35f90c3d-abbb-42b7-a471-97a064d79de9" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="2270e767-dc20-4e22-94f6-c11040f5c59f" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="92a964ba-3b10-4917-aca8-0787a0bcbea1" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#2ef83c84-6697-40f2-a9c8-9ce6bc0d17bb" class="modal-trigger">test/tests/markers/box_marker/box_marker_test.i</a></li><li><a href="#2f845a9a-0252-4695-8492-0ff0a942b6ff" class="modal-trigger">test/tests/markers/combo_marker/combo_marker_test.i</a></li><li><a href="#76ecadc9-cf91-4161-bfe4-e668f47fcfc8" class="modal-trigger">test/tests/fvkernels/fv_adapt/transient-adapt.i</a></li><li><a href="#759eb6b4-68e8-4f6b-a5cf-5950fa44e950" class="modal-trigger">test/tests/markers/box_marker/box_marker_adapt_test.i</a></li><li><a href="#7c9e2922-29ff-4abb-85ae-2019645ffc6c" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler_verification/ee-2d-linear-adapt.i</a></li><li><a href="#624c3273-3390-4fd3-acb7-711ad20c1b16" class="modal-trigger">test/tests/userobjects/toggle_mesh_adaptivity/toggle_mesh_adaptivity.i</a></li><li><a href="#2b696f57-1f2d-4e53-8db3-0f55d81b8c6e" class="modal-trigger">test/tests/materials/stateful_prop/spatial_adaptivity_test.i</a></li><li><a href="#ed162c53-4181-4a46-9b2e-ff4533439950" class="modal-trigger">modules/level_set/test/tests/transfers/markers/single_level/master.i</a></li><li><a href="#0b11ef54-a743-4490-ba4f-85989575c471" class="modal-trigger">test/tests/time_integrators/explicit-euler/ee-2d-linear-adapt.i</a></li><li><a href="#1086566c-03d7-4b18-a105-57ec3fffc872" class="modal-trigger">test/tests/outputs/exodus/variable_output_test.i</a></li><li><a href="#524e5369-3b71-4f9e-b464-b3488df41583" class="modal-trigger">test/tests/adaptivity/initial_marker/initial_marker.i</a></li><li><a href="#df4259ae-6bc0-43d5-9027-585831b743d9" class="modal-trigger">modules/porous_flow/examples/lava_lamp/2phase_convection.i</a></li><li><a href="#138294ad-6a48-4c43-8c64-2fedd52e3687" class="modal-trigger">test/tests/userobjects/toggle_mesh_adaptivity/toggle_mesh_adaptivity_wait.i</a></li><li><a href="#663ea94c-7aae-482d-98b0-8d585825fb95" class="modal-trigger">test/tests/misc/selective_reinit/selective_reinit_test.i</a></li><li><a href="#1e626bd4-bb9e-442b-862a-361fdce5d4a5" class="modal-trigger">test/tests/outputs/output_interface/marker.i</a></li><li><a href="#6a9332c2-6787-4299-b714-6e492df9cb82" class="modal-trigger">test/tests/kernels/diffusion_with_hanging_node/simple_diffusion.i</a></li><li><a href="#783c3f38-83e7-4785-9049-c651e1202cf8" class="modal-trigger">test/tests/postprocessors/num_adaptivity_cycles/num_adaptivity_cycles.i</a></li><li><a href="#5f24f2eb-1a28-4952-9022-a5a1cb912adb" class="modal-trigger">test/tests/outputs/oversample/adapt.i</a></li><li><a href="#2606018c-b891-4a00-8d6d-0f6b7dfbd7be" class="modal-trigger">test/tests/misc/serialized_solution/adapt.i</a></li><li><a href="#1af27563-a86b-46d9-8364-9092ef9b0d00" class="modal-trigger">modules/porous_flow/examples/lava_lamp/1phase_convection.i</a></li><li><a href="#52a0e1e3-231a-4a72-a713-f103e7504f2b" class="modal-trigger">test/tests/postprocessors/num_adaptivity_cycles/num_adaptivity_cycles_toggle_adaptivity_wait.i</a></li><li><a href="#fe1d6784-122d-4fd3-a836-26aa06ea9189" class="modal-trigger">test/tests/dirackernels/point_caching/point_caching_adaptive_refinement.i</a></li><li><a href="#3de3c8bf-cd2a-4f53-8275-1beb85908ae9" class="modal-trigger">test/tests/postprocessors/num_nodes/num_nodes.i</a></li><li><a href="#ebfcd5f7-d37b-4028-8431-4f7b36cac113" class="modal-trigger">modules/contact/test/tests/adaptivity/contact_initial_adaptivity.i</a></li><li><a href="#5ed0509a-ef8d-448f-a61c-8a58f350595a" class="modal-trigger">test/tests/adaptivity/max_h_level/max_h_level.i</a></li><li><a href="#a0e9983e-69d3-433b-a97f-e26789143057" class="modal-trigger">test/tests/postprocessors/num_adaptivity_cycles/num_adaptivity_cycles_toggle_adaptivity.i</a></li><li><a href="#0a77db19-6262-4f31-b88a-fd8c003831e9" class="modal-trigger">test/tests/materials/stateful_prop/stateful_prop_adaptivity_test.i</a></li><li><a href="#dbe929ca-ba17-4dfa-b423-342f83df533c" class="modal-trigger">test/tests/interfacekernels/adaptivity/adaptivity.i</a></li><li><a href="#8002f4cc-e8f6-4396-b2c3-77301afab100" class="modal-trigger">test/tests/postprocessors/num_elems/num_elems.i</a></li><li><a href="#411ae03e-dc67-4718-b496-7bdc2d2ee5c0" class="modal-trigger">test/tests/postprocessors/memory_usage/vector_memory_usage.i</a></li><li><a href="#b984d1d5-cab8-4e9f-b456-92c6513bbb0d" class="modal-trigger">test/tests/adaptivity/interval/adapt_interval.i</a></li><li><a href="#70dcff42-5f50-4fed-b41e-dbd9e0b379ee" class="modal-trigger">modules/level_set/test/tests/functions/olsson_bubble/olsson_bubble.i</a></li><li><a href="#c8137159-0704-4ff8-ac71-58ca72a7acc7" class="modal-trigger">test/tests/adaptivity/initial_adapt/initial_adapt.i</a></li><li><a href="#9a4ff153-fffd-4762-83b9-25a96ec17fb7" class="modal-trigger">test/tests/markers/dont_mark/dont_mark_test.i</a></li><li><a href="#938856f5-1e16-4e46-8c27-13518335ddd4" class="modal-trigger">test/tests/postprocessors/num_dofs/num_dofs.i</a></li></ul><div class="modal moose-modal" id="2ef83c84-6697-40f2-a9c8-9ce6bc0d17bb"><div class="modal-content"><h4>test/tests/markers/box_marker/box_marker_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 2
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Adaptivity]
+  [./Markers]
+    [./box]
+      type = BoxMarker
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      top_right = &#x27;0.6 0.6 0&#x27;
+      inside = refine
+      outside = do_nothing
+    [../]
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2f845a9a-0252-4695-8492-0ff0a942b6ff"><div class="modal-content"><h4>test/tests/markers/combo_marker/combo_marker_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 2
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Adaptivity]
+  [./Markers]
+    [./box]
+      type = BoxMarker
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      top_right = &#x27;0.6 0.6 0&#x27;
+      inside = refine
+      outside = do_nothing
+    [../]
+    [./combo]
+      type = ComboMarker
+      markers = &#x27;box box2&#x27;
+    [../]
+    [./box2]
+      type = BoxMarker
+      bottom_left = &#x27;0.5 0.5 0&#x27;
+      top_right = &#x27;0.8 0.8 0&#x27;
+      inside = refine
+      outside = coarsen
+    [../]
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="76ecadc9-cf91-4161-bfe4-e668f47fcfc8"><div class="modal-content"><h4>test/tests/fvkernels/fv_adapt/transient-adapt.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 10
+    ny = 10
+    elem_type = QUAD4
+  []
+[]
+
+[Variables]
+  [u]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [v][]
+[]
+
+[Functions]
+  [force]
+    type = ParsedFunction
+    value = t
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = Diffusion
+    variable = v
+  []
+  [force]
+    type = BodyForce
+    variable = v
+    function = force
+  []
+[]
+
+[FVKernels]
+  [diff]
+    type = FVDiffusion
+    variable = u
+    coeff = coeff
+  []
+  [force]
+    type = FVBodyForce
+    variable = u
+    function = force
+  []
+[]
+
+[FVBCs]
+  [right]
+    type = FVDirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+  [left]
+    type = FVDirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+[]
+
+[BCs]
+  [right]
+    type = DirichletBC
+    variable = v
+    boundary = right
+    value = 1
+  []
+  [left]
+    type = DirichletBC
+    variable = v
+    boundary = left
+    value = 0
+  []
+[]
+
+[Materials]
+  [diff]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;coeff&#x27;
+    prop_values = &#x27;1&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 2
+  dt = 1
+  solve_type = &#x27;NEWTON&#x27;
+[]
+
+[Problem]
+  kernel_coverage_check = false
+[]
+
+[Adaptivity]
+  marker = box
+  initial_steps = 1
+  [Markers]
+    [box]
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      inside = refine
+      top_right = &#x27;0.6 0.6 0&#x27;
+      outside = do_nothing
+      type = BoxMarker
+    []
+  []
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="759eb6b4-68e8-4f6b-a5cf-5950fa44e950"><div class="modal-content"><h4>test/tests/markers/box_marker/box_marker_adapt_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./top]
+    type = DirichletBC
+    variable = u
+    boundary = top
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = box
+  [./Markers]
+    [./box]
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      inside = refine
+      top_right = &#x27;0.6 0.6 0&#x27;
+      outside = do_nothing
+      type = BoxMarker
+    [../]
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="7c9e2922-29ff-4abb-85ae-2019645ffc6c"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler_verification/ee-2d-linear-adapt.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -1
+  xmax = 1
+  ymin = -1
+  ymax = 1
+  nx = 10
+  ny = 10
+  elem_type = QUAD4
+[]
+
+[Functions]
+  [./ic]
+    type = ParsedFunction
+    value = 0
+  [../]
+
+  [./forcing_fn]
+    type = ParsedFunction
+    value = (x+y)
+  [../]
+
+  [./exact_fn]
+    type = ParsedFunction
+    value = t*(x+y)
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+
+    [./InitialCondition]
+      type = FunctionIC
+      function = ic
+    [../]
+  [../]
+[]
+
+[Kernels]
+  [./ie]
+    type = TimeDerivative
+    variable = u
+  [../]
+
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./ffn]
+    type = BodyForce
+    variable = u
+    function = forcing_fn
+  [../]
+[]
+
+[BCs]
+  [./all]
+    type = FunctionDirichletBC
+    variable = u
+    preset = false
+    boundary = &#x27;0 1 2 3&#x27;
+    function = exact_fn
+  [../]
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = box
+  max_h_level = 2
+  [./Markers]
+    [./box]
+      bottom_left = &#x27;-0.4 -0.4 0&#x27;
+      inside = refine
+      top_right = &#x27;0.4 0.4 0&#x27;
+      outside = do_nothing
+      type = BoxMarker
+    [../]
+  [../]
+[]
+
+[Postprocessors]
+  [./l2_err]
+    type = ElementL2Error
+    variable = u
+    function = exact_fn
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  start_time = 0.0
+  num_steps = 4
+  dt = 0.005
+  l_tol = 1e-12
+
+  [./TimeIntegrator]
+    type = ActuallyExplicitEuler
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  [./console]
+    type = Console
+    max_rows = 10
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="624c3273-3390-4fd3-acb7-711ad20c1b16"><div class="modal-content"><h4>test/tests/userobjects/toggle_mesh_adaptivity/toggle_mesh_adaptivity.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 20
+  ny = 20
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 4
+  dt = 0.1
+[]
+
+[Adaptivity]
+  cycles_per_step = 1
+  marker = marker
+  max_h_level = 2
+  [./Markers]
+    [./marker]
+      type = BoxMarker
+      bottom_left = &#x27;0.35 0.25 0&#x27;
+      top_right = &#x27;0.5 0.5 0&#x27;
+      inside = refine
+      outside = coarsen
+    [../]
+  [../]
+[]
+
+[UserObjects]
+  [./mesh_adaptivity_off]
+    type = ToggleMeshAdaptivity
+    mesh_adaptivity = &#x27;off&#x27;
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  [./console]
+    type = Console
+    print_mesh_changed_info = true
+  [../]
+[]
+
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2b696f57-1f2d-4e53-8db3-0f55d81b8c6e"><div class="modal-content"><h4>test/tests/materials/stateful_prop/spatial_adaptivity_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 2
+  ny = 2
+  uniform_refine = 3
+  # This option is necessary if you have uniform refinement + stateful material properties + adaptivity
+  skip_partitioning = true
+  # stateful material properties + adaptivity are not yet compatible
+  # with distributed meshes
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[AuxVariables]
+  [./ssm]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./conv]
+    type = Convection
+    variable = u
+    velocity = &#x27;1 0 0&#x27;
+  [../]
+[]
+
+[AuxKernels]
+  [./ssm]
+    type = MaterialRealAux
+    variable = ssm
+    property = diffusivity
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Materials]
+  [./ssm]
+    type = SpatialStatefulMaterial
+    block = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  num_steps = 4
+  dt = 1
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Adaptivity]
+  marker = box
+  [./Markers]
+    [./box]
+      type = BoxMarker
+      bottom_left = &#x27;0.2 0.2 0&#x27;
+      top_right = &#x27;0.4 0.4 0&#x27;
+      inside = refine
+      outside = coarsen
+    [../]
+  [../]
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ed162c53-4181-4a46-9b2e-ff4533439950"><div class="modal-content"><h4>modules/level_set/test/tests/transfers/markers/single_level/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Adaptivity]
+  marker = marker
+  max_h_level = 1
+  [./Markers]
+    [./marker]
+      type = BoxMarker
+      bottom_left = &#x27;0.25 0.25 0&#x27;
+      top_right = &#x27;0.75 0.75 0&#x27;
+      outside =  DO_NOTHING
+      inside = REFINE
+    [../]
+  [../]
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./time]
+    type = TimeDerivative
+    variable = u
+  [../]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Problem]
+  type = LevelSetProblem
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 2
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[MultiApps]
+  [./sub]
+    type = LevelSetReinitializationMultiApp
+    input_files = &#x27;sub.i&#x27;
+    execute_on = TIMESTEP_BEGIN
+  [../]
+[]
+
+[Transfers]
+  [./marker_to_sub]
+    type = LevelSetMeshRefinementTransfer
+    multi_app = sub
+    source_variable = marker
+    variable = marker
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0b11ef54-a743-4490-ba4f-85989575c471"><div class="modal-content"><h4>test/tests/time_integrators/explicit-euler/ee-2d-linear-adapt.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -1
+  xmax = 1
+  ymin = -1
+  ymax = 1
+  nx = 10
+  ny = 10
+  elem_type = QUAD4
+[]
+
+[Functions]
+  [./ic]
+    type = ParsedFunction
+    value = 0
+  [../]
+
+  [./forcing_fn]
+    type = ParsedFunction
+    value = (x+y)
+  [../]
+
+  [./exact_fn]
+    type = ParsedFunction
+    value = t*(x+y)
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+
+    [./InitialCondition]
+      type = FunctionIC
+      function = ic
+    [../]
+  [../]
+[]
+
+[Kernels]
+  [./ie]
+    type = TimeDerivative
+    variable = u
+    lumping = true
+    implicit = true
+  [../]
+
+  [./diff]
+    type = Diffusion
+    variable = u
+    implicit = false
+  [../]
+
+  [./ffn]
+    type = BodyForce
+    variable = u
+    function = forcing_fn
+    implicit = false
+  [../]
+[]
+
+[BCs]
+  active = &#x27;all&#x27;
+
+  [./all]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    function = exact_fn
+    implicit = true
+  [../]
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = box
+  max_h_level = 2
+  [./Markers]
+    [./box]
+      bottom_left = &#x27;-0.4 -0.4 0&#x27;
+      inside = refine
+      top_right = &#x27;0.4 0.4 0&#x27;
+      outside = do_nothing
+      type = BoxMarker
+    [../]
+  [../]
+[]
+
+[Postprocessors]
+  [./l2_err]
+    type = ElementL2Error
+    variable = u
+    function = exact_fn
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = &#x27;explicit-euler&#x27;
+
+  start_time = 0.0
+  num_steps = 4
+  dt = 0.005
+[]
+
+[Outputs]
+  exodus = true
+  [./console]
+    type = Console
+    max_rows = 10
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1086566c-03d7-4b18-a105-57ec3fffc872"><div class="modal-content"><h4>test/tests/outputs/exodus/variable_output_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./aux]
+    family = SCALAR
+  [../]
+[]
+
+[Functions]
+  [./force]
+    type = ParsedFunction
+    value = t
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./force]
+    type = BodyForce
+    variable = u
+    function = force
+  [../]
+[]
+
+[BCs]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 4
+  dt = 1
+  solve_type = PJFNK
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = box
+  max_h_level = 2
+  [./Markers]
+    [./box]
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      inside = refine
+      top_right = &#x27;0.6 0.6 0&#x27;
+      outside = do_nothing
+      type = BoxMarker
+    [../]
+  [../]
+[]
+
+[Postprocessors]
+  [./aux_pp]
+    type = ScalarVariable
+    variable = aux
+    outputs = none
+  [../]
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  [./exodus]
+    type = Exodus
+    file_base = new_out
+    hide_variables = &#x27;u box aux_pp&#x27;
+    scalar_as_nodal = true
+    execute_scalars_on = none
+  [../]
+  [./console]
+    Type = Console
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="524e5369-3b71-4f9e-b464-b3488df41583"><div class="modal-content"><h4>test/tests/adaptivity/initial_marker/initial_marker.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Functions]
+  [./force]
+    type = ParsedFunction
+    value = t
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./force]
+    type = BodyForce
+    variable = u
+    function = force
+  [../]
+[]
+
+[BCs]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 4
+  dt = 1
+
+  solve_type = &#x27;PJFNK&#x27;
+
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = box
+  max_h_level = 2
+  initial_steps = 4
+  initial_marker = initial_box
+  [./Markers]
+    [./box]
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      inside = refine
+      top_right = &#x27;0.6 0.6 0&#x27;
+      outside = dont_mark
+      type = BoxMarker
+    [../]
+    [./initial_box]
+      type = BoxMarker
+      bottom_left = &#x27;0.8 0.1 0&#x27;
+      top_right = &#x27;0.9 0.2 0&#x27;
+      inside = refine
+      outside = dont_mark
+    [../]
+  [../]
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="df4259ae-6bc0-43d5-9027-585831b743d9"><div class="modal-content"><h4>modules/porous_flow/examples/lava_lamp/2phase_convection.i</h4><pre class="moose-pre"><code class="language-text"># Two phase density-driven convection of dissolved CO2 in brine
+#
+# Initially, the model has a gas phase at the top with a saturation of 0.29
+# (which corresponds to an initial value of zi = 0.2).
+# Diffusion of the dissolved CO2
+# component from the saturated liquid to the unsaturated liquid below reduces the
+# amount of CO2 in the gas phase. As the density of the CO2-saturated brine is greater
+# than the unsaturated brine, a gravitational instability arises and density-driven
+# convection of CO2-rich fingers descend into the unsaturated brine.
+#
+# The instability is seeded by a random perturbation to the porosity field.
+# Mesh adaptivity is used to refine the mesh as the fingers form.
+#
+# Note: this model is computationally expensive, so should be run with multiple cores,
+# preferably on a cluster.
+
+[GlobalParams]
+  PorousFlowDictator = &#x27;dictator&#x27;
+  gravity = &#x27;0 -9.81 0&#x27;
+[]
+
+[Adaptivity]
+  max_h_level = 2
+  marker = marker
+  initial_marker = initial
+  initial_steps = 2
+  [./Indicators]
+    [./indicator]
+      type = GradientJumpIndicator
+      variable = zi
+    [../]
+  [../]
+  [./Markers]
+    [./marker]
+      type = ErrorFractionMarker
+      indicator = indicator
+      refine = 0.8
+    [../]
+    [./initial]
+      type = BoxMarker
+      bottom_left = &#x27;0 1.95 0&#x27;
+      top_right = &#x27;2 2 0&#x27;
+      inside = REFINE
+      outside = DO_NOTHING
+    [../]
+  [../]
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  ymax = 2
+  xmax = 2
+  ny = 40
+  nx = 40
+  bias_y = 0.95
+[]
+
+[AuxVariables]
+  [./xnacl]
+    initial_condition = 0.01
+  [../]
+  [./saturation_gas]
+    order = FIRST
+    family = MONOMIAL
+  [../]
+  [./xco2l]
+    order = FIRST
+    family = MONOMIAL
+  [../]
+  [./density_liquid]
+    order = FIRST
+    family = MONOMIAL
+  [../]
+  [./porosity]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./saturation_gas]
+    type = PorousFlowPropertyAux
+    variable = saturation_gas
+    property = saturation
+    phase = 1
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./xco2l]
+    type = PorousFlowPropertyAux
+    variable = xco2l
+    property = mass_fraction
+    phase = 0
+    fluid_component = 1
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./density_liquid]
+    type = PorousFlowPropertyAux
+    variable = density_liquid
+    property = density
+    phase = 0
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Variables]
+  [./pgas]
+  [../]
+  [./zi]
+    scaling = 1e4
+  [../]
+[]
+
+[ICs]
+  [./pressure]
+    type = FunctionIC
+    function = 10e6-9.81*1000*y
+    variable = pgas
+  [../]
+  [./zi]
+    type = BoundingBoxIC
+    variable = zi
+    x1 = 0
+    x2 = 2
+    y1 = 1.95
+    y2 = 2
+    inside = 0.2
+    outside = 0
+  [../]
+  [./porosity]
+    type = RandomIC
+    variable = porosity
+    min = 0.25
+    max = 0.275
+    seed = 0
+  [../]
+[]
+
+[Kernels]
+  [./mass0]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 0
+    variable = pgas
+  [../]
+  [./flux0]
+    type = PorousFlowAdvectiveFlux
+    fluid_component = 0
+    variable = pgas
+  [../]
+  [./diff0]
+    type = PorousFlowDispersiveFlux
+    fluid_component = 0
+    variable = pgas
+    disp_long = &#x27;0 0&#x27;
+    disp_trans = &#x27;0 0&#x27;
+  [../]
+  [./mass1]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 1
+    variable = zi
+  [../]
+  [./flux1]
+    type = PorousFlowAdvectiveFlux
+    fluid_component = 1
+    variable = zi
+  [../]
+  [./diff1]
+    type = PorousFlowDispersiveFlux
+    fluid_component = 1
+    variable = zi
+    disp_long = &#x27;0 0&#x27;
+    disp_trans = &#x27;0 0&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./dictator]
+    type = PorousFlowDictator
+    porous_flow_vars = &#x27;pgas zi&#x27;
+    number_fluid_phases = 2
+    number_fluid_components = 2
+  [../]
+  [./pc]
+    type = PorousFlowCapillaryPressureConst
+    pc = 0
+  [../]
+  [./fs]
+    type = PorousFlowBrineCO2
+    brine_fp = brine
+    co2_fp = co2
+    capillary_pressure = pc
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./co2sw]
+      type = CO2FluidProperties
+    [../]
+    [./co2]
+      type = TabulatedFluidProperties
+      fp = co2sw
+    [../]
+    [./brine]
+      type = BrineFluidProperties
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./temperature]
+    type = PorousFlowTemperature
+    temperature = &#x27;45&#x27;
+  [../]
+  [./brineco2]
+    type = PorousFlowFluidState
+    gas_porepressure = &#x27;pgas&#x27;
+    z = &#x27;zi&#x27;
+    temperature_unit = Celsius
+    xnacl = &#x27;xnacl&#x27;
+    capillary_pressure = pc
+    fluid_state = fs
+  [../]
+  [./porosity]
+    type = PorousFlowPorosityConst
+    porosity = porosity
+  [../]
+  [./permeability]
+    type = PorousFlowPermeabilityConst
+    permeability = &#x27;1e-11 0 0 0 1e-11 0 0 0 1e-11&#x27;
+  [../]
+  [./relperm_water]
+    type = PorousFlowRelativePermeabilityCorey
+    phase = 0
+    n = 2
+    s_res = 0.1
+    sum_s_res = 0.2
+  [../]
+  [./relperm_gas]
+    type = PorousFlowRelativePermeabilityCorey
+    phase = 1
+    n = 2
+    s_res = 0.1
+    sum_s_res = 0.2
+  [../]
+  [./diffusivity]
+    type = PorousFlowDiffusivityConst
+    diffusion_coeff = &#x27;2e-9 2e-9 2e-9 2e-9&#x27;
+    tortuosity = &#x27;1 1&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./mumps_is_best_for_parallel_jobs]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-ksp_type -pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27;gmres      asm      lu           NONZERO                   2             &#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  end_time = 1e6
+  nl_max_its = 25
+  l_max_its = 100
+  dtmax = 1e4
+  nl_abs_tol = 1e-6
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 10
+    growth_factor = 2
+    cutback_factor = 0.5
+  [../]
+[]
+
+[Functions]
+  [./flux]
+    type = ParsedFunction
+    vals = &#x27;delta_xco2 dt&#x27;
+    vars = &#x27;dx dt&#x27;
+    value = &#x27;dx/dt&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./total_co2_in_gas]
+    type = PorousFlowFluidMass
+    phase = 1
+    fluid_component = 1
+  [../]
+  [./total_co2_in_liquid]
+    type = PorousFlowFluidMass
+    phase = 0
+    fluid_component = 1
+  [../]
+  [./numdofs]
+    type = NumDOFs
+  [../]
+  [./delta_xco2]
+    type = ChangeOverTimePostprocessor
+    postprocessor = total_co2_in_liquid
+  [../]
+  [./dt]
+    type = TimestepSize
+  [../]
+  [./flux]
+    type = FunctionValuePostprocessor
+    function = flux
+  [../]
+[]
+
+[Outputs]
+  print_linear_residuals = false
+  perf_graph = true
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="138294ad-6a48-4c43-8c64-2fedd52e3687"><div class="modal-content"><h4>test/tests/userobjects/toggle_mesh_adaptivity/toggle_mesh_adaptivity_wait.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 20
+  ny = 20
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 4
+  dt = 0.1
+[]
+
+[Adaptivity]
+  cycles_per_step = 1
+  marker = marker
+  max_h_level = 4
+  [./Markers]
+    [./marker]
+      type = BoxMarker
+      bottom_left = &#x27;0.35 0.25 0&#x27;
+      top_right = &#x27;0.5 0.5 0&#x27;
+      inside = refine
+      outside = coarsen
+    [../]
+  [../]
+[]
+
+[UserObjects]
+  [./mesh_adaptivity_off]
+    type = ToggleMeshAdaptivity
+    mesh_adaptivity = &#x27;off&#x27;
+    apply_after_timestep = 1
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  [./console]
+    type = Console
+    print_mesh_changed_info = true
+  [../]
+[]
+
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="663ea94c-7aae-482d-98b0-8d585825fb95"><div class="modal-content"><h4>test/tests/misc/selective_reinit/selective_reinit_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[AuxVariables]
+  [./dummy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./constant_dummy]
+    type = ConstantAux
+    variable = dummy
+    execute_on = &#x27;initial timestep_end&#x27;
+    value = 4
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Postprocessors]
+  [./u_integral]
+    type = ElementIntegralVariablePostprocessor
+    variable = u
+    execute_on = linear
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Adaptivity]
+  [./Indicators]
+    [./indicator]
+      type = GradientJumpIndicator
+      variable = u
+    [../]
+  [../]
+  [./Markers]
+    [./box]
+      type = BoxMarker
+      bottom_left = &#x27;0.2 0.2 0&#x27;
+      top_right = &#x27;0.8 0.8 0&#x27;
+      inside = refine
+      outside = coarsen
+    [../]
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  show = u
+[]
+
+[LotsOfAuxVariables]
+  [./avar]
+    number = 2000
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1e626bd4-bb9e-442b-862a-361fdce5d4a5"><div class="modal-content"><h4>test/tests/outputs/output_interface/marker.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Adaptivity]
+  [./Indicators]
+    [./indicator_0]
+      type = GradientJumpIndicator
+      variable = u
+      outputs = none
+    [../]
+    [./indicator_1]
+      type = GradientJumpIndicator
+      variable = u
+      outputs = none
+    [../]
+  [../]
+  [./Markers]
+    [./marker_0]
+      type = ValueThresholdMarker
+      outputs = markers
+      refine = 0.5
+      variable = u
+    [../]
+    [./marker_1]
+      type = BoxMarker
+      bottom_left = &#x27;0.25 0.25 0&#x27;
+      top_right = &#x27;0.75 0.75 0&#x27;
+      inside = REFINE
+      outside = DONT_MARK
+      outputs = markers
+    [../]
+  [../]
+[]
+
+[Outputs]
+  [./markers]
+    type = Exodus
+  [../]
+  [./no_markers]
+    type = Exodus
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6a9332c2-6787-4299-b714-6e492df9cb82"><div class="modal-content"><h4>test/tests/kernels/diffusion_with_hanging_node/simple_diffusion.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 2
+  ny = 1
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  # BCs cannot be preset due to Jacobian test
+  [./left]
+    type = DirichletBC
+    preset = false
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    preset = false
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Preconditioning]
+  [./pre]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options = &#x27;-pc_svd_monitor -ksp_view_pmat&#x27;
+  petsc_options_iname = &#x27;-pc_type&#x27;
+  petsc_options_value = &#x27;svd&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[Adaptivity]
+  marker = box
+  max_h_level = 1
+  initial_steps = 1
+
+  [./Markers]
+    [./box]
+      type = BoxMarker
+      bottom_left = &#x27;0.5 0 0&#x27;
+      top_right = &#x27;1 1 0&#x27;
+      inside = &#x27;refine&#x27;
+      outside = &#x27;do_nothing&#x27;
+    [../]
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="783c3f38-83e7-4785-9049-c651e1202cf8"><div class="modal-content"><h4>test/tests/postprocessors/num_adaptivity_cycles/num_adaptivity_cycles.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Functions]
+  [./force]
+    type = ParsedFunction
+    value = t
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./force]
+    type = BodyForce
+    variable = u
+    function = force
+  [../]
+[]
+
+[BCs]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 4
+  dt = 1
+
+  solve_type = &#x27;PJFNK&#x27;
+
+[]
+
+[Adaptivity]
+  cycles_per_step = 1
+  marker = box
+  max_h_level = 2
+  initial_steps = 4
+  initial_marker = initial_box
+  [./Markers]
+    [./box]
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      inside = refine
+      top_right = &#x27;0.6 0.6 0&#x27;
+      outside = dont_mark
+      type = BoxMarker
+    [../]
+    [./initial_box]
+      type = BoxMarker
+      bottom_left = &#x27;0.8 0.1 0&#x27;
+      top_right = &#x27;0.9 0.2 0&#x27;
+      inside = refine
+      outside = dont_mark
+    [../]
+  [../]
+[]
+
+[Postprocessors]
+  [./adaptivity_cycles]
+    type = NumAdaptivityCycles
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5f24f2eb-1a28-4952-9022-a5a1cb912adb"><div class="modal-content"><h4>test/tests/outputs/oversample/adapt.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Functions]
+  [./force]
+    type = ParsedFunction
+    value = t*t
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./force]
+    type = BodyForce
+    variable = u
+    function = force
+  [../]
+[]
+
+[BCs]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 4
+  dt = 1
+  solve_type = PJFNK
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = box
+  max_h_level = 2
+  [./Markers]
+    [./box]
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      inside = refine
+      top_right = &#x27;0.6 0.6 0&#x27;
+      outside = do_nothing
+      type = BoxMarker
+    [../]
+  [../]
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+  [./oversample]
+    type = Exodus
+    refinements = 2
+    file_base = adapt_out_oversample
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2606018c-b891-4a00-8d6d-0f6b7dfbd7be"><div class="modal-content"><h4>test/tests/misc/serialized_solution/adapt.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = CoefDiffusion
+    variable = u
+    coef = 0.1
+  [../]
+  [./time]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Postprocessors]
+  [./aux_serialized]
+    type = TestSerializedSolution
+    system = aux
+  [../]
+  [./nl_serialized]
+    type = TestSerializedSolution
+    system = nl
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 3
+  dt = 0.1
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Adaptivity]
+  marker = box_refine
+  [./Markers]
+    [./box_refine]
+      type = BoxMarker
+      bottom_left = &#x27;0.2 0.2 0&#x27;
+      top_right = &#x27;0.8 0.8 0&#x27;
+      inside = REFINE
+      outside = DONT_MARK
+    [../]
+  [../]
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1af27563-a86b-46d9-8364-9092ef9b0d00"><div class="modal-content"><h4>modules/porous_flow/examples/lava_lamp/1phase_convection.i</h4><pre class="moose-pre"><code class="language-text"># Two phase density-driven convection of dissolved CO2 in brine
+#
+# The model starts with CO2 in the liquid phase only.  The CO2 diffuses into the brine.
+# As the density of the CO2-saturated brine is greater
+# than the unsaturated brine, a gravitational instability arises and density-driven
+# convection of CO2-rich fingers descend into the unsaturated brine.
+#
+# The instability is seeded by a random perturbation to the porosity field.
+# Mesh adaptivity is used to refine the mesh as the fingers form.
+#
+# Note: this model is computationally expensive, so should be run with multiple cores.
+
+[GlobalParams]
+  PorousFlowDictator = &#x27;dictator&#x27;
+  gravity = &#x27;0 -9.81 0&#x27;
+[]
+
+[Adaptivity]
+  max_h_level = 2
+  marker = marker
+  initial_marker = initial
+  initial_steps = 2
+  [./Indicators]
+    [./indicator]
+      type = GradientJumpIndicator
+      variable = zi
+    [../]
+  [../]
+  [./Markers]
+    [./marker]
+      type = ErrorFractionMarker
+      indicator = indicator
+      refine = 0.8
+    [../]
+    [./initial]
+      type = BoxMarker
+      bottom_left = &#x27;0 1.95 0&#x27;
+      top_right = &#x27;2 2 0&#x27;
+      inside = REFINE
+      outside = DO_NOTHING
+    [../]
+  [../]
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  ymin = 1.5
+  ymax = 2
+  xmax = 2
+  ny = 20
+  nx = 40
+  bias_y = 0.95
+[]
+
+[AuxVariables]
+  [./xnacl]
+    initial_condition = 0.01
+  [../]
+  [./saturation_gas]
+    order = FIRST
+    family = MONOMIAL
+  [../]
+  [./xco2l]
+    order = FIRST
+    family = MONOMIAL
+  [../]
+  [./density_liquid]
+    order = FIRST
+    family = MONOMIAL
+  [../]
+  [./porosity]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./saturation_gas]
+    type = PorousFlowPropertyAux
+    variable = saturation_gas
+    property = saturation
+    phase = 1
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./xco2l]
+    type = PorousFlowPropertyAux
+    variable = xco2l
+    property = mass_fraction
+    phase = 0
+    fluid_component = 1
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./density_liquid]
+    type = PorousFlowPropertyAux
+    variable = density_liquid
+    property = density
+    phase = 0
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Variables]
+  [./pgas]
+  [../]
+  [./zi]
+    scaling = 1e4
+  [../]
+[]
+
+[ICs]
+  [./pressure]
+    type = FunctionIC
+    function = 10e6-9.81*1000*y
+    variable = pgas
+  [../]
+  [./zi]
+    type = ConstantIC
+    value = 0
+    variable = zi
+  [../]
+  [./porosity]
+    type = RandomIC
+    variable = porosity
+    min = 0.25
+    max = 0.275
+    seed = 0
+  [../]
+[]
+
+[BCs]
+  [./top]
+    type = DirichletBC
+    value = 0.04
+    variable = zi
+    boundary = top
+  [../]
+[]
+
+[Kernels]
+  [./mass0]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 0
+    variable = pgas
+  [../]
+  [./flux0]
+    type = PorousFlowAdvectiveFlux
+    fluid_component = 0
+    variable = pgas
+  [../]
+  [./diff0]
+    type = PorousFlowDispersiveFlux
+    fluid_component = 0
+    variable = pgas
+    disp_long = &#x27;0 0&#x27;
+    disp_trans = &#x27;0 0&#x27;
+  [../]
+  [./mass1]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 1
+    variable = zi
+  [../]
+  [./flux1]
+    type = PorousFlowAdvectiveFlux
+    fluid_component = 1
+    variable = zi
+  [../]
+  [./diff1]
+    type = PorousFlowDispersiveFlux
+    fluid_component = 1
+    variable = zi
+    disp_long = &#x27;0 0&#x27;
+    disp_trans = &#x27;0 0&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./dictator]
+    type = PorousFlowDictator
+    porous_flow_vars = &#x27;pgas zi&#x27;
+    number_fluid_phases = 2
+    number_fluid_components = 2
+  [../]
+  [./pc]
+    type = PorousFlowCapillaryPressureConst
+    pc = 0
+  [../]
+  [./fs]
+    type = PorousFlowBrineCO2
+    brine_fp = brine
+    co2_fp = co2
+    capillary_pressure = pc
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./co2sw]
+      type = CO2FluidProperties
+    [../]
+    [./co2]
+      type = TabulatedFluidProperties
+      fp = co2sw
+    [../]
+    [./brine]
+      type = BrineFluidProperties
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./temperature]
+    type = PorousFlowTemperature
+    temperature = &#x27;45&#x27;
+  [../]
+  [./brineco2]
+    type = PorousFlowFluidState
+    gas_porepressure = &#x27;pgas&#x27;
+    z = &#x27;zi&#x27;
+    temperature_unit = Celsius
+    xnacl = &#x27;xnacl&#x27;
+    capillary_pressure = pc
+    fluid_state = fs
+  [../]
+  [./porosity]
+    type = PorousFlowPorosityConst
+    porosity = porosity
+  [../]
+  [./permeability]
+    type = PorousFlowPermeabilityConst
+    permeability = &#x27;1e-11 0 0 0 1e-11 0 0 0 1e-11&#x27;
+  [../]
+  [./relperm_water]
+    type = PorousFlowRelativePermeabilityCorey
+    phase = 0
+    n = 2
+    s_res = 0.1
+    sum_s_res = 0.2
+  [../]
+  [./relperm_gas]
+    type = PorousFlowRelativePermeabilityCorey
+    phase = 1
+    n = 2
+    s_res = 0.1
+    sum_s_res = 0.2
+  [../]
+  [./diffusivity]
+    type = PorousFlowDiffusivityConst
+    diffusion_coeff = &#x27;2e-9 2e-9 2e-9 2e-9&#x27;
+    tortuosity = &#x27;1 1&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./mumps_is_best_for_parallel_jobs]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-ksp_type -pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27;gmres      asm      lu           NONZERO                   2             &#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  end_time = 1e6
+  nl_max_its = 25
+  l_max_its = 100
+  dtmax = 1e4
+  nl_abs_tol = 1e-6
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 100
+    growth_factor = 2
+    cutback_factor = 0.5
+  [../]
+[]
+
+[Functions]
+  [./flux]
+    type = ParsedFunction
+    vals = &#x27;delta_xco2 dt&#x27;
+    vars = &#x27;dx dt&#x27;
+    value = &#x27;dx/dt&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./total_co2_in_gas]
+    type = PorousFlowFluidMass
+    phase = 1
+    fluid_component = 1
+  [../]
+  [./total_co2_in_liquid]
+    type = PorousFlowFluidMass
+    phase = 0
+    fluid_component = 1
+  [../]
+  [./numdofs]
+    type = NumDOFs
+  [../]
+  [./delta_xco2]
+    type = ChangeOverTimePostprocessor
+    postprocessor = total_co2_in_liquid
+  [../]
+  [./dt]
+    type = TimestepSize
+  [../]
+  [./flux]
+    type = FunctionValuePostprocessor
+    function = flux
+  [../]
+[]
+
+[Outputs]
+  print_linear_residuals = false
+  perf_graph = true
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="52a0e1e3-231a-4a72-a713-f103e7504f2b"><div class="modal-content"><h4>test/tests/postprocessors/num_adaptivity_cycles/num_adaptivity_cycles_toggle_adaptivity_wait.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Functions]
+  [./force]
+    type = ParsedFunction
+    value = t
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./force]
+    type = BodyForce
+    variable = u
+    function = force
+  [../]
+[]
+
+[BCs]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 4
+  dt = 1
+
+  solve_type = &#x27;PJFNK&#x27;
+
+[]
+
+[Adaptivity]
+  cycles_per_step = 1
+  marker = box
+  max_h_level = 2
+  initial_steps = 4
+  initial_marker = initial_box
+  [./Markers]
+    [./box]
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      inside = refine
+      top_right = &#x27;0.6 0.6 0&#x27;
+      outside = dont_mark
+      type = BoxMarker
+    [../]
+    [./initial_box]
+      type = BoxMarker
+      bottom_left = &#x27;0.8 0.1 0&#x27;
+      top_right = &#x27;0.9 0.2 0&#x27;
+      inside = refine
+      outside = dont_mark
+    [../]
+  [../]
+[]
+
+[UserObjects]
+  [./toggle_adaptivity]
+    type = ToggleMeshAdaptivity
+    mesh_adaptivity = &#x27;off&#x27;
+    apply_after_timestep = 1
+  [../]
+[]
+
+[Postprocessors]
+  [./adaptivity_cycles]
+    type = NumAdaptivityCycles
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fe1d6784-122d-4fd3-a836-26aa06ea9189"><div class="modal-content"><h4>test/tests/dirackernels/point_caching/point_caching_adaptive_refinement.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  nx = 2
+  ny = 2
+  elem_type = QUAD4
+  uniform_refine = 2
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  active = &#x27;diff&#x27;
+
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[DiracKernels]
+  active = &#x27;point_source&#x27;
+
+  [./point_source]
+    type = CachingPointSource
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 3
+    value = 0
+  [../]
+
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Adaptivity]
+  steps = 3
+  marker = &#x27;combo&#x27;
+
+  [./Markers]
+    [./combo]
+      # In a real problem you would want to mark based on an error
+      # indicator, but we want this test to run consistently in
+      # parallel, so we just mark elements within a box for
+      # refinement.  The boxes here are based on the 8x8
+      # uniformly-refined initial grid.
+      type = ComboMarker
+      markers = &#x27;box1 box2 box3&#x27;
+    [../]
+
+    [./box1]
+      type = BoxMarker
+      bottom_left = &#x27;0.125 0.625 0&#x27;
+      top_right = &#x27;0.375 0.875 0&#x27;
+      inside = refine
+      outside = dont_mark
+    [../]
+
+    [./box2]
+      type = BoxMarker
+      bottom_left = &#x27;0.625 0.625 0&#x27;
+      top_right = &#x27;0.875 0.875 0&#x27;
+      inside = refine
+      outside = dont_mark
+    [../]
+
+    [./box3]
+      type = BoxMarker
+      bottom_left = &#x27;0.625 0.125 0&#x27;
+      top_right = &#x27;0.875 0.375 0&#x27;
+      inside = refine
+      outside = dont_mark
+    [../]
+  [../]
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3de3c8bf-cd2a-4f53-8275-1beb85908ae9"><div class="modal-content"><h4>test/tests/postprocessors/num_nodes/num_nodes.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 4
+  ny = 4
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+  uniform_refine = 1
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./u_aux]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./v_aux]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Functions]
+  [./force]
+    type = ParsedFunction
+    value = t
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./force]
+    type = BodyForce
+    variable = u
+    function = force
+  [../]
+[]
+
+[BCs]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 3
+  dt = 1
+  solve_type = PJFNK
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = box
+  max_h_level = 3
+  [./Markers]
+    [./box]
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      inside = refine
+      top_right = &#x27;0.6 0.6 0&#x27;
+      outside = do_nothing
+      type = BoxMarker
+    [../]
+  [../]
+[]
+
+[Postprocessors]
+  [./num_nodes]
+    type = NumNodes
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ebfcd5f7-d37b-4028-8431-4f7b36cac113"><div class="modal-content"><h4>modules/contact/test/tests/adaptivity/contact_initial_adaptivity.i</h4><pre class="moose-pre"><code class="language-text"># This is a test of the usage of initial adaptivity with contact.
+# It ensures that contact is enforced on the new nodes that are
+# created due to refinement on the secondary side of the interface.
+
+[GlobalParams]
+  volumetric_locking_correction = false
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Mesh]
+  file = 2blocks.e
+  patch_size = 80
+  parallel_type = replicated
+[]
+
+[AuxVariables]
+  [./penetration]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Functions]
+  [./negramp]
+    type = ParsedFunction
+    value = -t/10
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./all]
+    add_variables = true
+    strain = FINITE
+  []
+[]
+
+[AuxKernels]
+  [./penetration]
+    type = PenetrationAux
+    variable = penetration
+    boundary = 3
+    paired_boundary = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./nonlinear_its]
+    type = NumNonlinearIterations
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./left_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = 1
+    value = 0.0
+  [../]
+  [./left_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = 1
+    value = 0.0
+  [../]
+  [./right_x]
+    type = FunctionDirichletBC
+    variable = disp_x
+    boundary = 4
+    function = negramp
+  [../]
+  [./right_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = 4
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./stiffStuff1]
+    type = ComputeIsotropicElasticityTensor
+    block = &#x27;1 2&#x27;
+    youngs_modulus = 1e6
+    poissons_ratio = 0.3
+  [../]
+  [./stiffStuff1_stress]
+    type = ComputeFiniteStrainElasticStress
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[Contact]
+  [./leftright]
+    secondary = 3
+    primary = 2
+    model = frictionless
+    penalty = 1e+6
+    normal_smoothing_distance = 0.1
+  [../]
+[]
+
+[Adaptivity]
+  steps = 0
+  marker = box
+  max_h_level = 2
+  initial_steps = 2
+  [./Markers]
+    [./box]
+      type = BoxMarker
+      bottom_left = &#x27;0.5 -2.0 0.0&#x27;
+      top_right = &#x27;0.75 2.0 0.0&#x27;
+      inside = refine
+      outside = do_nothing
+    [../]
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+  petsc_options_value = &#x27;lu       superlu_dist&#x27;
+
+  line_search = &#x27;none&#x27;
+
+  l_max_its = 100
+  nl_max_its = 1000
+  dt = 0.2
+  end_time = 1.0
+  l_tol = 1e-6
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-9
+[]
+
+[Outputs]
+  exodus = true
+  console = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5ed0509a-ef8d-448f-a61c-8a58f350595a"><div class="modal-content"><h4>test/tests/adaptivity/max_h_level/max_h_level.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Functions]
+  [./force]
+    type = ParsedFunction
+    value = t
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./force]
+    type = BodyForce
+    variable = u
+    function = force
+  [../]
+[]
+
+[BCs]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 4
+  dt = 1
+  solve_type = PJFNK
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = box
+  max_h_level = 2
+  [./Markers]
+    [./box]
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      inside = refine
+      top_right = &#x27;0.6 0.6 0&#x27;
+      outside = do_nothing
+      type = BoxMarker
+    [../]
+  [../]
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  [./out]
+    type = Exodus
+    execute_scalars_on = none
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a0e9983e-69d3-433b-a97f-e26789143057"><div class="modal-content"><h4>test/tests/postprocessors/num_adaptivity_cycles/num_adaptivity_cycles_toggle_adaptivity.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Functions]
+  [./force]
+    type = ParsedFunction
+    value = t
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./force]
+    type = BodyForce
+    variable = u
+    function = force
+  [../]
+[]
+
+[BCs]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 4
+  dt = 1
+
+  solve_type = &#x27;PJFNK&#x27;
+
+[]
+
+[Adaptivity]
+  cycles_per_step = 1
+  marker = box
+  max_h_level = 2
+  initial_steps = 4
+  initial_marker = initial_box
+  [./Markers]
+    [./box]
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      inside = refine
+      top_right = &#x27;0.6 0.6 0&#x27;
+      outside = dont_mark
+      type = BoxMarker
+    [../]
+    [./initial_box]
+      type = BoxMarker
+      bottom_left = &#x27;0.8 0.1 0&#x27;
+      top_right = &#x27;0.9 0.2 0&#x27;
+      inside = refine
+      outside = dont_mark
+    [../]
+  [../]
+[]
+
+[UserObjects]
+  [./toggle_adaptivity]
+    type = ToggleMeshAdaptivity
+    mesh_adaptivity = &#x27;off&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./adaptivity_cycles]
+    type = NumAdaptivityCycles
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0a77db19-6262-4f31-b88a-fd8c003831e9"><div class="modal-content"><h4>test/tests/materials/stateful_prop/stateful_prop_adaptivity_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 2
+  ny = 2
+  nz = 2
+  uniform_refine = 2
+  # This option is necessary if you have uniform refinement + stateful material properties + adaptivity
+  skip_partitioning = true
+  # stateful material properties + adaptivity are not yet compatible
+  # with distributed meshes
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./prop1]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./heat]
+    type = MatDiffusionTest
+    variable = u
+    prop_name = thermal_conductivity
+    prop_state = old # Use the &quot;Old&quot; value to compute conductivity
+  [../]
+  [./ie]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./prop1_output]
+    type = MaterialRealAux
+    variable = prop1
+    property = thermal_conductivity
+  [../]
+[]
+
+[BCs]
+  [./bottom]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 0.0
+  [../]
+  [./top]
+    type = DirichletBC
+    variable = u
+    boundary = 2
+    value = 1.0
+  [../]
+[]
+
+[Materials]
+  [./stateful]
+    type = StatefulTest
+    prop_names = thermal_conductivity
+    prop_values = 1.0
+  [../]
+[]
+
+[Postprocessors]
+  [./integral]
+    type = ElementAverageValue
+    variable = prop1
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  l_max_its = 10
+  start_time = 0.0
+  num_steps = 4
+  dt = .1
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Adaptivity]
+  marker = box
+  [./Markers]
+    [./box]
+      type = BoxMarker
+      bottom_left = &#x27;0.2 0.2 0.2&#x27;
+      top_right = &#x27;0.4 0.4 0.4&#x27;
+      inside = refine
+      outside = coarsen
+    [../]
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="dbe929ca-ba17-4dfa-b423-342f83df533c"><div class="modal-content"><h4>test/tests/interfacekernels/adaptivity/adaptivity.i</h4><pre class="moose-pre"><code class="language-text"># This input file is used for two tests:
+# 1) Check that InterfaceKernels work with mesh adaptivity
+# 2) Error out when InterfaceKernels are used with adaptivity
+#    and stateful material prpoerties
+
+[Mesh]
+  parallel_type = &#x27;replicated&#x27;
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 2
+    ny = 2
+  []
+  [./subdomain1]
+    input = gen
+    type = SubdomainBoundingBoxGenerator
+    bottom_left = &#x27;0.5 0 0&#x27;
+    top_right = &#x27;1 1 0&#x27;
+    block_id = 1
+  [../]
+  [./interface]
+    type = SideSetsBetweenSubdomainsGenerator
+    input = subdomain1
+    primary_block = &#x27;0&#x27;
+    paired_block = &#x27;1&#x27;
+    new_boundary = &#x27;primary0_interface&#x27;
+  [../]
+  [./break_boundary]
+    input = interface
+    type = BreakBoundaryOnSubdomainGenerator
+  [../]
+[]
+
+[Variables]
+  [./u]
+    [./InitialCondition]
+      type = ConstantIC
+      value = 1
+    [../]
+    block = 0
+  [../]
+  [./u_neighbor]
+    [./InitialCondition]
+      type = ConstantIC
+      value = 1
+    [../]
+    block = 1
+  [../]
+[]
+
+[Functions]
+  [./forcing_fn]
+    type = ParsedFunction
+    value = (x*x*x)-6.0*x
+  [../]
+
+  [./bc_fn]
+    type = ParsedFunction
+    value = (x*x*x)
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = MatDiffusionTest
+    variable = u
+    prop_name = diffusivity
+    block = 0
+  [../]
+  [./abs]
+    type = Reaction
+    variable = u
+    block = 0
+  [../]
+  [./forcing]
+    type = BodyForce
+    variable = u
+    function = forcing_fn
+    block = 0
+  [../]
+  [./diffn]
+    type = MatDiffusionTest
+    variable = u_neighbor
+    prop_name = diffusivity
+    block = 1
+  [../]
+  [./absn]
+    type = Reaction
+    variable = u_neighbor
+    block = 1
+  [../]
+  [./forcingn]
+    type = BodyForce
+    variable = u_neighbor
+    function = forcing_fn
+    block = 1
+  [../]
+[]
+
+[InterfaceKernels]
+  [./flux_match]
+    type = PenaltyInterfaceDiffusion
+    variable = u
+    neighbor_var = u_neighbor
+    boundary = primary0_interface
+    penalty = 1e6
+  [../]
+[]
+
+[BCs]
+  [./u]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = &#x27;left&#x27;
+    function = bc_fn
+  [../]
+  [./u_neighbor]
+    type = FunctionDirichletBC
+    variable = u_neighbor
+    boundary = &#x27;right&#x27;
+    function = bc_fn
+  [../]
+[]
+
+[Materials]
+  active = &#x27;constant&#x27;
+  [./stateful]
+    type = StatefulTest
+    prop_names = &#x27;diffusivity&#x27;
+    prop_values = &#x27;1&#x27;
+    block = &#x27;0 1&#x27;
+  [../]
+  [./constant]
+    type = GenericConstantMaterial
+    prop_names = &#x27;diffusivity&#x27;
+    prop_values = &#x27;1&#x27;
+    block = &#x27;0 1&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+[]
+
+[Adaptivity]
+  marker = &#x27;marker&#x27;
+  steps = 1
+  [./Markers]
+    [./marker]
+      type = BoxMarker
+      bottom_left = &#x27;0 0 0&#x27;
+      top_right = &#x27;1 1 0&#x27;
+      inside = refine
+      outside = coarsen
+    [../]
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8002f4cc-e8f6-4396-b2c3-77301afab100"><div class="modal-content"><h4>test/tests/postprocessors/num_elems/num_elems.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 4
+  ny = 4
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+  uniform_refine = 1
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./u_aux]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./v_aux]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Functions]
+  [./force]
+    type = ParsedFunction
+    value = t
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./force]
+    type = BodyForce
+    variable = u
+    function = force
+  [../]
+[]
+
+[BCs]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 3
+  dt = 1
+  solve_type = PJFNK
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = box
+  max_h_level = 3
+  [./Markers]
+    [./box]
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      inside = refine
+      top_right = &#x27;0.6 0.6 0&#x27;
+      outside = do_nothing
+      type = BoxMarker
+    [../]
+  [../]
+[]
+
+[Postprocessors]
+  [./num_elems_active]
+    type = NumElems
+    elem_filter = &#x27;ACTIVE&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./num_elems_total]
+    type = NumElems
+    elem_filter = &#x27;TOTAL&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="411ae03e-dc67-4718-b496-7bdc2d2ee5c0"><div class="modal-content"><h4>test/tests/postprocessors/memory_usage/vector_memory_usage.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 20
+  ny = 20
+[]
+
+[GlobalParams]
+  order = CONSTANT
+  family = MONOMIAL
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Adaptivity]
+  [./Markers]
+    [./box]
+      type = BoxMarker
+      bottom_left = &#x27;0.6 0.7 0&#x27;
+      top_right = &#x27;0.9 0.9 0&#x27;
+      inside = refine
+      outside = do_nothing
+    [../]
+  [../]
+  marker = box
+[]
+
+[Problem]
+  kernel_coverage_check = false
+  solve = false
+[]
+
+[VectorPostprocessors]
+  [./mem]
+    type = VectorMemoryUsage
+    execute_on = &#x27;INITIAL TIMESTEP_END NONLINEAR LINEAR&#x27;
+    report_peak_value = true
+    mem_units = kilobytes # or bytes, megabytes, gigabytes
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 2
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b984d1d5-cab8-4e9f-b456-92c6513bbb0d"><div class="modal-content"><h4>test/tests/adaptivity/interval/adapt_interval.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Functions]
+  [./force]
+    type = ParsedFunction
+    value = t
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./force]
+    type = BodyForce
+    variable = u
+    function = force
+  [../]
+[]
+
+[BCs]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 6
+  dt = 1
+
+  solve_type = &#x27;PJFNK&#x27;
+
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = box
+  max_h_level = 2
+  interval = 2
+  [./Markers]
+    [./box]
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      inside = refine
+      top_right = &#x27;0.6 0.6 0&#x27;
+      outside = do_nothing
+      type = BoxMarker
+    [../]
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="70dcff42-5f50-4fed-b41e-dbd9e0b379ee"><div class="modal-content"><h4>modules/level_set/test/tests/functions/olsson_bubble/olsson_bubble.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 20
+  ny = 20
+[]
+
+[Adaptivity]
+  initial_marker = marker
+  initial_steps = 2
+  max_h_level = 2
+  [./Markers]
+    [./marker]
+      type = BoxMarker
+      bottom_left = &#x27;0 0 0&#x27;
+      top_right = &#x27;0.5 0.5 0&#x27;
+      inside = REFINE
+      outside = DO_NOTHING
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  [./bubble]
+  [../]
+[]
+
+[AuxKernels]
+  [./bubble_aux]
+    type = FunctionAux
+    variable = bubble
+    function = bubble_func
+    execute_on = initial
+  [../]
+[]
+
+
+[Functions]
+  [./bubble_func]
+    type = LevelSetOlssonBubble
+    center = &#x27;0.25 0.25 0&#x27;
+    radius = 0.15
+  [../]
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Outputs]
+  execute_on = &#x27;TIMESTEP_END&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c8137159-0704-4ff8-ac71-58ca72a7acc7"><div class="modal-content"><h4>test/tests/adaptivity/initial_adapt/initial_adapt.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Functions]
+  [./force]
+    type = ParsedFunction
+    value = t
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./force]
+    type = BodyForce
+    variable = u
+    function = force
+  [../]
+[]
+
+[BCs]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 4
+  dt = 1
+
+  solve_type = &#x27;PJFNK&#x27;
+
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = box
+  max_h_level = 2
+  initial_steps = 2
+  [./Markers]
+    [./box]
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      inside = refine
+      top_right = &#x27;0.6 0.6 0&#x27;
+      outside = do_nothing
+      type = BoxMarker
+    [../]
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9a4ff153-fffd-4762-83b9-25a96ec17fb7"><div class="modal-content"><h4>test/tests/markers/dont_mark/dont_mark_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 2
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Adaptivity]
+  [./Markers]
+    [./box]
+      type = BoxMarker
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      top_right = &#x27;0.6 0.6 0&#x27;
+      inside = refine
+      outside = coarsen
+    [../]
+    [./combo]
+      type = ComboMarker
+      markers = &#x27;box box2&#x27;
+    [../]
+    [./box2]
+      type = BoxMarker
+      bottom_left = &#x27;0.5 0.5 0&#x27;
+      top_right = &#x27;0.8 0.8 0&#x27;
+      inside = dont_mark
+      outside = refine
+    [../]
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="938856f5-1e16-4e46-8c27-13518335ddd4"><div class="modal-content"><h4>test/tests/postprocessors/num_dofs/num_dofs.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 4
+  ny = 4
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./u_aux]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./v_aux]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Functions]
+  [./force]
+    type = ParsedFunction
+    value = t
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./force]
+    type = BodyForce
+    variable = u
+    function = force
+  [../]
+[]
+
+[BCs]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 4
+  dt = 1
+  solve_type = PJFNK
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = box
+  max_h_level = 2
+  [./Markers]
+    [./box]
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      inside = refine
+      top_right = &#x27;0.6 0.6 0&#x27;
+      outside = do_nothing
+      type = BoxMarker
+    [../]
+  [../]
+[]
+
+[Postprocessors]
+  [./num_dofs_nl]
+    type = NumDOFs
+    system = NL
+  [../]
+  [./num_dofs_aux]
+    type = NumDOFs
+    system = AUX
+  [../]
+
+  # default
+  [./num_dofs_all]
+    type = NumDOFs
+    system = ALL
+  [../]
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#24eb4ff8-4c00-43c7-8182-c09c3484e291" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#a708f03a-000a-42b7-bb1a-7ee60ce0a61c" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#7151da1a-bef2-4a47-9b28-19f7112d7fd3" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#92a964ba-3b10-4917-aca8-0787a0bcbea1" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

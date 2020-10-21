@@ -1,0 +1,166 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>index.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="27752567-f912-4e7b-9c30-095ccf7d0939"><i class="material-icons">menu</i></a><ul class="sidenav" id="27752567-f912-4e7b-9c30-095ccf7d0939"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">syntax</a><a href="." class="breadcrumb">RayKernels</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="dbbb8b89-cba0-4ba2-b5d3-abde84645cce" data-section-level="1" data-section-text="RayKernels"><h1 id="raykernels">RayKernels</h1><p>A RayKernel operates on a line segment of a <a href="../../source/ray_tracing/Ray.html">Ray</a>, which is defined by the entry and exit point of the <a href="../../source/ray_tracing/Ray.html">Ray</a> within an element as it is traced through the mesh. The base object is the <code>RayKernelBase</code>.</p><p>Standard MOOSE convention denotes that a &quot;kernel&quot; is an object that contributes to the residual and the Jacobian. To remain consistent with this nomenclature, the <code>RayKernel</code> and <code>ADRayKernel</code> objects contribute to residuals and Jacobians from a <a href="../../source/ray_tracing/Ray.html">Ray</a>.</p><p>A summary of the objects that should be derived based on desired operation on segments are as follows:</p><ul class="browser-default"><li><p><a href="../../source/ray_kernels/RayKernel.html">RayKernel</a>: Segments contribute to residuals and Jacobians (example: line sources, see <a href="../../source/ray_kernels/LineSourceRayKernel.html">LineSourceRayKernel</a>) </p></li><li><p><a href="../../source/ray_kernels/ADRayKernel.html">ADRayKernel</a>: Segments contribute to residuals and use automatic-differentation to compute the Jacobian </p></li><li><p><code>GenericRayKernel</code>: Templated object that enables segment contribution to residuals and Jacobians with and without automatic differentation (serves a similar purpose as <a href="../../source/kernels/GenericKernel.html">GenericKernel</a>) </p></li><li><p><a href="../../source/ray_kernels/IntegralRayKernel.html">IntegralRayKernel</a>: Performs an integral on each segment and accumulates the integrated result into the <a href="../../source/ray_tracing/Ray.html">Ray</a> (example: integral of a variable along a line, see <a href="../../source/ray_kernels/VariableIntegralRayKernel.html">VariableIntegralRayKernel</a>) </p></li><li><p><a href="../AuxVariables/index.html">AuxRayKernel.md]: Segments contribute to an [AuxVariable</a> in a user-defined manner (example: segment distances are accumulated into an <code>AuxVariable</code>, see <code>RayIntegratedDistanceAux</code>) </p></li><li><p><a href="../../source/ray_kernels/GeneralRayKernel.html">GeneralRayKernel</a>: General purpose object that can be adapted to operate on segments in a manner that is not covered by the classes listed above</p></li></ul><p>The remainder of the discussion focuses on the use of the functionality offered within the base object, <a href="../../source/ray_kernels/RayKernelBase.html">RayKernelBase</a>. Refer to the objects above for a more specific discussion.</p><section class="scrollspy" id="339e8435-ae38-43f3-b19f-5e79e951a462" data-section-level="2" data-section-text="Using a RayKernel"><h2 id="using-a-raykernel">Using a RayKernel</h2><p>The method that is called on each segment of a <a href="../../source/ray_tracing/Ray.html">Ray</a> in a RayKernel is <code>onSegment()</code>. This method is to be overridden to specialize the on-segment operation. The <code>preTrace()</code> method is also available to be overridden and is called before a trace begins on a processor/thread.</p><p>The significant information pertaining to the trace that is available within <code>onSegment()</code> is as follows:</p><ul class="browser-default"><li><p><code>currentRay()</code> - The current <a href="../../source/ray_tracing/Ray.html">Ray</a> that is being traced on the segment. </p></li><li><p><code>_current_elem</code> - The current element that the <a href="../../source/ray_tracing/Ray.html">Ray</a> is being traced in. </p></li><li><p><code>_current_segment_start</code> - The start point of the current segment being operated on. This is not necessarily on the element periphery (a side of <code>_current_elem</code>) in the case that a <a href="../../source/ray_tracing/Ray.html">Ray</a> starts within an element. </p></li><li><p><code>_current_segment_end</code> - The end point of the current segment being operated on. This is not necessarily on the element periphery either in the case that a <a href="../../source/ray_tracing/Ray.html">Ray</a> ends within <code>_current_elem</code> (see <code>endsWithinElem()</code>) </p></li><li><p><code>_current_segment_length</code> - The length of the current segment being operated on. </p></li><li><p><code>_current_intersected_side</code> - The side intersected on <code>_current_elem</code> at <code>_current_segment_end</code>, if any. </p></li><li><p><code>_current_incoming_side</code> - The side intersected on <code>_current_elem</code> at <code>_current_segment_end</code>, if any. </p></li><li><p><code>_current_intersected_extrema</code> - The extrema (element vertex or edge, see <code>ElemExtrema</code> for more information) intersected on <code>_current_intersected_side</code> at <code>_current_segment_end</code>, if any. </p></li><li><p><code>endsWithinElem()</code> - Whether or not the <code>_current_segment_end</code> is <em>within</em> <code>_current_elem</code> or not. </p></li></ul><p>See the <a href="../../source/ray_tracing/Ray.html">Ray</a> documentation for what members are available for use during tracing.</p><p>Many standard MOOSE interfaces are also available within RayKernels to do things like access coupled variables, access materials, access UserObjects, access Postprocessors, etc.</p></section><section class="scrollspy" id="b357f003-2d53-41d9-b45d-ed763145c7ba" data-section-level="2" data-section-text="Modifying / Registering Ray Data"><h2 id="modifying-registering-ray-data">Modifying/Registering Ray Data</h2><p>TODO: add link to more detailed doc on modifying/registering</p><p>If your RayKernel requires data or auxiliary data on a <a href="../../source/ray_tracing/Ray.html">Ray</a> that is unique to said object, you can register said requirement in the constructor using <code>_study.registerRayData()</code> and <code>_study.registerAuxData()</code>.</p><p>An example of this exists in <a href="../../source/ray_kernels/IntegralRayKernel.html">IntegralRayKernel</a>, which accumulates integrals into a data member on the <a href="../../source/ray_tracing/Ray.html">Ray</a>. Each <a href="../../source/ray_kernels/IntegralRayKernel.html">IntegralRayKernel</a> requires its own value to accumulate into, therefore the <a href="../../source/ray_kernels/IntegralRayKernel.html">IntegralRayKernel</a> registers a value for its own use:</p><pre class="moose-pre"><code class="language-cpp">IntegralRayKernel::IntegralRayKernel(const InputParameters &amp; params)
+  : IntegralRayKernelBase(params),
+    _integral_data_index(_study.registerRayData(integralRayDataName()))
+{
+}
+</code></pre><a href="#0e6fc492-53f3-4b58-a4df-ebd3e9037ea1" class="modal-trigger">(modules/ray_tracing/src/ray_kernels/IntegralRayKernel.C)</a><div class="modal moose-modal" id="0e6fc492-53f3-4b58-a4df-ebd3e9037ea1"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/modules/ray_tracing/src/ray_kernels/IntegralRayKernel.C</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#include &quot;IntegralRayKernel.h&quot;
+
+// Local includes
+#include &quot;RayTracingStudy.h&quot;
+
+InputParameters
+IntegralRayKernel::validParams()
+{
+  return IntegralRayKernelBase::validParams();
+}
+
+IntegralRayKernel::IntegralRayKernel(const InputParameters &amp; params)
+  : IntegralRayKernelBase(params),
+    _integral_data_index(_study.registerRayData(integralRayDataName()))
+{
+}
+
+void
+IntegralRayKernel::computeIntegral()
+{
+  // Note that here we do not multiply by _coord[_qp]!
+  //
+  // The integral done here is the integral of a field variable/material/etc, and not
+  // an integration that contributes to the residual/Jacobian. Hence: it is something like
+  // a line integral. In RZ and RSPHERICAL, we want line integrals to still be line integrals.
+  // Therefore, it does not make sense to multiply by the coordinate transformation.
+  auto &amp; value = currentRay()-&gt;data(_integral_data_index);
+  for (_qp = 0; _qp &lt; _q_point.size(); ++_qp)
+    value += _JxW[_qp] * computeQpIntegral();
+}
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><pre class="moose-pre"><code class="language-cpp">class IntegralRayKernel : public IntegralRayKernelBase
+{
+public:
+  IntegralRayKernel(const InputParameters &amp; params);
+
+  static InputParameters validParams();
+
+  /**
+   * Gets the name of the Ray data associated with the integral accumulated by this RayKernel
+   */
+  std::string integralRayDataName() const { return _name + &quot;_value&quot;; }
+
+protected:
+  void computeIntegral() override;
+  virtual Real computeQpIntegral() = 0;
+
+  /// The index into the data on the Ray that this integral accumulates into
+  const RayDataIndex _integral_data_index;
+};
+</code></pre><a href="#9a0ccab8-2bd1-430b-96ce-1ab028427fd9" class="modal-trigger">(modules/ray_tracing/include/ray_kernels/IntegralRayKernel.h)</a><div class="modal moose-modal" id="9a0ccab8-2bd1-430b-96ce-1ab028427fd9"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/modules/ray_tracing/include/ray_kernels/IntegralRayKernel.h</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#pragma once
+
+#include &quot;IntegralRayKernelBase.h&quot;
+
+/**
+ * Base class for a RayKernel that integrates along a Ray segment and stores the result in a scalar
+ * value on the Ray
+ */
+class IntegralRayKernel : public IntegralRayKernelBase
+{
+public:
+  IntegralRayKernel(const InputParameters &amp; params);
+
+  static InputParameters validParams();
+
+  /**
+   * Gets the name of the Ray data associated with the integral accumulated by this RayKernel
+   */
+  std::string integralRayDataName() const { return _name + &quot;_value&quot;; }
+
+protected:
+  void computeIntegral() override;
+  virtual Real computeQpIntegral() = 0;
+
+  /// The index into the data on the Ray that this integral accumulates into
+  const RayDataIndex _integral_data_index;
+};
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>By registering the data, as long as you are appropriately sizing your generated <a href="../../source/ray_tracing/Ray.html">Ray</a>s (via <code>RayTracingStudy::rayDataSize()</code> and <code>RayTracingStudy::rayAuxDataSize()</code>, done automatically when generating a <a href="../../source/ray_tracing/Ray.html">Ray</a> within a RayKernel or RayBC), the data can be obtained by <code>currentRay().data()</code> and <code>currentRay().auxData()</code>. </p><p>In the case of the <a href="../../source/ray_kernels/IntegralRayKernel.html">IntegralRayKernel</a>, the <a href="../../source/ray_tracing/Ray.html">Ray</a> data is accessed as such:</p><pre class="moose-pre"><code class="language-cpp">void
+IntegralRayKernel::computeIntegral()
+{
+  // Note that here we do not multiply by _coord[_qp]!
+  //
+  // The integral done here is the integral of a field variable/material/etc, and not
+  // an integration that contributes to the residual/Jacobian. Hence: it is something like
+  // a line integral. In RZ and RSPHERICAL, we want line integrals to still be line integrals.
+  // Therefore, it does not make sense to multiply by the coordinate transformation.
+  auto &amp; value = currentRay()-&gt;data(_integral_data_index);
+  for (_qp = 0; _qp &lt; _q_point.size(); ++_qp)
+    value += _JxW[_qp] * computeQpIntegral();
+}
+</code></pre><a href="#519f3697-fb92-4869-9b18-46e1144ab015" class="modal-trigger">(modules/ray_tracing/src/ray_kernels/IntegralRayKernel.C)</a><div class="modal moose-modal" id="519f3697-fb92-4869-9b18-46e1144ab015"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/modules/ray_tracing/src/ray_kernels/IntegralRayKernel.C</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#include &quot;IntegralRayKernel.h&quot;
+
+// Local includes
+#include &quot;RayTracingStudy.h&quot;
+
+InputParameters
+IntegralRayKernel::validParams()
+{
+  return IntegralRayKernelBase::validParams();
+}
+
+IntegralRayKernel::IntegralRayKernel(const InputParameters &amp; params)
+  : IntegralRayKernelBase(params),
+    _integral_data_index(_study.registerRayData(integralRayDataName()))
+{
+}
+
+void
+IntegralRayKernel::computeIntegral()
+{
+  // Note that here we do not multiply by _coord[_qp]!
+  //
+  // The integral done here is the integral of a field variable/material/etc, and not
+  // an integration that contributes to the residual/Jacobian. Hence: it is something like
+  // a line integral. In RZ and RSPHERICAL, we want line integrals to still be line integrals.
+  // Therefore, it does not make sense to multiply by the coordinate transformation.
+  auto &amp; value = currentRay()-&gt;data(_integral_data_index);
+  for (_qp = 0; _qp &lt; _q_point.size(); ++_qp)
+    value += _JxW[_qp] * computeQpIntegral();
+}
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="372fa252-4b86-485f-be13-c6b71e7b6fcf" data-section-level="2" data-section-text="Ending the Ray"><h2 id="ending-the-ray">Ending the Ray</h2><p>To stop a <a href="../../source/ray_tracing/Ray.html">Ray</a> from being traced, call:</p><pre class="moose-pre"><code class="language-text">
+currentRay().setShouldContinue(false);
+</code></pre><p>Similarly, you can check if another object has set to kill a <a href="../../source/ray_tracing/Ray.html">Ray</a> after all RayBCs are executed with:</p><pre class="moose-pre"><code class="language-text">
+const bool ended = currentRay().shouldContinue();
+</code></pre><p>After all RayBCs are executed, if <code>!shouldContinue()</code>, the trace for said <a href="../../source/ray_tracing/Ray.html">Ray</a> will end.</p></section><section class="scrollspy" id="8d610ba9-a114-47dd-ac0f-9764fabc082b" data-section-level="2" data-section-text="Changing the Ray Trajectory"><h2 id="changing-the-ray-trajectory">Changing the Ray Trajectory</h2><p>A <a href="../../source/ray_tracing/Ray.html">Ray</a> that is currently being traced can have its trajectory changed mid-trace by a RayKernel. The following conditions are imposed on such a trajectory change:</p><ul class="browser-default"><li><p>The new start point (if changed) must remain within the element of the object that changed it. </p></li><li><p>The end point cannot be set. That is, the <a href="../../source/ray_tracing/Ray.html">Ray</a> can only continue until another object kills it (for example a RayBC on a boundary or another RayKernel). </p></li><li><p>Only one trajectory change can be called on each segment. </p></li><li><p>The <a href="../../source/ray_tracing/Ray.html">Ray</a> must have moved before its trajectory is changed.</p></li></ul><p>To change the trajectory of a <a href="../../source/ray_tracing/Ray.html">Ray</a> within a RayKernel, the method <code>changeRayStartDirection()</code> is to be called with parameters being the new start point of the <a href="../../source/ray_tracing/Ray.html">Ray</a> and the new direction of travel. For example:</p><pre class="moose-pre"><code class="language-text">
+const Point some_point(1, 2, 3); // must be within _current_elem!
+const Point some_direction(1, 0, 0);
+changeRayStartDirection(some_point, some_direction);
+</code></pre></section><section class="scrollspy" id="380413c9-d40b-44c8-8f40-e4f1d6a67016" data-section-level="2" data-section-text="Creating Additional Rays"><h2 id="creating-additional-rays">Creating Additional Rays</h2><p>It is possible to generate another <a href="../../source/ray_tracing/Ray.html">Ray</a> to be traced from within a RayKernel. A <a href="../../source/ray_tracing/Ray.html">Ray</a> that is generated from within a RayKernel <em>must</em> have a starting point within the element that created it. This method is thread safe.</p><p>First, acquire a new <a href="../../source/ray_tracing/Ray.html">Ray</a> using the <code>acquireRay()</code> method, which takes as arguments the starting point and direction of travel for the new <a href="../../source/ray_tracing/Ray.html">Ray</a>. For example:</p><pre class="moose-pre"><code class="language-text">
+const Point some_point(1, 2, 3); // must be within _current_elem!
+const Point some_direction(1, 0, 0);
+std::shared_ptr&lt;Ray&gt; ray = acquireRay(some_point, some_direction);
+</code></pre><p>The acquired <a href="../../source/ray_tracing/Ray.html">Ray</a> will be initialized with the following:</p><ul class="browser-default"><li><p>Zeroed data and aux data, sized as registered by the <code>RayTracingStudy</code>. </p></li><li><p>A starting element that is <code>_current_elem</code>. </p></li><li><p>A unique ID.</p></li></ul><p>After the <a href="../../source/ray_tracing/Ray.html">Ray</a> has been acquired, you may modify its data members as desired before setting it to be traced. Once the <a href="../../source/ray_tracing/Ray.html">Ray</a> is modified as desired, do the following to insert it into the buffer to be traced:</p><pre class="moose-pre"><code class="language-text">
+moveRayToBuffer(ray);
+</code></pre></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#339e8435-ae38-43f3-b19f-5e79e951a462" class="tooltipped" data-position="left" data-tooltip="Using a RayKernel">Using a RayKernel</a></li><li><a href="#b357f003-2d53-41d9-b45d-ed763145c7ba" class="tooltipped" data-position="left" data-tooltip="Modifying / Registering Ray Data">Modifying / Registering Ray Data</a></li><li><a href="#372fa252-4b86-485f-be13-c6b71e7b6fcf" class="tooltipped" data-position="left" data-tooltip="Ending the Ray">Ending the Ray</a></li><li><a href="#8d610ba9-a114-47dd-ac0f-9764fabc082b" class="tooltipped" data-position="left" data-tooltip="Changing the Ray Trajectory">Changing the Ray Trajectory</a></li><li><a href="#380413c9-d40b-44c8-8f40-e4f1d6a67016" class="tooltipped" data-position="left" data-tooltip="Creating Additional Rays">Creating Additional Rays</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

@@ -1,0 +1,376 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>VectorPostprocessorVisualizationAux.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="c3cf69dc-263f-4516-a0fc-28cdf8f99440"><i class="material-icons">menu</i></a><ul class="sidenav" id="c3cf69dc-263f-4516-a0fc-28cdf8f99440"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">auxkernels</span><a href="#" class="breadcrumb">VectorPostprocessorVisualizationAux</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="6db44536-28b3-41e9-bd3e-d92b1c3bf118" data-section-level="1" data-section-text="VectorPostprocessorVisualizationAux"><h1 id="vectorpostprocessorvisualizationaux">VectorPostprocessorVisualizationAux</h1><section class="scrollspy" id="98170c66-818a-41cf-b647-ee6f27a8392b" data-section-level="2" data-section-text="Short Description"><h2 id="short-description">Short Description</h2><p>Read values from a VectorPostprocessor that is producing vectors that are &#x27;number of processors&#x27; * in length.  Puts the value for each processor into an elemental auxiliary field.</p></section><section class="scrollspy" id="bf3f415a-b792-4565-9bb4-69dff1597c84" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>This object is intended to let you view VectorPostprocessor vectors that are of lenght <code>num_procs</code> (meaning there is one value per MPI process).  This object will take those values and fill up an Auxiliary field with them so the values can be visualized.</p></section><section class="scrollspy" id="b2723bfe-c34f-43b9-817d-d1aa6c092c8c" data-section-level="2" data-section-text="Important Notes"><h2 id="important-notes">Important Notes</h2><p>Note: the VectorPostprocessor must be syncing the vectors it&#x27;s computing to all processors.  By default many just compute to processor 0 (because that&#x27;s where output occurrs).</p><p>For instance: this is the case for <a href="../vectorpostprocessors/WorkBalance.html">WorkBalance</a>.  By default it only syncs to processor 0, but it has a parameter (<code>sync_to_all_procs</code>) to tell it to create copies of the vectors on all processors.</p></section><section class="scrollspy" id="9f38d615-2312-4dbe-b8f5-bd3a1988e4ed" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="0a9b3621-a9c9-45b3-875c-c19463dc95ed" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this object applies to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>AuxVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this object applies to</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_name</span><span class="moose-parameter-header-description">The name of the vector to use from the VectorPostprocessor</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the vector to use from the VectorPostprocessor</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vpp</span><span class="moose-parameter-header-description">The name of the VectorPostprocessor to pull the data from.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>VectorPostprocessorName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the VectorPostprocessor to pull the data from.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="b681dde8-0998-4360-bdab-b2ce90344e46" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">LINEAR TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM, PRE_DISPLACE.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>LINEAR TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM PRE_DISPLACE</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM, PRE_DISPLACE.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_broadcast</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Causes this AuxKernel to use a broadcasted version of the vector instead of a scattered version of the vector (the default).  This is slower - but is useful for debugging and testing</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Causes this AuxKernel to use a broadcasted version of the vector instead of a scattered version of the vector (the default).  This is slower - but is useful for debugging and testing</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="72c0c79c-62b8-43c1-aca3-9397844024af" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="11af0e90-91a1-4827-bdf4-f7c751e7c628" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#cc579d6b-6f85-4334-9553-0d86519b2947" class="modal-trigger">test/tests/vectorpostprocessors/parallel_consistency/parallel_consistency.i</a></li><li><a href="#4a6a835c-947c-402d-bfd5-89062bd0da28" class="modal-trigger">modules/ray_tracing/test/tests/vector_postprocessors/per_processor_ray_tracing_results_vector_postprocessor/per_processor_ray_tracing_results_vector_postprocessor.i</a></li><li><a href="#53e99c13-1dc6-4f7a-8844-94bc7f50c238" class="modal-trigger">test/tests/auxkernels/vector_postprocessor_visualization/vector_postprocessor_visualization.i</a></li></ul><div class="modal moose-modal" id="cc579d6b-6f85-4334-9553-0d86519b2947"><div class="modal-content"><h4>test/tests/vectorpostprocessors/parallel_consistency/parallel_consistency.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+
+  # To make this deterministic
+  [Partitioner]
+    type = GridPartitioner
+    nx = 2
+    ny = 1
+    nz = 1
+  []
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;left&#x27;
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;right&#x27;
+    value = 1
+  []
+[]
+
+[VectorPostprocessors]
+  [constant]
+    type = ConstantVectorPostprocessor
+    value = &#x27;3 4&#x27;
+    execute_on = &#x27;TIMESTEP_END&#x27;
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+
+[AuxVariables]
+  [scattered]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+[]
+
+[AuxKernels]
+  [viewit]
+    type = VectorPostprocessorVisualizationAux
+    vpp = &#x27;constant&#x27;
+    vector_name = value
+    variable = scattered
+    execute_on = &#x27;TIMESTEP_END&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4a6a835c-947c-402d-bfd5-89062bd0da28"><div class="modal-content"><h4>modules/ray_tracing/test/tests/vector_postprocessors/per_processor_ray_tracing_results_vector_postprocessor/per_processor_ray_tracing_results_vector_postprocessor.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 5
+    ny = 2
+    xmax = 5
+    ymax = 2
+  []
+[]
+
+[AuxVariables]
+  [rays_started]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [rays_traced]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [rays_received]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [rays_sent]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [intersections]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [face_hit]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [vertex_hit]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [edge_hit]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [moved_through_neighbors]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [intersection_calls]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [vertex_neighbor_lookups]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [edge_neighbor_lookups]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [point_neighbor_builds]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [ends_in_elem]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+[]
+
+# these results are not output because they cannot be golded against
+# but we still make sure they work:
+#
+# generation_time propagation_time chunks_traced
+# buffers_received buffers_sent ray_pool_created
+# receive_ray_pool_created receive_buffer_pool_created
+
+[AuxKernels]
+  [rays_started]
+    type = VectorPostprocessorVisualizationAux
+    variable = rays_started
+    vpp = per_proc_ray_tracing
+    vector_name = rays_started
+    execute_on = timestep_end
+  []
+  [rays_traced]
+    type = VectorPostprocessorVisualizationAux
+    variable = rays_traced
+    vpp = per_proc_ray_tracing
+    vector_name = rays_traced
+    execute_on = timestep_end
+  []
+  [rays_received]
+    type = VectorPostprocessorVisualizationAux
+    variable = rays_received
+    vpp = per_proc_ray_tracing
+    vector_name = rays_received
+    execute_on = timestep_end
+  []
+  [rays_sent]
+    type = VectorPostprocessorVisualizationAux
+    variable = rays_sent
+    vpp = per_proc_ray_tracing
+    vector_name = rays_sent
+    execute_on = timestep_end
+  []
+  [intersections]
+    type = VectorPostprocessorVisualizationAux
+    variable = intersections
+    vpp = per_proc_ray_tracing
+    vector_name = intersections
+    execute_on = timestep_end
+  []
+  [face_hit]
+    type = VectorPostprocessorVisualizationAux
+    variable = face_hit
+    vpp = per_proc_ray_tracing
+    vector_name = face_hit
+    execute_on = timestep_end
+  []
+  [vertex_hit]
+    type = VectorPostprocessorVisualizationAux
+    variable = vertex_hit
+    vpp = per_proc_ray_tracing
+    vector_name = vertex_hit
+    execute_on = timestep_end
+  []
+  [edge_hit]
+    type = VectorPostprocessorVisualizationAux
+    variable = edge_hit
+    vpp = per_proc_ray_tracing
+    vector_name = edge_hit
+    execute_on = timestep_end
+  []
+  [moved_through_neighbors]
+    type = VectorPostprocessorVisualizationAux
+    variable = moved_through_neighbors
+    vpp = per_proc_ray_tracing
+    vector_name = moved_through_neighbors
+    execute_on = timestep_end
+  []
+  [intersection_calls]
+    type = VectorPostprocessorVisualizationAux
+    variable = intersection_calls
+    vpp = per_proc_ray_tracing
+    vector_name = intersection_calls
+    execute_on = timestep_end
+  []
+  [vertex_neighbor_lookups]
+    type = VectorPostprocessorVisualizationAux
+    variable = vertex_neighbor_lookups
+    vpp = per_proc_ray_tracing
+    vector_name = vertex_neighbor_lookups
+    execute_on = timestep_end
+  []
+  [edge_neighbor_lookups]
+    type = VectorPostprocessorVisualizationAux
+    variable = edge_neighbor_lookups
+    vpp = per_proc_ray_tracing
+    vector_name = edge_neighbor_lookups
+    execute_on = timestep_end
+  []
+  [point_neighbor_builds]
+    type = VectorPostprocessorVisualizationAux
+    variable = point_neighbor_builds
+    vpp = per_proc_ray_tracing
+    vector_name = point_neighbor_builds
+    execute_on = timestep_end
+  []
+  [ends_in_elem]
+    type = VectorPostprocessorVisualizationAux
+    variable = ends_in_elem
+    vpp = per_proc_ray_tracing
+    vector_name = ends_in_elem
+    execute_on = timestep_end
+  []
+[]
+
+[UserObjects/lots]
+  type = LotsOfRaysRayStudy
+  ray_kernel_coverage_check = false # no need for RayKernels
+  execute_on = initial
+[]
+
+[RayBCs/kill]
+  type = KillRayBC
+  boundary = &#x27;top left right bottom&#x27;
+[]
+
+[VectorPostprocessors/per_proc_ray_tracing]
+  type = PerProcessorRayTracingResultsVectorPostprocessor
+  results = &#x27;rays_started rays_traced chunks_traced rays_received
+             buffers_received rays_sent buffers_sent intersections
+            generation_time propagation_time ray_pool_created receive_ray_pool_created
+            receive_buffer_pool_created send_buffer_pool_created face_hit
+            vertex_hit edge_hit
+            moved_through_neighbors backface_culling_successes
+            backface_culling_failures intersection_calls vertex_neighbor_builds
+            vertex_neighbor_lookups edge_neighbor_builds edge_neighbor_lookups
+            point_neighbor_builds ends_in_elem&#x27;
+  execute_on = timestep_end
+  study = lots
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="53e99c13-1dc6-4f7a-8844-94bc7f50c238"><div class="modal-content"><h4>test/tests/auxkernels/vector_postprocessor_visualization/vector_postprocessor_visualization.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  parallel_type = REPLICATED
+  partitioner = linear
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;left&#x27;
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;right&#x27;
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[AuxVariables]
+  [num_elems]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [partition_surface_area]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+[]
+
+[AuxKernels]
+  [wb_num_elems]
+    type = VectorPostprocessorVisualizationAux
+    vpp = &#x27;wb&#x27;
+    vector_name = num_elems
+    variable = num_elems
+    execute_on = &#x27;TIMESTEP_END&#x27;
+  []
+  [wb_partition_surface_area]
+    type = VectorPostprocessorVisualizationAux
+    vpp = &#x27;wb&#x27;
+    vector_name = partition_surface_area
+    variable = partition_surface_area
+    execute_on = &#x27;TIMESTEP_END&#x27;
+  []
+[]
+
+[VectorPostprocessors]
+  [wb]
+    type = WorkBalance
+    sync_to_all_procs = &#x27;true&#x27;
+    execute_on = &#x27;INITIAL&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="41e6a98a-3b49-4a3e-8b0a-078a52a674bd" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#98170c66-818a-41cf-b647-ee6f27a8392b" class="tooltipped" data-position="left" data-tooltip="Short Description">Short Description</a></li><li><a href="#bf3f415a-b792-4565-9bb4-69dff1597c84" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#b2723bfe-c34f-43b9-817d-d1aa6c092c8c" class="tooltipped" data-position="left" data-tooltip="Important Notes">Important Notes</a></li><li><a href="#9f38d615-2312-4dbe-b8f5-bd3a1988e4ed" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#11af0e90-91a1-4827-bdf4-f7c751e7c628" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li><li><a href="#41e6a98a-3b49-4a3e-8b0a-078a52a674bd" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

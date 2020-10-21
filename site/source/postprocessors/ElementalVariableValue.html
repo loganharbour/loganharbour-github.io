@@ -1,0 +1,7724 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>ElementalVariableValue.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="188c37db-5803-4b0d-be15-3bba1f5a67db"><i class="material-icons">menu</i></a><ul class="sidenav" id="188c37db-5803-4b0d-be15-3bba1f5a67db"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">postprocessors</span><a href="#" class="breadcrumb">ElementalVariableValue</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="66ad38a2-5108-42f0-aa98-77b7db18ba70" data-section-level="1" data-section-text="ElementalVariableValue"><h1 id="elementalvariablevalue">ElementalVariableValue</h1><p>Outputs an elemental variable value at a particular location</p><section class="scrollspy" id="3b47d404-2304-45b2-bb06-50d1529c4947" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>In some cases it may be of interest to output an elemental variable value (e.g., stress) at a particular location in the model.  This is accomplished by using the <code>ElementalVariableValue</code> postprocessor. This postprocessor takes a specific element ID to sample (only a single ID). The value of the specified variable is integrated over the element and then returned.</p></section><section class="scrollspy" id="eee42477-9e76-4370-b63b-4298a7b44aa5" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">[Postprocessors]
+  [./elem_56]
+    type = ElementalVariableValue
+    variable = u
+    elementid = 56
+  [../]
+
+  [./elem_12]
+    type = ElementalVariableValue
+    variable = u
+    elementid = 12
+  [../]
+[]
+</code></pre><a href="#1dc702ee-b5af-41f4-bfa5-9790aec21f27" class="modal-trigger">(test/tests/outputs/postprocessor/output_pps_hidden_shown_check.i)</a><div class="modal moose-modal" id="1dc702ee-b5af-41f4-bfa5-9790aec21f27"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/outputs/postprocessor/output_pps_hidden_shown_check.i</h4><pre class="moose-pre"><code class="language-text"># Computing two postprocessors and specifying one of them both in the
+# show list and the hide list, which should throw an error message.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  nx = 10
+  ny = 10
+  elem_type = QUAD4
+  # This test uses ElementalVariableValue postprocessors on specific
+  # elements, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./lr_u]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 3&#x27;
+    value = 1
+  [../]
+[]
+
+[Postprocessors]
+  [./elem_56]
+    type = ElementalVariableValue
+    variable = u
+    elementid = 56
+  [../]
+
+  [./elem_12]
+    type = ElementalVariableValue
+    variable = u
+    elementid = 12
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+[]
+
+[Outputs]
+  [./console]
+    type = Console
+    show = &#x27;elem_56&#x27;
+    hide = &#x27;elem_56&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="70da8eda-509f-40de-b404-3179d93d7a12" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="cf87e824-2ca4-4eae-aad4-8938e16706a1" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">elementid</span><span class="moose-parameter-header-description">The ID of the element where we monitor</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The ID of the element where we monitor</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The variable to be monitored</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>VariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The variable to be monitored</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="b76bda4d-b31f-4c92-8612-47fe5c9c2059" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM TRANSFER</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="1a540e4a-a97e-43f7-a11b-e9b1aa0ce21f" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">allow_duplicate_execution_on_initial</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preaux</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREAUX</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREAUX</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preic</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREIC during initial setup</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREIC during initial setup</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="6db75916-4248-456a-b8b6-2e7a1870b1f5" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#8538afdb-a39d-4e24-8158-8508d76fb0cd" class="modal-trigger">modules/fluid_properties/test/tests/co2/co2.i</a></li><li><a href="#6cf30540-290d-44ed-9a94-8e132bb3c884" class="modal-trigger">modules/fluid_properties/test/tests/brine/brine_tabulated.i</a></li><li><a href="#57257a3b-f622-420f-baa5-d511bdde3669" class="modal-trigger">modules/tensor_mechanics/test/tests/recompute_radial_return/affine_plasticity.i</a></li><li><a href="#af3f2632-42da-48e5-bd90-2a60f9e8cd99" class="modal-trigger">modules/tensor_mechanics/test/tests/jacobian_damper/cube_load.i</a></li><li><a href="#63972a46-7df3-437d-9cac-e5b5768f3284" class="modal-trigger">modules/fluid_properties/test/tests/brine/brine.i</a></li><li><a href="#7ae088d0-a4ec-4c2e-a2cb-96fb51bba51d" class="modal-trigger">modules/tensor_mechanics/test/tests/volumetric_eigenstrain/volumetric_mechanical.i</a></li><li><a href="#7a4ba72f-94f5-487c-9a21-48b6d7e9c9f8" class="modal-trigger">modules/tensor_mechanics/test/tests/shell/dynamics/shell_dynamics_bending_moment_free_orientation_inclined.i</a></li><li><a href="#fa29d75e-b388-4c2c-9f71-772c2fefc114" class="modal-trigger">modules/tensor_mechanics/test/tests/plane_stress/3D_finite_tension_pull.i</a></li><li><a href="#626e090b-4458-45fb-89bb-697e433540e0" class="modal-trigger">test/tests/functions/hardcoded_piecewise_linear/hardcoded_piecewise_linear.i</a></li><li><a href="#1acebc61-7b30-4a11-b07e-6b0b285df286" class="modal-trigger">modules/fluid_properties/test/tests/ics/specific_enthalpy_from_pressure_temperature/test.i</a></li><li><a href="#f131fcc1-8732-410a-8c10-2bf9448d8dc0" class="modal-trigger">modules/tensor_mechanics/test/tests/smeared_cracking/cracking_function.i</a></li><li><a href="#b2c32589-1607-453c-b57e-28b28e738ba4" class="modal-trigger">modules/stochastic_tools/test/tests/transfers/sampler_transfer_vector/sub.i</a></li><li><a href="#fca36f4a-8645-4f91-af73-b9ac768b14cb" class="modal-trigger">modules/fluid_properties/test/tests/water/water.i</a></li><li><a href="#18680f23-8e33-482b-b1a1-6ef23e9c1c59" class="modal-trigger">modules/tensor_mechanics/test/tests/shell/dynamics/shell_dynamics_bending_moment_free_orientation_inclined_hht.i</a></li><li><a href="#4bb0da01-9d51-46c9-b68e-c035427e16da" class="modal-trigger">test/tests/outputs/postprocessor/show_hide.i</a></li><li><a href="#72ebcff5-0236-4353-953a-51c85b26930a" class="modal-trigger">modules/tensor_mechanics/test/tests/shell/dynamics/shell_dynamics_bending_moment.i</a></li><li><a href="#d088d98a-1e57-4161-bdfb-56b3abb448a6" class="modal-trigger">test/tests/outputs/console/console_final.i</a></li><li><a href="#fd4d41c7-c638-40bb-b42c-7b77f3818a4d" class="modal-trigger">modules/porous_flow/test/tests/density/GravDensity01.i</a></li><li><a href="#9a1a4a78-40a8-4f1c-85b6-caa2a9c148bb" class="modal-trigger">modules/tensor_mechanics/test/tests/strain_energy_density/rate_model.i</a></li><li><a href="#405a1f96-8cb8-4657-a707-f6fc9b15a6d0" class="modal-trigger">modules/fluid_properties/test/tests/tabulated/tabulated.i</a></li><li><a href="#18c94b07-15ba-4c57-8b93-2ddfaab2397a" class="modal-trigger">modules/combined/test/tests/internal_volume/rz_displaced.i</a></li><li><a href="#60a8ab58-a180-4772-84e4-6630179f25d0" class="modal-trigger">modules/tensor_mechanics/test/tests/shell/static/beam_bending_moment_AD.i</a></li><li><a href="#fdb35c43-b195-4c1f-b759-4f918cfe198f" class="modal-trigger">modules/fluid_properties/test/tests/ics/rho_vapor_mixture_from_pressure_temperature/test.i</a></li><li><a href="#eb3d1ece-4d67-4c19-bdfd-d6935e4fb9f5" class="modal-trigger">modules/tensor_mechanics/test/tests/volumetric_eigenstrain/volumetric_eigenstrain.i</a></li><li><a href="#4ea78184-0d47-4d52-b1c7-dc63eb942db5" class="modal-trigger">modules/tensor_mechanics/test/tests/shell/dynamics/shell_dynamics_bending_moment_free.i</a></li><li><a href="#73f1d6d2-e067-4e34-9934-b2e80ff8f01c" class="modal-trigger">modules/tensor_mechanics/test/tests/strain_energy_density/rate_model_small.i</a></li><li><a href="#baa55392-e6a8-4b49-9b92-8737e24f1b73" class="modal-trigger">modules/tensor_mechanics/test/tests/ad_smeared_cracking/cracking_function.i</a></li><li><a href="#b1cd414e-c2d6-4114-89ad-12e5637fca54" class="modal-trigger">modules/tensor_mechanics/test/tests/strain_energy_density/incr_model.i</a></li><li><a href="#b16b8490-b451-4357-81bc-0648a4a9b3e9" class="modal-trigger">modules/tensor_mechanics/test/tests/strain_energy_density/rate_incr_model_elas_plas.i</a></li><li><a href="#e4ffd277-ff40-42c5-93a5-7b013e1ac53e" class="modal-trigger">test/tests/outputs/variables/show_single_vars.i</a></li><li><a href="#f73de307-c6d3-4b8a-a177-9a4bbd2ba208" class="modal-trigger">modules/tensor_mechanics/test/tests/temperature_dependent_hardening/temp_dep_hardening.i</a></li><li><a href="#0bbb4432-eb3d-4229-bdce-8b2f7c9bcbfd" class="modal-trigger">modules/tensor_mechanics/test/tests/plane_stress/weak_plane_stress_finite_tension_pull.i</a></li><li><a href="#379a01ff-5270-479a-ad77-b945b63b6ed0" class="modal-trigger">modules/tensor_mechanics/test/tests/strain_energy_density/tot_model.i</a></li><li><a href="#d271885c-2c22-4042-b142-419bd0e153a9" class="modal-trigger">test/tests/auxkernels/element_var/element_var_test.i</a></li><li><a href="#b05f8312-4927-4b89-8f8d-f40be068d5b1" class="modal-trigger">modules/porous_flow/test/tests/thermal_conductivity/ThermalCondPorosity01.i</a></li><li><a href="#64b5f4f5-f956-495b-ac51-b276a0c611e2" class="modal-trigger">modules/fluid_properties/test/tests/ics/rho_from_pressure_temperature/test.i</a></li><li><a href="#e0e55311-1cfe-4026-a039-55d6370dd882" class="modal-trigger">modules/tensor_mechanics/test/tests/strain_energy_density/incr_model_elas_plas.i</a></li><li><a href="#1369b23c-2d97-4646-9d4b-d2d2a8dc879f" class="modal-trigger">modules/tensor_mechanics/test/tests/shell/static/beam_bending_moment_AD_2.i</a></li><li><a href="#d2540b7e-1fd6-4d91-8c8a-226d1240879d" class="modal-trigger">test/tests/outputs/postprocessor/output_pps_hidden_shown_check.i</a></li><li><a href="#7d20ada7-32cd-4478-aa75-30f42ccae56b" class="modal-trigger">test/tests/postprocessors/element_variable_value/elemental_variable_value.i</a></li></ul><div class="modal moose-modal" id="8538afdb-a39d-4e24-8158-8508d76fb0cd"><div class="modal-content"><h4>modules/fluid_properties/test/tests/co2/co2.i</h4><pre class="moose-pre"><code class="language-text"># Test thermophysical property calculations in CO2FluidProperties
+#
+# Comparison with values from Span and Wagner, &quot;A New Equation of State for
+# Carbon Dioxide Covering the Fluid Region from the Triple-Point Temperature
+# to 1100K at Pressures up to 800 MPa&quot;, J. Phys. Chem. Ref. Data, 25 (1996)
+#
+# Viscosity values from Fenghour et al., &quot;The viscosity of carbon dioxide&quot;,
+# J. Phys. Chem. Ref. Data, 27, 31-44 (1998)
+#
+#
+#  --------------------------------------------------------------
+#  Pressure (Mpa)             |   1       |    1      |   1
+#  Temperature (K)            |  280      |  360      |  500
+#  --------------------------------------------------------------
+#  Expected values
+#  --------------------------------------------------------------
+#  Density (kg/m^3)           |  20.199   |  15.105   |  10.664
+#  Internal energy (kJ/kg/K)  |  -75.892  |  -18.406  |  91.829
+#  Enthalpy (kJ/kg)           |  -26.385  |  47.797   |  185.60
+#  Entropy (kJ/kg/K)          |  -0.51326 |  -0.28033 |  0.04225
+#  cv (kJ/kg/K)               |  0.67092  |  0.72664  |  0.82823
+#  cp (kJ/kg/K)               |  0.92518  |  0.94206  |  1.0273
+#  Speed of sound (m/s)       |  252.33   |  289.00   |  339.81
+#  Viscosity (1e-6Pa.s)       |  14.15    |  17.94    |  24.06
+#  --------------------------------------------------------------
+#  Calculated values
+#  --------------------------------------------------------------
+#  Density (kg/m^3)           |  20.199   |  15.105   |  10.664
+#  Internal energy (kJ/kg/K)  |  -75.892  |  -18.406  |  91.829
+#  Enthalpy (kJ/kg)           |  -26.385  |  47.797   |  185.60
+#  Entropy (kJ/kg/K)          |  -0.51326 |  -0.28033 |  0.04225
+#  cv (kJ/kg/K)               |  0.67092  |  0.72664  |  0.82823
+#  cp (kJ/kg/K)               |  0.92518  |  0.94206  |  1.0273
+#  Speed of sound (m/s)       |  252.33   |  289.00   |  339.81
+#  Viscosity (1e-6 Pa.s)      |  14.15    |  17.94    |  24.06
+#  --------------------------------------------------------------
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 3
+  xmax = 3
+  # This test uses ElementalVariableValue postprocessors on specific
+  # elements, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[Variables]
+  [./dummy]
+  [../]
+[]
+
+[AuxVariables]
+  [./pressure]
+    initial_condition = 1e6
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./temperature]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./rho]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./mu]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./e]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./h]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./s]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./cv]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./cp]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./c]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+[]
+
+[Functions]
+  [./tic]
+    type = ParsedFunction
+    value = if(x&lt;1,280,if(x&lt;2,360,500))
+  [../]
+[]
+
+[ICs]
+  [./t_ic]
+    type = FunctionIC
+    function = tic
+    variable = temperature
+  [../]
+[]
+
+[AuxKernels]
+  [./rho]
+    type = MaterialRealAux
+    variable = rho
+    property = density
+  [../]
+  [./my]
+    type = MaterialRealAux
+    variable = mu
+    property = viscosity
+  [../]
+  [./internal_energy]
+    type = MaterialRealAux
+    variable = e
+    property = e
+  [../]
+  [./enthalpy]
+    type = MaterialRealAux
+    variable = h
+    property = h
+  [../]
+  [./entropy]
+    type = MaterialRealAux
+    variable = s
+    property = s
+  [../]
+  [./cv]
+    type = MaterialRealAux
+    variable = cv
+    property = cv
+  [../]
+  [./cp]
+    type = MaterialRealAux
+    variable = cp
+    property = cp
+  [../]
+  [./c]
+    type = MaterialRealAux
+    variable = c
+    property = c
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./co2]
+      type = CO2FluidProperties
+    [../]
+  []
+[]
+
+[Materials]
+  [./fp_mat]
+    type = FluidPropertiesMaterialPT
+    pressure = pressure
+    temperature = temperature
+    fp = co2
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = dummy
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = NEWTON
+[]
+
+[Postprocessors]
+  [./rho0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = rho
+  [../]
+  [./rho1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = rho
+  [../]
+  [./rho2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = rho
+  [../]
+  [./mu0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = mu
+  [../]
+  [./mu1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = mu
+  [../]
+  [./mu2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = mu
+  [../]
+  [./e0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = e
+  [../]
+  [./e1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = e
+  [../]
+  [./e2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = e
+  [../]
+  [./h0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = h
+  [../]
+  [./h1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = h
+  [../]
+  [./h2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = h
+  [../]
+  [./s0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = s
+  [../]
+  [./s1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = s
+  [../]
+  [./s2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = s
+  [../]
+  [./cv0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = cv
+  [../]
+  [./cv1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = cv
+  [../]
+  [./cv2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = cv
+  [../]
+  [./cp0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = cp
+  [../]
+  [./cp1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = cp
+  [../]
+  [./cp2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = cp
+  [../]
+  [./c0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = c
+  [../]
+  [./c1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = c
+  [../]
+  [./c2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = c
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  execute_on = &#x27;TIMESTEP_END&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6cf30540-290d-44ed-9a94-8e132bb3c884"><div class="modal-content"><h4>modules/fluid_properties/test/tests/brine/brine_tabulated.i</h4><pre class="moose-pre"><code class="language-text"># Test BrineFluidProperties calculations of density, viscosity and thermal
+# conductivity with a TabulatedFluidProperties water.
+#
+# Experimental density values from Pitzer et al, &quot;Thermodynamic properties
+# of aqueous sodium chloride solution&quot;, Journal of Physical and Chemical
+# Reference Data, 13, 1-102 (1984)
+#
+# Experimental viscosity values from Phillips et al, &quot;Viscosity of NaCl and
+# other solutions up to 350C and 50MPa pressures&quot;, LBL-11586 (1980)
+#
+# Thermal conductivity values from Ozbek and Phillips, &quot;Thermal conductivity of
+# aqueous NaCl solutions from 20C to 330C&quot;, LBL-9086 (1980)
+#
+#  --------------------------------------------------------------
+#  Pressure (Mpa)                |   20      |    20     |   40
+#  Temperature (C)               |   50      |   200     |  200
+#  NaCl molality (mol/kg)        |    2      |     2     |    5
+#  NaCl mass fraction (kg/kg)    |  0.1047   |  0.1047   |  0.2261
+#  --------------------------------------------------------------
+#  Expected values
+#  --------------------------------------------------------------
+#  Density (kg/m^3)              |  1068.52  |  959.27   |  1065.58
+#  Viscosity (1e-6Pa.s)          |  679.8    |  180.0    |  263.1
+#  Thermal conductivity (W/m/K)  |  0.630    |  0.649    |  0.633
+#  --------------------------------------------------------------
+#  Calculated values
+#  --------------------------------------------------------------
+#  Density (kg/m^3)              |  1067.18  |  958.68   |  1065.46
+#  Viscosity (1e-6 Pa.s)         |  681.1    |  181.98    |  266.1
+#  Thermal conductivity (W/m/K)  |  0.637    |   0.662    |  0.658
+#  --------------------------------------------------------------
+#
+# All results are within expected accuracy
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 3
+  ny = 1
+  xmax = 3
+  # This test uses ElementalVariableValue postprocessors on specific
+  # elements, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[Variables]
+  [./dummy]
+  [../]
+[]
+
+[AuxVariables]
+  [./pressure]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./temperature]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./xnacl]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./density]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./enthalpy]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./internal_energy]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+[]
+
+[Functions]
+  [./pic]
+    type = ParsedFunction
+    value = &#x27;if(x&lt;2,20e6, 40e6)&#x27;
+  [../]
+  [./tic]
+    type = ParsedFunction
+    value = &#x27;if(x&lt;1, 323.15, 473.15)&#x27;
+  [../]
+  [./xic]
+    type = ParsedFunction
+    value = &#x27;if(x&lt;2,0.1047, 0.2261)&#x27;
+  [../]
+[]
+
+[ICs]
+  [./p_ic]
+    type = FunctionIC
+    function = pic
+    variable = pressure
+  [../]
+  [./t_ic]
+    type = FunctionIC
+    function = tic
+    variable = temperature
+  [../]
+  [./x_ic]
+    type = FunctionIC
+    function = xic
+    variable = xnacl
+  [../]
+[]
+
+[AuxKernels]
+  [./density]
+    type = MaterialRealAux
+     variable = density
+     property = density
+  [../]
+  [./enthalpy]
+    type = MaterialRealAux
+     variable = enthalpy
+     property = enthalpy
+  [../]
+  [./internal_energy]
+    type = MaterialRealAux
+     variable = internal_energy
+     property = e
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./water]
+      type = Water97FluidProperties
+    [../]
+    [./water_tab]
+      type = TabulatedFluidProperties
+      fp = water
+      save_file = false
+    [../]
+    [./brine]
+      type = BrineFluidProperties
+      water_fp = water_tab
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./fp_mat]
+    type = MultiComponentFluidPropertiesMaterialPT
+    pressure = pressure
+    temperature = temperature
+    xmass = xnacl
+    fp = brine
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = dummy
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = NEWTON
+[]
+
+[Postprocessors]
+  [./density0]
+    type = ElementalVariableValue
+    variable = density
+    elementid = 0
+  [../]
+  [./density1]
+    type = ElementalVariableValue
+    variable = density
+    elementid = 1
+  [../]
+  [./density2]
+    type = ElementalVariableValue
+    variable = density
+    elementid = 2
+  [../]
+  [./enthalpy0]
+    type = ElementalVariableValue
+    variable = enthalpy
+    elementid = 0
+  [../]
+  [./enthalpy1]
+    type = ElementalVariableValue
+    variable = enthalpy
+    elementid = 1
+  [../]
+  [./enthalpy2]
+    type = ElementalVariableValue
+    variable = enthalpy
+    elementid = 2
+  [../]
+  [./e0]
+    type = ElementalVariableValue
+    variable = internal_energy
+    elementid = 0
+  [../]
+  [./e1]
+    type = ElementalVariableValue
+    variable = internal_energy
+    elementid = 1
+  [../]
+  [./e2]
+    type = ElementalVariableValue
+    variable = internal_energy
+    elementid = 2
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  file_base = brine_out
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="57257a3b-f622-420f-baa5-d511bdde3669"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/recompute_radial_return/affine_plasticity.i</h4><pre class="moose-pre"><code class="language-text"># Affine Plasticity Test for Transient Stress Eigenvalues with Stationary Eigenvectors
+
+# This test is taken from K. Jamojjala, R. Brannon, A. Sadeghirad, J. Guilkey,
+#  &quot;Verification tests in solid mechanics,&quot; Engineering with Computers, Vol 31.,
+#  p. 193-213.
+
+# The test involves applying particular strains and expecting particular stresses.
+
+# The material properties are:
+#  Yield in shear     165 MPa
+#  Shear modulus       79 GPa
+#  Poisson&#x27;s ratio    1/3
+
+# The strains are:
+#  Time        e11        e22        e33
+#  0             0          0          0
+#  1        -0.003     -0.003      0.006
+#  2    -0.0103923          0  0.0103923
+
+# The expected stresses are:
+#  sigma11:
+#   -474*t                             0 &lt; t &lt;= 0.201
+#   -95.26                             0.201 &lt; t &lt;= 1
+#   (189.4+0.1704*sqrt(a)-0.003242*a)
+#   ---------------------------------  1 &lt; t &lt;= 2
+#            1+0.00001712*a
+#   -189.4                             t &gt; 2 (paper erroneously gives a positive value)
+#
+#  sigma22:
+#   -474*t                             0 &lt; t &lt;= 0.201
+#   -95.26                             0.201 &lt; t &lt;= 1
+#   -(76.87+1.443*sqrt(a)-0.001316*a)
+#   ---------------------------------  1 &lt; t &lt;= 2 (paper gives opposite sign)
+#             1+0.00001712*a
+#   76.87                              t &gt; 2
+#
+#  sigma33:
+#   948*t                              0 &lt; t &lt;= 0.201
+#   190.5                              0.201 &lt; t &lt;= 1
+#   -(112.5-1.272*sqrt(a)-0.001926*a)
+#   ---------------------------------  1 &lt; t &lt;= 2 (paper has two sign errors here)
+#            1+0.00001712*a
+#   112.5                              t &gt; 2
+#
+#  where a = exp(12.33*t).
+#
+# Note: If planning to run this case with strain type ComputeFiniteStrain, the
+#   displacement function must be adjusted.  Instead of
+#     strain = (l - l0)/l0 = (u+l0 - l0)/l0 = u/l0
+#   with l0=1.0, we would have
+#     strain = log(l/l0) = log((u+l0)/l0)
+#   with l0=1.0.  So, for strain = -0.003,
+#     -0.003 = log((u+l0)/l0) -&gt;
+#     u = exp(-0.003)*l0 - l0 = -0.0029955044966269995.
+#
+
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+  block = &#x27;0&#x27;
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 1
+  ny = 1
+  nz = 1
+  # This test uses ElementalVariableValue postprocessors on specific
+  # elements, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[Functions]
+  [./disp_x]
+    type = PiecewiseLinear
+    x = &#x27;0.  1.     2.&#x27;
+    y = &#x27;0. -0.003 -0.0103923&#x27;
+  [../]
+  [./disp_y]
+    type = PiecewiseLinear
+    x = &#x27;0.  1.    2.&#x27;
+    y = &#x27;0. -0.003 0.&#x27;
+  [../]
+  [./disp_z]
+    type = PiecewiseLinear
+    x = &#x27;0. 1.    2.&#x27;
+    y = &#x27;0. 0.006 0.0103923&#x27;
+  [../]
+  [./stress_xx]
+    type = ParsedFunction
+    # The paper gives 0.201 as the time at initial yield, but 0.20097635952803425 is the exact value.
+    # The paper gives -95.26 MPa as the stress at yield, but -95.26279441628823 is the exact value.
+    # The paper gives 12.33 as the factor in the exponential, but 12.332921390339125 is the exact value.
+    # 189.409039923814000, 0.170423791206825, -0.003242011311945, 1.711645501845780E-05 - exact values
+    vars = &#x27;timeAtYield stressAtYield expFac a b c d&#x27;
+    vals = &#x27;0.20097635952803425 -95.26279441628823 12.332921390339125 189.409039923814000 0.170423791206825 -0.003242011311945 1.711645501845780E-05&#x27;
+    value = &#x27;1e6*
+             if(t&lt;=timeAtYield, -474*t,
+             if(t&lt;=1, stressAtYield,
+             (a+b*sqrt(exp(expFac*t))+c*exp(expFac*t))/(1.0+d*exp(expFac*t))))&#x27; # tends to -a
+  [../]
+  [./stress_yy]
+    type = ParsedFunction
+    # The paper gives 0.201 as the time at initial yield, but 0.20097635952803425 is the exact value.
+    # the paper gives -95.26 MPa as the stress at yield, but -95.26279441628823 is the exact value.
+    # The paper gives 12.33 as the factor in the exponential, but 12.332921390339125 is the exact value.
+    # -76.867432297315000, -1.442488120272900, 0.001315697947301, 1.711645501845780E-05 - exact values
+    vars = &#x27;timeAtYield stressAtYield expFac a b c d&#x27;
+    vals = &#x27;0.20097635952803425 -95.26279441628823 12.332921390339125 -76.867432297315000 -1.442488120272900 0.001315697947301 1.711645501845780E-05&#x27;
+    value = &#x27;1e6*
+             if(t&lt;=timeAtYield, -474*t,
+             if(t&lt;=1, stressAtYield,
+             (a+b*sqrt(exp(expFac*t))+c*exp(expFac*t))/(1.0+d*exp(expFac*t))))&#x27; # tends to -a
+  [../]
+  [./stress_zz]
+    type = ParsedFunction
+    # The paper gives 0.201 as the time at initial yield, but 0.20097635952803425 is the exact value.
+    # the paper gives 190.5 MPa as the stress at yield, but 190.52558883257645 is the exact value.
+    # The paper gives 12.33 as the factor in the exponential, but 12.332921390339125 is the exact value.
+    # -112.541607626499000, 1.272064329066080, 0.001926313364644, 1.711645501845780E-05 - exact values
+    vars = &#x27;timeAtYield stressAtYield expFac a b c d&#x27;
+    vals = &#x27;0.20097635952803425 190.52558883257645 12.332921390339125 -112.541607626499000 1.272064329066080 0.001926313364644 1.711645501845780E-05&#x27;
+    value = &#x27;1e6*
+             if(t&lt;=timeAtYield, 948*t,
+             if(t&lt;=1, stressAtYield,
+             (a+b*sqrt(exp(expFac*t))+c*exp(expFac*t))/(1.0+d*exp(expFac*t))))&#x27; # tends to -a
+  [../]
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_z]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./vonmises]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./plastic_strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./plastic_strain_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./plastic_strain_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+[]
+
+[Kernels]
+  [./TensorMechanics]
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_xx]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xx
+    index_i = 0
+    index_j = 0
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./stress_yy]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_yy
+    index_i = 1
+    index_j = 1
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./stress_zz]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_zz
+    index_i = 2
+    index_j = 2
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./vonmises]
+    type = RankTwoScalarAux
+    rank_two_tensor = stress
+    variable = vonmises
+    scalar_type = vonmisesStress
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+
+  [./plastic_strain_xx]
+    type = RankTwoAux
+    rank_two_tensor = plastic_strain
+    variable = plastic_strain_xx
+    index_i = 0
+    index_j = 0
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./plastic_strain_yy]
+    type = RankTwoAux
+    rank_two_tensor = plastic_strain
+    variable = plastic_strain_yy
+    index_i = 1
+    index_j = 1
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./plastic_strain_zz]
+    type = RankTwoAux
+    rank_two_tensor = plastic_strain
+    variable = plastic_strain_zz
+    index_i = 2
+    index_j = 2
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[BCs]
+  [./fixed_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./fixed_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  [../]
+  [./fixed_z]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0.0
+  [../]
+
+  [./disp_x]
+    type = FunctionDirichletBC
+    variable = disp_x
+    boundary = right
+    function = disp_x
+  [../]
+  [./disp_y]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = top
+    function = disp_y
+  [../]
+  [./disp_z]
+    type = FunctionDirichletBC
+    variable = disp_z
+    boundary = front
+    function = disp_z
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 210666666666.666667
+    poissons_ratio = 0.3333333333333333
+  [../]
+
+  [./strain]
+    type = ComputeIncrementalSmallStrain
+  [../]
+
+  [./isotropic_plasticity]
+    type = IsotropicPlasticityStressUpdate
+    yield_stress = 285788383.2488647 # = sqrt(3)*165e6 = sqrt(3) * yield in shear
+    hardening_constant = 0.0
+  [../]
+  [./radial_return_stress]
+    type = ComputeMultipleInelasticStress
+    tangent_operator = elastic
+    inelastic_models = &#x27;isotropic_plasticity&#x27;
+  [../]
+[]
+
+[Executioner]
+
+  type = Transient
+
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options = &#x27;-snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-pc_type&#x27;
+  petsc_options_value = &#x27;lu&#x27;
+
+  nl_abs_tol = 1e-10
+
+  l_max_its = 20
+
+  start_time = 0.0
+  dt = 0.01 # use 0.0001 for a nearly exact match
+  end_time = 2.0
+[]
+
+[Postprocessors]
+  [./analytic_xx]
+    type = FunctionValuePostprocessor
+    function = stress_xx
+  [../]
+  [./analytic_yy]
+    type = FunctionValuePostprocessor
+    function = stress_yy
+  [../]
+  [./analytic_zz]
+    type = FunctionValuePostprocessor
+    function = stress_zz
+  [../]
+
+  [./stress_xx]
+    type = ElementalVariableValue
+    variable = stress_xx
+    elementid = 0
+  [../]
+  [./stress_yy]
+    type = ElementalVariableValue
+    variable = stress_yy
+    elementid = 0
+  [../]
+  [./stress_zz]
+    type = ElementalVariableValue
+    variable = stress_zz
+    elementid = 0
+  [../]
+
+  [./stress_xx_l2_error]
+    type = ElementL2Error
+    variable = stress_xx
+    function = stress_xx
+  [../]
+  [./stress_yy_l2_error]
+    type = ElementL2Error
+    variable = stress_yy
+    function = stress_yy
+  [../]
+  [./stress_zz_l2_error]
+    type = ElementL2Error
+    variable = stress_zz
+    function = stress_zz
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="af3f2632-42da-48e5-bd90-2a60f9e8cd99"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/jacobian_damper/cube_load.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 1
+  ny = 1
+  nz = 1
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+  # This test uses ElementalVariableValue postprocessors on specific
+  # elements, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+
+  [./disp_z]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./total_strain_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Functions]
+  [./top_pull]
+    type = PiecewiseLinear
+    x = &#x27;0 1     2&#x27;
+    y = &#x27;0 0.025 0.05&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    use_displaced_mesh = true
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_yy]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_yy
+    index_i = 1
+    index_j = 1
+  [../]
+
+  [./total_strain_yy]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = total_strain_yy
+    index_i = 1
+    index_j = 1
+  [../]
+[]
+
+
+[BCs]
+  [./y_pull_function]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = 3
+    function = top_pull
+  [../]
+
+  [./x_bot]
+    type = DirichletBC
+    variable = disp_x
+    boundary = 4
+    value = 0.0
+  [../]
+
+  [./y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = 1
+    value = 0.0
+  [../]
+
+  [./z_bot]
+    type = DirichletBC
+    variable = disp_z
+    boundary = 0
+    value = 0.0
+  [../]
+[]
+
+[Postprocessors]
+  [./stress_yy_el]
+    type = ElementalVariableValue
+    variable = stress_yy
+    elementid = 0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    poissons_ratio = 0.3
+    youngs_modulus = 2e5
+  [../]
+  [./strain]
+    type = ComputeFiniteStrain
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+  [../]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+[]
+
+[Dampers]
+  [./disp_x_damp]
+    type = ElementJacobianDamper
+    max_increment = 0.002
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options = &#x27;-snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
+  petsc_options_value = &#x27;201                hypre    boomeramg      4&#x27;
+
+  line_search = &#x27;none&#x27;
+
+  l_max_its = 100
+  nl_max_its = 100
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+  l_tol = 1e-9
+
+  start_time = 0.0
+  end_time = 2
+  dt = 1
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="63972a46-7df3-437d-9cac-e5b5768f3284"><div class="modal-content"><h4>modules/fluid_properties/test/tests/brine/brine.i</h4><pre class="moose-pre"><code class="language-text"># Test BrineFluidProperties calculations of density, viscosity and thermal
+# conductivity
+#
+# Experimental density values from Pitzer et al, &quot;Thermodynamic properties
+# of aqueous sodium chloride solution&quot;, Journal of Physical and Chemical
+# Reference Data, 13, 1-102 (1984)
+#
+# Experimental viscosity values from Phillips et al, &quot;Viscosity of NaCl and
+# other solutions up to 350C and 50MPa pressures&quot;, LBL-11586 (1980)
+#
+# Thermal conductivity values from Ozbek and Phillips, &quot;Thermal conductivity of
+# aqueous NaCl solutions from 20C to 330C&quot;, LBL-9086 (1980)
+#
+#  --------------------------------------------------------------
+#  Pressure (Mpa)                |   20      |    20     |   40
+#  Temperature (C)               |   50      |   200     |  200
+#  NaCl molality (mol/kg)        |    2      |     2     |    5
+#  NaCl mass fraction (kg/kg)    |  0.1047   |  0.1047   |  0.2261
+#  --------------------------------------------------------------
+#  Expected values
+#  --------------------------------------------------------------
+#  Density (kg/m^3)              |  1068.52  |  959.27   |  1065.58
+#  Viscosity (1e-6Pa.s)          |  679.8    |  180.0    |  263.1
+#  Thermal conductivity (W/m/K)  |  0.630    |  0.649    |  0.633
+#  --------------------------------------------------------------
+#  Calculated values
+#  --------------------------------------------------------------
+#  Density (kg/m^3)              |  1067.18  |  958.68   |  1065.46
+#  Viscosity (1e-6 Pa.s)         |  681.1    |  181.98    |  266.1
+#  Thermal conductivity (W/m/K)  |  0.637    |   0.662    |  0.658
+#  --------------------------------------------------------------
+#
+# All results are within expected accuracy
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 3
+  ny = 1
+  xmax = 3
+  # This test uses ElementalVariableValue postprocessors on specific
+  # elements, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[Variables]
+  [./dummy]
+  [../]
+[]
+
+[AuxVariables]
+  [./pressure]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./temperature]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./xnacl]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./density]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./enthalpy]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./internal_energy]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+[]
+
+[Functions]
+  [./pic]
+    type = ParsedFunction
+    value = &#x27;if(x&lt;2,20e6, 40e6)&#x27;
+  [../]
+  [./tic]
+    type = ParsedFunction
+    value = &#x27;if(x&lt;1, 323.15, 473.15)&#x27;
+  [../]
+  [./xic]
+    type = ParsedFunction
+    value = &#x27;if(x&lt;2,0.1047, 0.2261)&#x27;
+  [../]
+[]
+
+[ICs]
+  [./p_ic]
+    type = FunctionIC
+    function = pic
+    variable = pressure
+  [../]
+  [./t_ic]
+    type = FunctionIC
+    function = tic
+    variable = temperature
+  [../]
+  [./x_ic]
+    type = FunctionIC
+    function = xic
+    variable = xnacl
+  [../]
+[]
+
+[AuxKernels]
+  [./density]
+    type = MaterialRealAux
+     variable = density
+     property = density
+  [../]
+  [./enthalpy]
+    type = MaterialRealAux
+     variable = enthalpy
+     property = enthalpy
+  [../]
+  [./internal_energy]
+    type = MaterialRealAux
+     variable = internal_energy
+     property = e
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./brine]
+      type = BrineFluidProperties
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./fp_mat]
+    type = MultiComponentFluidPropertiesMaterialPT
+    pressure = pressure
+    temperature = temperature
+    xmass = xnacl
+    fp = brine
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = dummy
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = NEWTON
+[]
+
+[Postprocessors]
+  [./density0]
+    type = ElementalVariableValue
+    variable = density
+    elementid = 0
+  [../]
+  [./density1]
+    type = ElementalVariableValue
+    variable = density
+    elementid = 1
+  [../]
+  [./density2]
+    type = ElementalVariableValue
+    variable = density
+    elementid = 2
+  [../]
+  [./enthalpy0]
+    type = ElementalVariableValue
+    variable = enthalpy
+    elementid = 0
+  [../]
+  [./enthalpy1]
+    type = ElementalVariableValue
+    variable = enthalpy
+    elementid = 1
+  [../]
+  [./enthalpy2]
+    type = ElementalVariableValue
+    variable = enthalpy
+    elementid = 2
+  [../]
+  [./e0]
+    type = ElementalVariableValue
+    variable = internal_energy
+    elementid = 0
+  [../]
+  [./e1]
+    type = ElementalVariableValue
+    variable = internal_energy
+    elementid = 1
+  [../]
+  [./e2]
+    type = ElementalVariableValue
+    variable = internal_energy
+    elementid = 2
+  [../]
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="7ae088d0-a4ec-4c2e-a2cb-96fb51bba51d"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/volumetric_eigenstrain/volumetric_mechanical.i</h4><pre class="moose-pre"><code class="language-text"># This test ensures that the reported volumetric strain for a cube with
+# mechanically imposed displacements (through Dirichlet BCs) exactly
+# matches that from a version of this test that experiences the same
+# defomation, but due to imposed eigenstrains.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 1
+  ny = 1
+  nz = 1
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+  [./disp_z]
+  [../]
+[]
+
+[AuxVariables]
+  [./volumetric_strain]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Modules/TensorMechanics/Master]
+  [./master]
+    strain = FINITE
+    decomposition_method = EigenSolution #Necessary for exact solution
+  [../]
+[]
+
+[AuxKernels]
+  [./volumetric_strain]
+    type = RankTwoScalarAux
+    scalar_type = VolumetricStrain
+    rank_two_tensor = total_strain
+    variable = volumetric_strain
+  [../]
+[]
+
+[Functions]
+  [pres_disp]
+    type = PiecewiseLinear
+    # These values are taken from the displacements in the eigenstrain
+    # version of this test. The volume of the cube (which starts out as
+    # a 1x1x1 cube) is (1 + disp)^3. At time 2, this is
+    # (1.44224957030741)^3, which is 3.0.
+    xy_data = &#x27;0 0
+               1 0.25992104989487
+               2 0.44224957030741&#x27;
+  []
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./bottom]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  [../]
+  [./back]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0.0
+  [../]
+  [./right]
+    type = FunctionDirichletBC
+    variable = disp_x
+    boundary = right
+    function = pres_disp
+  [../]
+  [./top]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = top
+    function = pres_disp
+  [../]
+  [./front]
+    type = FunctionDirichletBC
+    variable = disp_z
+    boundary = front
+    function = pres_disp
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e6
+    poissons_ratio = 0.3
+  [../]
+  [./finite_strain_stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+  [./volumetric_change]
+    type = GenericFunctionMaterial
+    prop_names = volumetric_change
+    prop_values = t
+  [../]
+[]
+
+[Postprocessors]
+  [./vol]
+    type = VolumePostprocessor
+    use_displaced_mesh = true
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./volumetric_strain]
+    type = ElementalVariableValue
+    variable = volumetric_strain
+    elementid = 0
+  [../]
+  [./disp_right]
+    type = NodalMaxValue
+    variable = disp_x
+    boundary = right
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  l_max_its = 100
+  l_tol = 1e-4
+  nl_abs_tol = 1e-8
+  nl_rel_tol = 1e-12
+
+  start_time = 0.0
+  end_time = 2.0
+  dt = 1.0
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="7a4ba72f-94f5-487c-9a21-48b6d7e9c9f8"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/shell/dynamics/shell_dynamics_bending_moment_free_orientation_inclined.i</h4><pre class="moose-pre"><code class="language-text"># Test to verify the fundamental natural frequency of a one element ADComputeShellStress
+# BCs: Clamped on one end, free on others.
+# Initial perturbation applied to edge of the beam. After that, the shell vibrates freely.
+#
+# Results have been compared for various thicknesses with the following approximate Results
+# (Moose results were obtained with 8 elements along the length)
+# Thickness = 0.1. Reference freq: 10.785 Hz, Moose freq: 10.612 Hz
+# Thickness = 0.05. Reference freq: 5.393 Hz, Moose freq: 5.335 Hz
+# Thickness = 0.025. Reference freq: 2.696 Hz, Moose freq: 2.660 Hz
+#
+# Reference values have been obtained from Robert Blevins, &quot;Formulas for Dynamics, Acoustics and Vibration&quot;,
+# Table 5.3 case 11. Formula looks like: f = lambda^2/(2*pi*a^2) * sqrt(E*h^2/(12*(1-nu*nu))), where lambda
+# changes as a function of shell dimensions.
+
+# This test uses one single element for speed reasons.
+
+# Here, the shell, instead of being on the XY plane, is oriented at a 45 deg. angle
+# with respect to the Y axis.
+
+[Mesh]
+  type = FileMesh
+  file = shell_inclined.e
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+  [./disp_z]
+  [../]
+  [./rot_x]
+  [../]
+  [./rot_y]
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_yz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  # aux variables for dynamics
+  [./vel_x]
+  [../]
+  [./vel_y]
+  [../]
+  [./vel_z]
+  [../]
+  [./accel_x]
+  [../]
+  [./accel_y]
+  [../]
+  [./accel_z]
+  [../]
+  [./rot_vel_x]
+  [../]
+  [./rot_vel_y]
+  [../]
+  [./rot_accel_x]
+  [../]
+  [./rot_accel_y]
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_yy]
+    type = RankTwoAux
+    variable = stress_yy
+    rank_two_tensor = global_stress_t_points_0
+    index_i = 1
+    index_j = 1
+  [../]
+  [./stress_yz]
+    type = RankTwoAux
+    variable = stress_yz
+    rank_two_tensor = global_stress_t_points_0
+    index_i = 1
+    index_j = 2
+  [../]
+
+# Kernels for dynamics
+[./accel_x]
+  type = NewmarkAccelAux
+  variable = accel_x
+  displacement = disp_x
+  velocity = vel_x
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./vel_x]
+  type = NewmarkVelAux
+  variable = vel_x
+  acceleration = accel_x
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[./accel_y]
+  type = NewmarkAccelAux
+  variable = accel_y
+  displacement = disp_y
+  velocity = vel_y
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./vel_y]
+  type = NewmarkVelAux
+  variable = vel_y
+  acceleration = accel_y
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[./accel_z]
+  type = NewmarkAccelAux
+  variable = accel_z
+  displacement = disp_z
+  velocity = vel_z
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./vel_z]
+  type = NewmarkVelAux
+  variable = vel_z
+  acceleration = accel_z
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[./rot_accel_x]
+  type = NewmarkAccelAux
+  variable = rot_accel_x
+  displacement = rot_x
+  velocity = rot_vel_x
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./rot_vel_x]
+  type = NewmarkVelAux
+  variable = rot_vel_x
+  acceleration = rot_accel_x
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[./rot_accel_y]
+  type = NewmarkAccelAux
+  variable = rot_accel_y
+  displacement = rot_y
+  velocity = rot_vel_y
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./rot_vel_y]
+  type = NewmarkVelAux
+  variable = rot_vel_y
+  acceleration = rot_accel_y
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[]
+
+[BCs]
+  [./fixy1]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;0&#x27;
+    value = 0.0
+  [../]
+  [./fixz1]
+    type = DirichletBC
+    variable = disp_z
+    boundary = &#x27;0&#x27;
+    value = 0.0
+  [../]
+  [./fixr1]
+    type = DirichletBC
+    variable = rot_x
+    boundary = &#x27;0&#x27;
+    value = 0.0
+  [../]
+  [./fixr2]
+    type = DirichletBC
+    variable = rot_y
+    boundary = &#x27;0&#x27;
+    value = 0.0
+  [../]
+  [./fixx1]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;0&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Functions]
+  [./force_function]
+    type = PiecewiseLinear
+    x = &#x27;0.0 0.01 0.15 10.0&#x27;
+    y = &#x27;0.0 0.01 0.0 0.0&#x27;
+  [../]
+[]
+[NodalKernels]
+  [./force_y2]
+    type = UserForcingFunctionNodalKernel
+    variable = disp_z
+    boundary = &#x27;2&#x27;
+    function = force_function
+  [../]
+[]
+[Kernels]
+  [./solid_disp_x]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 0
+    variable = disp_x
+    through_thickness_order = SECOND
+  [../]
+  [./solid_disp_y]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 1
+    variable = disp_y
+    through_thickness_order = SECOND
+  [../]
+  [./solid_disp_z]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 2
+    variable = disp_z
+    through_thickness_order = SECOND
+  [../]
+  [./solid_rot_x]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 3
+    variable = rot_x
+    through_thickness_order = SECOND
+  [../]
+  [./solid_rot_y]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 4
+    variable = rot_y
+    through_thickness_order = SECOND
+  [../]
+
+  [./inertial_force_x]
+    type = ADInertialForceShell
+    use_displaced_mesh = true
+    eta = 0.0
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 0
+    variable = disp_x
+    thickness = 0.1
+  [../]
+
+  [./inertial_force_y]
+    type = ADInertialForceShell
+    use_displaced_mesh = true
+    eta = 0.0
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 1
+    variable = disp_y
+    thickness = 0.1
+
+  [../]
+
+  [./inertial_force_z]
+    type = ADInertialForceShell
+    use_displaced_mesh = true
+    eta = 0.0
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 2
+    variable = disp_z
+    thickness = 0.1
+
+  [../]
+
+  [./inertial_force_rot_x]
+    type = ADInertialForceShell
+    use_displaced_mesh = true
+    eta = 0.0
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 3
+    variable = rot_x
+    thickness = 0.1
+  [../]
+
+  [./inertial_force_rot_y]
+    type = ADInertialForceShell
+    use_displaced_mesh = true
+    eta = 0.0
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 4
+    variable = rot_y
+    thickness = 0.1
+  [../]
+[]
+
+[Materials]
+  [./elasticity]
+    type = ADComputeIsotropicElasticityTensorShell
+    youngs_modulus = 2100000
+    poissons_ratio = 0.3
+    block = 0
+    through_thickness_order = SECOND
+  [../]
+  [./strain]
+    type = ADComputeIncrementalShellStrain
+    block = &#x27;0&#x27;
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    thickness = 0.1
+    through_thickness_order = SECOND
+  [../]
+  [./stress]
+    type = ADComputeShellStress
+    block = 0
+    through_thickness_order = SECOND
+  [../]
+  [./density]
+    type = GenericConstantMaterial
+    block = 0
+    prop_names = &#x27;density&#x27;
+    prop_values = &#x27;1.0&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./disp_z_tip]
+    type = PointValue
+    point = &#x27;0.0 1.06 1.06&#x27;
+    variable = disp_z
+  [../]
+  [./rot_x_tip]
+    type = PointValue
+    point = &#x27;0.0 1.06 1.06&#x27;
+    variable = rot_x
+  [../]
+  [./stress_yy_el_0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = stress_yy
+  [../]
+  [./stress_yy_el_1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = stress_yy
+  [../]
+  [./stress_yy_el_2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = stress_yy
+  [../]
+  [./stress_yy_el_3]
+    type = ElementalVariableValue
+    elementid = 3
+    variable = stress_yy
+  [../]
+  [./stress_yz_el_0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_3]
+    type = ElementalVariableValue
+    elementid = 3
+    variable = stress_yz
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  l_tol = 1e-11
+  nl_max_its = 15
+  nl_rel_tol = 1e-11
+  nl_abs_tol = 1e-10
+  l_max_its = 20
+  dt = 0.005
+  dtmin = 0.005
+  timestep_tolerance = 2e-13
+  end_time = 0.5
+
+  [./TimeIntegrator]
+    type = NewmarkBeta
+    beta = 0.25
+    gamma = 0.5
+  [../]
+
+[]
+
+[Outputs]
+  perf_graph = true
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fa29d75e-b388-4c2c-9f71-772c2fefc114"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/plane_stress/3D_finite_tension_pull.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  order = FIRST
+  family = LAGRANGE
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Problem]
+  extra_tag_vectors = &#x27;ref&#x27;
+[]
+
+[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 3
+    nx = 1
+    ny = 1
+    nz = 1
+  []
+[]
+
+[AuxVariables]
+  [react_x]
+  []
+[]
+
+[Postprocessors]
+  [react_x]
+    type = NodalSum
+    variable = &#x27;react_x&#x27;
+    boundary = &#x27;right&#x27;
+  []
+  [stress_xx]
+    type = ElementalVariableValue
+    variable = &#x27;stress_xx&#x27;
+    elementid = 0
+  []
+  [strain_zz]
+    type = ElementalVariableValue
+    variable = &#x27;strain_zz&#x27;
+    elementid = 0
+  []
+[]
+
+[Modules/TensorMechanics/Master]
+  [plane_stress]
+    strain = FINITE
+    extra_vector_tags = &#x27;ref&#x27;
+    generate_output = &#x27;stress_xx stress_xy stress_yy stress_zz strain_xx strain_xy strain_yy strain_zz&#x27;
+    add_variables = true
+  []
+[]
+
+[AuxKernels]
+  [react_x]
+    type = TagVectorAux
+    vector_tag = &#x27;ref&#x27;
+    v = &#x27;disp_x&#x27;
+    variable = &#x27;react_x&#x27;
+  []
+[]
+
+[BCs]
+  [leftx]
+    type = DirichletBC
+    boundary = left
+    variable = disp_x
+    value = 0.0
+  []
+  [bottomy]
+    type = DirichletBC
+    boundary = bottom
+    variable = disp_y
+    value = 0.0
+  []
+  [backz]
+    type = DirichletBC
+    boundary = back
+    variable = disp_z
+    value = 0.0
+  []
+  [rightx]
+    type = FunctionDirichletBC
+    boundary = right
+    variable = disp_x
+    function = &#x27;t&#x27;
+  []
+[]
+
+[Materials]
+  [elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    poissons_ratio = 0.3
+    youngs_modulus = 1e6
+  []
+  [stress]
+    type = ComputeFiniteStrainElasticStress
+  []
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = PJFNK
+  line_search = none
+
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+
+  # time control
+  start_time = 0.0
+  dt = 0.01
+  dtmin = 0.01
+  end_time = 0.2
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="626e090b-4458-45fb-89bb-697e433540e0"><div class="modal-content"><h4>test/tests/functions/hardcoded_piecewise_linear/hardcoded_piecewise_linear.i</h4><pre class="moose-pre"><code class="language-text"># This test ensures that hardcoded_function returns the expected
+# time-dependent values. The HardCodedPiecewiseLinearFunction is
+# a test object whose purpose is to ensure that the setData() method
+# can be used in Piecewise functions to directly set the xy data.
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmin = 0
+  xmax = 1
+  nx = 1
+  # This test uses an ElementalVariableValue postprocessor on a specific
+  # element, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[Problem]
+  solve = false
+[]
+
+[AuxVariables]
+  [funcval]
+  []
+[]
+
+[AuxKernels]
+  [funcval]
+    type = FunctionAux
+    variable = funcval
+    function = hardcoded_function
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+[]
+
+
+[Functions]
+  [hardcoded_function]
+    type = HardCodedPiecewiseLinearFunction
+  []
+[]
+
+[Postprocessors]
+  [end1_pp]
+    type = ElementalVariableValue
+    variable = funcval
+    elementid = 0
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 0.5
+  end_time = 2
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1acebc61-7b30-4a11-b07e-6b0b285df286"><div class="modal-content"><h4>modules/fluid_properties/test/tests/ics/specific_enthalpy_from_pressure_temperature/test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 1
+  allow_renumbering = false
+[]
+
+[Modules]
+  [FluidProperties]
+    [fp_steam]
+      type = StiffenedGasFluidProperties
+      gamma = 1.43
+      cv = 1040.0
+      q = 2.03e6
+      p_inf = 0.0
+      q_prime = -2.3e4
+      k = 0.026
+      mu = 134.4e-7
+      M = 0.01801488
+      rho_c = 322.0
+    []
+  []
+[]
+
+[AuxVariables]
+  [h]
+  []
+  [p]
+  []
+  [T]
+  []
+[]
+
+[ICs]
+  [h_ic]
+    type = SpecificEnthalpyFromPressureTemperatureIC
+    variable = h
+    p = p
+    T = T
+    fp = fp_steam
+  []
+  [p_ic]
+    type = ConstantIC
+    variable = p
+    value = 100e3
+  []
+  [T_ic]
+    type = ConstantIC
+    variable = T
+    value = 500
+  []
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Postprocessors]
+  [h_test]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = h
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+[]
+
+[Outputs]
+  csv = true
+  execute_on = &#x27;INITIAL&#x27;
+[]
+
+[Problem]
+  solve = false
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f131fcc1-8732-410a-8c10-2bf9448d8dc0"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/smeared_cracking/cracking_function.i</h4><pre class="moose-pre"><code class="language-text">#
+# Simple pull test for cracking. This tests the option to prescribe the
+# cracking strength using an AuxVariable. In this case, an elemental
+# AuxVariable is used, and a function is used to prescribe its value.
+# One of the elements is weaker than the others, so the crack localizes
+# in that element.
+#
+[Mesh]
+   file = plate.e
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[AuxVariables]
+  [./cracking_stress_fn]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./crack_flags2]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Functions]
+  [./displ]
+    type = PiecewiseLinear
+    x = &#x27;0 0.1 0.2 0.3 0.4&#x27;
+    y = &#x27;0 0.001 0 -0.001 0&#x27;
+  [../]
+  [./fstress]
+    type = ParsedFunction
+    value = &#x27;if(x &gt; 0.667, 1.1e6, 1.2e6)&#x27;
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./all]
+    strain = FINITE
+    add_variables = true
+    generate_output = &#x27;stress_xx stress_yy stress_zz stress_xy stress_yz stress_zx strain_xx strain_yy strain_xy strain_yz&#x27;
+  [../]
+[]
+
+[AuxKernels]
+  [./cracking_stress_fn]
+    type = FunctionAux
+    variable = cracking_stress_fn
+    function = fstress
+    execute_on = initial
+  [../]
+  [./crack_flags2]
+    type = MaterialRealVectorValueAux
+    property = crack_flags
+    variable = crack_flags2
+   component = 2
+  [../]
+[]
+
+[BCs]
+  [./pull]
+    type = FunctionDirichletBC
+    variable = disp_x
+    boundary = &#x27;3 4&#x27;
+    function = displ
+  [../]
+
+  [./pin_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary =  &#x27;1 2&#x27;
+    value = 0
+  [../]
+  [./pin_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;1 4&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 200.0e7
+    poissons_ratio = 0.0
+  [../]
+  [./elastic_stress]
+    type = ComputeSmearedCrackingStress
+    cracking_stress = cracking_stress_fn
+    softening_models = abrupt_softening
+  [../]
+  [./abrupt_softening]
+    type = AbruptSoftening
+    residual_stress = 0.0
+  [../]
+[]
+
+[Postprocessors]
+  [./elem_stress_xx]
+    type = ElementalVariableValue
+    variable = stress_xx
+    elementid = 2
+  [../]
+  [./elem_strain_xx]
+    type = ElementalVariableValue
+    variable = strain_xx
+    elementid = 2
+  [../]
+  [./elem_crack_flags_x]
+    type = ElementalVariableValue
+    variable = crack_flags2
+    elementid = 2
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = PJFNK
+
+  petsc_options_iname = &#x27;-ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;101               &#x27;
+
+  line_search = &#x27;none&#x27;
+
+  l_max_its = 100
+  nl_max_its = 100
+  nl_rel_tol = 1e-8
+  nl_abs_tol = 1e-6
+  l_tol = 1e-5
+  start_time = 0.0
+  end_time = 0.2
+  dt = 0.0025
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b2c32589-1607-453c-b57e-28b28e738ba4"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/transfers/sampler_transfer_vector/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 10
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[AuxVariables]
+  [prop_a]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [prop_b]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+[]
+
+[AuxKernels]
+  [prop_a]
+    type = MaterialRealAux
+    variable = prop_a
+    property = prop_a
+  []
+  [prop_b]
+    type = MaterialRealAux
+    variable = prop_b
+    property = prop_b
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 5
+  dt = 0.01
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Materials]
+  [mat]
+    type = GenericConstantMaterial
+    prop_names = &#x27;prop_a prop_b&#x27;
+    prop_values = &#x27;100    200&#x27;
+  []
+  [mat2]
+    type = GenericConstantMaterial
+    prop_names = &#x27;prop_c prop_d prop_e&#x27;
+    prop_values = &#x27;300    400    500&#x27;
+  []
+[]
+
+[Controls]
+  [stochastic]
+    type = SamplerReceiver
+  []
+[]
+
+[Postprocessors]
+  [left_bc]
+    type = NodalVariableValue
+    variable = u
+    nodeid = 0
+  []
+  [right_bc]
+    type = NodalVariableValue
+    variable = u
+    nodeid = 10
+  []
+  [prop_a]
+    type = ElementalVariableValue
+    variable = prop_a
+    elementid = 0
+  []
+  [prop_b]
+    type = ElementalVariableValue
+    variable = prop_b
+    elementid = 0
+  []
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fca36f4a-8645-4f91-af73-b9ac768b14cb"><div class="modal-content"><h4>modules/fluid_properties/test/tests/water/water.i</h4><pre class="moose-pre"><code class="language-text"># Example of using Water97FluidProperties module in Region 1 by recovering the values
+# in Table 5 of Revised Release on the IAPWS Industrial Formulation 1997 for the
+# Thermodynamic Properties of Water and Steam
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 3
+  xmax = 3
+  # This test uses ElementalVariableValue postprocessors on specific
+  # elements, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[Variables]
+  [./dummy]
+  [../]
+[]
+
+[AuxVariables]
+  [./pressure]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./temperature]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./rho]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./v]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./e]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./h]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./s]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./cp]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./cv]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./c]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./mu]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./k]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+[]
+
+[Functions]
+  [./tic]
+    type = ParsedFunction
+    value = &#x27;if(x&lt;2, 300, 500)&#x27;
+  [../]
+  [./pic]
+    type = ParsedFunction
+    value = &#x27;if(x&lt;1,3e6, if(x&lt;2, 80e6, 3e6))&#x27;
+  [../]
+[]
+
+[ICs]
+  [./p_ic]
+    type = FunctionIC
+    function = pic
+    variable = pressure
+  [../]
+  [./t_ic]
+    type = FunctionIC
+    function = tic
+    variable = temperature
+  [../]
+[]
+
+[AuxKernels]
+  [./rho]
+    type = MaterialRealAux
+    variable = rho
+    property = density
+  [../]
+  [./v]
+    type = ParsedAux
+    args = rho
+    function = 1/rho
+    variable = v
+  [../]
+  [./e]
+    type = MaterialRealAux
+    variable = e
+    property = e
+  [../]
+  [./h]
+    type = MaterialRealAux
+    variable = h
+    property = h
+  [../]
+  [./s]
+    type = MaterialRealAux
+    variable = s
+    property = s
+  [../]
+  [./cp]
+    type = MaterialRealAux
+    variable = cp
+    property = cp
+  [../]
+  [./cv]
+    type = MaterialRealAux
+    variable = cv
+    property = cv
+  [../]
+  [./c]
+    type = MaterialRealAux
+    variable = c
+    property = c
+  [../]
+  [./mu]
+    type = MaterialRealAux
+    variable = mu
+    property = viscosity
+  [../]
+  [./k]
+    type = MaterialRealAux
+    variable = k
+    property = k
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./water]
+      type = Water97FluidProperties
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./fp_mat]
+    type = FluidPropertiesMaterialPT
+    pressure = pressure
+    temperature = temperature
+    fp = water
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = dummy
+  [../]
+[]
+
+[Postprocessors]
+  [./density0]
+    type = ElementalVariableValue
+    variable = rho
+    elementid = 0
+  [../]
+  [./density1]
+    type = ElementalVariableValue
+    variable = rho
+    elementid = 1
+  [../]
+  [./density2]
+    type = ElementalVariableValue
+    variable = rho
+    elementid = 2
+  [../]
+  [./v0]
+    type = ElementalVariableValue
+    variable = v
+    elementid = 0
+  [../]
+  [./v1]
+    type = ElementalVariableValue
+    variable = v
+    elementid = 1
+  [../]
+  [./v2]
+    type = ElementalVariableValue
+    variable = v
+    elementid = 2
+  [../]
+  [./e0]
+    type = ElementalVariableValue
+    variable = e
+    elementid = 0
+  [../]
+  [./e1]
+    type = ElementalVariableValue
+    variable = e
+    elementid = 1
+  [../]
+  [./e2]
+    type = ElementalVariableValue
+    variable = e
+    elementid = 2
+  [../]
+  [./h0]
+    type = ElementalVariableValue
+    variable = h
+    elementid = 0
+  [../]
+  [./h1]
+    type = ElementalVariableValue
+    variable = h
+    elementid = 1
+  [../]
+  [./h2]
+    type = ElementalVariableValue
+    variable = h
+    elementid = 2
+  [../]
+  [./s0]
+    type = ElementalVariableValue
+    variable = s
+    elementid = 0
+  [../]
+  [./s1]
+    type = ElementalVariableValue
+    variable = s
+    elementid = 1
+  [../]
+  [./s2]
+    type = ElementalVariableValue
+    variable = s
+    elementid = 2
+  [../]
+  [./cp0]
+    type = ElementalVariableValue
+    variable = cp
+    elementid = 0
+  [../]
+  [./cp1]
+    type = ElementalVariableValue
+    variable = cp
+    elementid = 1
+  [../]
+  [./cp2]
+    type = ElementalVariableValue
+    variable = cp
+    elementid = 2
+  [../]
+  [./cv0]
+    type = ElementalVariableValue
+    variable = cv
+    elementid = 0
+  [../]
+  [./cv1]
+    type = ElementalVariableValue
+    variable = cv
+    elementid = 1
+  [../]
+  [./cv2]
+    type = ElementalVariableValue
+    variable = cv
+    elementid = 2
+  [../]
+  [./c0]
+    type = ElementalVariableValue
+    variable = c
+    elementid = 0
+  [../]
+  [./c1]
+    type = ElementalVariableValue
+    variable = c
+    elementid = 1
+  [../]
+  [./c2]
+    type = ElementalVariableValue
+    variable = c
+    elementid = 2
+  [../]
+  [./mu0]
+    type = ElementalVariableValue
+    variable = mu
+    elementid = 0
+  [../]
+  [./mu1]
+    type = ElementalVariableValue
+    variable = mu
+    elementid = 1
+  [../]
+  [./mu2]
+    type = ElementalVariableValue
+    variable = mu
+    elementid = 2
+  [../]
+  [./k0]
+    type = ElementalVariableValue
+    variable = k
+    elementid = 0
+  [../]
+  [./k1]
+    type = ElementalVariableValue
+    variable = k
+    elementid = 1
+  [../]
+  [./k2]
+    type = ElementalVariableValue
+    variable = k
+    elementid = 2
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = NEWTON
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="18680f23-8e33-482b-b1a1-6ef23e9c1c59"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/shell/dynamics/shell_dynamics_bending_moment_free_orientation_inclined_hht.i</h4><pre class="moose-pre"><code class="language-text"># Test to verify the fundamental natural frequency of a one element ADComputeShellStress
+# BCs: Clamped on one end, free on others.
+# Initial perturbation applied to edge of the beam. After that, the shell vibrates freely.
+#
+# Results have been compared for various thicknesses with the following approximate Results
+# (Moose results were obtained with 8 elements along the length)
+# Thickness = 0.1. Reference freq: 10.785 Hz, Moose freq: 10.612 Hz
+# Thickness = 0.05. Reference freq: 5.393 Hz, Moose freq: 5.335 Hz
+# Thickness = 0.025. Reference freq: 2.696 Hz, Moose freq: 2.660 Hz
+#
+# Reference values have been obtained from Robert Blevins, &quot;Formulas for Dynamics, Acoustics and Vibration&quot;,
+# Table 5.3 case 11. Formula looks like: f = lambda^2/(2*pi*a^2) * sqrt(E*h^2/(12*(1-nu*nu))), where lambda
+# changes as a function of shell dimensions.
+
+# This test uses one single element for speed reasons.
+
+# Here, the shell, instead of being on the XY plane, is oriented at a 45 deg. angle
+# with respect to the Y axis.
+
+[Mesh]
+  type = FileMesh
+  file = shell_inclined.e
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+  [./disp_z]
+  [../]
+  [./rot_x]
+  [../]
+  [./rot_y]
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_yz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  # aux variables for dynamics
+  [./vel_x]
+  [../]
+  [./vel_y]
+  [../]
+  [./vel_z]
+  [../]
+  [./accel_x]
+  [../]
+  [./accel_y]
+  [../]
+  [./accel_z]
+  [../]
+  [./rot_vel_x]
+  [../]
+  [./rot_vel_y]
+  [../]
+  [./rot_accel_x]
+  [../]
+  [./rot_accel_y]
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_yy]
+    type = RankTwoAux
+    variable = stress_yy
+    rank_two_tensor = global_stress_t_points_0
+    index_i = 1
+    index_j = 1
+  [../]
+  [./stress_yz]
+    type = RankTwoAux
+    variable = stress_yz
+    rank_two_tensor = global_stress_t_points_0
+    index_i = 1
+    index_j = 2
+  [../]
+
+# Kernels for dynamics
+[./accel_x]
+  type = NewmarkAccelAux
+  variable = accel_x
+  displacement = disp_x
+  velocity = vel_x
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./vel_x]
+  type = NewmarkVelAux
+  variable = vel_x
+  acceleration = accel_x
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[./accel_y]
+  type = NewmarkAccelAux
+  variable = accel_y
+  displacement = disp_y
+  velocity = vel_y
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./vel_y]
+  type = NewmarkVelAux
+  variable = vel_y
+  acceleration = accel_y
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[./accel_z]
+  type = NewmarkAccelAux
+  variable = accel_z
+  displacement = disp_z
+  velocity = vel_z
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./vel_z]
+  type = NewmarkVelAux
+  variable = vel_z
+  acceleration = accel_z
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[./rot_accel_x]
+  type = NewmarkAccelAux
+  variable = rot_accel_x
+  displacement = rot_x
+  velocity = rot_vel_x
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./rot_vel_x]
+  type = NewmarkVelAux
+  variable = rot_vel_x
+  acceleration = rot_accel_x
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[./rot_accel_y]
+  type = NewmarkAccelAux
+  variable = rot_accel_y
+  displacement = rot_y
+  velocity = rot_vel_y
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./rot_vel_y]
+  type = NewmarkVelAux
+  variable = rot_vel_y
+  acceleration = rot_accel_y
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[]
+
+[BCs]
+  [./fixy1]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;0&#x27;
+    value = 0.0
+  [../]
+  [./fixz1]
+    type = DirichletBC
+    variable = disp_z
+    boundary = &#x27;0&#x27;
+    value = 0.0
+  [../]
+  [./fixr1]
+    type = DirichletBC
+    variable = rot_x
+    boundary = &#x27;0&#x27;
+    value = 0.0
+  [../]
+  [./fixr2]
+    type = DirichletBC
+    variable = rot_y
+    boundary = &#x27;0&#x27;
+    value = 0.0
+  [../]
+  [./fixx1]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;0&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Functions]
+  [./force_function]
+    type = PiecewiseLinear
+    x = &#x27;0.0 0.01 0.15 10.0&#x27;
+    y = &#x27;0.0 0.01 0.0 0.0&#x27;
+  [../]
+[]
+[NodalKernels]
+  [./force_y2]
+    type = UserForcingFunctionNodalKernel
+    variable = disp_z
+    boundary = &#x27;2&#x27;
+    function = force_function
+  [../]
+[]
+[Kernels]
+  [./solid_disp_x]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 0
+    variable = disp_x
+    through_thickness_order = SECOND
+  [../]
+  [./solid_disp_y]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 1
+    variable = disp_y
+    through_thickness_order = SECOND
+  [../]
+  [./solid_disp_z]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 2
+    variable = disp_z
+    through_thickness_order = SECOND
+  [../]
+  [./solid_rot_x]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 3
+    variable = rot_x
+    through_thickness_order = SECOND
+  [../]
+  [./solid_rot_y]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 4
+    variable = rot_y
+    through_thickness_order = SECOND
+  [../]
+
+  [./inertial_force_x]
+    type = ADInertialForceShell
+    use_displaced_mesh = true
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 0
+    variable = disp_x
+    thickness = 0.1
+    eta = 0.0
+    alpha = 0.0
+  [../]
+
+  [./inertial_force_y]
+    type = ADInertialForceShell
+    use_displaced_mesh = true
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 1
+    variable = disp_y
+    thickness = 0.1
+    eta = 0.0
+    alpha = 0.0
+  [../]
+
+  [./inertial_force_z]
+    type = ADInertialForceShell
+    use_displaced_mesh = true
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 2
+    variable = disp_z
+    thickness = 0.1
+    eta = 0.0
+    alpha = 0.0
+  [../]
+
+  [./inertial_force_rot_x]
+    type = ADInertialForceShell
+    use_displaced_mesh = true
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 3
+    variable = rot_x
+    thickness = 0.1
+    eta = 0.0
+    alpha = 0.0
+  [../]
+
+  [./inertial_force_rot_y]
+    type = ADInertialForceShell
+    use_displaced_mesh = true
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 4
+    variable = rot_y
+    thickness = 0.1
+    eta = 0.0
+    alpha = 0.0
+  [../]
+[]
+
+[Materials]
+  [./elasticity]
+    type = ADComputeIsotropicElasticityTensorShell
+    youngs_modulus = 2100000
+    poissons_ratio = 0.3
+    block = 0
+    through_thickness_order = SECOND
+  [../]
+  [./strain]
+    type = ADComputeIncrementalShellStrain
+    block = &#x27;0&#x27;
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    thickness = 0.1
+    through_thickness_order = SECOND
+  [../]
+  [./stress]
+    type = ADComputeShellStress
+    block = 0
+    through_thickness_order = SECOND
+  [../]
+  [./density]
+    type = GenericConstantMaterial
+    block = 0
+    prop_names = &#x27;density&#x27;
+    prop_values = &#x27;1.0&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./disp_z_tip]
+    type = PointValue
+    point = &#x27;0.0 1.06 1.06&#x27;
+    variable = disp_z
+  [../]
+  [./rot_x_tip]
+    type = PointValue
+    point = &#x27;0.0 1.06 1.06&#x27;
+    variable = rot_x
+  [../]
+  [./stress_yy_el_0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = stress_yy
+  [../]
+  [./stress_yy_el_1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = stress_yy
+  [../]
+  [./stress_yy_el_2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = stress_yy
+  [../]
+  [./stress_yy_el_3]
+    type = ElementalVariableValue
+    elementid = 3
+    variable = stress_yy
+  [../]
+  [./stress_yz_el_0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_3]
+    type = ElementalVariableValue
+    elementid = 3
+    variable = stress_yz
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  l_tol = 1e-11
+  nl_max_its = 15
+  nl_rel_tol = 1e-11
+  nl_abs_tol = 1e-10
+  l_max_its = 20
+  dt = 0.005
+  dtmin = 0.005
+  timestep_tolerance = 2e-13
+  end_time = 0.5
+
+  [./TimeIntegrator]
+    type = NewmarkBeta
+    beta = 0.25
+    gamma = 0.5
+  [../]
+
+[]
+
+[Outputs]
+  perf_graph = true
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4bb0da01-9d51-46c9-b68e-c035427e16da"><div class="modal-content"><h4>test/tests/outputs/postprocessor/show_hide.i</h4><pre class="moose-pre"><code class="language-text"># Having 2 postprocessors, putting one into hide list and the other one into show list
+# We should only see the PPS that is in the show list in the output.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  nx = 10
+  ny = 10
+  elem_type = QUAD4
+  # This test uses ElementalVariableValue postprocessors on specific
+  # elements, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[Functions]
+  [./bc_fn]
+    type = ParsedFunction
+    value = x
+  [../]
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./all_u]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = &#x27;1 3&#x27;
+    function = bc_fn
+  [../]
+[]
+
+[Postprocessors]
+  [./elem_56]
+    type = ElementalVariableValue
+    variable = u
+    elementid = 56
+  [../]
+
+  [./elem_12]
+    type = ElementalVariableValue
+    variable = u
+    elementid = 12
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+[]
+
+[Outputs]
+  [./console]
+    type = Console
+    show = &#x27;elem_56&#x27;
+    hide = &#x27;elem_12&#x27;
+  [../]
+  [./out]
+    type = CSV
+    show = &#x27;elem_56&#x27;
+    hide = &#x27;elem_12&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="72ebcff5-0236-4353-953a-51c85b26930a"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/shell/dynamics/shell_dynamics_bending_moment.i</h4><pre class="moose-pre"><code class="language-text"># Test that models bending of a cantilever beam using shell elements
+
+# A cantilever beam of length 10 m (in Y direction) and cross-section
+# 1 m x 0.1 m is modeled using 4 shell elements placed along the length
+# (Figure 6a from Dvorkin and Bathe, 1984). All displacements and
+# X rotations are fixed on the bottom boundary. E = 2100000 and v = 0.0.
+# A load of 0.5 N (in the Z direction) is applied at each node on the top
+# boundary resulting in a total load of 1 N.
+
+# The analytical solution for displacement at tip using small strain/rotations # is PL^3/3EI + PL/AG = 1.90485714 m
+# The FEM solution using 4 shell elements is 1.875095 m with a relative error
+# of 1.5%.
+
+# Similarly, the analytical solution for slope at tip is PL^2/2EI = 0.285714286
+# The FEM solution is 0.2857143 and the relative error is 5e-6%.
+
+# The stress_yy for the four elements at z = -0.57735 * (t/2) (first qp below mid-surface of shell) are:
+# 3031.089 Pa, 2165.064 Pa, 1299.038 Pa and 433.0127 Pa.
+# Note the above values are the average stresses in each element.
+
+# Analytically, stress_yy decreases linearly from y = 0 to y = 10 m.
+# The maximum value of stress_yy at y = 0 is Mz/I = PL * 0.57735*(t/2)/I = 3464.1 Pa
+# Therefore, the analytical value of stress at z = -0.57735 * (t/2) at the mid-point
+# of the four elements are:
+# 3031.0875 Pa, 2165.0625 Pa, 1299.0375 Pa ,433.0125 Pa
+
+# The relative error in stress_yy is in the order of 5e-5%.
+
+# The stress_yz at z = -0.57735 * (t/2) at all four elements from the simulation is 10 Pa.
+# The analytical solution for the shear stress is: V/2/I *((t^2)/4 - z^2), where the shear force (V)
+# is 1 N at any y along the length of the beam. Therefore, the analytical shear stress at
+# z = -0.57735 * (t/2) is 10 Pa at any location along the length of the beam.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 1
+  ny = 4
+  xmin = 0.0
+  xmax = 1.0
+  ymin = 0.0
+  ymax = 10.0
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_z]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./rot_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./rot_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_yz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  # aux variables for dynamics
+  [./vel_x]
+  order = FIRST
+  family = LAGRANGE
+  [../]
+  [./vel_y]
+  order = FIRST
+  family = LAGRANGE
+  [../]
+  [./vel_z]
+  order = FIRST
+  family = LAGRANGE
+  [../]
+  [./accel_x]
+  order = FIRST
+  family = LAGRANGE
+  [../]
+  [./accel_y]
+  order = FIRST
+  family = LAGRANGE
+  [../]
+  [./accel_z]
+  order = FIRST
+  family = LAGRANGE
+  [../]
+  [./rot_vel_x]
+  order = FIRST
+  family = LAGRANGE
+  [../]
+  [./rot_vel_y]
+  order = FIRST
+  family = LAGRANGE
+  [../]
+  [./rot_accel_x]
+  order = FIRST
+  family = LAGRANGE
+  [../]
+  [./rot_accel_y]
+  order = FIRST
+  family = LAGRANGE
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_yy]
+    type = RankTwoAux
+    variable = stress_yy
+    rank_two_tensor = global_stress_t_points_0
+    index_i = 1
+    index_j = 1
+  [../]
+  [./stress_yz]
+    type = RankTwoAux
+    variable = stress_yz
+    rank_two_tensor = global_stress_t_points_0
+    index_i = 1
+    index_j = 2
+  [../]
+
+# Kernels for dynamics
+[./accel_x]
+  type = NewmarkAccelAux
+  variable = accel_x
+  displacement = disp_x
+  velocity = vel_x
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./vel_x]
+  type = NewmarkVelAux
+  variable = vel_x
+  acceleration = accel_x
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[./accel_y]
+  type = NewmarkAccelAux
+  variable = accel_y
+  displacement = disp_y
+  velocity = vel_y
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./vel_y]
+  type = NewmarkVelAux
+  variable = vel_y
+  acceleration = accel_y
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[./accel_z]
+  type = NewmarkAccelAux
+  variable = accel_z
+  displacement = disp_z
+  velocity = vel_z
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./vel_z]
+  type = NewmarkVelAux
+  variable = vel_z
+  acceleration = accel_z
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[./rot_accel_x]
+  type = NewmarkAccelAux
+  variable = rot_accel_x
+  displacement = rot_x
+  velocity = rot_vel_x
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./rot_vel_x]
+  type = NewmarkVelAux
+  variable = rot_vel_x
+  acceleration = rot_accel_x
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[./rot_accel_y]
+  type = NewmarkAccelAux
+  variable = rot_accel_y
+  displacement = rot_y
+  velocity = rot_vel_y
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./rot_vel_y]
+  type = NewmarkVelAux
+  variable = rot_vel_y
+  acceleration = rot_accel_y
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+
+[]
+
+[BCs]
+  [./fixy1]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./fixz1]
+    type = DirichletBC
+    variable = disp_z
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./fixr1]
+    type = DirichletBC
+    variable = rot_x
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./fixr2]
+    type = DirichletBC
+    variable = rot_y
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./fixx1]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Functions]
+  [./force_function]
+    type = PiecewiseLinear
+    x = &#x27;0.0 1.0&#x27;
+    y = &#x27;0.0 0.5&#x27;
+  [../]
+[]
+[NodalKernels]
+  [./force_y2]
+    type = UserForcingFunctionNodalKernel
+    variable = disp_z
+    boundary = &#x27;top&#x27;
+    function = force_function
+  [../]
+[]
+[Kernels]
+  [./solid_disp_x]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 0
+    variable = disp_x
+    through_thickness_order = SECOND
+  [../]
+  [./solid_disp_y]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 1
+    variable = disp_y
+    through_thickness_order = SECOND
+  [../]
+  [./solid_disp_z]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 2
+    variable = disp_z
+    through_thickness_order = SECOND
+  [../]
+  [./solid_rot_x]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 3
+    variable = rot_x
+    through_thickness_order = SECOND
+  [../]
+  [./solid_rot_y]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 4
+    variable = rot_y
+    through_thickness_order = SECOND
+  [../]
+
+  [./inertial_force_x]
+    type = ADInertialForceShell
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 0
+    variable = disp_x
+    thickness = 0.1
+  [../]
+
+  [./inertial_force_y]
+    type = ADInertialForceShell
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 1
+    variable = disp_y
+    thickness = 0.1
+  [../]
+
+  [./inertial_force_z]
+    type = ADInertialForceShell
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 2
+    variable = disp_z
+    thickness = 0.1
+  [../]
+
+  [./inertial_force_rot_x]
+    type = ADInertialForceShell
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 3
+    variable = rot_x
+    thickness = 0.1
+  [../]
+
+  [./inertial_force_rot_y]
+    type = ADInertialForceShell
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 4
+    variable = rot_y
+    thickness = 0.1
+  [../]
+[]
+
+[Materials]
+  [./elasticity]
+    type = ADComputeIsotropicElasticityTensorShell
+    youngs_modulus = 2100000
+    poissons_ratio = 0.0
+    block = 0
+    through_thickness_order = SECOND
+  [../]
+  [./strain]
+    type = ADComputeIncrementalShellStrain
+    block = &#x27;0&#x27;
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    thickness = 0.1
+    through_thickness_order = SECOND
+  [../]
+  [./stress]
+    type = ADComputeShellStress
+    block = 0
+    through_thickness_order = SECOND
+  [../]
+  [./density]
+    type = GenericConstantMaterial
+    block = 0
+    prop_names = &#x27;density&#x27;
+    prop_values = &#x27;1.0&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./disp_z_tip]
+    type = PointValue
+    point = &#x27;1.0 10.0 0.0&#x27;
+    variable = disp_z
+  [../]
+  [./rot_x_tip]
+    type = PointValue
+    point = &#x27;0.0 10.0 0.0&#x27;
+    variable = rot_x
+  [../]
+  [./stress_yy_el_0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = stress_yy
+  [../]
+  [./stress_yy_el_1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = stress_yy
+  [../]
+  [./stress_yy_el_2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = stress_yy
+  [../]
+  [./stress_yy_el_3]
+    type = ElementalVariableValue
+    elementid = 3
+    variable = stress_yy
+  [../]
+  [./stress_yz_el_0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_3]
+    type = ElementalVariableValue
+    elementid = 3
+    variable = stress_yz
+  [../]
+[]
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  nl_max_its = 2
+  nl_rel_tol = 1e-10
+  nl_abs_tol = 5e-4
+
+  dt = 0.0005
+  dtmin = 0.0005
+  end_time = 1
+
+#  [./TimeIntegrator]
+#    type = NewmarkBeta
+#    beta = 0.25
+#    gamma = 0.5
+#  [../]
+
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d088d98a-1e57-4161-bdfb-56b3abb448a6"><div class="modal-content"><h4>test/tests/outputs/console/console_final.i</h4><pre class="moose-pre"><code class="language-text">###########################################################
+# This test exercises console Output control. The console
+# output is only output every third step. Additionally it
+# is forced to be output after the final timestep as well.
+#
+# @Requirement U1.40
+###########################################################
+
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  nx = 10
+  ny = 10
+  elem_type = QUAD4
+  # This test uses ElementalVariableValue postprocessors on specific
+  # elements, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[Functions]
+  [./ffn]
+    type = ParsedFunction
+    value = -4
+  [../]
+
+  [./exactfn]
+    type = ParsedFunction
+    value = x*x+y*y
+  [../]
+
+  [./aux_exact_fn]
+    type = ParsedFunction
+    value = t*(x*x+y*y)
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./td]
+    type = TimeDerivative
+    variable = u
+  [../]
+
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./force]
+    type = BodyForce
+    variable = u
+    function = ffn
+  [../]
+[]
+
+[AuxVariables]
+  [./aux_u]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./a]
+    type = FunctionAux
+    variable = aux_u
+    function = aux_exact_fn
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    function = exactfn
+  [../]
+[]
+
+[Postprocessors]
+  [./elem_56]
+    type = ElementalVariableValue
+    variable = u
+    elementid = 56
+  [../]
+
+  [./aux_elem_99]
+    type = ElementalVariableValue
+    variable = aux_u
+    elementid = 99
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+  dt = 0.01
+  start_time = 0
+  num_steps = 10
+[]
+
+[Outputs]
+  interval = 3
+  execute_on = &#x27;initial timestep_end final&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fd4d41c7-c638-40bb-b42c-7b77f3818a4d"><div class="modal-content"><h4>modules/porous_flow/test/tests/density/GravDensity01.i</h4><pre class="moose-pre"><code class="language-text"># Trivial test of PorousFlowTotalGravitationalDensityFullySaturatedFromPorosity
+# Porosity = 0.1
+# Solid density = 3
+# Fluid density = 2
+# Fluid bulk modulus = 4
+# Fluid pressure = 0
+# Bulk density: rho = 3 * (1 - 0.1) + 2 * 0.1 = 2.9
+# Derivative wrt fluid pressure: d_rho / d_pp = d_rho / d_rho_f * d_rho_f / d_pp
+#   = phi * rho_f / B
+#   where rho_f = rho_0 * exp(pp / B) is fluid density, pp is fluid pressure, phi is
+#   porosity and B is fluid bulk modulus
+# With pp = 0, d_rho / d_pp = phi * rho_0 / B = 0.1 * 2 / 4 = 0.05
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  zmin = -1
+  zmax = 0
+  nx = 1
+  ny = 1
+  nz = 1
+  # This test uses ElementalVariableValue postprocessors on specific
+  # elements, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[GlobalParams]
+  PorousFlowDictator = dictator
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./simple_fluid]
+      type = SimpleFluidProperties
+      thermal_expansion = 0
+      bulk_modulus = 4
+      density0 = 2
+    [../]
+  [../]
+[]
+
+[Variables]
+  [./pp]
+    [./InitialCondition]
+      type = ConstantIC
+      value = 0
+    [../]
+  [../]
+[]
+
+[Kernels]
+  [./dummy]
+    type = Diffusion
+    variable = pp
+  [../]
+[]
+
+[BCs]
+  [./p]
+    type = DirichletBC
+    variable = pp
+    boundary = &#x27;front back&#x27;
+    value = 0
+  [../]
+[]
+
+[AuxVariables]
+  [./density]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./ddensity_dpp]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./density]
+    type = MaterialRealAux
+    property = density
+    variable = density
+  [../]
+  [./ddensity_dpp]
+    type = MaterialStdVectorAux
+    property = ddensity_dvar
+    variable = ddensity_dpp
+    index = 0
+  [../]
+[]
+
+[Postprocessors]
+  [./density]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = density
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./ddensity_dpp]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = ddensity_dpp
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./dictator]
+    type = PorousFlowDictator
+    porous_flow_vars = &#x27;pp&#x27;
+    number_fluid_phases = 1
+    number_fluid_components = 1
+  [../]
+[]
+
+[Materials]
+  [./temperature]
+    type = PorousFlowTemperature
+  [../]
+  [./ppss_qp]
+    type = PorousFlow1PhaseFullySaturated
+    porepressure = pp
+  [../]
+  [./simple_fluid]
+    type = PorousFlowSingleComponentFluid
+    fp = simple_fluid
+    phase = 0
+  [../]
+  [./porosity]
+    type = PorousFlowPorosityConst
+    porosity = 0.1
+  [../]
+  [./density]
+    type = PorousFlowTotalGravitationalDensityFullySaturatedFromPorosity
+    rho_s = 3
+  [../]
+[]
+
+[Preconditioning]
+  [./andy]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  solve_type = Newton
+  type = Steady
+[]
+
+
+[Outputs]
+  file_base = GravDensity01
+  csv = true
+  execute_on = &#x27;timestep_end&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9a1a4a78-40a8-4f1c-85b6-caa2a9c148bb"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/strain_energy_density/rate_model.i</h4><pre class="moose-pre"><code class="language-text"># Single element test to check the strain energy density calculation
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+  volumetric_locking_correction = true
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 1
+  ny = 1
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 2
+[]
+
+[AuxVariables]
+  [./SERD]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Functions]
+  [./rampConstantUp]
+    type = PiecewiseLinear
+    x = &#x27;0. 1.&#x27;
+    y = &#x27;0. 1.&#x27;
+    scale_factor = -100
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./master]
+    strain = FINITE
+    add_variables = true
+    incremental = true
+    generate_output = &#x27;stress_xx stress_yy stress_zz vonmises_stress strain_xx strain_yy strain_zz&#x27;
+    planar_formulation = PLANE_STRAIN
+  [../]
+[]
+
+[AuxKernels]
+  [./SERD]
+    type = MaterialRealAux
+    variable = SERD
+    property = strain_energy_rate_density
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./no_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;left&#x27;
+    value = 0.0
+  [../]
+  [./no_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./Pressure]
+    [./top]
+      boundary = &#x27;top&#x27;
+      function = rampConstantUp
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 206800
+    poissons_ratio = 0.0
+  [../]
+  [./radial_return_stress]
+    type = ComputeMultipleInelasticStress
+    inelastic_models = &#x27;powerlawcrp&#x27;
+  [../]
+  [./powerlawcrp]
+    type = PowerLawCreepStressUpdate
+    coefficient = 3.125e-21 # 7.04e-17 #
+    n_exponent = 4.0
+    m_exponent = 0.0
+    activation_energy = 0.0
+    # max_inelastic_increment = 0.01
+  [../]
+  [./strain_energy_rate_density]
+    type = StrainEnergyRateDensity
+    inelastic_models = &#x27;powerlawcrp&#x27;
+  [../]
+[]
+
+[Executioner]
+   type = Transient
+
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
+  petsc_options_value = &#x27;201                hypre    boomeramg      4&#x27;
+
+  line_search = &#x27;none&#x27;
+
+   l_max_its = 50
+   nl_max_its = 20
+   nl_abs_tol = 3e-7
+   nl_rel_tol = 1e-12
+   l_tol = 1e-2
+
+   start_time = 0.0
+   dt = 1
+
+   end_time = 1
+   num_steps = 1
+[]
+
+[Postprocessors]
+  [./epxx]
+    type = ElementalVariableValue
+    variable = strain_xx
+    elementid = 0
+  [../]
+  [./epyy]
+    type = ElementalVariableValue
+    variable = strain_yy
+    elementid = 0
+  [../]
+  [./epzz]
+    type = ElementalVariableValue
+    variable = strain_zz
+    elementid = 0
+  [../]
+  [./sigxx]
+    type = ElementAverageValue
+    variable = stress_xx
+  [../]
+  [./sigyy]
+    type = ElementAverageValue
+    variable = stress_yy
+  [../]
+  [./sigzz]
+    type = ElementAverageValue
+    variable = stress_zz
+  [../]
+  [./SERD]
+    type = ElementAverageValue
+    variable = SERD
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="405a1f96-8cb8-4657-a707-f6fc9b15a6d0"><div class="modal-content"><h4>modules/fluid_properties/test/tests/tabulated/tabulated.i</h4><pre class="moose-pre"><code class="language-text"># Test thermophysical property calculations using TabulatedFluidProperties.
+# Calculations for density, internal energy and enthalpy using bicubic spline
+# interpolation of data generated using CO2FluidProperties.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  # This test uses ElementalVariableValue postprocessors on specific
+  # elements, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[Variables]
+  [./dummy]
+  [../]
+[]
+
+[AuxVariables]
+  [./pressure]
+    initial_condition = 2e6
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./temperature]
+    initial_condition = 350
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./rho]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./mu]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./e]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./h]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./s]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./cv]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./cp]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./c]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+[]
+
+[AuxKernels]
+  [./rho]
+    type = MaterialRealAux
+    variable = rho
+    property = density
+  [../]
+  [./my]
+    type = MaterialRealAux
+    variable = mu
+    property = viscosity
+  [../]
+  [./internal_energy]
+    type = MaterialRealAux
+    variable = e
+    property = e
+  [../]
+  [./enthalpy]
+    type = MaterialRealAux
+    variable = h
+    property = h
+  [../]
+  [./entropy]
+    type = MaterialRealAux
+    variable = s
+    property = s
+  [../]
+  [./cv]
+    type = MaterialRealAux
+    variable = cv
+    property = cv
+  [../]
+  [./cp]
+    type = MaterialRealAux
+    variable = cp
+    property = cp
+  [../]
+  [./c]
+    type = MaterialRealAux
+    variable = c
+    property = c
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./co2]
+      type = CO2FluidProperties
+    [../]
+    [./tabulated]
+      type = TabulatedFluidProperties
+      fp = co2
+      fluid_property_file = fluid_properties.csv
+    [../]
+  []
+[]
+
+[Materials]
+  [./fp_mat]
+    type = FluidPropertiesMaterialPT
+    pressure = pressure
+    temperature = temperature
+    fp = tabulated
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = dummy
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = NEWTON
+[]
+
+[Postprocessors]
+  [./rho]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = rho
+  [../]
+  [./mu]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = mu
+  [../]
+  [./e]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = e
+  [../]
+  [./h]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = h
+  [../]
+  [./s]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = s
+  [../]
+  [./cv]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = cv
+  [../]
+  [./cp]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = cp
+  [../]
+  [./c]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = c
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  file_base = tabulated_out
+  execute_on = &#x27;TIMESTEP_END&#x27;
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="18c94b07-15ba-4c57-8b93-2ddfaab2397a"><div class="modal-content"><h4>modules/combined/test/tests/internal_volume/rz_displaced.i</h4><pre class="moose-pre"><code class="language-text">#
+# Volume Test
+#
+# This test is designed to compute the volume of a space when displacements
+#   are imposed.
+#
+# The mesh is composed of one block (1) with two elements.  The mesh is
+#   such that the initial volume is 1.  One element face is displaced to
+#   produce a final volume of 2.
+#
+#     r1
+#   +----+   -
+#   |    |   |
+#   +----+   h    V1 = pi * h * r1^2
+#   |    |   |
+#   +----+   -
+#
+#   becomes
+#
+#   +----+
+#   |     \
+#   +------+      v2 = pi * h/2 * ( r2^2 + 1/3 * ( r2^2 + r2*r1 + r1^2 ) )
+#   |      |
+#   +------+
+#      r2
+#
+#   r1 = 1
+#   r2 = 1.5380168369562588
+#   h  = 1/pi
+#
+#  Note:  Because the InternalVolume PP computes cavity volumes as positive,
+#         the volumes reported are negative.
+#
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[Mesh]
+  file = meshes/rz_displaced.e
+  # This test uses ElementalVariableValue postprocessors on specific
+  # elements, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[Functions]
+  [./disp_x]
+    type = PiecewiseLinear
+    x = &#x27;0. 1.&#x27;
+    y = &#x27;0. 0.5380168369562588&#x27;
+  [../]
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./volumetric_strain]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./all]
+    volumetric_locking_correction = false
+    decomposition_method = EigenSolution
+    incremental = true
+    strain = FINITE
+  [../]
+[]
+
+[AuxKernels]
+  [./fred]
+    type = RankTwoScalarAux
+    rank_two_tensor = total_strain
+    variable = volumetric_strain
+    scalar_type = VolumetricStrain
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./no_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = 1
+    value = 0.0
+  [../]
+
+  [./no_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = 2
+    value = 0.0
+  [../]
+
+  [./x]
+    type = FunctionDirichletBC
+    boundary = 3
+    variable = disp_x
+    function = disp_x
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e6
+    poissons_ratio = 0.3
+  [../]
+
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+
+  start_time = 0.0
+  dt = 1.0
+  end_time = 1.0
+[]
+
+[Postprocessors]
+  [./internalVolume]
+    type = InternalVolume
+    boundary = 2
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./volStrain0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = volumetric_strain
+  [../]
+  [./volStrain1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = volumetric_strain
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="60a8ab58-a180-4772-84e4-6630179f25d0"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/shell/static/beam_bending_moment_AD.i</h4><pre class="moose-pre"><code class="language-text"># Test that models bending of a cantilever beam using shell elements
+
+# A cantilever beam of length 10 m (in Y direction) and cross-section
+# 1 m x 0.1 m is modeled using 4 shell elements placed along the length
+# (Figure 6a from Dvorkin and Bathe, 1984). All displacements and
+# X rotations are fixed on the bottom boundary. E = 2100000 and v = 0.0.
+# A load of 0.5 N (in the Z direction) is applied at each node on the top
+# boundary resulting in a total load of 1 N.
+
+# The analytical solution for displacement at tip using small strain/rotations # is PL^3/3EI + PL/AG = 1.90485714 m
+# The FEM solution using 4 shell elements is 1.875095 m with a relative error
+# of 1.5%.
+
+# Similarly, the analytical solution for slope at tip is PL^2/2EI = 0.285714286
+# The FEM solution is 0.2857143 and the relative error is 5e-6%.
+
+# The stress_yy for the four elements at z = -0.57735 * (t/2) (first qp below mid-surface of shell) are:
+# 3031.089 Pa, 2165.064 Pa, 1299.038 Pa and 433.0127 Pa.
+# Note the above values are the average stresses in each element.
+
+# Analytically, stress_yy decreases linearly from y = 0 to y = 10 m.
+# The maximum value of stress_yy at y = 0 is Mz/I = PL * 0.57735*(t/2)/I = 3464.1 Pa
+# Therefore, the analytical value of stress at z = -0.57735 * (t/2) at the mid-point
+# of the four elements are:
+# 3031.0875 Pa, 2165.0625 Pa, 1299.0375 Pa ,433.0125 Pa
+
+# The relative error in stress_yy is in the order of 5e-5%.
+
+# The stress_yz at z = -0.57735 * (t/2) at all four elements from the simulation is 10 Pa.
+# The analytical solution for the shear stress is: V/2/I *((t^2)/4 - z^2), where the shear force (V)
+# is 1 N at any y along the length of the beam. Therefore, the analytical shear stress at
+# z = -0.57735 * (t/2) is 10 Pa at any location along the length of the beam.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 1
+  ny = 4
+  xmin = 0.0
+  xmax = 1.0
+  ymin = 0.0
+  ymax = 10.0
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_z]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./rot_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./rot_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_yz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_yy]
+    type = RankTwoAux
+    variable = stress_yy
+    rank_two_tensor = global_stress_t_points_0
+    index_i = 1
+    index_j = 1
+  [../]
+  [./stress_yz]
+    type = RankTwoAux
+    variable = stress_yz
+    rank_two_tensor = global_stress_t_points_0
+    index_i = 1
+    index_j = 2
+  [../]
+[]
+
+[BCs]
+  [./fixy1]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./fixz1]
+    type = DirichletBC
+    variable = disp_z
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./fixr1]
+    type = DirichletBC
+    variable = rot_x
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./fixr2]
+    type = DirichletBC
+    variable = rot_y
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./fixx1]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+[]
+
+[NodalKernels]
+  [./force_y2]
+    type = ConstantRate
+    variable = disp_z
+    boundary = &#x27;top&#x27;
+    rate = 0.5
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  nl_max_its = 2
+  nl_rel_tol = 1e-10
+  nl_abs_tol = 5e-4
+
+  dt = 1
+  dtmin = 1
+  end_time = 1
+[]
+
+[Kernels]
+  [./solid_disp_x]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 0
+    variable = disp_x
+    through_thickness_order = SECOND
+  [../]
+  [./solid_disp_y]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 1
+    variable = disp_y
+    through_thickness_order = SECOND
+  [../]
+  [./solid_disp_z]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 2
+    variable = disp_z
+    through_thickness_order = SECOND
+  [../]
+  [./solid_rot_x]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 3
+    variable = rot_x
+    through_thickness_order = SECOND
+  [../]
+  [./solid_rot_y]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 4
+    variable = rot_y
+    through_thickness_order = SECOND
+  [../]
+[]
+
+[Materials]
+  [./elasticity]
+    type = ADComputeIsotropicElasticityTensorShell
+    youngs_modulus = 2100000
+    poissons_ratio = 0.0
+    block = 0
+    through_thickness_order = SECOND
+  [../]
+  [./strain]
+    type = ADComputeIncrementalShellStrain
+    block = &#x27;0&#x27;
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    thickness = 0.1
+    through_thickness_order = SECOND
+  [../]
+  [./stress]
+    type = ADComputeShellStress
+    block = 0
+    through_thickness_order = SECOND
+  [../]
+[]
+
+[Postprocessors]
+  [./disp_z_tip]
+    type = PointValue
+    point = &#x27;1.0 10.0 0.0&#x27;
+    variable = disp_z
+  [../]
+  [./rot_x_tip]
+    type = PointValue
+    point = &#x27;0.0 10.0 0.0&#x27;
+    variable = rot_x
+  [../]
+  [./stress_yy_el_0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = stress_yy
+  [../]
+  [./stress_yy_el_1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = stress_yy
+  [../]
+  [./stress_yy_el_2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = stress_yy
+  [../]
+  [./stress_yy_el_3]
+    type = ElementalVariableValue
+    elementid = 3
+    variable = stress_yy
+  [../]
+  [./stress_yz_el_0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_3]
+    type = ElementalVariableValue
+    elementid = 3
+    variable = stress_yz
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fdb35c43-b195-4c1f-b759-4f918cfe198f"><div class="modal-content"><h4>modules/fluid_properties/test/tests/ics/rho_vapor_mixture_from_pressure_temperature/test.i</h4><pre class="moose-pre"><code class="language-text"># Tests the initial condition for mixture density from pressure and temperature.
+# This test uses the general vapor mixture fluid properties with steam, air,
+# and helium with mass fractions 0.5, 0.3, and 0.2, respectively. The individual
+# specific volumes (in m^3/kg) at p = 100 kPa, T = 500 K are:
+#   steam:  2.298113001
+#   air:    1.43525
+#   helium: 10.3855
+# For the general vapor mixture, the mixture specific volume is computed as
+#   v = \sum\limits_i x_i v_i  ,
+# where x_i is the mass fraction of component i, and v_i is the specific volume
+# of component i. Therefore, the correct value for specific volume of the mixture is
+#   v = 3.65673150050 m^3/kg
+# and thus density is
+#   rho = 0.27346825980066236 kg/m^3
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 1
+  allow_renumbering = false
+[]
+
+[Modules]
+  [FluidProperties]
+    [fp_steam]
+      type = StiffenedGasFluidProperties
+      gamma = 1.43
+      cv = 1040.0
+      q = 2.03e6
+      p_inf = 0.0
+      q_prime = -2.3e4
+      k = 0.026
+      mu = 134.4e-7
+      M = 0.01801488
+      rho_c = 322.0
+    []
+    [fp_air]
+      type = IdealGasFluidProperties
+      gamma = 1.4
+      molar_mass = 28.965197004e-3
+    []
+    [fp_helium]
+      type = IdealGasFluidProperties
+      gamma = 1.66
+      molar_mass = 4.002917432959e-3
+    []
+    [fp_vapor_mixture]
+      type = IdealRealGasMixtureFluidProperties
+      fp_primary = fp_steam
+      fp_secondary = &#x27;fp_air fp_helium&#x27;
+    []
+  []
+[]
+
+[AuxVariables]
+  [rho]
+  []
+  [p]
+  []
+  [T]
+  []
+  [x_air]
+  []
+  [x_helium]
+  []
+[]
+
+[ICs]
+  [rho_ic]
+    type = RhoVaporMixtureFromPressureTemperatureIC
+    variable = rho
+    p = p
+    T = T
+    x_secondary_vapors = &#x27;x_air x_helium&#x27;
+    fp_vapor_mixture = fp_vapor_mixture
+  []
+  [p_ic]
+    type = ConstantIC
+    variable = p
+    value = 100e3
+  []
+  [T_ic]
+    type = ConstantIC
+    variable = T
+    value = 500
+  []
+  [x_air_ic]
+    type = ConstantIC
+    variable = x_air
+    value = 0.3
+  []
+  [x_helium_ic]
+    type = ConstantIC
+    variable = x_helium
+    value = 0.2
+  []
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Postprocessors]
+  [rho_test]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = rho
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+[]
+
+[Outputs]
+  csv = true
+  execute_on = &#x27;INITIAL&#x27;
+[]
+
+[Problem]
+  solve = false
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="eb3d1ece-4d67-4c19-bdfd-d6935e4fb9f5"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/volumetric_eigenstrain/volumetric_eigenstrain.i</h4><pre class="moose-pre"><code class="language-text"># This tests the ability of the ComputeVolumetricEigenstrain material
+# to compute an eigenstrain tensor that results in a solution that exactly
+# recovers the specified volumetric expansion.
+# This model applies volumetric strain that ramps from 0 to 2 to a unit cube
+# and computes the final volume, which should be exactly 3.  Note that the default
+# TaylorExpansion option for decomposition_method gives a small (~4%) error
+# with this very large incremental strain, but decomposition_method=EigenSolution
+# gives the exact solution.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 1
+  ny = 1
+  nz = 1
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+  [./disp_z]
+  [../]
+[]
+
+[AuxVariables]
+  [./volumetric_strain]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Modules/TensorMechanics/Master]
+  [./master]
+    strain = FINITE
+    eigenstrain_names = eigenstrain
+    decomposition_method = EigenSolution #Necessary for exact solution
+  [../]
+[]
+
+[AuxKernels]
+  [./volumetric_strain]
+    type = RankTwoScalarAux
+    scalar_type = VolumetricStrain
+    rank_two_tensor = total_strain
+    variable = volumetric_strain
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./bottom]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  [../]
+  [./back]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e6
+    poissons_ratio = 0.3
+  [../]
+  [./finite_strain_stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+  [./volumetric_eigenstrain]
+    type = ComputeVolumetricEigenstrain
+    volumetric_materials = volumetric_change
+    eigenstrain_name = eigenstrain
+    args = &#x27;&#x27;
+  [../]
+  [./volumetric_change]
+    type = GenericFunctionMaterial
+    prop_names = volumetric_change
+    prop_values = t
+  [../]
+[]
+
+[Postprocessors]
+  [./vol]
+    type = VolumePostprocessor
+    use_displaced_mesh = true
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./volumetric_strain]
+    type = ElementalVariableValue
+    variable = volumetric_strain
+    elementid = 0
+  [../]
+  [./disp_right]
+    type = NodalMaxValue
+    variable = disp_x
+    boundary = right
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  l_max_its = 100
+  l_tol = 1e-4
+  nl_abs_tol = 1e-8
+  nl_rel_tol = 1e-12
+
+  start_time = 0.0
+  end_time = 2.0
+  dt = 1.0
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4ea78184-0d47-4d52-b1c7-dc63eb942db5"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/shell/dynamics/shell_dynamics_bending_moment_free.i</h4><pre class="moose-pre"><code class="language-text"># Test to verify the fundamental natural frequency of a one element ADComputeShellStress
+# BCs: Clamped on one end, free on others.
+# Initial perturbation applied to edge of the beam. After that, the shell vibrates freely.
+#
+# Results have been compared for various thicknesses with the following approximate Results
+# (Moose results were obtained with 8 elements along the length)
+# Thickness = 0.1. Reference freq: 10.785 Hz, Moose freq: 10.612 Hz
+# Thickness = 0.05. Reference freq: 5.393 Hz, Moose freq: 5.335 Hz
+# Thickness = 0.025. Reference freq: 2.696 Hz, Moose freq: 2.660 Hz
+#
+# Reference values have been obtained from Robert Blevins, &quot;Formulas for Dynamics, Acoustics and Vibration&quot;,
+# Table 5.3 case 11. Formula looks like: f = lambda^2/(2*pi*a^2) * sqrt(E*h^2/(12*(1-nu*nu))), where lambda
+# changes as a function of shell dimensions.
+
+# This test uses one single element for speed reasons.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 1 # 1
+  ny = 1# 4
+  xmin = 0.0
+  xmax = 1.0
+  ymin = 0.0
+  ymax = 1.5
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+  [./disp_z]
+  [../]
+  [./rot_x]
+  [../]
+  [./rot_y]
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_yz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  # aux variables for dynamics
+  [./vel_x]
+  [../]
+  [./vel_y]
+  [../]
+  [./vel_z]
+  [../]
+  [./accel_x]
+  [../]
+  [./accel_y]
+  [../]
+  [./accel_z]
+  [../]
+  [./rot_vel_x]
+  [../]
+  [./rot_vel_y]
+  [../]
+  [./rot_accel_x]
+  [../]
+  [./rot_accel_y]
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_yy]
+    type = RankTwoAux
+    variable = stress_yy
+    rank_two_tensor = global_stress_t_points_0
+    index_i = 1
+    index_j = 1
+  [../]
+  [./stress_yz]
+    type = RankTwoAux
+    variable = stress_yz
+    rank_two_tensor = global_stress_t_points_0
+    index_i = 1
+    index_j = 2
+  [../]
+
+# Kernels for dynamics
+[./accel_x]
+  type = NewmarkAccelAux
+  variable = accel_x
+  displacement = disp_x
+  velocity = vel_x
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./vel_x]
+  type = NewmarkVelAux
+  variable = vel_x
+  acceleration = accel_x
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[./accel_y]
+  type = NewmarkAccelAux
+  variable = accel_y
+  displacement = disp_y
+  velocity = vel_y
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./vel_y]
+  type = NewmarkVelAux
+  variable = vel_y
+  acceleration = accel_y
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[./accel_z]
+  type = NewmarkAccelAux
+  variable = accel_z
+  displacement = disp_z
+  velocity = vel_z
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./vel_z]
+  type = NewmarkVelAux
+  variable = vel_z
+  acceleration = accel_z
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[./rot_accel_x]
+  type = NewmarkAccelAux
+  variable = rot_accel_x
+  displacement = rot_x
+  velocity = rot_vel_x
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./rot_vel_x]
+  type = NewmarkVelAux
+  variable = rot_vel_x
+  acceleration = rot_accel_x
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[./rot_accel_y]
+  type = NewmarkAccelAux
+  variable = rot_accel_y
+  displacement = rot_y
+  velocity = rot_vel_y
+  beta = 0.25
+  execute_on = timestep_end
+[../]
+[./rot_vel_y]
+  type = NewmarkVelAux
+  variable = rot_vel_y
+  acceleration = rot_accel_y
+  gamma = 0.5
+  execute_on = timestep_end
+[../]
+[]
+
+[BCs]
+  [./fixy1]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./fixz1]
+    type = DirichletBC
+    variable = disp_z
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./fixr1]
+    type = DirichletBC
+    variable = rot_x
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./fixr2]
+    type = DirichletBC
+    variable = rot_y
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./fixx1]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Functions]
+  [./force_function]
+    type = PiecewiseLinear
+    x = &#x27;0.0 0.01 0.15 10.0&#x27;
+    y = &#x27;0.0 0.01 0.0 0.0&#x27;
+  [../]
+[]
+[NodalKernels]
+  [./force_z2]
+    type = UserForcingFunctionNodalKernel
+    variable = disp_z
+    boundary = &#x27;top&#x27;
+    function = force_function
+  [../]
+[]
+[Kernels]
+  [./solid_disp_x]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 0
+    variable = disp_x
+    through_thickness_order = SECOND
+  [../]
+  [./solid_disp_y]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 1
+    variable = disp_y
+    through_thickness_order = SECOND
+  [../]
+  [./solid_disp_z]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 2
+    variable = disp_z
+    through_thickness_order = SECOND
+  [../]
+  [./solid_rot_x]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 3
+    variable = rot_x
+    through_thickness_order = SECOND
+  [../]
+  [./solid_rot_y]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 4
+    variable = rot_y
+    through_thickness_order = SECOND
+  [../]
+
+  [./inertial_force_x]
+    type = ADInertialForceShell
+    # use_displaced_mesh = true
+    eta = 0.0
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 0
+    variable = disp_x
+    thickness = 0.1
+  [../]
+
+  [./inertial_force_y]
+    type = ADInertialForceShell
+    eta = 0.0
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 1
+    variable = disp_y
+    thickness = 0.1
+
+  [../]
+
+  [./inertial_force_z]
+    type = ADInertialForceShell
+    eta = 0.0
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 2
+    variable = disp_z
+    thickness = 0.1
+
+  [../]
+
+  [./inertial_force_rot_x]
+    type = ADInertialForceShell
+    eta = 0.0
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 3
+    variable = rot_x
+    thickness = 0.1
+  [../]
+
+  [./inertial_force_rot_y]
+    type = ADInertialForceShell
+    eta = 0.0
+    block = 0
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    velocities = &#x27;vel_x vel_y vel_z&#x27;
+    accelerations = &#x27;accel_x accel_y accel_z&#x27;
+    rotational_velocities = &#x27;rot_vel_x rot_vel_y&#x27;
+    rotational_accelerations = &#x27;rot_accel_x rot_accel_y&#x27;
+    component = 4
+    variable = rot_y
+    thickness = 0.1
+  [../]
+[]
+
+[Materials]
+  [./elasticity]
+    type = ADComputeIsotropicElasticityTensorShell
+    youngs_modulus = 2100000
+    poissons_ratio = 0.3
+    block = 0
+    through_thickness_order = SECOND
+  [../]
+  [./strain]
+    type = ADComputeIncrementalShellStrain
+    block = &#x27;0&#x27;
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    thickness = 0.1
+    through_thickness_order = SECOND
+  [../]
+  [./stress]
+    type = ADComputeShellStress
+    block = 0
+    through_thickness_order = SECOND
+  [../]
+  [./density]
+    type = GenericConstantMaterial
+    block = 0
+    prop_names = &#x27;density&#x27;
+    prop_values = &#x27;1.0&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./disp_z_tip]
+    type = PointValue
+    point = &#x27;1.0 1.0 0.0&#x27;
+    variable = disp_z
+  [../]
+  [./rot_x_tip]
+    type = PointValue
+    point = &#x27;0.0 1.0 0.0&#x27;
+    variable = rot_x
+  [../]
+  [./stress_yy_el_0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = stress_yy
+  [../]
+  [./stress_yy_el_1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = stress_yy
+  [../]
+  [./stress_yy_el_2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = stress_yy
+  [../]
+  [./stress_yy_el_3]
+    type = ElementalVariableValue
+    elementid = 3
+    variable = stress_yy
+  [../]
+  [./stress_yz_el_0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_3]
+    type = ElementalVariableValue
+    elementid = 3
+    variable = stress_yz
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  l_tol = 1e-11
+  nl_max_its = 15
+  nl_rel_tol = 1e-11
+  nl_abs_tol = 1e-10
+  l_max_its = 20
+  dt = 0.005
+  dtmin = 0.005
+  timestep_tolerance = 2e-13
+  end_time = 0.5
+
+  [./TimeIntegrator]
+    type = NewmarkBeta
+    beta = 0.25
+    gamma = 0.5
+  [../]
+[]
+
+[Outputs]
+  perf_graph = true
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="73f1d6d2-e067-4e34-9934-b2e80ff8f01c"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/strain_energy_density/rate_model_small.i</h4><pre class="moose-pre"><code class="language-text"># Single element test to check the strain energy density calculation
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+  volumetric_locking_correction = true
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 1
+  ny = 1
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 2
+[]
+
+[AuxVariables]
+  [./SERD]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Functions]
+  [./rampConstantUp]
+    type = PiecewiseLinear
+    x = &#x27;0. 1.&#x27;
+    y = &#x27;0. 1.&#x27;
+    scale_factor = -100
+  [../]
+  [./ramp_disp_y]
+    type = PiecewiseLinear
+    x = &#x27;0. 1. 2.&#x27;
+    y = &#x27;0. 6.8e-6 1.36e-5&#x27;
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./master]
+    strain = SMALL
+    add_variables = true
+    incremental = true
+    generate_output = &#x27;stress_xx stress_yy stress_zz vonmises_stress elastic_strain_xx elastic_strain_yy elastic_strain_zz strain_xx strain_yy strain_zz&#x27;
+    planar_formulation = PLANE_STRAIN
+  [../]
+[]
+
+[AuxKernels]
+  [./SERD]
+    type = MaterialRealAux
+    variable = SERD
+    property = strain_energy_rate_density
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./no_x]
+    type = DirichletBC
+    variable = disp_x
+    preset = false
+    boundary = &#x27;left&#x27;
+    value = 0.0
+  [../]
+  [./no_y]
+    type = DirichletBC
+    variable = disp_y
+    preset = false
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./top_disp]
+    type = FunctionDirichletBC
+    variable = disp_y
+    preset = false
+    boundary = &#x27;top&#x27;
+    function = ramp_disp_y
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 206800
+    poissons_ratio = 0.0
+  [../]
+  [./radial_return_stress]
+    type = ComputeMultipleInelasticStress
+    inelastic_models = &#x27;powerlawcrp&#x27;
+  [../]
+  [./powerlawcrp]
+    type = PowerLawCreepStressUpdate
+    coefficient = 3.125e-21 # 7.04e-17 #
+    n_exponent = 4.0
+    m_exponent = 0.0
+    activation_energy = 0.0
+    # max_inelastic_increment = 0.01
+  [../]
+  [./strain_energy_rate_density]
+    type = StrainEnergyRateDensity
+    inelastic_models = &#x27;powerlawcrp&#x27;
+  [../]
+[]
+
+[Executioner]
+   type = Transient
+
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
+  petsc_options_value = &#x27;201                hypre    boomeramg      4&#x27;
+
+  line_search = &#x27;none&#x27;
+
+   l_max_its = 50
+   nl_max_its = 20
+   nl_abs_tol = 3e-7
+   nl_rel_tol = 1e-12
+   l_tol = 1e-2
+
+   start_time = 0.0
+   dt = 1
+
+   end_time = 2
+   num_steps = 2
+[]
+
+[Postprocessors]
+  [./etxx]
+    type = ElementalVariableValue
+    variable = strain_xx
+    elementid = 0
+  [../]
+  [./etyy]
+    type = ElementalVariableValue
+    variable = strain_yy
+    elementid = 0
+  [../]
+  [./etzz]
+    type = ElementalVariableValue
+    variable = strain_zz
+    elementid = 0
+  [../]
+  [./sigxx]
+    type = ElementAverageValue
+    variable = stress_xx
+  [../]
+  [./sigyy]
+    type = ElementAverageValue
+    variable = stress_yy
+  [../]
+  [./sigzz]
+    type = ElementAverageValue
+    variable = stress_zz
+  [../]
+  [./SERD]
+    type = ElementAverageValue
+    variable = SERD
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="baa55392-e6a8-4b49-9b92-8737e24f1b73"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/ad_smeared_cracking/cracking_function.i</h4><pre class="moose-pre"><code class="language-text">#
+# Simple pull test for cracking. This tests the option to prescribe the
+# cracking strength using an AuxVariable. In this case, an elemental
+# AuxVariable is used, and a function is used to prescribe its value.
+# One of the elements is weaker than the others, so the crack localizes
+# in that element.
+#
+[Mesh]
+   file = plate.e
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[AuxVariables]
+  [./cracking_stress_fn]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./crack_flags2]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Functions]
+  [./displ]
+    type = PiecewiseLinear
+    x = &#x27;0 0.1 0.2 0.3 0.4&#x27;
+    y = &#x27;0 0.001 0 -0.001 0&#x27;
+  [../]
+  [./fstress]
+    type = ParsedFunction
+    value = &#x27;if(x &gt; 0.667, 1.1e6, 1.2e6)&#x27;
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./all]
+    strain = FINITE
+    add_variables = true
+    generate_output = &#x27;stress_xx stress_yy stress_zz stress_xy stress_yz stress_zx strain_xx strain_yy strain_xy strain_yz&#x27;
+    use_automatic_differentiation = true
+  [../]
+[]
+
+[AuxKernels]
+  [./cracking_stress_fn]
+    type = FunctionAux
+    variable = cracking_stress_fn
+    function = fstress
+    execute_on = initial
+  [../]
+  [./crack_flags2]
+    type = ADMaterialRealVectorValueAux
+    property = crack_flags
+    variable = crack_flags2
+   component = 2
+  [../]
+[]
+
+[BCs]
+  [./pull]
+    type = ADFunctionDirichletBC
+    variable = disp_x
+    boundary = &#x27;3 4&#x27;
+    function = displ
+  [../]
+
+  [./pin_x]
+    type = ADDirichletBC
+    variable = disp_x
+    boundary =  &#x27;1 2&#x27;
+    value = 0
+  [../]
+  [./pin_y]
+    type = ADDirichletBC
+    variable = disp_y
+    boundary = &#x27;1 4&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ADComputeIsotropicElasticityTensor
+    youngs_modulus = 200.0e7
+    poissons_ratio = 0.0
+  [../]
+  [./elastic_stress]
+    type = ADComputeSmearedCrackingStress
+    cracking_stress = cracking_stress_fn
+    softening_models = abrupt_softening
+  [../]
+  [./abrupt_softening]
+    type = ADAbruptSoftening
+    residual_stress = 0.0
+  [../]
+[]
+
+[Postprocessors]
+  [./elem_stress_xx]
+    type = ElementalVariableValue
+    variable = stress_xx
+    elementid = 2
+  [../]
+  [./elem_strain_xx]
+    type = ElementalVariableValue
+    variable = strain_xx
+    elementid = 2
+  [../]
+  [./elem_crack_flags_x]
+    type = ElementalVariableValue
+    variable = crack_flags2
+    elementid = 2
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+
+  petsc_options_iname = &#x27;-ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;101               &#x27;
+
+  line_search = &#x27;none&#x27;
+
+  l_max_its = 100
+  nl_max_its = 100
+  nl_rel_tol = 1e-8
+  nl_abs_tol = 1e-6
+  l_tol = 1e-5
+  start_time = 0.0
+  end_time = 0.2
+  dt = 0.0025
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b1cd414e-c2d6-4114-89ad-12e5637fca54"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/strain_energy_density/incr_model.i</h4><pre class="moose-pre"><code class="language-text"># Single element test to check the strain energy density calculation
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+  volumetric_locking_correction = true
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 1
+  ny = 1
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 2
+[]
+
+[AuxVariables]
+  [./SED]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Functions]
+  [./rampConstantUp]
+    type = PiecewiseLinear
+    x = &#x27;0. 1.&#x27;
+    y = &#x27;0. 1.&#x27;
+    scale_factor = -100
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./master]
+    strain = FINITE
+    add_variables = true
+    incremental = true
+    generate_output = &#x27;stress_xx stress_yy stress_zz vonmises_stress strain_xx strain_yy strain_zz&#x27;
+    planar_formulation = PLANE_STRAIN
+  [../]
+[]
+
+[AuxKernels]
+  [./SED]
+    type = MaterialRealAux
+    variable = SED
+    property = strain_energy_density
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./no_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;left&#x27;
+    value = 0.0
+  [../]
+  [./no_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./Pressure]
+    [./top]
+      boundary = &#x27;top&#x27;
+      function = rampConstantUp
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 30e+6
+    poissons_ratio = 0.3
+  [../]
+  [./elastic_stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+  [./strain_energy_density]
+    type = StrainEnergyDensity
+    incremental = true
+  [../]
+[]
+
+[Executioner]
+   type = Transient
+
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
+  petsc_options_value = &#x27;201                hypre    boomeramg      4&#x27;
+
+  line_search = &#x27;none&#x27;
+
+   l_max_its = 50
+   nl_max_its = 20
+   nl_abs_tol = 3e-7
+   nl_rel_tol = 1e-12
+   l_tol = 1e-2
+
+   start_time = 0.0
+   dt = 1
+
+   end_time = 1
+   num_steps = 1
+[]
+
+[Postprocessors]
+  [./epxx]
+    type = ElementalVariableValue
+    variable = strain_xx
+    elementid = 0
+  [../]
+  [./epyy]
+    type = ElementalVariableValue
+    variable = strain_yy
+    elementid = 0
+  [../]
+  [./epzz]
+    type = ElementalVariableValue
+    variable = strain_zz
+    elementid = 0
+  [../]
+  [./sigxx]
+    type = ElementAverageValue
+    variable = stress_xx
+  [../]
+  [./sigyy]
+    type = ElementAverageValue
+    variable = stress_yy
+  [../]
+  [./sigzz]
+    type = ElementAverageValue
+    variable = stress_zz
+  [../]
+  [./SED]
+    type = ElementAverageValue
+    variable = SED
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b16b8490-b451-4357-81bc-0648a4a9b3e9"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/strain_energy_density/rate_incr_model_elas_plas.i</h4><pre class="moose-pre"><code class="language-text"># Single element test to check the strain energy density calculation
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+  volumetric_locking_correction = true
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 1
+  ny = 1
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 2
+[]
+
+[AuxVariables]
+  [./SED]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Functions]
+  [./rampConstantUp]
+    type = PiecewiseLinear
+    x = &#x27;0. 1.&#x27;
+    y = &#x27;0. 1.&#x27;
+    scale_factor = -100
+  [../]
+  [./ramp_disp_y]
+    type = PiecewiseLinear
+    x = &#x27;0. 1. 2.&#x27;
+    y = &#x27;0. 6.8e-6 1.36e-5&#x27;
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./master]
+    strain = SMALL
+    add_variables = true
+    incremental = true
+    generate_output = &#x27;stress_xx stress_yy stress_zz vonmises_stress elastic_strain_xx elastic_strain_yy elastic_strain_zz plastic_strain_xx plastic_strain_yy plastic_strain_zz strain_xx strain_yy strain_zz&#x27;
+    planar_formulation = PLANE_STRAIN
+  [../]
+[]
+
+[AuxKernels]
+  [./SED]
+    type = MaterialRealAux
+    variable = SED
+    property = strain_energy_density
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./no_x]
+    type = DirichletBC
+    variable = disp_x
+    preset = false
+    boundary = &#x27;left&#x27;
+    value = 0.0
+  [../]
+  [./no_y]
+    type = DirichletBC
+    variable = disp_y
+    preset = false
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./top_disp]
+    type = FunctionDirichletBC
+    variable = disp_y
+    preset = false
+    boundary = &#x27;top&#x27;
+    function = ramp_disp_y
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 30e+6
+    poissons_ratio = 0.3
+  [../]
+  [./elastic_stress]
+    type = ComputeMultipleInelasticStress
+    inelastic_models = &#x27;isoplas&#x27;
+  [../]
+  [./isoplas]
+    type = IsotropicPlasticityStressUpdate
+    yield_stress = 1e2
+    hardening_constant = 0.0
+  [../]
+  [./strain_energy_density]
+    type = StrainEnergyDensity
+    incremental = true
+  [../]
+[]
+
+[Executioner]
+   type = Transient
+
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
+  petsc_options_value = &#x27;201                hypre    boomeramg      4&#x27;
+
+  line_search = &#x27;none&#x27;
+
+   l_max_its = 50
+   nl_max_its = 20
+   nl_abs_tol = 3e-7
+   nl_rel_tol = 1e-12
+   l_tol = 1e-2
+
+   start_time = 0.0
+   dt = 1
+
+   end_time = 2
+   num_steps = 2
+[]
+
+[Postprocessors]
+  [./epxx]
+    type = ElementalVariableValue
+    variable = elastic_strain_xx
+    elementid = 0
+  [../]
+  [./epyy]
+    type = ElementalVariableValue
+    variable = elastic_strain_yy
+    elementid = 0
+  [../]
+  [./epzz]
+    type = ElementalVariableValue
+    variable = elastic_strain_zz
+    elementid = 0
+  [../]
+  [./eplxx]
+    type = ElementalVariableValue
+    variable = plastic_strain_xx
+    elementid = 0
+  [../]
+  [./eplyy]
+    type = ElementalVariableValue
+    variable = plastic_strain_yy
+    elementid = 0
+  [../]
+  [./eplzz]
+    type = ElementalVariableValue
+    variable = plastic_strain_zz
+    elementid = 0
+  [../]
+  [./etxx]
+    type = ElementalVariableValue
+    variable = strain_xx
+    elementid = 0
+  [../]
+  [./etyy]
+    type = ElementalVariableValue
+    variable = strain_yy
+    elementid = 0
+  [../]
+  [./etzz]
+    type = ElementalVariableValue
+    variable = strain_zz
+    elementid = 0
+  [../]
+  [./sigxx]
+    type = ElementAverageValue
+    variable = stress_xx
+  [../]
+  [./sigyy]
+    type = ElementAverageValue
+    variable = stress_yy
+  [../]
+  [./sigzz]
+    type = ElementAverageValue
+    variable = stress_zz
+  [../]
+  [./SED]
+    type = ElementAverageValue
+    variable = SED
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e4ffd277-ff40-42c5-93a5-7b013e1ac53e"><div class="modal-content"><h4>test/tests/outputs/variables/show_single_vars.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  nx = 10
+  ny = 10
+  elem_type = QUAD4
+  # This test uses ElementalVariableValue postprocessors on specific
+  # elements, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[Functions]
+  [./ffn]
+    type = ParsedFunction
+    value = -4
+  [../]
+
+  [./exactfn]
+    type = ParsedFunction
+    value = x*x+y*y
+  [../]
+
+  [./aux_exact_fn]
+    type = ParsedFunction
+    value = t*(x*x+y*y)
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./td]
+    type = TimeDerivative
+    variable = u
+  [../]
+
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./force]
+    type = BodyForce
+    variable = u
+    function = ffn
+  [../]
+[]
+
+[AuxVariables]
+  [./aux_u]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./a]
+    type = FunctionAux
+    variable = aux_u
+    function = aux_exact_fn
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    function = exactfn
+  [../]
+[]
+
+[Postprocessors]
+  [./elem_56]
+    type = ElementalVariableValue
+    variable = u
+    elementid = 56
+  [../]
+
+  [./aux_elem_99]
+    type = ElementalVariableValue
+    variable = aux_u
+    elementid = 99
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+  dt = 0.01
+  start_time = 0
+  num_steps = 1
+[]
+
+[Outputs]
+  exodus = true
+  show = &#x27;aux_u&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f73de307-c6d3-4b8a-a177-9a4bbd2ba208"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/temperature_dependent_hardening/temp_dep_hardening.i</h4><pre class="moose-pre"><code class="language-text">#
+# This is a test of the piece-wise linear strain hardening model using the
+# small strain formulation.  This test exercises the temperature-dependent
+# hardening curve capability.
+#
+# Test procedure:
+# 1. The element is pulled to and then beyond the yield stress for a given
+# temperature.
+# 2. The displacement is then constant while the temperature increases and
+# the yield stress decreases.  This results in a lower stress with more
+# plastic strain.
+# 3. The temperature decreases beyond its original value giving a higher
+# yield stress.  The displacement increases, causing increases stress to
+# the new yield stress.
+# 4. The temperature and yield stress are constant with increasing
+# displacement giving a constant stress and more plastic strain.
+#
+# Plotting total_strain_yy on the x axis and stress_yy on the y axis shows
+# the stress history in a clear way.
+#
+#  s |
+#  t |            *****
+#  r |           *
+#  e |   *****  *
+#  s |  *    * *
+#  s | *     *
+#    |*
+#    +------------------
+#           total strain
+#
+# The exact same problem was run in Abaqus with exactly the same result.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 1
+  ny = 1
+  nz = 1
+  # This test uses ElementalVariableValue postprocessors on specific
+  # elements, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[AuxVariables]
+  [./temp]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 500.0
+  [../]
+[]
+
+[AuxKernels]
+  [./temp_aux]
+    type = FunctionAux
+    variable = temp
+    function = temp_hist
+  [../]
+[]
+
+[Functions]
+  [./top_pull]
+    type = PiecewiseLinear
+    x = &#x27;0 1     2    4    5    6&#x27;
+    y = &#x27;0 0.025 0.05 0.05 0.06 0.085&#x27;
+  [../]
+  [./hf1]
+    type = PiecewiseLinear
+    x = &#x27;0.0  0.01 0.02 0.03 0.1&#x27;
+    y = &#x27;5000 5030 5060 5090 5300&#x27;
+  [../]
+  [./hf2]
+    type = PiecewiseLinear
+    x = &#x27;0.0  0.01 0.02 0.03 0.1&#x27;
+    y = &#x27;4000 4020 4040 4060 4200&#x27;
+  [../]
+  [./temp_hist]
+    type = PiecewiseLinear
+    x = &#x27;0   1   2   3   4&#x27;
+    y = &#x27;500 500 500 600 400&#x27;
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./all]
+    strain = SMALL
+    incremental = true
+    add_variables = true
+    generate_output = &#x27;stress_yy strain_yy plastic_strain_xx plastic_strain_yy plastic_strain_zz&#x27;
+  [../]
+[]
+
+
+[BCs]
+  [./y_pull_function]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = 3
+    function = top_pull
+  [../]
+  [./x_bot]
+    type = DirichletBC
+    variable = disp_x
+    boundary = 4
+    value = 0.0
+  [../]
+  [./y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = 1
+    value = 0.0
+  [../]
+  [./z_bot]
+    type = DirichletBC
+    variable = disp_z
+    boundary = 0
+    value = 0.0
+  [../]
+[]
+
+[Postprocessors]
+  [./stress_yy_el]
+    type = ElementalVariableValue
+    variable = stress_yy
+    elementid = 0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 2e5
+    poissons_ratio = 0.3
+  [../]
+  [./temp_dep_hardening]
+    type = TemperatureDependentHardeningStressUpdate
+    hardening_functions = &#x27;hf1 hf2&#x27;
+    temperatures = &#x27;300.0 800.0&#x27;
+    relative_tolerance = 1e-25
+    absolute_tolerance = 1e-5
+    temperature = temp
+  [../]
+  [./radial_return_stress]
+    type = ComputeMultipleInelasticStress
+    tangent_operator = elastic
+    inelastic_models = &#x27;temp_dep_hardening&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options = &#x27;-snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
+  petsc_options_value = &#x27;201                hypre    boomeramg      4&#x27;
+
+  line_search = &#x27;none&#x27;
+
+  l_max_its = 100
+  nl_max_its = 100
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+  l_tol = 1e-9
+
+  start_time = 0.0
+  end_time = 6
+  dt = 0.1
+[]
+
+[Outputs]
+  [./out]
+    type = Exodus
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0bbb4432-eb3d-4229-bdce-8b2f7c9bcbfd"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/plane_stress/weak_plane_stress_finite_tension_pull.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  order = FIRST
+  family = LAGRANGE
+  displacements = &#x27;disp_x disp_y&#x27;
+  out_of_plane_strain = strain_zz
+[]
+
+[Problem]
+  extra_tag_vectors = &#x27;ref&#x27;
+[]
+
+[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 1
+    ny = 1
+  []
+[]
+
+[Variables]
+  [disp_x]
+  []
+  [disp_y]
+  []
+  [strain_zz]
+  []
+[]
+
+[AuxVariables]
+  [react_x]
+  []
+[]
+
+[Postprocessors]
+  [react_x]
+    type = NodalSum
+    variable = &#x27;react_x&#x27;
+    boundary = &#x27;right&#x27;
+  []
+  [stress_xx]
+    type = ElementalVariableValue
+    variable = &#x27;stress_xx&#x27;
+    elementid = 0
+  []
+  [strain_zz]
+    type = ElementalVariableValue
+    variable = &#x27;strain_zz&#x27;
+    elementid = 0
+  []
+[]
+
+[Modules/TensorMechanics/Master]
+  [plane_stress]
+    strain = FINITE
+    planar_formulation = WEAK_PLANE_STRESS
+    extra_vector_tags = &#x27;ref&#x27;
+    generate_output = &#x27;stress_xx stress_xy stress_yy stress_zz strain_xx strain_xy strain_yy&#x27;
+  []
+[]
+
+[AuxKernels]
+  [react_x]
+    type = TagVectorAux
+    vector_tag = &#x27;ref&#x27;
+    v = &#x27;disp_x&#x27;
+    variable = &#x27;react_x&#x27;
+  []
+[]
+
+[BCs]
+  [leftx]
+    type = DirichletBC
+    boundary = left
+    variable = disp_x
+    value = 0.0
+  []
+  [bottomy]
+    type = DirichletBC
+    boundary = bottom
+    variable = disp_y
+    value = 0.0
+  []
+  [rightx]
+    type = FunctionDirichletBC
+    boundary = right
+    variable = disp_x
+    function = &#x27;t&#x27;
+  []
+[]
+
+[Materials]
+  [elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    poissons_ratio = 0.3
+    youngs_modulus = 1e6
+  []
+  [stress]
+    type = ComputeFiniteStrainElasticStress
+  []
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = PJFNK
+  line_search = none
+
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+
+  # time control
+  start_time = 0.0
+  dt = 0.01
+  dtmin = 0.01
+  end_time = 0.2
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="379a01ff-5270-479a-ad77-b945b63b6ed0"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/strain_energy_density/tot_model.i</h4><pre class="moose-pre"><code class="language-text"># Single element test to check the strain energy density calculation
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+  volumetric_locking_correction = true
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 1
+  ny = 1
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 2
+[]
+
+[AuxVariables]
+  [./SED]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Functions]
+  [./rampConstantUp]
+    type = PiecewiseLinear
+    x = &#x27;0. 1.&#x27;
+    y = &#x27;0. 1.&#x27;
+    scale_factor = -100
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./master]
+    strain = SMALL
+    add_variables = true
+    incremental = false
+    generate_output = &#x27;stress_xx stress_yy stress_zz vonmises_stress strain_xx strain_yy strain_zz&#x27;
+    planar_formulation = PLANE_STRAIN
+  [../]
+[]
+
+[AuxKernels]
+  [./SED]
+    type = MaterialRealAux
+    variable = SED
+    property = strain_energy_density
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./no_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;left&#x27;
+    value = 0.0
+  [../]
+  [./no_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./Pressure]
+    [./top]
+      boundary = &#x27;top&#x27;
+      function = rampConstantUp
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 30e+6
+    poissons_ratio = 0.3
+  [../]
+  [./elastic_stress]
+    type = ComputeLinearElasticStress
+  [../]
+  [./strain_energy_density]
+    type = StrainEnergyDensity
+    incremental = false
+  [../]
+[]
+
+[Executioner]
+   type = Transient
+
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
+  petsc_options_value = &#x27;201                hypre    boomeramg      4&#x27;
+
+  line_search = &#x27;none&#x27;
+
+   l_max_its = 50
+   nl_max_its = 20
+   nl_abs_tol = 3e-7
+   nl_rel_tol = 1e-12
+   l_tol = 1e-2
+
+   start_time = 0.0
+   dt = 1
+
+   end_time = 1
+   num_steps = 1
+[]
+
+[Postprocessors]
+  [./epxx]
+    type = ElementalVariableValue
+    variable = strain_xx
+    elementid = 0
+  [../]
+  [./epyy]
+    type = ElementalVariableValue
+    variable = strain_yy
+    elementid = 0
+  [../]
+  [./epzz]
+    type = ElementalVariableValue
+    variable = strain_zz
+    elementid = 0
+  [../]
+  [./sigxx]
+    type = ElementAverageValue
+    variable = stress_xx
+  [../]
+  [./sigyy]
+    type = ElementAverageValue
+    variable = stress_yy
+  [../]
+  [./sigzz]
+    type = ElementAverageValue
+    variable = stress_zz
+  [../]
+  [./SED]
+    type = ElementAverageValue
+    variable = SED
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d271885c-2c22-4042-b142-419bd0e153a9"><div class="modal-content"><h4>test/tests/auxkernels/element_var/element_var_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  nx = 10
+  ny = 10
+  elem_type = QUAD4
+  # This test uses ElementalVariableValue postprocessors on specific
+  # elements, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[Functions]
+  [./ffn]
+    type = ParsedFunction
+    value = -4
+  [../]
+
+  [./exactfn]
+    type = ParsedFunction
+    value = x*x+y*y
+  [../]
+
+  [./aux_exact_fn]
+    type = ParsedFunction
+    value = t*(x*x+y*y)
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./td]
+    type = TimeDerivative
+    variable = u
+  [../]
+
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+
+  #Coupling of nonlinear to Aux
+  [./force]
+    type = BodyForce
+    variable = u
+    function = ffn
+  [../]
+[]
+
+[AuxVariables]
+  [./aux_u]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./a]
+    type = FunctionAux
+    variable = aux_u
+    function = aux_exact_fn
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    function = exactfn
+  [../]
+[]
+
+[Postprocessors]
+  [./elem_56]
+    type = ElementalVariableValue
+    variable = u
+    elementid = 56
+  [../]
+
+  [./aux_elem_99]
+    type = ElementalVariableValue
+    variable = aux_u
+    elementid = 99
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  dt = 0.01
+  start_time = 0
+  num_steps = 10
+[]
+
+[Outputs]
+  exodus = true
+  file_base = out
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b05f8312-4927-4b89-8f8d-f40be068d5b1"><div class="modal-content"><h4>modules/porous_flow/test/tests/thermal_conductivity/ThermalCondPorosity01.i</h4><pre class="moose-pre"><code class="language-text"># Trivial test of PorousFlowThermalConductivityFromPorosity
+# Porosity = 0.1
+# Solid thermal conductivity = 3
+# Fluid thermal conductivity = 2
+# Expected porous medium thermal conductivity = 3 * (1 - 0.1) + 2 * 0.1 = 2.9
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  zmin = -1
+  zmax = 0
+  nx = 1
+  ny = 1
+  nz = 1
+  # This test uses ElementalVariableValue postprocessors on specific
+  # elements, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[GlobalParams]
+  PorousFlowDictator = dictator
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./simple_fluid]
+      type = SimpleFluidProperties
+    [../]
+  [../]
+[]
+
+[Variables]
+  [./temp]
+    initial_condition = 1
+  [../]
+  [./pp]
+    initial_condition = 0
+  [../]
+[]
+
+[Kernels]
+  [./heat_conduction]
+    type = PorousFlowHeatConduction
+    variable = temp
+  [../]
+  [./dummy]
+    type = Diffusion
+    variable = pp
+  [../]
+[]
+
+[BCs]
+  [./temp]
+    type = DirichletBC
+    variable = temp
+    boundary = &#x27;front back&#x27;
+    value = 1
+  [../]
+  [./pp]
+    type = DirichletBC
+    variable = pp
+    boundary = &#x27;front back&#x27;
+    value = 0
+  [../]
+[]
+
+[AuxVariables]
+  [./lambda_x]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./lambda_y]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./lambda_z]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./lambda_x]
+    type = MaterialRealTensorValueAux
+    property = PorousFlow_thermal_conductivity_qp
+    row = 0
+    column = 0
+    variable = lambda_x
+  [../]
+  [./lambda_y]
+    type = MaterialRealTensorValueAux
+    property = PorousFlow_thermal_conductivity_qp
+    row = 1
+    column = 1
+    variable = lambda_y
+  [../]
+  [./lambda_z]
+    type = MaterialRealTensorValueAux
+    property = PorousFlow_thermal_conductivity_qp
+    row = 2
+    column = 2
+    variable = lambda_z
+  [../]
+[]
+
+[Postprocessors]
+  [./lambda_x]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = lambda_x
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./lambda_y]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = lambda_y
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./lambda_z]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = lambda_z
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./dictator]
+    type = PorousFlowDictator
+    porous_flow_vars = &#x27;pp temp&#x27;
+    number_fluid_phases = 1
+    number_fluid_components = 1
+  [../]
+[]
+
+[Materials]
+  [./temperature]
+    type = PorousFlowTemperature
+    temperature = temp
+  [../]
+  [./ppss_qp]
+    type = PorousFlow1PhaseFullySaturated
+    porepressure = pp
+  [../]
+  [./simple_fluid]
+    type = PorousFlowSingleComponentFluid
+    fp = simple_fluid
+    phase = 0
+  [../]
+  [./porosity_qp]
+    type = PorousFlowPorosityConst
+    porosity = 0.1
+  [../]
+  [./lambda]
+    type = PorousFlowThermalConductivityFromPorosity
+    lambda_s = &#x27;3 0 0  0 3 0  0 0 3&#x27;
+    lambda_f = &#x27;2 0 0  0 2 0  0 0 2&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./andy]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  solve_type = Newton
+  type = Steady
+[]
+
+[Outputs]
+  file_base = ThermalCondPorosity01
+  csv = true
+  execute_on = &#x27;timestep_end&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="64b5f4f5-f956-495b-ac51-b276a0c611e2"><div class="modal-content"><h4>modules/fluid_properties/test/tests/ics/rho_from_pressure_temperature/test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 1
+  allow_renumbering = false
+[]
+
+[Modules]
+  [FluidProperties]
+    [fp_steam]
+      type = StiffenedGasFluidProperties
+      gamma = 1.43
+      cv = 1040.0
+      q = 2.03e6
+      p_inf = 0.0
+      q_prime = -2.3e4
+      k = 0.026
+      mu = 134.4e-7
+      M = 0.01801488
+      rho_c = 322.0
+    []
+  []
+[]
+
+[AuxVariables]
+  [rho]
+  []
+  [p]
+  []
+  [T]
+  []
+[]
+
+[ICs]
+  [rho_ic]
+    type = RhoFromPressureTemperatureIC
+    variable = rho
+    p = p
+    T = T
+    fp = fp_steam
+  []
+  [p_ic]
+    type = ConstantIC
+    variable = p
+    value = 100e3
+  []
+  [T_ic]
+    type = ConstantIC
+    variable = T
+    value = 500
+  []
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Postprocessors]
+  [rho_test]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = rho
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+[]
+
+[Outputs]
+  csv = true
+  execute_on = &#x27;INITIAL&#x27;
+[]
+
+[Problem]
+  solve = false
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e0e55311-1cfe-4026-a039-55d6370dd882"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/strain_energy_density/incr_model_elas_plas.i</h4><pre class="moose-pre"><code class="language-text"># Single element test to check the strain energy density calculation
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+  volumetric_locking_correction = true
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 1
+  ny = 1
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 2
+[]
+
+[AuxVariables]
+  [./SED]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Functions]
+  [./rampConstantUp]
+    type = PiecewiseLinear
+    x = &#x27;0. 1.&#x27;
+    y = &#x27;0. 1.&#x27;
+    scale_factor = -100
+  [../]
+  [./ramp_disp_y]
+    type = PiecewiseLinear
+    x = &#x27;0. 1. 2.&#x27;
+    y = &#x27;0. 6.8e-6 1.36e-5&#x27;
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./master]
+    strain = SMALL
+    add_variables = true
+    incremental = true
+    generate_output = &#x27;stress_xx stress_yy stress_zz vonmises_stress elastic_strain_xx elastic_strain_yy elastic_strain_zz plastic_strain_xx plastic_strain_yy plastic_strain_zz strain_xx strain_yy strain_zz&#x27;
+    planar_formulation = PLANE_STRAIN
+  [../]
+[]
+
+[AuxKernels]
+  [./SED]
+    type = MaterialRealAux
+    variable = SED
+    property = strain_energy_density
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./no_x]
+    type = DirichletBC
+    variable = disp_x
+    preset = false
+    boundary = &#x27;left&#x27;
+    value = 0.0
+  [../]
+  [./no_y]
+    type = DirichletBC
+    variable = disp_y
+    preset = false
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./top_disp]
+    type = FunctionDirichletBC
+    variable = disp_y
+    preset = false
+    boundary = &#x27;top&#x27;
+    function = ramp_disp_y
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 30e+6
+    poissons_ratio = 0.3
+  [../]
+  [./elastic_stress]
+    type = ComputeMultipleInelasticStress
+    inelastic_models = &#x27;isoplas&#x27;
+  [../]
+  [./isoplas]
+    type = IsotropicPlasticityStressUpdate
+    yield_stress = 1e2
+    hardening_constant = 0.0
+  [../]
+  [./strain_energy_density]
+    type = StrainEnergyDensity
+    incremental = true
+  [../]
+[]
+
+[Executioner]
+   type = Transient
+
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
+  petsc_options_value = &#x27;201                hypre    boomeramg      4&#x27;
+
+  line_search = &#x27;none&#x27;
+
+   l_max_its = 50
+   nl_max_its = 20
+   nl_abs_tol = 3e-7
+   nl_rel_tol = 1e-12
+   l_tol = 1e-2
+
+   start_time = 0.0
+   dt = 1
+
+   end_time = 2
+   num_steps = 2
+[]
+
+[Postprocessors]
+  [./epxx]
+    type = ElementalVariableValue
+    variable = elastic_strain_xx
+    elementid = 0
+  [../]
+  [./epyy]
+    type = ElementalVariableValue
+    variable = elastic_strain_yy
+    elementid = 0
+  [../]
+  [./epzz]
+    type = ElementalVariableValue
+    variable = elastic_strain_zz
+    elementid = 0
+  [../]
+  [./eplxx]
+    type = ElementalVariableValue
+    variable = plastic_strain_xx
+    elementid = 0
+  [../]
+  [./eplyy]
+    type = ElementalVariableValue
+    variable = plastic_strain_yy
+    elementid = 0
+  [../]
+  [./eplzz]
+    type = ElementalVariableValue
+    variable = plastic_strain_zz
+    elementid = 0
+  [../]
+  [./etxx]
+    type = ElementalVariableValue
+    variable = strain_xx
+    elementid = 0
+  [../]
+  [./etyy]
+    type = ElementalVariableValue
+    variable = strain_yy
+    elementid = 0
+  [../]
+  [./etzz]
+    type = ElementalVariableValue
+    variable = strain_zz
+    elementid = 0
+  [../]
+  [./sigxx]
+    type = ElementAverageValue
+    variable = stress_xx
+  [../]
+  [./sigyy]
+    type = ElementAverageValue
+    variable = stress_yy
+  [../]
+  [./sigzz]
+    type = ElementAverageValue
+    variable = stress_zz
+  [../]
+  [./SED]
+    type = ElementAverageValue
+    variable = SED
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1369b23c-2d97-4646-9d4b-d2d2a8dc879f"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/shell/static/beam_bending_moment_AD_2.i</h4><pre class="moose-pre"><code class="language-text"># Test that models bending of a rotated cantilever beam using shell elements
+
+# A cantilever beam of length 10 m (in Z direction) and cross-section
+# 1 m x 0.1 m is modeled using 4 shell elements placed along the length
+# (Figure 6a from Dvorkin and Bathe, 1984). All displacements and
+# X rotations are fixed on the bottom boundary. E = 2100000 and v = 0.0.
+# A load of 0.5 N (in the Y direction) is applied at each node on the top
+# boundary resulting in a total load of 1 N.
+
+# The analytical solution for displacement at tip using small strain/rotations # is PL^3/3EI + PL/AG = 1.90485714 m
+# The FEM solution using 4 shell elements is 1.875095 m with a relative error
+# of 1.5%.
+
+# Similarly, the analytical solution for slope at tip is PL^2/2EI = 0.285714286
+# The FEM solution is 0.2857143 and the relative error is 5e-6%.
+
+# The stress_zz for the four elements at y = -0.57735 * (t/2) (first qp below mid-surface of shell) are:
+# 3031.089 Pa, 2165.064 Pa, 1299.038 Pa and 433.0127 Pa.
+# Note the above values are the average stresses in each element.
+
+# Analytically, stress_zz decreases linearly from z = 0 to z = 10 m.
+# The maximum value of stress_zz at z = 0 is My/I = PL * 0.57735*(t/2)/I = 3464.1 Pa
+# Therefore, the analytical value of stress at y = -0.57735 * (t/2) at the mid-point
+# of the four elements are:
+# 3031.0875 Pa, 2165.0625 Pa, 1299.0375 Pa ,433.0125 Pa
+
+# The relative error in stress_zz is in the order of 5e-5%.
+
+# The stress_yz at y = -0.57735 * (t/2) at all four elements from the simulation is 10 Pa.
+# The analytical solution for the shear stress is: V/2/I *((t^2)/4 - y^2), where the shear force (V)
+# is 1 N at any z along the length of the beam. Therefore, the analytical shear stress at
+# y = -0.57735 * (t/2) is 10 Pa at any location along the length of the beam.
+
+[Mesh]
+  [./gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 1
+    ny = 4
+    xmin = 0.0
+    xmax = 1.0
+    ymin = 0.0
+    ymax = 10.0
+  []
+  [./rotate]
+    type = TransformGenerator
+    input = gen
+    transform = ROTATE
+    vector_value = &#x27;0 90 0&#x27;
+  [../]
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_z]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./rot_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./rot_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_yz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_zz]
+    type = RankTwoAux
+    variable = stress_zz
+    rank_two_tensor = global_stress_t_points_0
+    index_i = 2
+    index_j = 2
+  [../]
+  [./stress_yz]
+    type = RankTwoAux
+    variable = stress_yz
+    rank_two_tensor = global_stress_t_points_0
+    index_i = 1
+    index_j = 2
+  [../]
+[]
+
+[BCs]
+  [./fixy1]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./fixz1]
+    type = DirichletBC
+    variable = disp_z
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./fixr1]
+    type = DirichletBC
+    variable = rot_x
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./fixr2]
+    type = DirichletBC
+    variable = rot_y
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+  [./fixx1]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;bottom&#x27;
+    value = 0.0
+  [../]
+[]
+
+[NodalKernels]
+  [./force_y2]
+    type = ConstantRate
+    variable = disp_y
+    boundary = &#x27;top&#x27;
+    rate = 0.5
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  nl_max_its = 2
+  nl_rel_tol = 1e-10
+  nl_abs_tol = 5e-4
+
+  dt = 1
+  dtmin = 1
+  end_time = 1
+[]
+
+[Kernels]
+  [./solid_disp_x]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 0
+    variable = disp_x
+    through_thickness_order = SECOND
+  [../]
+  [./solid_disp_y]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 1
+    variable = disp_y
+    through_thickness_order = SECOND
+  [../]
+  [./solid_disp_z]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 2
+    variable = disp_z
+    through_thickness_order = SECOND
+  [../]
+  [./solid_rot_x]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 3
+    variable = rot_x
+    through_thickness_order = SECOND
+  [../]
+  [./solid_rot_y]
+    type = ADStressDivergenceShell
+    block = &#x27;0&#x27;
+    component = 4
+    variable = rot_y
+    through_thickness_order = SECOND
+  [../]
+[]
+
+[Materials]
+  [./elasticity]
+    type = ADComputeIsotropicElasticityTensorShell
+    youngs_modulus = 2100000
+    poissons_ratio = 0.0
+    block = 0
+    through_thickness_order = SECOND
+  [../]
+  [./strain]
+    type = ADComputeIncrementalShellStrain
+    block = &#x27;0&#x27;
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y&#x27;
+    thickness = 0.1
+    through_thickness_order = SECOND
+  [../]
+  [./stress]
+    type = ADComputeShellStress
+    block = 0
+    through_thickness_order = SECOND
+  [../]
+[]
+
+[Postprocessors]
+  [./disp_z_tip]
+    type = PointValue
+    point = &#x27;1.0 0.0 10.0&#x27;
+    variable = disp_y
+  [../]
+  [./rot_y_tip]
+    type = PointValue
+    point = &#x27;0.0 0.0 10.0&#x27;
+    variable = rot_y
+  [../]
+  [./stress_zz_el_0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = stress_zz
+  [../]
+  [./stress_zz_el_1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = stress_zz
+  [../]
+  [./stress_zz_el_2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = stress_zz
+  [../]
+  [./stress_zz_el_3]
+    type = ElementalVariableValue
+    elementid = 3
+    variable = stress_zz
+  [../]
+  [./stress_yz_el_0]
+    type = ElementalVariableValue
+    elementid = 0
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_1]
+    type = ElementalVariableValue
+    elementid = 1
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_2]
+    type = ElementalVariableValue
+    elementid = 2
+    variable = stress_yz
+  [../]
+  [./stress_yz_el_3]
+    type = ElementalVariableValue
+    elementid = 3
+    variable = stress_yz
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d2540b7e-1fd6-4d91-8c8a-226d1240879d"><div class="modal-content"><h4>test/tests/outputs/postprocessor/output_pps_hidden_shown_check.i</h4><pre class="moose-pre"><code class="language-text"># Computing two postprocessors and specifying one of them both in the
+# show list and the hide list, which should throw an error message.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  nx = 10
+  ny = 10
+  elem_type = QUAD4
+  # This test uses ElementalVariableValue postprocessors on specific
+  # elements, so element numbering needs to stay unchanged
+  allow_renumbering = false
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./lr_u]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 3&#x27;
+    value = 1
+  [../]
+[]
+
+[Postprocessors]
+  [./elem_56]
+    type = ElementalVariableValue
+    variable = u
+    elementid = 56
+  [../]
+
+  [./elem_12]
+    type = ElementalVariableValue
+    variable = u
+    elementid = 12
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+[]
+
+[Outputs]
+  [./console]
+    type = Console
+    show = &#x27;elem_56&#x27;
+    hide = &#x27;elem_56&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="7d20ada7-32cd-4478-aa75-30f42ccae56b"><div class="modal-content"><h4>test/tests/postprocessors/element_variable_value/elemental_variable_value.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 1
+  ymax = 0.1
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = CoefDiffusion
+    variable = u
+    coef = 0.1
+  [../]
+  [./time]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 1
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 10
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 10
+  dt = 0.1
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Postprocessors]
+  [./elem_left]
+    type = ElementalVariableValue
+    variable = u
+    elementid = 0
+  []
+  [./elem_right]
+    type = ElementalVariableValue
+    variable = u
+    elementid = 9
+  []
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#3b47d404-2304-45b2-bb06-50d1529c4947" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#eee42477-9e76-4370-b63b-4298a7b44aa5" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#70da8eda-509f-40de-b404-3179d93d7a12" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#6db75916-4248-456a-b8b6-2e7a1870b1f5" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

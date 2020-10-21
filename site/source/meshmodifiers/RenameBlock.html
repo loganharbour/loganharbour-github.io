@@ -1,0 +1,344 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>RenameBlock.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="754905e6-9461-4e81-8b9a-270820ab4a0b"><i class="material-icons">menu</i></a><ul class="sidenav" id="754905e6-9461-4e81-8b9a-270820ab4a0b"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">meshmodifiers</span><a href="#" class="breadcrumb">RenameBlock</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="8618ccc6-8e5e-4429-8292-1285386bf04b" data-section-level="1" data-section-text="RenameBlock"><h1 id="renameblock">RenameBlock</h1><p>RenameBlock re-numbers or re-names an old_block_id or old_block_name with a new_block_id or new_block_name.  If using RenameBlock to merge blocks (by giving them the same name, for instance) it is advisable to specify all your blocks in old_blocks to avoid inconsistencies</p><p><code>RenameBlock</code> is usually used to provide meaningful names to blocks so that input files are easier to read.  For instance</p><pre class="moose-pre"><code class="language-text">
+old_block_id = &#x27;1 2 3&#x27;
+new_block_name = &#x27;wheel engine axle&#x27;
+</code></pre><p>Then the MOOSE input file can employ <code>block = wheel</code> rather than <code>block = 1</code>.  <code>RenameBlock</code> may also be to provide more meaningful names to mesh blocks that are already named.  For instance</p><pre class="moose-pre"><code class="language-text">
+old_block_name = &#x27;silly meaningless crazy&#x27;
+new_block_name = &#x27;wheel engine axle&#x27;
+</code></pre><p>Then the MOOSE input file can employ <code>block = axle</code> rather than <code>block = crazy</code>.</p><div class="card moose-alert moose-alert-warning"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">warning</span></div><div class="card-content"><div class="moose-alert-content"><p><p><code>RenameBlock</code> may also be used to merge blocks, but care must be taken.</p></p></div></div></div><p>For instance</p><pre class="moose-pre"><code class="language-text">
+old_block_id = &#x27;1 2 3&#x27;
+new_block_id = &#x27;4 4 4&#x27;
+</code></pre><p>Then blocks 1, 2 and 3 will be merged together into one block that may be used in the remainder of the input file.  However, when merging blocks problems and even inconsistencies can occur.</p><p>Firstly, in the example just given, what if the blocks 1, 2 and 3 were named?  What should the name of the block 4 be?  The convention is that it is the name of the first old block that is given the block ID of 4, which is the name of the old block 1 in this case.  The user needs to be aware of this convention.  Similarly, if <code>old_block_name = &#x27;oldA oldB&#x27;</code> and <code>new_block_name = &#x27;new1 new1&#x27;</code>, then the block ID of new1 is the block ID of oldA.</p><p>Secondly, in the example above, what if block 4 already existed?  An inconsistency could arise in the input file, because block 4 is now given the name of the old block 1.</p><p>Thirdly, in this example <code>old_block_id = &#x27;1 2&#x27;</code> and <code>new_block_name = &#x27;wheel wheel&#x27;</code></p><p>what if another block, with a different ID, already had the name &quot;wheel&quot;?  This can lead to great confusion in the MOOSE input file.</p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">note</span></div><div class="card-content"><div class="moose-alert-content"><p><p>Given all these potential problems, when merging blocks it is strongly recommended to use just <em></em>one** <code>RenameBlock</code> that includes the names or IDs of <em></em>all** the blocks involved in the merging. This will make the new block IDs and new block names unequivocally obvious.</p></p></div></div></div><section class="scrollspy" id="eca6e3ee-f0fd-4025-991e-c5f090c4c8d2" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="5469e77d-dd12-4e9c-a16c-cd589df684ee" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">depends_on</span><span class="moose-parameter-header-description">The MeshModifiers that this modifier relies upon (i.e. must execute before this one)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The MeshModifiers that this modifier relies upon (i.e. must execute before this one)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_prepare</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Normally all MeshModifiers run before the mesh is prepared for use. This flag can be set on an individual modifier to force preparation between modifiers where they might be needed.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Normally all MeshModifiers run before the mesh is prepared for use. This flag can be set on an individual modifier to force preparation between modifiers where they might be needed.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">new_block_id</span><span class="moose-parameter-header-description">Elements with the old block number (or name) will be given this block number.  If the old blocks are named, their names will be passed onto the newly numbered blocks.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<unsigned short></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Elements with the old block number (or name) will be given this block number.  If the old blocks are named, their names will be passed onto the newly numbered blocks.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">new_block_name</span><span class="moose-parameter-header-description">Elements with the old block number (or name) will be given this block name.  No change of block ID is performed, unless multiple old blocks are given the same name, in which case they are all given the first old block number.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Elements with the old block number (or name) will be given this block name.  No change of block ID is performed, unless multiple old blocks are given the same name, in which case they are all given the first old block number.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">old_block_id</span><span class="moose-parameter-header-description">Elements with this block number will be given the new_block_number or new_block_name.  You must supply either old_block_id or old_block_name.  You may supply a vector of old_block_id, in which case the new_block information must also be a vector.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<unsigned short></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Elements with this block number will be given the new_block_number or new_block_name.  You must supply either old_block_id or old_block_name.  You may supply a vector of old_block_id, in which case the new_block information must also be a vector.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">old_block_name</span><span class="moose-parameter-header-description">Elements with this block name will be given the new_block_number or new_block_name.  You must supply either old_block_id or old_block_name.  You may supply a vector of old_block_name, in which case the new_block information must also be a vector.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Elements with this block name will be given the new_block_number or new_block_name.  You must supply either old_block_id or old_block_name.  You may supply a vector of old_block_name, in which case the new_block information must also be a vector.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="2549f13f-6fce-44be-9019-2b5afe1535b4" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="f022b360-ea70-4909-b382-f40692b2a35f" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#8bf2f8c0-426d-4117-933c-fdc4607075da" class="modal-trigger">test/tests/mesh_modifiers/rename_block/rename1.i</a></li><li><a href="#743b0840-37d1-4ac8-9aa9-de587a9e43ea" class="modal-trigger">test/tests/mesh_modifiers/rename_block/rename2.i</a></li><li><a href="#af5a5fe0-957f-4836-84ec-8e7a5abbe898" class="modal-trigger">test/tests/mesh_modifiers/rename_block/except.i</a></li></ul><div class="modal moose-modal" id="8bf2f8c0-426d-4117-933c-fdc4607075da"><div class="modal-content"><h4>test/tests/mesh_modifiers/rename_block/rename1.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 2
+  ny = 2
+  nz = 2
+  xmin = -1
+  xmax = 1
+  ymin = -1
+  ymax = 1
+  zmin = -1
+  zmax = 1
+[]
+
+# Mesh Modifiers
+[MeshModifiers]
+  [./sbb0]
+    type = SubdomainBoundingBox
+    block_id = 1
+    bottom_left = &#x27;-1 -1 -1&#x27;
+    top_right = &#x27;0 0 0&#x27;
+  [../]
+
+  [./re_id]
+    type = RenameBlock
+    old_block_id = &#x27;0 1&#x27;
+    new_block_id = &#x27;2 3&#x27;
+    depends_on = sbb0
+  [../]
+  [./rename_no_effect]
+    type = RenameBlock
+    old_block_id = &#x27;5 0 1&#x27;
+    new_block_name = &#x27;five zero one&#x27;
+    depends_on = re_id
+  [../]
+  [./rename]
+    type = RenameBlock
+    old_block_id = &#x27;2&#x27;
+    new_block_name = &#x27;two_was_zero&#x27;
+    depends_on = rename_no_effect
+  [../]
+  [./rename_block2]
+    type = RenameBlock
+    old_block_name = &#x27;two_was_zero&#x27;
+    new_block_name = &#x27;simply_two&#x27;
+    depends_on = rename
+  [../]
+  [./rename_blockID_3]
+    type = RenameBlock
+    old_block_id = &#x27;3&#x27;
+    new_block_name = &#x27;three&#x27;
+    depends_on = rename_block2
+  [../]
+  [./three_to_4]
+    type = RenameBlock
+    old_block_name = &#x27;three&#x27;
+    new_block_id = 4
+    depends_on = rename_blockID_3
+  [../]
+  [./another_no_effect]
+    type = RenameBlock
+    old_block_id = 3
+    new_block_name = &#x27;there_is_no_block_id_3_now&#x27;
+    depends_on = three_to_4
+  [../]
+  [./should_not_do_anything]
+    type = RenameBlock
+    old_block_name = &#x27;five&#x27;
+    new_block_id = &#x27;4&#x27;
+    depends_on = another_no_effect
+  [../]
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./bottom]
+    type = DirichletBC
+    variable = u
+    boundary = bottom
+    value = 0
+  [../]
+  [./top]
+    type = DirichletBC
+    variable = u
+    boundary = top
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="743b0840-37d1-4ac8-9aa9-de587a9e43ea"><div class="modal-content"><h4>test/tests/mesh_modifiers/rename_block/rename2.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 2
+  ny = 2
+  nz = 2
+  xmin = -1
+  xmax = 1
+  ymin = -1
+  ymax = 1
+  zmin = -1
+  zmax = 1
+[]
+
+# Mesh Modifiers
+[MeshModifiers]
+  [./sbb1]
+    type = SubdomainBoundingBox
+    block_id = 1
+    bottom_left = &#x27;-1 -1 -1&#x27;
+    top_right = &#x27;0 0 0&#x27;
+  [../]
+  [./sbb2]
+    type = SubdomainBoundingBox
+    block_id = 2
+    bottom_left = &#x27;0 -1 -1&#x27;
+    top_right = &#x27;1 0 0&#x27;
+  [../]
+  [./sbb3]
+    type = SubdomainBoundingBox
+    block_id = 3
+    bottom_left = &#x27;-1 0 -1&#x27;
+    top_right = &#x27;0 1 0&#x27;
+  [../]
+  [./sbb4]
+    type = SubdomainBoundingBox
+    block_id = 4
+    bottom_left = &#x27;0 0 -1&#x27;
+    top_right = &#x27;1 1 0&#x27;
+  [../]
+  [./sbb5]
+    type = SubdomainBoundingBox
+    block_id = 5
+    bottom_left = &#x27;-1 -1 0&#x27;
+    top_right = &#x27;0 0 1&#x27;
+  [../]
+  [./sbb6]
+    type = SubdomainBoundingBox
+    block_id = 6
+    bottom_left = &#x27;0 -1 0&#x27;
+    top_right = &#x27;1 0 1&#x27;
+  [../]
+  [./sbb7]
+    type = SubdomainBoundingBox
+    block_id = 7
+    bottom_left = &#x27;-1 0 0&#x27;
+    top_right = &#x27;0 1 1&#x27;
+  [../]
+  [./sbb8]
+    type = SubdomainBoundingBox
+    block_id = 8
+    bottom_left = &#x27;0 0 0&#x27;
+    top_right = &#x27;1 1 1&#x27;
+  [../]
+
+  [./re0]
+    type = RenameBlock
+    old_block_id = &#x27;12345    1   2   3     4&#x27;
+    new_block_name = &#x27;nill  one two three four&#x27;
+    depends_on = &#x27;sbb1 sbb2 sbb3 sbb4 sbb5 sbb6 sbb7 sbb8&#x27;
+  [../]
+
+  [./re1]
+    type = RenameBlock
+    old_block_id = &#x27;12345    1          2&#x27;
+    new_block_name = &#x27;nill  one_and_two one_and_two&#x27;
+    depends_on = re0
+  [../]
+
+  [./does_nothing_there_is_no_block_2_now]
+    type = RenameBlock
+    old_block_id = 2
+    new_block_id = 9
+    depends_on = re1
+  [../]
+
+  [./re2]
+    type = RenameBlock
+    old_block_id = &#x27;1 2     3 4 5 8&#x27;
+    new_block_id = &#x27;1 12345 4 4 4 7&#x27;  # note this makes block_id=4 have name &quot;three&quot;, since the first occurance of new_block_id=4 has name &quot;three&quot;
+    depends_on = does_nothing_there_is_no_block_2_now
+  [../]
+
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./bottom]
+    type = DirichletBC
+    variable = u
+    boundary = bottom
+    value = 0
+  [../]
+  [./top]
+    type = DirichletBC
+    variable = u
+    boundary = top
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="af5a5fe0-957f-4836-84ec-8e7a5abbe898"><div class="modal-content"><h4>test/tests/mesh_modifiers/rename_block/except.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 2
+  ny = 2
+  nz = 2
+  xmin = -1
+  xmax = 1
+  ymin = -1
+  ymax = 1
+  zmin = -1
+  zmax = 1
+[]
+
+# Mesh Modifiers
+[MeshModifiers]
+  active = &#x27;sbb0&#x27;
+  [./sbb0]
+    type = SubdomainBoundingBox
+    block_id = 1
+    bottom_left = &#x27;-1 -1 -1&#x27;
+    top_right = &#x27;0 0 0&#x27;
+  [../]
+
+  [./too_many_new_id]
+    type = RenameBlock
+    old_block_id = &#x27;0&#x27;
+    new_block_id = &#x27;2 3&#x27;
+    depends_on = sbb0
+  [../]
+  [./old_id_and_name]
+    type = RenameBlock
+    old_block_id = &#x27;0 1&#x27;
+    old_block_name = &#x27;zero one&#x27;
+    new_block_id = &#x27;2 3&#x27;
+    depends_on = sbb0
+  [../]
+  [./no_old_id]
+    type = RenameBlock
+    new_block_id = &#x27;2 3&#x27;
+    depends_on = sbb0
+  [../]
+  [./too_many_old]
+    type = RenameBlock
+    old_block_id = &#x27;1 2 3&#x27;
+    new_block_name = &#x27;two three&#x27;
+    depends_on = sbb0
+  [../]
+  [./new_id_and_name]
+    type = RenameBlock
+    old_block_id = &#x27;1 2 3&#x27;
+    new_block_id = &#x27;5 6 7&#x27;
+    new_block_name = &#x27;five six seven&#x27;
+    depends_on = sbb0
+  [../]
+  [./no_new]
+    type = RenameBlock
+    old_block_id = &#x27;1 2 3&#x27;
+    depends_on = sbb0
+  [../]
+
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#eca6e3ee-f0fd-4025-991e-c5f090c4c8d2" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#f022b360-ea70-4909-b382-f40692b2a35f" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

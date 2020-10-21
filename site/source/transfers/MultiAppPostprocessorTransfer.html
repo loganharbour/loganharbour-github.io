@@ -1,0 +1,723 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>MultiAppPostprocessorTransfer.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="a1a9e984-9408-4b61-b6ab-31b9b85ba3c3"><i class="material-icons">menu</i></a><ul class="sidenav" id="a1a9e984-9408-4b61-b6ab-31b9b85ba3c3"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">transfers</span><a href="#" class="breadcrumb">MultiAppPostprocessorTransfer</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="1ac0f7b5-9565-4b68-bc64-af471ff37124" data-section-level="1" data-section-text="MultiAppPostprocessorTransfer"><h1 id="multiapppostprocessortransfer">MultiAppPostprocessorTransfer</h1><p>Transfers postprocessor data between the master application and sub-application(s).</p><section class="scrollspy" id="5f27058a-2b27-4a40-ab0a-5bdee22212eb" data-section-level="2" data-section-text="Example Input File Syntax"><h2 id="example-input-file-syntax">Example Input File Syntax</h2><p>The MultiAppPostprocessorTransfer allows for a Postprocessor value to be transfer between the master application and sub-application(s). For example, the input file snippet below sets up a transfer of a Postprocessor value from the master application to a Postprocessor on each of the sub-applications.</p><pre class="moose-pre"><code class="language-text">[Transfers]
+  [pp_transfer]
+    type = MultiAppPostprocessorTransfer
+    direction = to_multiapp
+    multi_app = pp_sub
+    from_postprocessor = average
+    to_postprocessor = from_master
+  []
+[]
+</code></pre><a href="#29cd34df-edc8-49c0-a1f0-99f9fe7acfe6" class="modal-trigger">(test/tests/transfers/multiapp_postprocessor_transfer/master.i)</a><div class="modal moose-modal" id="29cd34df-edc8-49c0-a1f0-99f9fe7acfe6"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/transfers/multiapp_postprocessor_transfer/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = CoefDiffusion
+    variable = u
+    coef = 0.01
+  []
+  [td]
+    type = TimeDerivative
+    variable = u
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Postprocessors]
+  [average]
+    type = ElementAverageValue
+    variable = u
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 5
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+
+  nl_rel_tol = 1e-12
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[MultiApps]
+  [pp_sub]
+    app_type = MooseTestApp
+    positions = &#x27;0.5 0.5 0 0.7 0.7 0&#x27;
+    execute_on = timestep_end
+    type = TransientMultiApp
+    input_files = sub.i
+  []
+[]
+
+[Transfers]
+  [pp_transfer]
+    type = MultiAppPostprocessorTransfer
+    direction = to_multiapp
+    multi_app = pp_sub
+    from_postprocessor = average
+    to_postprocessor = from_master
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="da02b677-b455-48f1-8bfe-dda3fb346bc2" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="1696c08b-fe12-4947-bc20-93401ecd4f60" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">direction</span><span class="moose-parameter-header-description">Whether this Transfer will be 'to' or 'from' a MultiApp, or bidirectional, by providing both FROM_MULTIAPP and TO_MULTIAPP.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>to_multiapp from_multiapp</p><p class="moose-parameter-description"><span>Description:</span>Whether this Transfer will be 'to' or 'from' a MultiApp, or bidirectional, by providing both FROM_MULTIAPP and TO_MULTIAPP.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">from_postprocessor</span><span class="moose-parameter-header-description">The name of the Postprocessor in the Master to transfer the value from.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>PostprocessorName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the Postprocessor in the Master to transfer the value from.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">multi_app</span><span class="moose-parameter-header-description">The name of the MultiApp to use.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiAppName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the MultiApp to use.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">to_postprocessor</span><span class="moose-parameter-header-description">The name of the Postprocessor in the MultiApp to transfer the value to.  This should most likely be a Reporter Postprocessor.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>PostprocessorName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the Postprocessor in the MultiApp to transfer the value to.  This should most likely be a Reporter Postprocessor.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="765e841b-a73b-494b-a216-d3af77ec2612" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">check_multiapp_execute_on</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">When false the check between the multiapp and transfer execute on flags is not preformed.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When false the check between the multiapp and transfer execute on flags is not preformed.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displaced_source_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not to use the displaced mesh for the source mesh.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not to use the displaced mesh for the source mesh.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displaced_target_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not to use the displaced mesh for the target mesh.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not to use the displaced mesh for the target mesh.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">SAME_AS_MULTIAPP</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM, SAME_AS_MULTIAPP.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>SAME_AS_MULTIAPP</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM SAME_AS_MULTIAPP</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM, SAME_AS_MULTIAPP.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">reduction_type</span><span class="moose-parameter-header-description">The type of reduction to perform to reduce postprocessor values from multiple SubApps to a single value</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>average sum maximum minimum</p><p class="moose-parameter-description"><span>Description:</span>The type of reduction to perform to reduce postprocessor values from multiple SubApps to a single value</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="f0740ecc-995a-476c-990f-5ea7c67c1f36" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="6ceb12b9-1ce4-4e74-9567-aaec3c3e254b" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#928811b6-ac98-4723-a9a9-75446b4305b3" class="modal-trigger">test/tests/transfers/multiapp_postprocessor_transfer/master_from_multiapp.i</a></li><li><a href="#fc5b763b-946a-403b-ae16-a43858cb86cf" class="modal-trigger">test/tests/multiapps/initial_transfer/master.i</a></li><li><a href="#c3278429-08e7-4b10-a6f8-457ec9baf084" class="modal-trigger">test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/picard_sub.i</a></li><li><a href="#fe93c164-0d8d-4713-bda7-382d824ec49d" class="modal-trigger">test/tests/transfers/multiapp_postprocessor_transfer/from_one_sub_master.i</a></li><li><a href="#849bace7-cc8a-4a46-ad76-aeadb21c1f3e" class="modal-trigger">test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/master.i</a></li><li><a href="#7e30f513-5dc1-44d8-a220-ad33179ff1c4" class="modal-trigger">test/tests/transfers/multiapp_postprocessor_transfer/master.i</a></li></ul><div class="modal moose-modal" id="928811b6-ac98-4723-a9a9-75446b4305b3"><div class="modal-content"><h4>test/tests/transfers/multiapp_postprocessor_transfer/master_from_multiapp.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[AuxVariables]
+  [./from_sub]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Postprocessors]
+  [./sub_average]
+    type = Receiver
+  [../]
+  [./sub_sum]
+    type = Receiver
+  [../]
+  [./sub_maximum]
+    type = Receiver
+  [../]
+  [./sub_minimum]
+    type = Receiver
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+  dt = 1
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[MultiApps]
+  [./sub]
+    positions = &#x27;0.2 0.2 0 0.7 0.7 0&#x27;
+    type = TransientMultiApp
+    app_type = MooseTestApp
+    input_files = &#x27;sub0.i sub1.i&#x27;
+  [../]
+[]
+
+[Transfers]
+  [./pp_transfer_ave]
+    type = MultiAppPostprocessorTransfer
+    reduction_type = average
+    direction = from_multiapp
+    multi_app = sub
+    from_postprocessor = average
+    to_postprocessor = sub_average
+  [../]
+  [./pp_transfer_sum]
+    type = MultiAppPostprocessorTransfer
+    reduction_type = sum
+    direction = from_multiapp
+    multi_app = sub
+    from_postprocessor = average
+    to_postprocessor = sub_sum
+  [../]
+  [./pp_transfer_min]
+    type = MultiAppPostprocessorTransfer
+    reduction_type = minimum
+    direction = from_multiapp
+    multi_app = sub
+    from_postprocessor = average
+    to_postprocessor = sub_minimum
+  [../]
+  [./pp_transfer_max]
+    type = MultiAppPostprocessorTransfer
+    reduction_type = maximum
+    direction = from_multiapp
+    multi_app = sub
+    from_postprocessor = average
+    to_postprocessor = sub_maximum
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fc5b763b-946a-403b-ae16-a43858cb86cf"><div class="modal-content"><h4>test/tests/multiapps/initial_transfer/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  nx = 2
+  ny = 2
+[]
+
+[Problem]
+  kernel_coverage_check = false
+[]
+
+[Variables][dummy][][]
+
+[Functions]
+  [func]
+    type = ConstantFunction
+    value = 1
+  []
+[]
+
+[Postprocessors]
+  [c]
+    type = FunctionValuePostprocessor
+    function = func
+    execute_on = initial
+    # this will force this postprocessor to be evaluated before transfer on initial
+    force_preic = true
+  []
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[MultiApps]
+  [sub]
+    type = FullSolveMultiApp
+    input_files = sub.i
+    execute_on = initial
+  [../]
+[]
+
+[Transfers]
+  [to_sub]
+    type = MultiAppPostprocessorTransfer
+    direction = to_multiapp
+    multi_app = sub
+    from_postprocessor = c
+    to_postprocessor = receiver
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c3278429-08e7-4b10-a6f8-457ec9baf084"><div class="modal-content"><h4>test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/picard_sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./v]
+  [../]
+[]
+
+[AuxVariables]
+  [./v2]
+  [../]
+  [./v3]
+  [../]
+  [./w]
+  [../]
+[]
+
+[AuxKernels]
+  [./set_w]
+    type = NormalizationAux
+    variable = w
+    source_variable = v
+    normal_factor = 0.1
+  [../]
+[]
+
+[Kernels]
+  [./diff_v]
+    type = Diffusion
+    variable = v
+  [../]
+  [./coupled_force]
+    type = CoupledForce
+    variable = v
+    v = v2
+  [../]
+  [./coupled_force2]
+    type = CoupledForce
+    variable = v
+    v = v3
+  [../]
+  [./td_v]
+    type = TimeDerivative
+    variable = v
+  [../]
+[]
+
+[BCs]
+  [./left_v]
+    type = FunctionDirichletBC
+    variable = v
+    boundary = left
+    function = func
+  [../]
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = right
+    value = 0
+  [../]
+[]
+
+[Functions]
+  [func]
+    type = ParsedFunction
+    value = &#x27;if(t &lt; 2.5, 1, 1 / t)&#x27;
+  []
+[]
+
+[Postprocessors]
+  [./picard_its]
+    type = NumPicardIterations
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [master_time]
+    type = Receiver
+    execute_on = &#x27;timestep_end&#x27;
+  []
+  [master_dt]
+    type = Receiver
+    execute_on = &#x27;timestep_end&#x27;
+  []
+  [time]
+    type = TimePostprocessor
+    execute_on = &#x27;timestep_end&#x27;
+  []
+  [dt]
+    type = TimestepSize
+    execute_on = &#x27;timestep_end&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  picard_max_its = 2 # deliberately make it fail at 2 to test the time step rejection behavior
+  nl_rel_tol = 1e-5 # loose enough to force multiple Picard iterations on this example
+  l_tol = 1e-5 # loose enough to force multiple Picard iterations on this example
+  picard_rel_tol = 1e-8
+  num_steps = 2
+[]
+
+[MultiApps]
+  [./sub2]
+    type = TransientMultiApp
+    positions = &#x27;0 0 0&#x27;
+    input_files = picard_sub2.i
+    execute_on = timestep_end
+  [../]
+[]
+
+[Transfers]
+  [./v_to_v3]
+    type = MultiAppNearestNodeTransfer
+    direction = from_multiapp
+    multi_app = sub2
+    source_variable = v
+    variable = v3
+  [../]
+  [./w]
+    type = MultiAppNearestNodeTransfer
+    direction = to_multiapp
+    multi_app = sub2
+    source_variable = w
+    variable = w
+  [../]
+  [time_to_sub]
+    type = MultiAppPostprocessorTransfer
+    from_postprocessor = time
+    to_postprocessor = sub_time
+    direction = to_multiapp
+    multi_app = sub2
+  []
+  [dt_to_sub]
+    type = MultiAppPostprocessorTransfer
+    from_postprocessor = dt
+    to_postprocessor = sub_dt
+    direction = to_multiapp
+    multi_app = sub2
+  []
+  [matser_time_to_sub]
+    type = MultiAppPostprocessorTransfer
+    from_postprocessor = time
+    to_postprocessor = master_time
+    direction = to_multiapp
+    multi_app = sub2
+  []
+  [master_dt_to_sub]
+    type = MultiAppPostprocessorTransfer
+    from_postprocessor = dt
+    to_postprocessor = master_dt
+    direction = to_multiapp
+    multi_app = sub2
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fe93c164-0d8d-4713-bda7-382d824ec49d"><div class="modal-content"><h4>test/tests/transfers/multiapp_postprocessor_transfer/from_one_sub_master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[AuxVariables]
+  [./from_sub]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Postprocessors]
+  [./sub_average]
+    type = Receiver
+  [../]
+  [./sub_sum]
+    type = Receiver
+  [../]
+  [./sub_maximum]
+    type = Receiver
+  [../]
+  [./sub_minimum]
+    type = Receiver
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+  dt = 1
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[MultiApps]
+  [./sub]
+    positions = &#x27;0.2 0.2 0&#x27;
+    type = TransientMultiApp
+    app_type = MooseTestApp
+    input_files = &#x27;sub0.i&#x27;
+  [../]
+[]
+
+[Transfers]
+  [./pp_transfer_ave]
+    type = MultiAppPostprocessorTransfer
+    reduction_type = average
+    direction = from_multiapp
+    multi_app = sub
+    from_postprocessor = average
+    to_postprocessor = sub_average
+  [../]
+  [./pp_transfer_sum]
+    type = MultiAppPostprocessorTransfer
+    reduction_type = sum
+    direction = from_multiapp
+    multi_app = sub
+    from_postprocessor = average
+    to_postprocessor = sub_sum
+  [../]
+  [./pp_transfer_min]
+    type = MultiAppPostprocessorTransfer
+    reduction_type = minimum
+    direction = from_multiapp
+    multi_app = sub
+    from_postprocessor = average
+    to_postprocessor = sub_minimum
+  [../]
+  [./pp_transfer_max]
+    type = MultiAppPostprocessorTransfer
+    reduction_type = maximum
+    direction = from_multiapp
+    multi_app = sub
+    from_postprocessor = average
+    to_postprocessor = sub_maximum
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="849bace7-cc8a-4a46-ad76-aeadb21c1f3e"><div class="modal-content"><h4>test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[AuxVariables]
+  [./v]
+  [../]
+[]
+
+[AuxKernels]
+  [./set_v]
+    type = FunctionAux
+    variable = v
+    function = &#x27;t&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = CoefDiffusion
+    variable = u
+    coef = 0.1
+  [../]
+  [./coupled_force]
+    type = CoupledForce
+    variable = u
+    v = v
+  [../]
+  [./time]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  num_steps = 2
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  picard_max_its = 1
+  auto_advance = false
+[]
+
+[MultiApps]
+  [./sub1]
+    type = TransientMultiApp
+    positions = &#x27;0 0 0&#x27;
+    input_files = picard_sub.i
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Transfers]
+  [./u_to_v2]
+    type = MultiAppNearestNodeTransfer
+    direction = to_multiapp
+    multi_app = sub1
+    source_variable = u
+    variable = v2
+  [../]
+  [time_to_sub]
+    type = MultiAppPostprocessorTransfer
+    from_postprocessor = time
+    to_postprocessor = master_time
+    direction = to_multiapp
+    multi_app = sub1
+  []
+  [dt_to_sub]
+    type = MultiAppPostprocessorTransfer
+    from_postprocessor = dt
+    to_postprocessor = master_dt
+    direction = to_multiapp
+    multi_app = sub1
+  []
+[]
+
+[Postprocessors]
+  [time]
+    type = TimePostprocessor
+    execute_on = &#x27;timestep_end&#x27;
+  []
+  [dt]
+    type = TimestepSize
+    execute_on = &#x27;timestep_end&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="7e30f513-5dc1-44d8-a220-ad33179ff1c4"><div class="modal-content"><h4>test/tests/transfers/multiapp_postprocessor_transfer/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = CoefDiffusion
+    variable = u
+    coef = 0.01
+  []
+  [td]
+    type = TimeDerivative
+    variable = u
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Postprocessors]
+  [average]
+    type = ElementAverageValue
+    variable = u
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 5
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+
+  nl_rel_tol = 1e-12
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[MultiApps]
+  [pp_sub]
+    app_type = MooseTestApp
+    positions = &#x27;0.5 0.5 0 0.7 0.7 0&#x27;
+    execute_on = timestep_end
+    type = TransientMultiApp
+    input_files = sub.i
+  []
+[]
+
+[Transfers]
+  [pp_transfer]
+    type = MultiAppPostprocessorTransfer
+    direction = to_multiapp
+    multi_app = pp_sub
+    from_postprocessor = average
+    to_postprocessor = from_master
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#5f27058a-2b27-4a40-ab0a-5bdee22212eb" class="tooltipped" data-position="left" data-tooltip="Example Input File Syntax">Example Input File Syntax</a></li><li><a href="#da02b677-b455-48f1-8bfe-dda3fb346bc2" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#6ceb12b9-1ce4-4e74-9567-aaec3c3e254b" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

@@ -1,0 +1,6853 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>BoundingBoxIC.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="50f0996c-9b41-43f3-81a0-dd8232f2df42"><i class="material-icons">menu</i></a><ul class="sidenav" id="50f0996c-9b41-43f3-81a0-dd8232f2df42"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">ics</span><a href="#" class="breadcrumb">BoundingBoxIC</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="fd93389a-2651-4e53-9c03-96d6d30e189f" data-section-level="1" data-section-text="BoundingBoxIC"><h1 id="boundingboxic">BoundingBoxIC</h1><p>BoundingBoxIC allows setting the initial condition of a value inside and outside of a specified box. The box is aligned with the x, y, z axes and is specified by passing in the x, y, z coordinates of the bottom left point and the top right point. Each of the coordinates of the &quot;bottom_left&quot; point MUST be less than those coordinates in the &quot;top_right&quot; point.</p><p>When setting the initial condition, if <code>bottom_left &lt;= Point &lt;= top_right</code> then the &quot;inside&quot; value is used. Otherwise the &quot;outside&quot; value is used.</p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">note</span></div><div class="card-content"><div class="moose-alert-content"><p><p>When using this IC, only a single bounding box my be specified within the domain. If multiple bounding boxes are needed, this capability is implemented in the phase_field module as <code>MultiBoundingBoxIC</code>.</p></p></div></div></div><section class="scrollspy" id="ae8857fb-7c62-4f6e-8446-899bd12b2d80" data-section-level="2" data-section-text="Class Description"><h2 id="class-description">Class Description</h2><p>BoundingBoxIC allows setting the initial condition of a value inside and outside of a specified box. The box is aligned with the x, y, z axes</p></section><section class="scrollspy" id="fa1a6d22-b541-458d-b7db-fadccd263871" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="32a4b21b-b281-497f-9ceb-18177bc15f2f" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The variable this initial condition is supposed to provide values for.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>VariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The variable this initial condition is supposed to provide values for.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">x1</span><span class="moose-parameter-header-description">The x coordinate of the lower left-hand corner of the box</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The x coordinate of the lower left-hand corner of the box</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">x2</span><span class="moose-parameter-header-description">The x coordinate of the upper right-hand corner of the box</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The x coordinate of the upper right-hand corner of the box</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">y1</span><span class="moose-parameter-header-description">The y coordinate of the lower left-hand corner of the box</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The y coordinate of the lower left-hand corner of the box</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">y2</span><span class="moose-parameter-header-description">The y coordinate of the upper right-hand corner of the box</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The y coordinate of the upper right-hand corner of the box</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="0f737067-e3a1-434d-a628-a866c5e2d8b6" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">inside</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The value of the variable inside the box</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The value of the variable inside the box</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">int_width</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The width of the diffuse interface. Set to 0 for sharp interface.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The width of the diffuse interface. Set to 0 for sharp interface.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outside</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The value of the variable outside the box</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The value of the variable outside the box</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">z1</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The z coordinate of the lower left-hand corner of the box</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The z coordinate of the lower left-hand corner of the box</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">z2</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The z coordinate of the upper right-hand corner of the box</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The z coordinate of the upper right-hand corner of the box</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="51e03282-cc9b-4cda-993d-9a8c9dc031e7" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">ignore_uo_dependency</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">When set to true, a UserObject retrieved by this IC will not be executed before the this IC</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When set to true, a UserObject retrieved by this IC will not be executed before the this IC</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="748458ce-8c6c-4a97-a816-8b67bc9b31d2" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#4a519745-123b-4eb5-9d95-72fc30b3f4b9" class="modal-trigger">modules/porous_flow/test/tests/chemistry/2species_equilibrium_2phase.i</a></li><li><a href="#db0b6b08-7019-44fb-87e5-a8f6fd77d0c5" class="modal-trigger">modules/phase_field/test/tests/mobility_derivative/AC_mobility_derivative_coupled_test.i</a></li><li><a href="#bc38b09f-c90b-4434-a3ea-88e5a1c49541" class="modal-trigger">modules/chemical_reactions/test/tests/parser/equilibrium_without_action.i</a></li><li><a href="#a2811b60-b9d5-4f54-81d8-e1cc2602046f" class="modal-trigger">modules/phase_field/test/tests/rigidbodymotion/grain_motion2.i</a></li><li><a href="#66677647-4d63-4ded-ba47-0d0a083e42e2" class="modal-trigger">modules/chemical_reactions/test/tests/aqueous_equilibrium/2species_with_density.i</a></li><li><a href="#3da93168-19ce-42ad-ae6d-7683f50c5515" class="modal-trigger">modules/phase_field/test/tests/mobility_derivative/mobility_derivative_direct_coupled_test.i</a></li><li><a href="#030cd479-adff-4f69-a65c-719fc4c9a3d0" class="modal-trigger">modules/phase_field/tutorials/spinodal_decomposition/s1_testmodel.i</a></li><li><a href="#365a1687-44fc-4a44-bc10-b4e98abde27a" class="modal-trigger">modules/phase_field/test/tests/actions/both_direct_2vars.i</a></li><li><a href="#ce29b116-abea-4708-95d4-71742778e4f9" class="modal-trigger">modules/misc/test/tests/dynamic_loading/dynamic_obj_registration/dynamic_wrong_lib.i</a></li><li><a href="#5bff6d93-b79f-4248-bb8d-0a60af8f1a00" class="modal-trigger">modules/phase_field/test/tests/phase_field_kernels/nonuniform_barrier_coefficient.i</a></li><li><a href="#1a50859e-f0b5-41f1-8e7c-e049a5a8bc85" class="modal-trigger">modules/phase_field/tutorials/spinodal_decomposition/s2_fasttest.i</a></li><li><a href="#85f28df8-c137-4fa6-a0b3-9983af7477cd" class="modal-trigger">modules/porous_flow/examples/lava_lamp/2phase_convection.i</a></li><li><a href="#b0a68383-4e0f-4e05-9d06-116028fe6466" class="modal-trigger">modules/misc/test/tests/dynamic_loading/dynamic_obj_registration/dynamic_objects.i</a></li><li><a href="#ec526722-f377-4aa7-a078-712dc3c1c21d" class="modal-trigger">test/tests/ics/bounding_box_ic/bounding_box_ic_diffuse_test.i</a></li><li><a href="#b41ef101-0d17-4191-a56d-ac7abf215860" class="modal-trigger">modules/phase_field/test/tests/initial_conditions/BoundingBoxIC.i</a></li><li><a href="#e54b606a-adc1-4579-9011-85a7dbe85355" class="modal-trigger">modules/phase_field/examples/rigidbodymotion/AC_CH_advection_constforce_rect.i</a></li><li><a href="#b90c5ee1-3912-4a1a-9f42-ef6c0d1499d7" class="modal-trigger">modules/chemical_reactions/test/tests/aqueous_equilibrium/2species.i</a></li><li><a href="#77da2b08-b87f-401f-98e5-503cbdaca795" class="modal-trigger">test/tests/ics/bounding_box_ic/bounding_box_ic_test.i</a></li><li><a href="#82aaafa7-2f3f-4c2a-9408-1cd12eeb8883" class="modal-trigger">modules/phase_field/test/tests/actions/gpm_kernel.i</a></li><li><a href="#2a1406ce-c721-476d-963d-2e09a59b26d7" class="modal-trigger">modules/phase_field/examples/anisotropic_interfaces/GrandPotentialPlanarGrowth.i</a></li><li><a href="#0082f889-0509-4ea3-90fc-00193b94162f" class="modal-trigger">modules/porous_flow/examples/tutorial/13.i</a></li><li><a href="#6c44c95a-4a4e-496f-9c88-a75d5a837ba1" class="modal-trigger">modules/chemical_reactions/test/tests/aqueous_equilibrium/2species_eqaux.i</a></li><li><a href="#a6af5803-7544-4692-811e-bce2617182cd" class="modal-trigger">modules/phase_field/test/tests/mobility_derivative/mobility_derivative_split_coupled_test.i</a></li><li><a href="#e9135cfc-3398-4955-aa5a-9495772f4719" class="modal-trigger">modules/phase_field/test/tests/actions/both_split_2vars.i</a></li><li><a href="#2bb97432-2827-4a0a-be93-372def5f2458" class="modal-trigger">modules/misc/test/tests/dynamic_loading/dynamic_load_multiapp/phase_field_sub.i</a></li><li><a href="#09ed6d72-865f-4e13-a498-1dd51931119b" class="modal-trigger">modules/porous_flow/test/tests/chemistry/2species_equilibrium.i</a></li><li><a href="#9c772882-7b8e-407b-bbe4-e4bb7af51a64" class="modal-trigger">modules/phase_field/test/tests/rigidbodymotion/update_orientation.i</a></li><li><a href="#0aa969f0-6f6d-49d2-85fa-633993a2d877" class="modal-trigger">modules/chemical_reactions/test/tests/aqueous_equilibrium/1species_without_action.i</a></li><li><a href="#612471af-0350-4c02-bb5b-7b630449f930" class="modal-trigger">test/tests/ics/from_exodus_solution/nodal_part2.i</a></li><li><a href="#41ecf1b5-a258-4dae-83c1-a5079b00a09c" class="modal-trigger">modules/combined/test/tests/linear_elasticity/extra_stress.i</a></li><li><a href="#c8006ae8-a96e-4d1c-897b-f878c6049e79" class="modal-trigger">modules/phase_field/test/tests/rigidbodymotion/grain_motion.i</a></li><li><a href="#479baf65-de10-47e2-9a99-f58b6f03ec9f" class="modal-trigger">modules/chemical_reactions/examples/calcium_bicarbonate/calcium_bicarbonate.i</a></li><li><a href="#0a714903-a1e2-4336-8fda-b039156d9d81" class="modal-trigger">modules/chemical_reactions/test/tests/aqueous_equilibrium/1species.i</a></li><li><a href="#34fad280-de59-4afe-bcd2-ae3cc543a5b0" class="modal-trigger">modules/chemical_reactions/test/tests/parser/equilibrium_action.i</a></li><li><a href="#446c271a-a771-43c7-9341-8534d5676116" class="modal-trigger">modules/chemical_reactions/test/tests/aqueous_equilibrium/2species_without_action.i</a></li><li><a href="#6f307cab-5e89-4e46-a0d5-0f8b3ac7c2e3" class="modal-trigger">test/tests/mesh/adapt/initial_adaptivity_test.i</a></li><li><a href="#6f1ef841-3b9d-4375-b775-66075df7853d" class="modal-trigger">modules/phase_field/test/tests/rigidbodymotion/update_orientation_verify.i</a></li><li><a href="#3c801217-4007-4721-991b-3bb1b08ac4c1" class="modal-trigger">modules/phase_field/test/tests/MultiPhase/switchingfunctionmultiphasematerial.i</a></li><li><a href="#c9a0cb89-7d1a-431d-887c-4a7aaec81829" class="modal-trigger">test/tests/indicators/value_jump_indicator/value_jump_indicator_test.i</a></li></ul><div class="modal moose-modal" id="4a519745-123b-4eb5-9d95-72fc30b3f4b9"><div class="modal-content"><h4>modules/porous_flow/test/tests/chemistry/2species_equilibrium_2phase.i</h4><pre class="moose-pre"><code class="language-text"># Using a two-phase system (see 2species_equilibrium for the single-phase)
+# The saturations, porosity, mass fractions, tortuosity and diffusion coefficients are chosen so that the results are identical to 2species_equilibrium
+#
+# PorousFlow analogy of chemical_reactions/test/tests/aqueous_equilibrium/2species.i
+#
+# Simple equilibrium reaction example to illustrate the use of PorousFlowMassFractionAqueousEquilibriumChemistry
+#
+# In this example, two primary species a and b are transported by diffusion and convection
+# from the left of the porous medium, reacting to form two equilibrium species pa2 and pab
+# according to the equilibrium reaction:
+#
+#      reactions = &#x27;2a = pa2     rate = 10^2
+#                   a + b = pab  rate = 10^-2&#x27;
+#
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+[]
+
+[Variables]
+  [./a]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.0
+      y1 = 0.0
+      x2 = 1.0e-10
+      y2 = 1
+      inside = 1.0e-2
+      outside = 1.0e-10
+    [../]
+  [../]
+  [./b]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.0
+      y1 = 0.0
+      x2 = 1.0e-10
+      y2 = 1
+      inside = 1.0e-2
+      outside = 1.0e-10
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  [./eqm_k0]
+    initial_condition = 1E2
+  [../]
+  [./eqm_k1]
+    initial_condition = 1E-2
+  [../]
+  [./pressure0]
+  [../]
+  [./saturation1]
+    initial_condition = 0.25
+  [../]
+  [./a_in_phase0]
+    initial_condition = 0.0
+  [../]
+  [./b_in_phase0]
+    initial_condition = 0.0
+  [../]
+  [./pa2]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./pab]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+[]
+
+[AuxKernels]
+  [./pa2]
+    type = PorousFlowPropertyAux
+    property = secondary_concentration
+    secondary_species = 0
+    variable = pa2
+  [../]
+  [./pab]
+    type = PorousFlowPropertyAux
+    property = secondary_concentration
+    secondary_species = 1
+    variable = pab
+  [../]
+[]
+
+[ICs]
+  [./pressure0]
+    type = FunctionIC
+    variable = pressure0
+    function = 2-x
+  [../]
+[]
+
+[GlobalParams]
+  PorousFlowDictator = dictator
+  gravity = &#x27;0 0 0&#x27;
+[]
+
+[Kernels]
+  [./mass_a]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 0
+    variable = a
+  [../]
+  [./flux_a]
+    type = PorousFlowAdvectiveFlux
+    variable = a
+    fluid_component = 0
+  [../]
+  [./diff_a]
+    type = PorousFlowDispersiveFlux
+    variable = a
+    fluid_component = 0
+    disp_trans = &#x27;0 0&#x27;
+    disp_long = &#x27;0 0&#x27;
+  [../]
+  [./mass_b]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 1
+    variable = b
+  [../]
+  [./flux_b]
+    type = PorousFlowAdvectiveFlux
+    variable = b
+    fluid_component = 1
+  [../]
+  [./diff_b]
+    type = PorousFlowDispersiveFlux
+    variable = b
+    fluid_component = 1
+    disp_trans = &#x27;0 0&#x27;
+    disp_long = &#x27;0 0&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./dictator]
+    type = PorousFlowDictator
+    porous_flow_vars = &#x27;a b&#x27;
+    number_fluid_phases = 2
+    number_fluid_components = 3
+    number_aqueous_equilibrium = 2
+    aqueous_phase_number = 1
+  [../]
+  [./pc]
+    type = PorousFlowCapillaryPressureConst
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./simple_fluid]
+      type = SimpleFluidProperties
+      bulk_modulus = 2e9 # huge, so mimic chemical_reactions
+      density0 = 1000
+      thermal_expansion = 0
+      viscosity = 1e-3
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./temperature]
+    type = PorousFlowTemperature
+  [../]
+  [./ppss]
+    type = PorousFlow2PhasePS
+    capillary_pressure = pc
+    phase0_porepressure = pressure0
+    phase1_saturation = saturation1
+  [../]
+  [./massfrac]
+    type = PorousFlowMassFractionAqueousEquilibriumChemistry
+    mass_fraction_vars = &#x27;a_in_phase0 b_in_phase0 a b&#x27;
+    num_reactions = 2
+    equilibrium_constants = &#x27;eqm_k0 eqm_k1&#x27;
+    primary_activity_coefficients = &#x27;1 1&#x27;
+    secondary_activity_coefficients = &#x27;1 1&#x27;
+    reactions = &#x27;2 0
+                 1 1&#x27;
+  [../]
+  [./simple_fluid0]
+    type = PorousFlowSingleComponentFluid
+    fp = simple_fluid
+    phase = 0
+  [../]
+  [./simple_fluid1]
+    type = PorousFlowSingleComponentFluid
+    fp = simple_fluid
+    phase = 1
+  [../]
+  [./porosity]
+    type = PorousFlowPorosityConst
+    porosity = 0.8
+  [../]
+  [./permeability]
+    type = PorousFlowPermeabilityConst
+    # porous_flow permeability / porous_flow viscosity = chemical_reactions conductivity = 1E-4
+    permeability = &#x27;1E-7 0 0 0 1E-7 0 0 0 1E-7&#x27;
+  [../]
+  [./relp0]
+    type = PorousFlowRelativePermeabilityConst
+    phase = 0
+  [../]
+  [./relp1]
+    type = PorousFlowRelativePermeabilityConst
+    phase = 1
+  [../]
+  [./diff]
+    type = PorousFlowDiffusivityConst
+    # porous_flow diffusion_coeff * tortuousity * porosity = chemical_reactions diffusivity = 1E-4
+    diffusion_coeff = &#x27;5E-4 5E-4 5E-4
+                       5E-4 5E-4 5E-4&#x27;
+    tortuosity = &#x27;0.25 0.25&#x27;
+  [../]
+[]
+
+[BCs]
+  [./a_left]
+    type = DirichletBC
+    variable = a
+    boundary = left
+    value = 1.0e-2
+  [../]
+  [./b_left]
+    type = DirichletBC
+    variable = b
+    boundary = left
+    value = 1.0e-2
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  dt = 10
+  end_time = 100
+[]
+
+[Outputs]
+  print_linear_residuals = true
+  exodus = true
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="db0b6b08-7019-44fb-87e5-a8f6fd77d0c5"><div class="modal-content"><h4>modules/phase_field/test/tests/mobility_derivative/AC_mobility_derivative_coupled_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 20
+  ny = 10
+  xmax = 50
+  ymin = 25
+  ymax = 50
+[]
+
+[Variables]
+  [./op]
+  [../]
+  [./v]
+  [../]
+[]
+
+[ICs]
+  [./op_IC]
+    type = SmoothCircleIC
+    x1 = 25.0
+    y1 = 25.0
+    radius = 15.0
+    invalue = 0.9
+    outvalue = 0.1
+    int_width = 3.0
+    variable = op
+  [../]
+  [./v_IC]
+    type = BoundingBoxIC
+    x1 = 0.0
+    x2 = 25.0
+    y1 = 0.0
+    y2 = 50.0
+    inside = 1.0
+    outside = 0.0
+    variable = v
+  [../]
+[]
+
+[Kernels]
+  [./op_dot]
+    type = TimeDerivative
+    variable = op
+  [../]
+  [./op_bulk]
+    type = AllenCahn
+    variable = op
+    f_name = F
+    mob_name = L
+    args = v
+  [../]
+  [./op_interface]
+    type = ACInterface
+    variable = op
+    kappa_name = 1
+    mob_name = L
+    args = v
+  [../]
+  [./v_dot]
+    type = TimeDerivative
+    variable = v
+  [../]
+  [./v_diff]
+    type = MatDiffusion
+    variable = v
+    diffusivity = 50.0
+  [../]
+[]
+
+[Materials]
+  [./consts]
+    type = DerivativeParsedMaterial
+    f_name  = L
+    function = &#x27;l:=0.1+1*(v+op)^2; if(l&lt;0.01, 0.01, l)&#x27;
+    args = &#x27;op v&#x27;
+    outputs = exodus
+    output_properties = &#x27;L dL/dop dL/dv&#x27;
+    derivative_order = 2
+  [../]
+  [./free_energy]
+    type = DerivativeParsedMaterial
+    f_name = F
+    args = &#x27;op&#x27;
+    function = &#x27;2*op^2*(1-op)^2 - 0.2*op&#x27;
+    derivative_order = 2
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = &#x27;bdf2&#x27;
+
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type&#x27;
+  petsc_options_value = &#x27;lu&#x27;
+
+  l_max_its = 15
+  l_tol = 1.0e-4
+
+  nl_max_its = 15
+  nl_rel_tol = 1.0e-9
+
+  start_time = 0.0
+  num_steps = 10
+  dt = 0.2
+[]
+
+[Outputs]
+  interval = 5
+  print_linear_residuals = false
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="bc38b09f-c90b-4434-a3ea-88e5a1c49541"><div class="modal-content"><h4>modules/chemical_reactions/test/tests/parser/equilibrium_without_action.i</h4><pre class="moose-pre"><code class="language-text"># Test AqueousEquilibriumReactions parser
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+[]
+
+[Variables]
+  [./a]
+  [../]
+  [./b]
+  [../]
+[]
+
+[AuxVariables]
+  [./pressure]
+  [../]
+  [./pa2]
+  [../]
+  [./pab]
+  [../]
+[]
+
+[AuxKernels]
+  [./pa2]
+    type = AqueousEquilibriumRxnAux
+    variable = pa2
+    v = a
+    log_k = 2
+    sto_v = 2
+  [../]
+  [./pab]
+    type = AqueousEquilibriumRxnAux
+    variable = pab
+    v = &#x27;a b&#x27;
+    log_k = -2
+    sto_v = &#x27;1 1&#x27;
+  [../]
+[]
+
+[ICs]
+  [./a]
+    type = BoundingBoxIC
+    variable = a
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 1
+    inside = 1.0e-2
+    outside = 1.0e-10
+  [../]
+  [./b]
+    type = BoundingBoxIC
+    variable = b
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 1
+    inside = 1.0e-2
+    outside = 1.0e-10
+  [../]
+  [./pressure]
+    type = FunctionIC
+    variable = pressure
+    function = 2-x
+  [../]
+[]
+
+[Kernels]
+  [./a_ie]
+    type = PrimaryTimeDerivative
+    variable = a
+  [../]
+  [./a_diff]
+    type = PrimaryDiffusion
+    variable = a
+  [../]
+  [./a_conv]
+    type = PrimaryConvection
+    variable = a
+    p = pressure
+  [../]
+  [./b_ie]
+    type = PrimaryTimeDerivative
+    variable = b
+  [../]
+  [./b_diff]
+    type = PrimaryDiffusion
+    variable = b
+  [../]
+  [./b_conv]
+    type = PrimaryConvection
+    variable = b
+    p = pressure
+  [../]
+  [./a1_eq]
+    type = CoupledBEEquilibriumSub
+    variable = a
+    log_k = 2
+    weight = 2
+    sto_u = 2
+  [../]
+  [./a1_diff]
+    type = CoupledDiffusionReactionSub
+    variable = a
+    log_k = 2
+    weight = 2
+    sto_u = 2
+  [../]
+  [./a1_conv]
+    type = CoupledConvectionReactionSub
+    variable = a
+    log_k = 2
+    weight = 2
+    sto_u = 2
+    p = pressure
+  [../]
+  [./a2_eq]
+    type = CoupledBEEquilibriumSub
+    variable = a
+    v = b
+    log_k = -2
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+  [../]
+  [./a2_diff]
+    type = CoupledDiffusionReactionSub
+    variable = a
+    v = b
+    log_k = -2
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+  [../]
+  [./a2_conv]
+    type = CoupledConvectionReactionSub
+    variable = a
+    v = b
+    log_k = -2
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+    p = pressure
+  [../]
+  [./b2_eq]
+    type = CoupledBEEquilibriumSub
+    variable = b
+    v = a
+    log_k = -2
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+  [../]
+  [./b2_diff]
+    type = CoupledDiffusionReactionSub
+    variable = b
+    v = a
+    log_k = -2
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+  [../]
+  [./b2_conv]
+    type = CoupledConvectionReactionSub
+    variable = b
+    v = a
+    log_k = -2
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+    p = pressure
+  [../]
+[]
+
+[BCs]
+  [./a_left]
+    type = DirichletBC
+    variable = a
+    boundary = left
+    value = 1.0e-2
+  [../]
+  [./a_right]
+    type = ChemicalOutFlowBC
+    variable = a
+    boundary = right
+  [../]
+  [./b_left]
+    type = DirichletBC
+    variable = b
+    boundary = left
+    value = 1.0e-2
+  [../]
+  [./b_right]
+    type = ChemicalOutFlowBC
+    variable = b
+    boundary = right
+  [../]
+[]
+
+[Materials]
+  [./porous]
+    type = GenericConstantMaterial
+    prop_names = &#x27;diffusivity conductivity porosity&#x27;
+    prop_values = &#x27;1e-4 1e-4 0.2&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  nl_abs_tol = 1e-12
+  end_time = 10
+  dt = 10
+[]
+
+[Outputs]
+  file_base = equilibrium_out
+  exodus = true
+  perf_graph = true
+  print_linear_residuals = true
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a2811b60-b9d5-4f54-81d8-e1cc2602046f"><div class="modal-content"><h4>modules/phase_field/test/tests/rigidbodymotion/grain_motion2.i</h4><pre class="moose-pre"><code class="language-text"># test file for applyting advection term and observing rigid body motion of grains
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 25
+  ny = 15
+  nz = 0
+  xmax = 50
+  ymax = 25
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./c]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./w]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./eta]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./vadvx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./vadvy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./unique_grains]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./centroids]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./c_res]
+    type = SplitCHParsed
+    variable = c
+    f_name = F
+    kappa_name = kappa_c
+    w = w
+    args = eta
+  [../]
+  [./w_res]
+    type = SplitCHWRes
+    variable = w
+    mob_name = M
+  [../]
+  [./time]
+    type = CoupledTimeDerivative
+    variable = w
+    v = c
+  [../]
+  [./motion]
+    type = MultiGrainRigidBodyMotion
+    variable = w
+    c = c
+    v = eta
+    grain_tracker_object = grain_center
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+  [../]
+  [./eta_dot]
+    type = TimeDerivative
+    variable = eta
+  [../]
+  [./vadv_eta]
+    type = SingleGrainRigidBodyMotion
+    variable = eta
+    c = c
+    v = eta
+    grain_tracker_object = grain_center
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+  [../]
+  [./acint_eta]
+    type = ACInterface
+    variable = eta
+    mob_name = M
+    args = c
+    kappa_name = kappa_eta
+  [../]
+  [./acbulk_eta]
+    type = AllenCahn
+    variable = eta
+    mob_name = M
+    f_name = F
+    args = c
+  [../]
+[]
+
+[AuxKernels]
+  [./vadv_x]
+    type = GrainAdvectionAux
+    component = x
+    grain_tracker_object = grain_center
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+    variable = vadvx
+  [../]
+  [./vadv_y]
+    type = GrainAdvectionAux
+    component = y
+    grain_tracker_object = grain_center
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+    variable = vadvy
+  [../]
+  [./unique_grains]
+    type = FeatureFloodCountAux
+    variable = unique_grains
+    flood_counter = grain_center
+    field_display = UNIQUE_REGION
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+  [./centroids]
+    type = FeatureFloodCountAux
+    variable = centroids
+    execute_on = &#x27;initial timestep_begin&#x27;
+    field_display = CENTROID
+    flood_counter = grain_center
+  [../]
+[]
+
+[Materials]
+  [./pfmobility]
+    type = GenericConstantMaterial
+    prop_names = &#x27;M    kappa_c  kappa_eta&#x27;
+    prop_values = &#x27;5.0  2.0      0.1&#x27;
+  [../]
+  [./free_energy]
+    type = DerivativeParsedMaterial
+    args = &#x27;c eta&#x27;
+    constant_names = &#x27;barr_height  cv_eq&#x27;
+    constant_expressions = &#x27;0.1          1.0e-2&#x27;
+    function = 16*barr_height*(c-cv_eq)^2*(1-cv_eq-c)^2+(c-eta)^2
+    derivative_order = 2
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./forces]
+    type = GrainForcesPostprocessor
+    grain_force = grain_force
+  [../]
+  [./grain_volumes]
+    type = FeatureVolumeVectorPostprocessor
+    flood_counter = grain_center
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./grain_center]
+    type = FauxGrainTracker
+    variable = eta
+    outputs = none
+    compute_var_to_feature_map = true
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+  [./grain_force]
+    type = ConstantGrainForceAndTorque
+    execute_on = &#x27;initial linear nonlinear&#x27;
+    force = &#x27;0.5 0.0 0.0 &#x27;
+    torque = &#x27;0.0 0.0 10.0 &#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  nl_max_its = 30
+  scheme = bdf2
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -ksp_gmres_restart -sub_ksp_type -sub_pc_type -pc_asm_overlap&#x27;
+  petsc_options_value = &#x27;asm         31   preonly   lu      1&#x27;
+  l_max_its = 30
+  l_tol = 1.0e-4
+  nl_rel_tol = 1.0e-10
+  start_time = 0.0
+  dt = 0.5
+  num_steps = 1
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[ICs]
+  [./rect_c]
+    y2 = 20.0
+    y1 = 5.0
+    inside = 1.0
+    x2 = 30.0
+    variable = c
+    x1 = 10.0
+    type = BoundingBoxIC
+  [../]
+  [./rect_eta]
+    y2 = 20.0
+    y1 = 5.0
+    inside = 1.0
+    x2 = 30.0
+    variable = eta
+    x1 = 10.0
+    type = BoundingBoxIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="66677647-4d63-4ded-ba47-0d0a083e42e2"><div class="modal-content"><h4>modules/chemical_reactions/test/tests/aqueous_equilibrium/2species_with_density.i</h4><pre class="moose-pre"><code class="language-text"># Simple equilibrium reaction example with fluid density and gravity included
+# in calculation of the Darcy velocity. For details about reaction network,
+# see documentation in 2species.i
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+[]
+
+[Variables]
+  [./a]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.0
+      y1 = 0.0
+      x2 = 1.0e-10
+      y2 = 1
+      inside = 1.0e-2
+      outside = 1.0e-10
+    [../]
+  [../]
+  [./b]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.0
+      y1 = 0.0
+      x2 = 1.0e-10
+      y2 = 1
+      inside = 1.0e-2
+      outside = 1.0e-10
+    [../]
+  [../]
+  [./pressure]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 1
+  [../]
+[]
+
+[ReactionNetwork]
+  [./AqueousEquilibriumReactions]
+    primary_species = &#x27;a b&#x27;
+    reactions = &#x27;2a = pa2     2,
+                 a + b = pab -2&#x27;
+    secondary_species = &#x27;pa2 pab&#x27;
+    pressure = pressure
+    gravity = &#x27;-1 0 0&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./a_ie]
+    type = PrimaryTimeDerivative
+    variable = a
+  [../]
+  [./a_diff]
+    type = PrimaryDiffusion
+    variable = a
+  [../]
+  [./a_conv]
+    type = PrimaryConvection
+    variable = a
+    p = pressure
+    gravity = &#x27;-1 0 0&#x27;
+  [../]
+  [./b_ie]
+    type = PrimaryTimeDerivative
+    variable = b
+  [../]
+  [./b_diff]
+    type = PrimaryDiffusion
+    variable = b
+  [../]
+  [./b_conv]
+    type = PrimaryConvection
+    variable = b
+    p = pressure
+    gravity = &#x27;-1 0 0&#x27;
+  [../]
+  [./p]
+    type = DarcyFluxPressure
+    variable = pressure
+    gravity = &#x27;-1 0 0&#x27;
+  [../]
+[]
+
+[BCs]
+  [./a_left]
+    type = DirichletBC
+    variable = a
+    preset = false
+    boundary = left
+    value = 1.0e-2
+  [../]
+  [./a_right]
+    type = ChemicalOutFlowBC
+    variable = a
+    boundary = right
+  [../]
+  [./b_left]
+    type = DirichletBC
+    variable = b
+    preset = false
+    boundary = left
+    value = 1.0e-2
+  [../]
+  [./b_right]
+    type = ChemicalOutFlowBC
+    variable = b
+    boundary = right
+  [../]
+  [./pleft]
+    type = DirichletBC
+    variable = pressure
+    preset = false
+    value = 2
+    boundary = left
+  [../]
+  [./pright]
+    type = DirichletBC
+    variable = pressure
+    preset = false
+    value = 1
+    boundary = right
+  [../]
+[]
+
+[Materials]
+  [./porous]
+    type = GenericConstantMaterial
+    prop_names = &#x27;diffusivity conductivity porosity density&#x27;
+    prop_values = &#x27;1e-4 1e-4 0.2 4&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  nl_abs_tol = 1e-12
+  start_time = 0.0
+  end_time = 100
+  dt = 10.0
+[]
+
+[Outputs]
+  exodus = true
+  perf_graph = true
+  print_linear_residuals = true
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3da93168-19ce-42ad-ae6d-7683f50c5515"><div class="modal-content"><h4>modules/phase_field/test/tests/mobility_derivative/mobility_derivative_direct_coupled_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  xmax = 30
+  ymax = 30
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./c]
+    family = HERMITE
+    order = THIRD
+  [../]
+  [./d]
+  [../]
+[]
+
+[ICs]
+  [./c_IC]
+    type = SmoothCircleIC
+    x1 = 15
+    y1 = 15
+    radius = 12
+    variable = c
+    int_width = 3
+    invalue = 1
+    outvalue = 0
+  [../]
+  [./d_IC]
+    type = BoundingBoxIC
+    x1 = 0
+    x2 = 15
+    y1 = 0
+    y2 = 30
+    inside = 1.0
+    outside = 0.0
+    variable = d
+  [../]
+[]
+
+[Kernels]
+  [./c_bulk]
+    type = CahnHilliard
+    variable = c
+    mob_name = M
+    f_name = F
+    args = d
+  [../]
+  [./c_int]
+    type = CHInterface
+    variable = c
+    kappa_name = kappa_c
+    mob_name = M
+    args = d
+  [../]
+  [./c_dot]
+    type = TimeDerivative
+    variable = c
+  [../]
+  [./d_dot]
+    type = TimeDerivative
+    variable = d
+  [../]
+  [./d_diff]
+    type = MatDiffusion
+    variable = d
+    diffusivity = diffusivity
+  [../]
+[]
+
+[Materials]
+  [./kappa]
+    type = GenericConstantMaterial
+    prop_names = kappa_c
+    prop_values = 2.0
+  [../]
+  [./mob]
+    type = DerivativeParsedMaterial
+    f_name = M
+    args = &#x27;c d&#x27;
+    function = if(d&gt;0.001,d,0.001)*if(c&lt;0,0.5,if(c&gt;1,0.5,1-0.5*c^2))
+    derivative_order = 2
+  [../]
+  [./free_energy]
+    type = MathEBFreeEnergy
+    f_name = F
+    c = c
+  [../]
+  [./d_diff]
+    type = GenericConstantMaterial
+    prop_names = diffusivity
+    prop_values = 1.0
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = BDF2
+
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -ksp_gmres_restart -sub_pc_type -pc_asm_overlap&#x27;
+  petsc_options_value = &#x27;asm         31      lu      1&#x27;
+
+  l_max_its = 30
+  l_tol = 1.0e-4
+  nl_max_its = 50
+  nl_rel_tol = 1.0e-10
+
+  dt = 0.25
+  num_steps = 2
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  [./oversample]
+    refinements = 2
+    type = Exodus
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="030cd479-adff-4f69-a65c-719fc4c9a3d0"><div class="modal-content"><h4>modules/phase_field/tutorials/spinodal_decomposition/s1_testmodel.i</h4><pre class="moose-pre"><code class="language-text">#
+# Simulation of an iron-chromium alloy using simplest possible code and a test
+# set of initial conditions.
+#
+
+[Mesh]
+  # generate a 2D, 25nm x 25nm mesh
+  type = GeneratedMesh
+  dim = 2
+  elem_type = QUAD4
+  nx = 100
+  ny = 100
+  nz = 0
+  xmin = 0
+  xmax = 25
+  ymin = 0
+  ymax = 25
+  zmin = 0
+  zmax = 0
+[]
+
+[Variables]
+  [./c]   # Mole fraction of Cr (unitless)
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./w]   # Chemical potential (eV/mol)
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[ICs]
+  # Use a bounding box IC at equilibrium concentrations to make sure the
+  # model behaves as expected.
+  [./testIC]
+    type = BoundingBoxIC
+    variable = c
+    x1 = 5
+    x2 = 20
+    y1 = 5
+    y2 = 20
+    inside = 0.823
+    outside = 0.236
+  [../]
+[]
+
+[BCs]
+  # periodic BC as is usually done on phase-field models
+  [./Periodic]
+    [./c_bcs]
+      auto_direction = &#x27;x y&#x27;
+    [../]
+  [../]
+[]
+
+[Kernels]
+  # See wiki page &quot;Developing Phase Field Models&quot; for more information on Split
+  # Cahn-Hilliard equation kernels.
+  # http://mooseframework.org/wiki/PhysicsModules/PhaseField/DevelopingModels/
+  [./w_dot]
+    variable = w
+    v = c
+    type = CoupledTimeDerivative
+  [../]
+  [./coupled_res]
+    variable = w
+    type = SplitCHWRes
+    mob_name = M
+  [../]
+  [./coupled_parsed]
+    variable = c
+    type = SplitCHParsed
+    f_name = f_loc
+    kappa_name = kappa_c
+    w = w
+  [../]
+[]
+
+[Materials]
+  # d is a scaling factor that makes it easier for the solution to converge
+  # without changing the results. It is defined in each of the materials and
+  # must have the same value in each one.
+  [./constants]
+    # Define constant values kappa_c and M. Eventually M will be replaced with
+    # an equation rather than a constant.
+    type = GenericFunctionMaterial
+    prop_names = &#x27;kappa_c M&#x27;
+    prop_values = &#x27;8.125e-16*6.24150934e+18*1e+09^2*1e-27
+                   2.2841e-26*1e+09^2/6.24150934e+18/1e-27&#x27;
+                   # kappa_c*eV_J*nm_m^2*d
+                   # M*nm_m^2/eV_J/d
+  [../]
+  [./local_energy]
+    # Defines the function for the local free energy density as given in the
+    # problem, then converts units and adds scaling factor.
+    type = DerivativeParsedMaterial
+    f_name = f_loc
+    args = c
+    constant_names = &#x27;A   B   C   D   E   F   G  eV_J  d&#x27;
+    constant_expressions = &#x27;-2.446831e+04 -2.827533e+04 4.167994e+03 7.052907e+03
+                            1.208993e+04 2.568625e+03 -2.354293e+03
+                            6.24150934e+18 1e-27&#x27;
+    function = &#x27;eV_J*d*(A*c+B*(1-c)+C*c*log(c)+D*(1-c)*log(1-c)+
+                E*c*(1-c)+F*c*(1-c)*(2*c-1)+G*c*(1-c)*(2*c-1)^2)&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  # Preconditioning is required for Newton&#x27;s method. See wiki page &quot;Solving
+  # Phase Field Models&quot; for more information.
+  # http://mooseframework.org/wiki/PhysicsModules/PhaseField/SolvingModels/
+  [./coupled]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  l_max_its = 30
+  l_tol = 1e-6
+  nl_max_its = 50
+  nl_abs_tol = 1e-9
+  end_time = 86400   # 1 day. We only need to run this long enough to verify
+                     # the model is working properly.
+  petsc_options_iname = &#x27;-pc_type -ksp_gmres_restart -sub_ksp_type
+                         -sub_pc_type -pc_asm_overlap&#x27;
+  petsc_options_value = &#x27;asm      31                  preonly
+                         ilu          1&#x27;
+  dt = 100
+[]
+
+[Outputs]
+  exodus = true
+  console = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="365a1687-44fc-4a44-bc10-b4e98abde27a"><div class="modal-content"><h4>modules/phase_field/test/tests/actions/both_direct_2vars.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 9
+  ny = 6
+  xmin = 10
+  xmax = 40
+  ymin = 15
+  ymax = 35
+  elem_type = QUAD
+[]
+
+[Modules]
+  [./PhaseField]
+    [./Conserved]
+      [./c]
+        free_energy = F
+        mobility = 1.0
+        kappa = 20.0
+        args = &#x27;eta&#x27;
+        solve_type = direct
+      [../]
+    [../]
+    [./Nonconserved]
+      [./eta]
+        free_energy = F
+        mobility = 1.0
+        kappa = 20
+        args = &#x27;c&#x27;
+        family = HERMITE
+        order = THIRD
+      [../]
+    [../]
+  [../]
+[]
+
+[ICs]
+  [./c_IC]
+    type = BoundingBoxIC
+    variable = c
+    x1 = 10
+    x2 = 25
+    y1 = 15
+    y2 = 35
+    inside = 0.1
+    outside = 0.9
+  [../]
+  [./eta_IC]
+    type = ConstantIC
+    variable = eta
+    value = 0.5
+  [../]
+[]
+
+[Materials]
+  [./free_energy]
+    type = DerivativeParsedMaterial
+    f_name = F
+    args = &#x27;eta c&#x27;
+    function = &#x27;(1 - eta)*10.0*(c - 0.1)^2 + eta*(8.0*(c - 0.9)^2) + 10.0*eta^2*(1-eta)^2&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = &#x27;bdf2&#x27;
+  solve_type = &#x27;NEWTON&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type&#x27;
+  petsc_options_value = &#x27;asm lu&#x27;
+
+  l_max_its = 15
+  l_tol = 1.0e-4
+
+  nl_max_its = 10
+  nl_rel_tol = 1.0e-11
+
+  start_time = 0.0
+  num_steps = 5
+  dt = 0.05
+[]
+
+[Outputs]
+  perf_graph = true
+  [./out]
+    type = Exodus
+    refinements = 2
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ce29b116-abea-4708-95d4-71742778e4f9"><div class="modal-content"><h4>modules/misc/test/tests/dynamic_loading/dynamic_obj_registration/dynamic_wrong_lib.i</h4><pre class="moose-pre"><code class="language-text"># This input file contains objects only available in phase_field
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 4
+  ny = 2
+  nz = 0
+  xmax = 50
+  ymax = 25
+  zmax = 0
+  elem_type = QUAD4
+  uniform_refine = 2
+[]
+
+[Variables]
+  [./c]
+    order = THIRD
+    family = HERMITE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 15.0
+      x2 = 35.0
+      y1 = 0.0
+      y2 = 25.0
+      inside = 1.0
+      outside = -0.8
+      variable = c
+    [../]
+  [../]
+[]
+
+[Kernels]
+  [./ie_c]
+    type = TimeDerivative
+    variable = c
+  [../]
+  [./CHSolid]
+    type = CHMath
+    variable = c
+    mob_name = M
+  [../]
+  [./CHInterface]
+    type = CHInterface
+    variable = c
+    kappa_name = kappa_c
+    mob_name = M
+  [../]
+[]
+
+[BCs]
+  [./Periodic]
+    [./all]
+      auto_direction = &#x27;x y&#x27;
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./constant]
+    type = GenericConstantMaterial
+    prop_names  = &#x27;M kappa_c&#x27;
+    prop_values = &#x27;1.0 1.0&#x27;
+    block = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre boomeramg 101&#x27;
+  l_max_its = 15
+  nl_max_its = 10
+  start_time = 0.0
+  num_steps = 2
+  dt = 1.0
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+# Here we&#x27;ll load the wrong library and check for the correct error condition
+[Problem]
+  register_objects_from = &#x27;TensorMechanicsApp&#x27;
+  library_path = &#x27;../../../../../tensor_mechanics/lib&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5bff6d93-b79f-4248-bb8d-0a60af8f1a00"><div class="modal-content"><h4>modules/phase_field/test/tests/phase_field_kernels/nonuniform_barrier_coefficient.i</h4><pre class="moose-pre"><code class="language-text"># This material tests the kernels ACBarrierFunction and ACKappaFunction for a
+# multiphase system.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 20
+  ny = 20
+  xmin = -200
+  xmax = 200
+  ymin = -200
+  ymax = 200
+  uniform_refine = 0
+[]
+
+[Variables]
+  [./gr0]
+  [../]
+  [./gr1]
+  [../]
+[]
+
+[ICs]
+  [./gr0_IC]
+    type = BoundingBoxIC
+    variable = gr0
+    x1 = -80
+    y1 = -80
+    x2 = 80
+    y2 = 80
+    inside = 0
+    outside = 1
+  [../]
+  [./gr1_IC]
+    type = BoundingBoxIC
+    variable = gr1
+    x1 = -80
+    y1 = -80
+    x2 = 80
+    y2 = 80
+    inside = 1
+    outside = 0
+  [../]
+[]
+
+[Materials]
+  [./constants]
+    type = GenericConstantMaterial
+    prop_names =  &#x27;L   gamma E0 E1&#x27;
+    prop_values = &#x27;0.1 1.5   3  1&#x27;
+  [../]
+  [./h0]
+    type = DerivativeParsedMaterial
+    f_name = h0
+    args = &#x27;gr0 gr1&#x27;
+    function = &#x27;gr0^2 / (gr0^2 + gr1^2)&#x27;
+    derivative_order = 2
+  [../]
+  [./h1]
+    type = DerivativeParsedMaterial
+    f_name = h1
+    args = &#x27;gr0 gr1&#x27;
+    function = &#x27;gr1^2 / (gr0^2 + gr1^2)&#x27;
+    derivative_order = 2
+  [../]
+  [./mu]
+    type = DerivativeParsedMaterial
+    f_name = mu
+    args = &#x27;gr0 gr1&#x27;
+    constant_names = &#x27;mag&#x27;
+    constant_expressions = &#x27;16&#x27;
+    function = &#x27;mag * (gr0^2 * gr1^2 + 0.1)&#x27;
+    derivative_order = 2
+  [../]
+  [./kappa]
+    type = DerivativeParsedMaterial
+    f_name = kappa
+    args = &#x27;gr0 gr1&#x27;
+    material_property_names = &#x27;h0(gr0,gr1) h1(gr0,gr1)&#x27;
+    constant_names = &#x27;mag0 mag1&#x27;
+    constant_expressions = &#x27;200 100&#x27;
+    function = &#x27;h0*mag0 + h1*mag1&#x27;
+    derivative_order = 2
+  [../]
+[]
+
+[Kernels]
+  [./gr0_time]
+    type = TimeDerivative
+    variable = gr0
+  [../]
+  [./gr0_interface]
+    type = ACInterface
+    variable = gr0
+    args = &#x27;gr1&#x27;
+    mob_name = L
+    kappa_name = &#x27;kappa&#x27;
+  [../]
+  [./gr0_switching]
+    type = ACSwitching
+    variable = gr0
+    args = &#x27;gr1&#x27;
+    hj_names = &#x27;h0 h1&#x27;
+    Fj_names = &#x27;E0 E1&#x27;
+    mob_name = L
+  [../]
+  [./gr0_multi]
+    type = ACGrGrMulti
+    variable = gr0
+    v = &#x27;gr1&#x27;
+    mob_name = L
+    gamma_names = &#x27;gamma&#x27;
+  [../]
+  [./gr0_barrier]
+    type = ACBarrierFunction
+    variable = gr0
+    mob_name = L
+    gamma = gamma
+    v = &#x27;gr1&#x27;
+  [../]
+  [./gr0_kappa]
+    type = ACKappaFunction
+    variable = gr0
+    mob_name = L
+    kappa_name = kappa
+    v = &#x27;gr1&#x27;
+  [../]
+
+  [./gr1_time]
+    type = TimeDerivative
+    variable = gr1
+  [../]
+  [./gr1_interface]
+    type = ACInterface
+    variable = gr1
+    args = &#x27;gr0&#x27;
+    mob_name = L
+    kappa_name = &#x27;kappa&#x27;
+  [../]
+  [./gr1_switching]
+    type = ACSwitching
+    variable = gr1
+    args = &#x27;gr0&#x27;
+    hj_names = &#x27;h0 h1&#x27;
+    Fj_names = &#x27;E0 E1&#x27;
+    mob_name = L
+  [../]
+  [./gr1_multi]
+    type = ACGrGrMulti
+    variable = gr1
+    v = &#x27;gr0&#x27;
+    mob_name = L
+    gamma_names = &#x27;gamma&#x27;
+  [../]
+  [./gr1_barrier]
+    type = ACBarrierFunction
+    variable = gr1
+    mob_name = L
+    gamma = gamma
+    v = &#x27;gr0&#x27;
+  [../]
+  [./gr1_kappa]
+    type = ACKappaFunction
+    variable = gr1
+    mob_name = L
+    kappa_name = kappa
+    v = &#x27;gr0&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type -pc_asm_overlap -ksp_gmres_restart -sub_ksp_type&#x27;
+  petsc_options_value = &#x27; asm      ilu          1               31                 preonly&#x27;
+  nl_max_its = 20
+  l_max_its = 30
+  l_tol = 1e-4
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-12
+  start_time = 0
+  num_steps = 3
+  dt = 1
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1a50859e-f0b5-41f1-8e7c-e049a5a8bc85"><div class="modal-content"><h4>modules/phase_field/tutorials/spinodal_decomposition/s2_fasttest.i</h4><pre class="moose-pre"><code class="language-text">#
+# Simulation of an iron-chromium alloy using simple code and a test set of
+# initial conditions.
+#
+
+[Mesh]
+  # generate a 2D, 25nm x 25nm mesh
+  type = GeneratedMesh
+  dim = 2
+  elem_type = QUAD4
+  nx = 100
+  ny = 100
+  nz = 0
+  xmin = 0
+  xmax = 25
+  ymin = 0
+  ymax = 25
+  zmin = 0
+  zmax = 0
+[]
+
+[Variables]
+  [./c]   # Mole fraction of Cr (unitless)
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./w]   # Chemical potential (eV/mol)
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[ICs]
+  # Use a bounding box IC at equilibrium concentrations to make sure the
+  # model behaves as expected.
+  [./testIC]
+    type = BoundingBoxIC
+    variable = c
+    x1 = 5
+    x2 = 20
+    y1 = 5
+    y2 = 20
+    inside = 0.823
+    outside = 0.236
+  [../]
+[]
+
+[BCs]
+  # periodic BC as is usually done on phase-field models
+  [./Periodic]
+    [./c_bcs]
+      auto_direction = &#x27;x y&#x27;
+    [../]
+  [../]
+[]
+
+[Kernels]
+  # See wiki page &quot;Developing Phase Field Models&quot; for more information on Split
+  # Cahn-Hilliard equation kernels.
+  # http://mooseframework.org/wiki/PhysicsModules/PhaseField/DevelopingModels/
+  [./w_dot]
+    variable = w
+    v = c
+    type = CoupledTimeDerivative
+  [../]
+  [./coupled_res]
+    variable = w
+    type = SplitCHWRes
+    mob_name = M
+  [../]
+  [./coupled_parsed]
+    variable = c
+    type = SplitCHParsed
+    f_name = f_loc
+    kappa_name = kappa_c
+    w = w
+  [../]
+[]
+
+[Materials]
+  # d is a scaling factor that makes it easier for the solution to converge
+  # without changing the results. It is defined in each of the materials and
+  # must have the same value in each one.
+  [./constants]
+    # Define constant values kappa_c and M. Eventually M will be replaced with
+    # an equation rather than a constant.
+    type = GenericFunctionMaterial
+    prop_names = &#x27;kappa_c M&#x27;
+    prop_values = &#x27;8.125e-16*6.24150934e+18*1e+09^2*1e-27
+                   2.2841e-26*1e+09^2/6.24150934e+18/1e-27&#x27;
+                   # kappa_c*eV_J*nm_m^2*d
+                   # M*nm_m^2/eV_J/d
+  [../]
+  [./local_energy]
+    # Defines the function for the local free energy density as given in the
+    # problem, then converts units and adds scaling factor.
+    type = DerivativeParsedMaterial
+    f_name = f_loc
+    args = c
+    constant_names = &#x27;A   B   C   D   E   F   G  eV_J  d&#x27;
+    constant_expressions = &#x27;-2.446831e+04 -2.827533e+04 4.167994e+03 7.052907e+03
+                            1.208993e+04 2.568625e+03 -2.354293e+03
+                            6.24150934e+18 1e-27&#x27;
+    function = &#x27;eV_J*d*(A*c+B*(1-c)+C*c*log(c)+D*(1-c)*log(1-c)+
+                E*c*(1-c)+F*c*(1-c)*(2*c-1)+G*c*(1-c)*(2*c-1)^2)&#x27;
+    derivative_order = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./evaluations]           # Cumulative residual calculations for simulation
+    type = NumResidualEvaluations
+  [../]
+  [./elapsed]
+    type = PerfGraphData
+    section_name = &quot;Root&quot;
+    data_type = total
+  [../]
+[]
+
+[Preconditioning]
+  # Preconditioning is required for Newton&#x27;s method. See wiki page &quot;Solving
+  # Phase Field Models&quot; for more information.
+  # http://mooseframework.org/wiki/PhysicsModules/PhaseField/SolvingModels/
+  [./coupled]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  l_max_its = 30
+  l_tol = 1e-6
+  nl_max_its = 50
+  nl_abs_tol = 1e-9
+  end_time = 86400   # 1 day. We only need to run this long enough to verify
+                     # the model is working properly.
+  petsc_options_iname = &#x27;-pc_type -ksp_gmres_restart -sub_ksp_type
+                         -sub_pc_type -pc_asm_overlap&#x27;
+  petsc_options_value = &#x27;asm      31                  preonly
+                         ilu          1&#x27;
+  [./TimeStepper]
+    # Turn on time stepping
+    type = IterationAdaptiveDT
+    dt = 10
+    cutback_factor = 0.8
+    growth_factor = 1.5
+    optimal_iterations = 7
+  [../]
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Outputs]
+  exodus = true
+  console = true
+  csv = true
+  [./console]
+    type = Console
+    max_rows = 10
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="85f28df8-c137-4fa6-a0b3-9983af7477cd"><div class="modal-content"><h4>modules/porous_flow/examples/lava_lamp/2phase_convection.i</h4><pre class="moose-pre"><code class="language-text"># Two phase density-driven convection of dissolved CO2 in brine
+#
+# Initially, the model has a gas phase at the top with a saturation of 0.29
+# (which corresponds to an initial value of zi = 0.2).
+# Diffusion of the dissolved CO2
+# component from the saturated liquid to the unsaturated liquid below reduces the
+# amount of CO2 in the gas phase. As the density of the CO2-saturated brine is greater
+# than the unsaturated brine, a gravitational instability arises and density-driven
+# convection of CO2-rich fingers descend into the unsaturated brine.
+#
+# The instability is seeded by a random perturbation to the porosity field.
+# Mesh adaptivity is used to refine the mesh as the fingers form.
+#
+# Note: this model is computationally expensive, so should be run with multiple cores,
+# preferably on a cluster.
+
+[GlobalParams]
+  PorousFlowDictator = &#x27;dictator&#x27;
+  gravity = &#x27;0 -9.81 0&#x27;
+[]
+
+[Adaptivity]
+  max_h_level = 2
+  marker = marker
+  initial_marker = initial
+  initial_steps = 2
+  [./Indicators]
+    [./indicator]
+      type = GradientJumpIndicator
+      variable = zi
+    [../]
+  [../]
+  [./Markers]
+    [./marker]
+      type = ErrorFractionMarker
+      indicator = indicator
+      refine = 0.8
+    [../]
+    [./initial]
+      type = BoxMarker
+      bottom_left = &#x27;0 1.95 0&#x27;
+      top_right = &#x27;2 2 0&#x27;
+      inside = REFINE
+      outside = DO_NOTHING
+    [../]
+  [../]
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  ymax = 2
+  xmax = 2
+  ny = 40
+  nx = 40
+  bias_y = 0.95
+[]
+
+[AuxVariables]
+  [./xnacl]
+    initial_condition = 0.01
+  [../]
+  [./saturation_gas]
+    order = FIRST
+    family = MONOMIAL
+  [../]
+  [./xco2l]
+    order = FIRST
+    family = MONOMIAL
+  [../]
+  [./density_liquid]
+    order = FIRST
+    family = MONOMIAL
+  [../]
+  [./porosity]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./saturation_gas]
+    type = PorousFlowPropertyAux
+    variable = saturation_gas
+    property = saturation
+    phase = 1
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./xco2l]
+    type = PorousFlowPropertyAux
+    variable = xco2l
+    property = mass_fraction
+    phase = 0
+    fluid_component = 1
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./density_liquid]
+    type = PorousFlowPropertyAux
+    variable = density_liquid
+    property = density
+    phase = 0
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Variables]
+  [./pgas]
+  [../]
+  [./zi]
+    scaling = 1e4
+  [../]
+[]
+
+[ICs]
+  [./pressure]
+    type = FunctionIC
+    function = 10e6-9.81*1000*y
+    variable = pgas
+  [../]
+  [./zi]
+    type = BoundingBoxIC
+    variable = zi
+    x1 = 0
+    x2 = 2
+    y1 = 1.95
+    y2 = 2
+    inside = 0.2
+    outside = 0
+  [../]
+  [./porosity]
+    type = RandomIC
+    variable = porosity
+    min = 0.25
+    max = 0.275
+    seed = 0
+  [../]
+[]
+
+[Kernels]
+  [./mass0]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 0
+    variable = pgas
+  [../]
+  [./flux0]
+    type = PorousFlowAdvectiveFlux
+    fluid_component = 0
+    variable = pgas
+  [../]
+  [./diff0]
+    type = PorousFlowDispersiveFlux
+    fluid_component = 0
+    variable = pgas
+    disp_long = &#x27;0 0&#x27;
+    disp_trans = &#x27;0 0&#x27;
+  [../]
+  [./mass1]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 1
+    variable = zi
+  [../]
+  [./flux1]
+    type = PorousFlowAdvectiveFlux
+    fluid_component = 1
+    variable = zi
+  [../]
+  [./diff1]
+    type = PorousFlowDispersiveFlux
+    fluid_component = 1
+    variable = zi
+    disp_long = &#x27;0 0&#x27;
+    disp_trans = &#x27;0 0&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./dictator]
+    type = PorousFlowDictator
+    porous_flow_vars = &#x27;pgas zi&#x27;
+    number_fluid_phases = 2
+    number_fluid_components = 2
+  [../]
+  [./pc]
+    type = PorousFlowCapillaryPressureConst
+    pc = 0
+  [../]
+  [./fs]
+    type = PorousFlowBrineCO2
+    brine_fp = brine
+    co2_fp = co2
+    capillary_pressure = pc
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./co2sw]
+      type = CO2FluidProperties
+    [../]
+    [./co2]
+      type = TabulatedFluidProperties
+      fp = co2sw
+    [../]
+    [./brine]
+      type = BrineFluidProperties
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./temperature]
+    type = PorousFlowTemperature
+    temperature = &#x27;45&#x27;
+  [../]
+  [./brineco2]
+    type = PorousFlowFluidState
+    gas_porepressure = &#x27;pgas&#x27;
+    z = &#x27;zi&#x27;
+    temperature_unit = Celsius
+    xnacl = &#x27;xnacl&#x27;
+    capillary_pressure = pc
+    fluid_state = fs
+  [../]
+  [./porosity]
+    type = PorousFlowPorosityConst
+    porosity = porosity
+  [../]
+  [./permeability]
+    type = PorousFlowPermeabilityConst
+    permeability = &#x27;1e-11 0 0 0 1e-11 0 0 0 1e-11&#x27;
+  [../]
+  [./relperm_water]
+    type = PorousFlowRelativePermeabilityCorey
+    phase = 0
+    n = 2
+    s_res = 0.1
+    sum_s_res = 0.2
+  [../]
+  [./relperm_gas]
+    type = PorousFlowRelativePermeabilityCorey
+    phase = 1
+    n = 2
+    s_res = 0.1
+    sum_s_res = 0.2
+  [../]
+  [./diffusivity]
+    type = PorousFlowDiffusivityConst
+    diffusion_coeff = &#x27;2e-9 2e-9 2e-9 2e-9&#x27;
+    tortuosity = &#x27;1 1&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./mumps_is_best_for_parallel_jobs]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-ksp_type -pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27;gmres      asm      lu           NONZERO                   2             &#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  end_time = 1e6
+  nl_max_its = 25
+  l_max_its = 100
+  dtmax = 1e4
+  nl_abs_tol = 1e-6
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 10
+    growth_factor = 2
+    cutback_factor = 0.5
+  [../]
+[]
+
+[Functions]
+  [./flux]
+    type = ParsedFunction
+    vals = &#x27;delta_xco2 dt&#x27;
+    vars = &#x27;dx dt&#x27;
+    value = &#x27;dx/dt&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./total_co2_in_gas]
+    type = PorousFlowFluidMass
+    phase = 1
+    fluid_component = 1
+  [../]
+  [./total_co2_in_liquid]
+    type = PorousFlowFluidMass
+    phase = 0
+    fluid_component = 1
+  [../]
+  [./numdofs]
+    type = NumDOFs
+  [../]
+  [./delta_xco2]
+    type = ChangeOverTimePostprocessor
+    postprocessor = total_co2_in_liquid
+  [../]
+  [./dt]
+    type = TimestepSize
+  [../]
+  [./flux]
+    type = FunctionValuePostprocessor
+    function = flux
+  [../]
+[]
+
+[Outputs]
+  print_linear_residuals = false
+  perf_graph = true
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b0a68383-4e0f-4e05-9d06-116028fe6466"><div class="modal-content"><h4>modules/misc/test/tests/dynamic_loading/dynamic_obj_registration/dynamic_objects.i</h4><pre class="moose-pre"><code class="language-text"># This input file contains objects only available in phase_field
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 4
+  ny = 2
+  xmax = 50
+  ymax = 25
+  elem_type = QUAD4
+  uniform_refine = 2
+[]
+
+[Variables]
+  [./c]
+    order = THIRD
+    family = HERMITE
+  [../]
+[]
+
+[ICs]
+  [./c_IC]
+    type = BoundingBoxIC
+    x1 = 15.0
+    x2 = 35.0
+    y1 = 0.0
+    y2 = 25.0
+    inside = 1.0
+    outside = -0.8
+    variable = c
+  [../]
+[]
+
+[Kernels]
+  [./ie_c]
+    type = TimeDerivative
+    variable = c
+  [../]
+  [./CHSolid]
+    type = CHMath
+    variable = c
+    mob_name = M
+  [../]
+  [./CHInterface]
+    type = CHInterface
+    variable = c
+    kappa_name = kappa_c
+    mob_name = M
+  [../]
+[]
+
+[BCs]
+  [./Periodic]
+    [./all]
+      auto_direction = &#x27;x y&#x27;
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./constant]
+    type = GenericConstantMaterial
+    prop_names  = &#x27;M kappa_c&#x27;
+    prop_values = &#x27;1.0 1.0&#x27;
+    block = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre boomeramg 31&#x27;
+
+  l_max_its = 15
+  nl_max_its = 10
+  start_time = 0.0
+
+  num_steps = 2
+  dt = 1.0
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[Problem]
+  register_objects_from = &#x27;PhaseFieldApp&#x27;
+  library_path = &#x27;../../../../../phase_field/lib&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ec526722-f377-4aa7-a078-712dc3c1c21d"><div class="modal-content"><h4>test/tests/ics/bounding_box_ic/bounding_box_ic_diffuse_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [./square]
+    type = GeneratedMeshGenerator
+    nx = 2
+    ny = 2
+    dim = 2
+  [../]
+  uniform_refine = 3
+[]
+
+[Variables]
+  active = &#x27;u&#x27;
+
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.1
+      y1 = 0.1
+      x2 = 0.6
+      y2 = 0.6
+      inside = 2.3
+      outside = 4.6
+      int_width = 0.2
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  active = &#x27;u_aux&#x27;
+
+  [./u_aux]
+    order = FIRST
+    family = LAGRANGE
+
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.1
+      y1 = 0.1
+      x2 = 0.6
+      y2 = 0.6
+      inside = 1.34
+      outside = 6.67
+      int_width = 0.2
+    [../]
+  [../]
+[]
+
+[Kernels]
+  active = &#x27;diff&#x27;
+
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left right&#x27;
+
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 3
+    value = 0
+  [../]
+
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b41ef101-0d17-4191-a56d-ac7abf215860"><div class="modal-content"><h4>modules/phase_field/test/tests/initial_conditions/BoundingBoxIC.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 4
+  ny = 2
+  xmax = 50
+  ymax = 25
+  elem_type = QUAD4
+  uniform_refine = 2
+[]
+
+[Variables]
+  [./c]
+    order = THIRD
+    family = HERMITE
+  [../]
+[]
+
+[ICs]
+  [./c_IC]
+    type = BoundingBoxIC
+    x1 = 15.0
+    x2 = 35.0
+    y1 = 0.0
+    y2 = 25.0
+    inside = 1.0
+    outside = -0.8
+    variable = c
+  [../]
+[]
+
+[Kernels]
+  [./ie_c]
+    type = TimeDerivative
+    variable = c
+  [../]
+  [./CHSolid]
+    type = CHMath
+    variable = c
+    mob_name = M
+  [../]
+  [./CHInterface]
+    type = CHInterface
+    variable = c
+    kappa_name = kappa_c
+    mob_name = M
+  [../]
+[]
+
+[BCs]
+  [./Periodic]
+    [./all]
+      auto_direction = &#x27;x y&#x27;
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./constant]
+    type = GenericConstantMaterial
+    prop_names  = &#x27;M kappa_c&#x27;
+    prop_values = &#x27;1.0 1.0&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre boomeramg 31&#x27;
+
+  l_max_its = 15
+  nl_max_its = 10
+
+  start_time = 0.0
+  num_steps = 2
+  dt = 1.0
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e54b606a-adc1-4579-9011-85a7dbe85355"><div class="modal-content"><h4>modules/phase_field/examples/rigidbodymotion/AC_CH_advection_constforce_rect.i</h4><pre class="moose-pre"><code class="language-text">#
+# Tests the Rigid Body Motion of grains due to applied forces.
+# Concenterated forces and torques have been applied and corresponding
+# advection velocities are calculated.
+# Grain motion kernels make the grains translate and rotate as a rigidbody,
+# applicable to grain movement in porous media
+#
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 50
+  ny = 25
+  nz = 0
+  xmax = 50
+  ymax = 25
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./c]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./w]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./eta]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./vadvx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./vadvy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./c_res]
+    type = SplitCHParsed
+    variable = c
+    f_name = F
+    kappa_name = kappa_c
+    w = w
+    args = eta
+  [../]
+  [./w_res]
+    type = SplitCHWRes
+    variable = w
+    mob_name = M
+  [../]
+  [./time]
+    type = CoupledTimeDerivative
+    variable = w
+    v = c
+  [../]
+  [./motion]
+    # advection kernel corrsponding to CH equation
+    type = MultiGrainRigidBodyMotion
+    variable = w
+    c = c
+    v = eta
+    grain_tracker_object = grain_center
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+  [../]
+  [./eta_dot]
+    type = TimeDerivative
+    variable = eta
+  [../]
+  [./vadv_eta]
+    # advection kernel corrsponding to AC equation
+    type = SingleGrainRigidBodyMotion
+    variable = eta
+    c = c
+    v = eta
+    grain_tracker_object = grain_center
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+  [../]
+  [./acint_eta]
+    type = ACInterface
+    variable = eta
+    mob_name = M
+    args = c
+    kappa_name = kappa_eta
+  [../]
+  [./acbulk_eta]
+    type = AllenCahn
+    variable = eta
+    mob_name = M
+    f_name = F
+    args = c
+  [../]
+[]
+
+[AuxKernels]
+  [./vadv_x]
+    type = GrainAdvectionAux
+    component = x
+    grain_tracker_object = grain_center
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+    variable = vadvx
+  [../]
+  [./vadv_y]
+    type = GrainAdvectionAux
+    component = y
+    grain_tracker_object = grain_center
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+    variable = vadvy
+  [../]
+[]
+
+[Materials]
+  [./pfmobility]
+    type = GenericConstantMaterial
+    prop_names = &#x27;M    kappa_c  kappa_eta&#x27;
+    prop_values = &#x27;1.0  2.0      0.1&#x27;
+  [../]
+  [./free_energy]
+    type = DerivativeParsedMaterial
+    args = &#x27;c eta&#x27;
+    constant_names = &#x27;barr_height  cv_eq&#x27;
+    constant_expressions = &#x27;0.1          1.0e-2&#x27;
+    function = 16*barr_height*(c-cv_eq)^2*(1-cv_eq-c)^2+(c-eta)^2
+    derivative_order = 2
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./forces]
+    # VectorPostprocessor for outputting grain forces and torques
+    type = GrainForcesPostprocessor
+    grain_force = grain_force
+  [../]
+  [./grain_volumes]
+    type = FeatureVolumeVectorPostprocessor
+    flood_counter = grain_center
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./grain_center]
+    type = GrainTracker
+    variable = eta
+    outputs = none
+    compute_var_to_feature_map = true
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+  [./grain_force]
+    type = ConstantGrainForceAndTorque
+    execute_on = &#x27;linear nonlinear&#x27;
+    force = &#x27;0.2 0.0 0.0 &#x27; # size should be 3 * no. of grains
+    torque = &#x27;0.0 0.0 5.0 &#x27; # size should be 3 * no. of grains
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  nl_max_its = 30
+  scheme = bdf2
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -ksp_gmres_restart -sub_ksp_type -sub_pc_type -pc_asm_overlap&#x27;
+  petsc_options_value = &#x27;asm         31   preonly   lu      1&#x27;
+  l_max_its = 30
+  l_tol = 1.0e-4
+  nl_rel_tol = 1.0e-10
+  start_time = 0.0
+  dt = 0.1
+  end_time = 10
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[ICs]
+  [./rect_c]
+    y2 = 20.0
+    y1 = 5.0
+    inside = 1.0
+    x2 = 30.0
+    variable = c
+    x1 = 10.0
+    type = BoundingBoxIC
+  [../]
+  [./rect_eta]
+    y2 = 20.0
+    y1 = 5.0
+    inside = 1.0
+    x2 = 30.0
+    variable = eta
+    x1 = 10.0
+    type = BoundingBoxIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b90c5ee1-3912-4a1a-9f42-ef6c0d1499d7"><div class="modal-content"><h4>modules/chemical_reactions/test/tests/aqueous_equilibrium/2species.i</h4><pre class="moose-pre"><code class="language-text"># Simple equilibrium reaction example to illustrate the use of the AqueousEquilibriumReactions
+# action.
+# In this example, two primary species a and b are transported by diffusion and convection
+# from the left of the porous medium, reacting to form two equilibrium species pa2 and pab
+# according to the equilibrium reaction specified in the AqueousEquilibriumReactions block as:
+#
+#      reactions = &#x27;2a = pa2     2
+#                   a + b = pab -2&#x27;
+#
+# where the 2 is the weight of the equilibrium species, the 2 on the RHS of the first reaction
+# refers to the equilibrium constant (log10(Keq) = 2), and the -2 on the RHS of the second
+# reaction equates to log10(Keq) = -2.
+#
+# The AqueousEquilibriumReactions action creates all the required kernels and auxkernels
+# to compute the reaction given by the above equilibrium reaction equation.
+#
+# Specifically, it adds to following:
+# * An AuxVariable named &#x27;pa2&#x27; (given in the reactions equations)
+# * An AuxVariable named &#x27;pab&#x27; (given in the reactions equations)
+# * A AqueousEquilibriumRxnAux AuxKernel for each AuxVariable with all parameters
+# * A CoupledBEEquilibriumSub Kernel for each primary species with all parameters
+# * A CoupledDiffusionReactionSub Kernel for each primary species with all parameters
+# * A CoupledConvectionReactionSub Kernel for each primary species with all parameters if
+# pressure is a coupled variable
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+[]
+
+[Variables]
+  [./a]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.0
+      y1 = 0.0
+      x2 = 1.0e-10
+      y2 = 1
+      inside = 1.0e-2
+      outside = 1.0e-10
+    [../]
+  [../]
+  [./b]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.0
+      y1 = 0.0
+      x2 = 1.0e-10
+      y2 = 1
+      inside = 1.0e-2
+      outside = 1.0e-10
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  [./pressure]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[ICs]
+  [./pressure]
+    type = FunctionIC
+    variable = pressure
+    function = 2-x
+  [../]
+[]
+
+[ReactionNetwork]
+  [./AqueousEquilibriumReactions]
+    primary_species = &#x27;a b&#x27;
+    reactions = &#x27;2a = pa2     2,
+                 a + b = pab -2&#x27;
+    secondary_species = &#x27;pa2 pab&#x27;
+    pressure = pressure
+  [../]
+[]
+
+[Kernels]
+  [./a_ie]
+    type = PrimaryTimeDerivative
+    variable = a
+  [../]
+  [./a_diff]
+    type = PrimaryDiffusion
+    variable = a
+  [../]
+  [./a_conv]
+    type = PrimaryConvection
+    variable = a
+    p = pressure
+  [../]
+  [./b_ie]
+    type = PrimaryTimeDerivative
+    variable = b
+  [../]
+  [./b_diff]
+    type = PrimaryDiffusion
+    variable = b
+  [../]
+  [./b_conv]
+    type = PrimaryConvection
+    variable = b
+    p = pressure
+  [../]
+[]
+
+[BCs]
+  [./a_left]
+    type = DirichletBC
+    variable = a
+    boundary = left
+    value = 1.0e-2
+  [../]
+  [./a_right]
+    type = ChemicalOutFlowBC
+    variable = a
+    boundary = right
+  [../]
+  [./b_left]
+    type = DirichletBC
+    variable = b
+    boundary = left
+    value = 1.0e-2
+  [../]
+  [./b_right]
+    type = ChemicalOutFlowBC
+    variable = b
+    boundary = right
+  [../]
+[]
+
+[Materials]
+  [./porous]
+    type = GenericConstantMaterial
+    prop_names = &#x27;diffusivity conductivity porosity&#x27;
+    prop_values = &#x27;1e-4 1e-4 0.2&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  nl_abs_tol = 1e-12
+  start_time = 0.0
+  end_time = 100
+  dt = 10.0
+[]
+
+[Outputs]
+  file_base = 2species_out
+  exodus = true
+  perf_graph = true
+  print_linear_residuals = true
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="77da2b08-b87f-401f-98e5-503cbdaca795"><div class="modal-content"><h4>test/tests/ics/bounding_box_ic/bounding_box_ic_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [./square]
+    type = GeneratedMeshGenerator
+    nx = 2
+    ny = 2
+    dim = 2
+  [../]
+  uniform_refine = 3
+[]
+
+[Variables]
+  active = &#x27;u&#x27;
+
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.1
+      y1 = 0.1
+      x2 = 0.6
+      y2 = 0.6
+      inside = 2.3
+      outside = 4.6
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  active = &#x27;u_aux&#x27;
+
+  [./u_aux]
+    order = FIRST
+    family = LAGRANGE
+
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.1
+      y1 = 0.1
+      x2 = 0.6
+      y2 = 0.6
+      inside = 1.34
+      outside = 6.67
+    [../]
+  [../]
+[]
+
+[Kernels]
+  active = &#x27;diff&#x27;
+
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left right&#x27;
+
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 3
+    value = 0
+  [../]
+
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Outputs]
+  file_base = out
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="82aaafa7-2f3f-4c2a-9408-1cd12eeb8883"><div class="modal-content"><h4>modules/phase_field/test/tests/actions/gpm_kernel.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 100
+  xmin = 0
+  xmax = 300
+[]
+
+[GlobalParams]
+  op_num = 1
+  var_name_base = eta
+[]
+
+[Variables]
+  [./w]
+  [../]
+  [./phi]
+  [../]
+  [./eta0]
+  [../]
+[]
+
+[AuxVariables]
+  [./bnds]
+  [../]
+[]
+
+[ICs]
+  [./IC_w]
+    type = BoundingBoxIC
+    variable = w
+    x1 = 150
+    x2 = 300
+    y1 = 0
+    y2 = 0
+    inside = 0.1
+    outside = 0
+  [../]
+  [./IC_phi]
+    type = BoundingBoxIC
+    variable = phi
+    x1 = 0
+    x2 = 150
+    y1 = 0
+    y2 = 0
+    inside = 1
+    outside = 0
+  [../]
+  [./IC_eta0]
+    type = BoundingBoxIC
+    variable = eta0
+    x1 = 150
+    x2 = 300
+    y1 = 0
+    y2 = 0
+    inside = 1
+    outside = 0
+  [../]
+[]
+
+[AuxKernels]
+  [./bnds_aux]
+    type = BndsCalcAux
+    variable = bnds
+  [../]
+[]
+
+[Modules]
+  [./PhaseField]
+    [./GrandPotential]
+      switching_function_names = &#x27;hb hm&#x27;
+
+      chemical_potentials = &#x27;w&#x27;
+      anisotropic = &#x27;false&#x27;
+      mobilities = &#x27;chiD&#x27;
+      susceptibilities = &#x27;chi&#x27;
+      free_energies_w = &#x27;rhob rhom&#x27;
+
+      gamma_gr = gamma
+      mobility_name_gr = L
+      kappa_gr = kappa
+      free_energies_gr = &#x27;omegab omegam&#x27;
+
+      additional_ops = &#x27;phi&#x27;
+      gamma_grxop = gamma
+      mobility_name_op = L_phi
+      kappa_op = kappa
+      free_energies_op = &#x27;omegab omegam&#x27;
+    [../]
+  [../]
+[]
+
+[Materials]
+  #REFERENCES
+  [./constants]
+    type = GenericConstantMaterial
+    prop_names =  &#x27;Va      cb_eq cm_eq kb   km  mu  gamma L      L_phi  kappa  kB&#x27;
+    prop_values = &#x27;0.04092 1.0   1e-5  1400 140 1.5 1.5   5.3e+3 2.3e+4 295.85 8.6173324e-5&#x27;
+  [../]
+  #SWITCHING FUNCTIONS
+  [./switchb]
+    type = SwitchingFunctionMultiPhaseMaterial
+    h_name = hb
+    all_etas = &#x27;phi eta0&#x27;
+    phase_etas = &#x27;phi&#x27;
+  [../]
+  [./switchm]
+    type = SwitchingFunctionMultiPhaseMaterial
+    h_name = hm
+    all_etas = &#x27;phi eta0&#x27;
+    phase_etas = &#x27;eta0&#x27;
+  [../]
+  [./omegab]
+    type = DerivativeParsedMaterial
+    f_name = omegab
+    args = &#x27;w phi&#x27;
+    material_property_names = &#x27;Va kb cb_eq&#x27;
+    function = &#x27;-0.5*w^2/Va^2/kb - w/Va*cb_eq&#x27;
+    derivative_order = 2
+  [../]
+  [./omegam]
+    type = DerivativeParsedMaterial
+    f_name = omegam
+    args = &#x27;w eta0&#x27;
+    material_property_names = &#x27;Va km cm_eq&#x27;
+    function = &#x27;-0.5*w^2/Va^2/km - w/Va*cm_eq&#x27;
+    derivative_order = 2
+  [../]
+  [./chi]
+    type = DerivativeParsedMaterial
+    f_name = chi
+    args = &#x27;w&#x27;
+    material_property_names = &#x27;Va hb hm kb km&#x27;
+    function = &#x27;(hm/km + hb/kb)/Va^2&#x27;
+    derivative_order = 2
+  [../]
+  #DENSITIES/CONCENTRATION
+  [./rhob]
+    type = DerivativeParsedMaterial
+    f_name = rhob
+    args = &#x27;w&#x27;
+    material_property_names = &#x27;Va kb cb_eq&#x27;
+    function = &#x27;w/Va^2/kb + cb_eq/Va&#x27;
+    derivative_order = 1
+  [../]
+  [./rhom]
+    type = DerivativeParsedMaterial
+    f_name = rhom
+    args = &#x27;w eta0&#x27;
+    material_property_names = &#x27;Va km cm_eq(eta0)&#x27;
+    function = &#x27;w/Va^2/km + cm_eq/Va&#x27;
+    derivative_order = 1
+  [../]
+  [./concentration]
+    type = ParsedMaterial
+    f_name = c
+    material_property_names = &#x27;rhom hm rhob hb Va&#x27;
+    function = &#x27;Va*(hm*rhom + hb*rhob)&#x27;
+    outputs = exodus
+  [../]
+  [./mobility]
+    type = DerivativeParsedMaterial
+    material_property_names = &#x27;chi kB&#x27;
+    constant_names = &#x27;T Em D0&#x27;
+    constant_expressions = &#x27;1400 2.4 1.25e2&#x27;
+    f_name = chiD
+    function = &#x27;chi*D0*exp(-Em/kB/T)&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type -pc_asm_overlap -ksp_gmres_restart -sub_ksp_type&#x27;
+  petsc_options_value = &#x27; asm      lu           1               31                 preonly&#x27;
+  nl_max_its = 20
+  l_max_its = 30
+  l_tol = 1e-4
+  nl_rel_tol = 1e-7
+  nl_abs_tol = 1e-7
+  start_time = 0
+  dt = 2e-5
+  num_steps = 3
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2a1406ce-c721-476d-963d-2e09a59b26d7"><div class="modal-content"><h4>modules/phase_field/examples/anisotropic_interfaces/GrandPotentialPlanarGrowth.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  xmin = -2
+  xmax = 2
+  ymin = -2
+  ymax = 2
+  uniform_refine = 2
+[]
+
+[GlobalParams]
+  x1 = -2
+  y1 = -2
+  x2 = 2
+  y2 = -1.5
+  derivative_order = 2
+[]
+
+[Variables]
+  [./w]
+  [../]
+  [./etaa0]
+  [../]
+  [./etab0]
+  [../]
+[]
+
+[AuxVariables]
+  [./bnds]
+  [../]
+  #Temperature
+  [./T]
+  [../]
+[]
+
+[AuxKernels]
+  [./bnds]
+    type = BndsCalcAux
+    variable = bnds
+    v = &#x27;etaa0 etab0&#x27;
+  [../]
+  [./T]
+    type = FunctionAux
+    function = 95.0+2.0*(y-1.0*t)
+    variable = T
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+[]
+
+[ICs]
+  [./w]
+    type = BoundingBoxIC
+    variable = w
+    # note w = A*(c-cleq), A = 1.0, cleq = 0.0 ,i.e., w = c (in the matrix/liquid phase)
+    outside = -4.0
+    inside = 0.0
+  [../]
+  [./etaa0]
+    type = BoundingBoxIC
+    variable = etaa0
+    #Solid phase
+    outside = 0.0
+    inside = 1.0
+  [../]
+  [./etab0]
+    type = BoundingBoxIC
+    variable = etab0
+    #Liquid phase
+    outside = 1.0
+    inside = 0.0
+  [../]
+[]
+
+
+[Kernels]
+# Order parameter eta_alpha0
+  [./ACa0_bulk]
+    type = ACGrGrMulti
+    variable = etaa0
+    v =           &#x27;etab0&#x27;
+    gamma_names = &#x27;gab&#x27;
+  [../]
+  [./ACa0_sw]
+    type = ACSwitching
+    variable = etaa0
+    Fj_names  = &#x27;omegaa omegab&#x27;
+    hj_names  = &#x27;ha     hb&#x27;
+    args = &#x27;etab0 w&#x27;
+  [../]
+  [./ACa0_int1]
+    type = ACInterface2DMultiPhase1
+    variable = etaa0
+    etas = &#x27;etab0&#x27;
+    kappa_name = kappaa
+    dkappadgrad_etaa_name = dkappadgrad_etaa
+    d2kappadgrad_etaa_name = d2kappadgrad_etaa
+  [../]
+  [./ACa0_int2]
+    type = ACInterface2DMultiPhase2
+    variable = etaa0
+    kappa_name = kappaa
+    dkappadgrad_etaa_name = dkappadgrad_etaa
+  [../]
+  [./ea0_dot]
+    type = TimeDerivative
+    variable = etaa0
+  [../]
+# Order parameter eta_beta0
+  [./ACb0_bulk]
+    type = ACGrGrMulti
+    variable = etab0
+    v =           &#x27;etaa0&#x27;
+    gamma_names = &#x27;gab&#x27;
+  [../]
+  [./ACb0_sw]
+    type = ACSwitching
+    variable = etab0
+    Fj_names  = &#x27;omegaa omegab&#x27;
+    hj_names  = &#x27;ha     hb&#x27;
+    args = &#x27;etaa0 w&#x27;
+  [../]
+  [./ACb0_int1]
+    type = ACInterface2DMultiPhase1
+    variable = etab0
+    etas = &#x27;etaa0&#x27;
+    kappa_name = kappab
+    dkappadgrad_etaa_name = dkappadgrad_etab
+    d2kappadgrad_etaa_name = d2kappadgrad_etab
+  [../]
+  [./ACb0_int2]
+    type = ACInterface2DMultiPhase2
+    variable = etab0
+    kappa_name = kappab
+    dkappadgrad_etaa_name = dkappadgrad_etab
+  [../]
+  [./eb0_dot]
+    type = TimeDerivative
+    variable = etab0
+  [../]
+#Chemical potential
+  [./w_dot]
+    type = SusceptibilityTimeDerivative
+    variable = w
+    f_name = chi
+  [../]
+  [./Diffusion]
+    type = MatDiffusion
+    variable = w
+    diffusivity = Dchi
+  [../]
+  [./coupled_etaa0dot]
+    type = CoupledSwitchingTimeDerivative
+    variable = w
+    v = etaa0
+    Fj_names = &#x27;rhoa rhob&#x27;
+    hj_names = &#x27;ha   hb&#x27;
+    args = &#x27;etaa0 etab0&#x27;
+  [../]
+  [./coupled_etab0dot]
+    type = CoupledSwitchingTimeDerivative
+    variable = w
+    v = etab0
+    Fj_names = &#x27;rhoa rhob&#x27;
+    hj_names = &#x27;ha   hb&#x27;
+    args = &#x27;etaa0 etab0&#x27;
+  [../]
+[]
+
+
+[Materials]
+  [./ha]
+    type = SwitchingFunctionMultiPhaseMaterial
+    h_name = ha
+    all_etas = &#x27;etaa0 etab0&#x27;
+    phase_etas = &#x27;etaa0&#x27;
+  [../]
+  [./hb]
+    type = SwitchingFunctionMultiPhaseMaterial
+    h_name = hb
+    all_etas = &#x27;etaa0 etab0&#x27;
+    phase_etas = &#x27;etab0&#x27;
+  [../]
+  [./omegaa]
+    type = DerivativeParsedMaterial
+    args = &#x27;w&#x27;
+    f_name = omegaa
+    material_property_names = &#x27;Vm ka caeq&#x27;
+    function = &#x27;-0.5*w^2/Vm^2/ka-w/Vm*caeq&#x27;
+  [../]
+  [./omegab]
+    type = DerivativeParsedMaterial
+    args = &#x27;w T&#x27;
+    f_name = omegab
+    material_property_names = &#x27;Vm kb cbeq S Tm&#x27;
+    function = &#x27;-0.5*w^2/Vm^2/kb-w/Vm*cbeq-S*(T-Tm)&#x27;
+  [../]
+  [./rhoa]
+    type = DerivativeParsedMaterial
+    args = &#x27;w&#x27;
+    f_name = rhoa
+    material_property_names = &#x27;Vm ka caeq&#x27;
+    function = &#x27;w/Vm^2/ka + caeq/Vm&#x27;
+  [../]
+  [./rhob]
+    type = DerivativeParsedMaterial
+    args = &#x27;w&#x27;
+    f_name = rhob
+    material_property_names = &#x27;Vm kb cbeq&#x27;
+    function = &#x27;w/Vm^2/kb + cbeq/Vm&#x27;
+  [../]
+  [./kappaa]
+    type = InterfaceOrientationMultiphaseMaterial
+    kappa_name = kappaa
+    dkappadgrad_etaa_name = dkappadgrad_etaa
+    d2kappadgrad_etaa_name = d2kappadgrad_etaa
+    etaa = etaa0
+    etab = etab0
+    outputs = exodus
+    output_properties = &#x27;kappaa&#x27;
+  [../]
+  [./kappab]
+    type = InterfaceOrientationMultiphaseMaterial
+    kappa_name = kappab
+    dkappadgrad_etaa_name = dkappadgrad_etab
+    d2kappadgrad_etaa_name = d2kappadgrad_etab
+    etaa = etab0
+    etab = etaa0
+    outputs = exodus
+    output_properties = &#x27;kappab&#x27;
+  [../]
+  [./const]
+    type = GenericConstantMaterial
+    prop_names =  &#x27;L   D    chi  Vm   ka    caeq kb    cbeq  gab mu   S   Tm&#x27;
+    prop_values = &#x27;1.0 1.0  0.1  1.0  10.0  0.1  10.0  0.9   4.5 10.0 1.0 100.0&#x27;
+  [../]
+  [./Mobility]
+    type = ParsedMaterial
+    f_name = Dchi
+    material_property_names = &#x27;D chi&#x27;
+    function = &#x27;D*chi&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre    boomeramg      31&#x27;
+  l_tol = 1.0e-3
+  l_max_its = 30
+  nl_max_its = 15
+  nl_rel_tol = 1.0e-8
+  nl_abs_tol = 1e-8
+  end_time = 2.0
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 0.0005
+    cutback_factor = 0.7
+    growth_factor = 1.2
+  [../]
+[]
+
+[Adaptivity]
+ initial_steps = 3
+ max_h_level = 3
+ initial_marker = err_eta
+ marker = err_bnds
+[./Markers]
+   [./err_eta]
+     type = ErrorFractionMarker
+     coarsen = 0.3
+     refine = 0.95
+     indicator = ind_eta
+   [../]
+   [./err_bnds]
+     type = ErrorFractionMarker
+     coarsen = 0.3
+     refine = 0.95
+     indicator = ind_bnds
+   [../]
+ [../]
+ [./Indicators]
+   [./ind_eta]
+     type = GradientJumpIndicator
+     variable = etaa0
+    [../]
+    [./ind_bnds]
+      type = GradientJumpIndicator
+      variable = bnds
+   [../]
+ [../]
+[]
+
+[Outputs]
+  interval = 10
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0082f889-0509-4ea3-90fc-00193b94162f"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/13.i</h4><pre class="moose-pre"><code class="language-text"># Example of reactive transport model with dissolution of dolomite
+#
+# The equilibrium system has 5 primary species (Variables) and
+# 5 secondary species (PorousFlowMassFractionAqueousEquilibrium).
+# Some of the equilibrium constants have been chosen rather arbitrarily.
+#
+# Equilibrium reactions
+# H+  + HCO3-                      = CO2(aq)
+# -H+ + HCO3-                      = CO32-
+#       HCO3- + Ca2+               = CaHCO3+
+#       HCO3-        + Mg2+        = MgHCO3+
+#       HCO3-               + Fe2+ = FeHCO3+
+#
+# The kinetic reaction that dissolves dolomite involves all 5 primary species.
+#
+# -2H+ + 2HCO3- + Ca2+ + 0.8Mg2+ + 0.2Fe2+ = CaMg0.8Fe0.2(CO3)2
+#
+# The initial concentration of precipitated dolomite is high, so it starts
+# to dissolve immediately, increasing the concentrations of the primary species.
+#
+# Only single-phase, fully saturated physics is used.
+# The pressure gradient is fixed, so that the Darcy velocity is 0.1m/s.
+#
+# Primary species are injected from the left side, and they flow to the right.
+# Less dolomite dissolution therefore occurs on the left side (where
+# the primary species have higher concentration).
+#
+# This test is more fully documented in tutorial_13
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 100
+  xmax = 1
+[]
+
+[Variables]
+  [./h+]
+  [../]
+  [./hco3-]
+  [../]
+  [./ca2+]
+  [../]
+  [./mg2+]
+  [../]
+  [./fe2+]
+  [../]
+[]
+
+[AuxVariables]
+  [./eqm_k0]
+    initial_condition = 2.19E6
+  [../]
+  [./eqm_k1]
+    initial_condition = 4.73E-11
+  [../]
+  [./eqm_k2]
+    initial_condition = 0.222
+  [../]
+  [./eqm_k3]
+    initial_condition = 1E-2
+  [../]
+  [./eqm_k4]
+    initial_condition = 1E-3
+  [../]
+  [./kinetic_k]
+    initial_condition = 326.2
+  [../]
+  [./pressure]
+  [../]
+  [./dolomite]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./dolomite_initial]
+    initial_condition = 1E-7
+  [../]
+[]
+
+[AuxKernels]
+  [./dolomite]
+    type = PorousFlowPropertyAux
+    property = mineral_concentration
+    mineral_species = 0
+    variable = dolomite
+  [../]
+[]
+
+[GlobalParams]
+  PorousFlowDictator = dictator
+  gravity = &#x27;0 0 0&#x27;
+[]
+
+[ICs]
+  [./pressure_ic]
+    type = FunctionIC
+    variable = pressure
+    function = &#x27;(1 - x) * 1E6&#x27;
+  [../]
+  [./h+_ic]
+    type = BoundingBoxIC
+    variable = h+
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 0.25
+    inside = 5.0e-2
+    outside = 1.0e-6
+  [../]
+  [./hco3_ic]
+    type = BoundingBoxIC
+    variable = hco3-
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 0.25
+    inside = 5.0e-2
+    outside = 1.0e-6
+  [../]
+  [./ca2_ic]
+    type = BoundingBoxIC
+    variable = ca2+
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 0.25
+    inside = 5.0e-2
+    outside = 1.0e-6
+  [../]
+  [./mg2_ic]
+    type = BoundingBoxIC
+    variable = mg2+
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 0.25
+    inside = 5.0e-2
+    outside = 1.0e-6
+  [../]
+  [./fe2_ic]
+    type = BoundingBoxIC
+    variable = fe2+
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 0.25
+    inside = 5.0e-2
+    outside = 1.0e-6
+  [../]
+[]
+
+[Kernels]
+  [./h+_ie]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 0
+    variable = h+
+  [../]
+  [./h+_conv]
+    type = PorousFlowAdvectiveFlux
+    fluid_component = 0
+    variable = h+
+  [../]
+  [./predis_h+]
+    type = PorousFlowPreDis
+    variable = h+
+    mineral_density = 2875.0
+    stoichiometry = -2
+  [../]
+  [./hco3-_ie]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 1
+    variable = hco3-
+  [../]
+  [./hco3-_conv]
+    type = PorousFlowAdvectiveFlux
+    fluid_component = 1
+    variable = hco3-
+  [../]
+  [./predis_hco3-]
+    type = PorousFlowPreDis
+    variable = hco3-
+    mineral_density = 2875.0
+    stoichiometry = 2
+  [../]
+  [./ca2+_ie]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 2
+    variable = ca2+
+  [../]
+  [./ca2+_conv]
+    type = PorousFlowAdvectiveFlux
+    fluid_component = 2
+    variable = ca2+
+  [../]
+  [./predis_ca2+]
+    type = PorousFlowPreDis
+    variable = ca2+
+    mineral_density = 2875.0
+    stoichiometry = 1
+  [../]
+  [./mg2+_ie]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 3
+    variable = mg2+
+  [../]
+  [./mg2+_conv]
+    type = PorousFlowAdvectiveFlux
+    fluid_component = 3
+    variable = mg2+
+  [../]
+  [./predis_mg2+]
+    type = PorousFlowPreDis
+    variable = mg2+
+    mineral_density = 2875.0
+    stoichiometry = 0.8
+  [../]
+  [./fe2+_ie]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 4
+    variable = fe2+
+  [../]
+  [./fe2+_conv]
+    type = PorousFlowAdvectiveFlux
+    fluid_component = 4
+    variable = fe2+
+  [../]
+  [./predis_fe2+]
+    type = PorousFlowPreDis
+    variable = fe2+
+    mineral_density = 2875.0
+    stoichiometry = 0.2
+  [../]
+[]
+
+[UserObjects]
+  [./dictator]
+    type = PorousFlowDictator
+    porous_flow_vars = &#x27;h+ hco3- ca2+ mg2+ fe2+&#x27;
+    number_fluid_phases = 1
+    number_fluid_components = 6
+    number_aqueous_equilibrium = 5
+    number_aqueous_kinetic = 1
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./simple_fluid]
+      type = SimpleFluidProperties
+      viscosity = 1E-3
+    [../]
+  [../]
+[]
+
+[BCs]
+  [./hco3-_left]
+    type = DirichletBC
+    variable = hco3-
+    boundary = left
+    value = 5E-2
+  [../]
+  [./h+_left]
+    type = DirichletBC
+    variable = h+
+    boundary = left
+    value = 5E-2
+  [../]
+  [./ca2+_left]
+    type = DirichletBC
+    variable = ca2+
+    boundary = left
+    value = 5E-2
+  [../]
+  [./mg2+_left]
+    type = DirichletBC
+    variable = mg2+
+    boundary = left
+    value = 5E-2
+  [../]
+  [./fe2+_left]
+    type = DirichletBC
+    variable = fe2+
+    boundary = left
+    value = 5E-2
+  [../]
+  [./hco3-_right]
+    type = DirichletBC
+    variable = hco3-
+    boundary = right
+    value = 1E-6
+  [../]
+  [./h+_right]
+    type = DirichletBC
+    variable = h+
+    boundary = right
+    value = 1e-6
+  [../]
+  [./ca2+_right]
+    type = DirichletBC
+    variable = ca2+
+    boundary = right
+    value = 1E-6
+  [../]
+  [./mg2+_right]
+    type = DirichletBC
+    variable = mg2+
+    boundary = right
+    value = 1E-6
+  [../]
+  [./fe2+_right]
+    type = DirichletBC
+    variable = fe2+
+    boundary = right
+    value = 1E-6
+  [../]
+[]
+
+[Materials]
+  [./temperature]
+    type = PorousFlowTemperature
+    temperature = 298.15
+  [../]
+  [./ppss]
+    type = PorousFlow1PhaseFullySaturated
+    porepressure = pressure
+  [../]
+  [./equilibrium_massfrac]
+    type = PorousFlowMassFractionAqueousEquilibriumChemistry
+    mass_fraction_vars = &#x27;h+ hco3- ca2+ mg2+ fe2+&#x27;
+    num_reactions = 5
+    equilibrium_constants = &#x27;eqm_k0 eqm_k1 eqm_k2 eqm_k3 eqm_k4&#x27;
+    primary_activity_coefficients = &#x27;1 1 1 1 1&#x27;
+    secondary_activity_coefficients = &#x27;1 1 1 1 1&#x27;
+    reactions = &#x27;1 1 0 0 0
+                -1 1 0 0 0
+                 0 1 1 0 0
+                 0 1 0 1 0
+                 0 1 0 0 1&#x27;
+  [../]
+  [./kinetic]
+    type = PorousFlowAqueousPreDisChemistry
+    primary_concentrations = &#x27;h+ hco3- ca2+ mg2+ fe2+&#x27;
+    num_reactions = 1
+    equilibrium_constants = kinetic_k
+    primary_activity_coefficients = &#x27;1 1 1 1 1&#x27;
+    reactions = &#x27;-2 2 1 0.8 0.2&#x27;
+    specific_reactive_surface_area = &#x27;1.2E-8&#x27;
+    kinetic_rate_constant = &#x27;3E-4&#x27;
+    activation_energy = &#x27;1.5e4&#x27;
+    molar_volume = 64365.0
+    gas_constant = 8.314
+    reference_temperature = 298.15
+  [../]
+  [./dolomite_conc]
+    type = PorousFlowAqueousPreDisMineral
+    initial_concentrations = dolomite_initial
+  [../]
+  [./simple_fluid]
+    type = PorousFlowSingleComponentFluid
+    fp = simple_fluid
+    phase = 0
+  [../]
+  [./porosity]
+    type = PorousFlowPorosityConst
+    porosity = 0.2
+  [../]
+  [./permeability]
+    type = PorousFlowPermeabilityConst
+    permeability = &#x27;1E-10 0 0 0 1E-10 0 0 0 1E-10&#x27;
+  [../]
+  [./relp]
+    type = PorousFlowRelativePermeabilityConst
+    phase = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  end_time = 1
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 0.1
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
+    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
+  [../]
+  [./preferred_but_might_not_be_installed]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+[]
+
+[Outputs]
+  print_linear_residuals = false
+  perf_graph = true
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6c44c95a-4a4e-496f-9c88-a75d5a837ba1"><div class="modal-content"><h4>modules/chemical_reactions/test/tests/aqueous_equilibrium/2species_eqaux.i</h4><pre class="moose-pre"><code class="language-text"># In this example, two primary species a and b are transported by diffusion and convection
+# from the left of the porous medium, reacting to form two equilibrium species pa2 and pab
+# according to the equilibrium reaction specified in the AqueousEquilibriumReactions block as:
+#
+#      reactions = &#x27;2a = pa2     2
+#                   a + b = pab -2&#x27;
+#
+# where the 2 is the weight of the equilibrium species, the 2 on the RHS of the first reaction
+# refers to the equilibrium constant (log10(Keq) = 2), and the -2 on the RHS of the second
+# reaction equates to log10(Keq) = -2.
+#
+# This example is identical to 2species.i, except that it explicitly includes all AuxKernels
+# and Kernels that are set up by the action in 2species.i, and that the equilbrium constants
+# are provided by AuxVariables
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+[]
+
+[Variables]
+  [./a]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.0
+      y1 = 0.0
+      x2 = 1.0e-10
+      y2 = 1
+      inside = 1.0e-2
+      outside = 1.0e-10
+    [../]
+  [../]
+  [./b]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.0
+      y1 = 0.0
+      x2 = 1.0e-10
+      y2 = 1
+      inside = 1.0e-2
+      outside = 1.0e-10
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  [./pressure]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./pa2]
+  [../]
+  [./pab]
+  [../]
+  [./pa2_logk]
+    initial_condition = 2
+  [../]
+  [./pab_logk]
+    initial_condition = -2
+  [../]
+[]
+
+[AuxKernels]
+  [./pa2eq]
+    type = AqueousEquilibriumRxnAux
+    variable = pa2
+    v = a
+    sto_v = 2
+    log_k = pa2_logk
+  [../]
+  [./pabeq]
+    type = AqueousEquilibriumRxnAux
+    variable = pab
+    v = &#x27;a b&#x27;
+    sto_v = &#x27;1 1&#x27;
+    log_k = pab_logk
+  [../]
+[]
+
+[ICs]
+  [./pressure]
+    type = FunctionIC
+    variable = pressure
+    function = 2-x
+  [../]
+[]
+
+[Kernels]
+  [./a_ie]
+    type = PrimaryTimeDerivative
+    variable = a
+  [../]
+  [./a_diff]
+    type = PrimaryDiffusion
+    variable = a
+  [../]
+  [./a_conv]
+    type = PrimaryConvection
+    variable = a
+    p = pressure
+  [../]
+  [./b_ie]
+    type = PrimaryTimeDerivative
+    variable = b
+  [../]
+  [./b_diff]
+    type = PrimaryDiffusion
+    variable = b
+  [../]
+  [./b_conv]
+    type = PrimaryConvection
+    variable = b
+    p = pressure
+  [../]
+  [./a1eq]
+    type = CoupledBEEquilibriumSub
+    variable = a
+    log_k = pa2_logk
+    weight = 2
+    sto_u = 2
+  [../]
+  [./a1diff]
+    type = CoupledDiffusionReactionSub
+    variable = a
+    log_k = pa2_logk
+    weight = 2
+    sto_u = 2
+  [../]
+  [./a1conv]
+    type = CoupledConvectionReactionSub
+    variable = a
+    log_k = pa2_logk
+    weight = 2
+    sto_u = 2
+    p = pressure
+  [../]
+  [./a2eq]
+    type = CoupledBEEquilibriumSub
+    variable = a
+    v = b
+    log_k = pab_logk
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+  [../]
+  [./a2diff]
+    type = CoupledDiffusionReactionSub
+    variable = a
+    v = b
+    log_k = pab_logk
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+  [../]
+  [./a2conv]
+    type = CoupledConvectionReactionSub
+    variable = a
+    v = b
+    log_k = pab_logk
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+    p = pressure
+  [../]
+  [./b2eq]
+    type = CoupledBEEquilibriumSub
+    variable = b
+    v = a
+    log_k = pab_logk
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+  [../]
+  [./b2diff]
+    type = CoupledDiffusionReactionSub
+    variable = b
+    v = a
+    log_k = pab_logk
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+  [../]
+  [./b2conv]
+    type = CoupledConvectionReactionSub
+    variable = b
+    v = a
+    log_k = pab_logk
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+    p = pressure
+  [../]
+[]
+
+[BCs]
+  [./a_left]
+    type = DirichletBC
+    variable = a
+    boundary = left
+    value = 1.0e-2
+  [../]
+  [./a_right]
+    type = ChemicalOutFlowBC
+    variable = a
+    boundary = right
+  [../]
+  [./b_left]
+    type = DirichletBC
+    variable = b
+    boundary = left
+    value = 1.0e-2
+  [../]
+  [./b_right]
+    type = ChemicalOutFlowBC
+    variable = b
+    boundary = right
+  [../]
+[]
+
+[Materials]
+  [./porous]
+    type = GenericConstantMaterial
+    prop_names = &#x27;diffusivity conductivity porosity&#x27;
+    prop_values = &#x27;1e-4 1e-4 0.2&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  nl_abs_tol = 1e-12
+  start_time = 0.0
+  end_time = 100
+  dt = 10.0
+[]
+
+[Outputs]
+  file_base = 2species_out
+  exodus = true
+  perf_graph = true
+  print_linear_residuals = true
+  hide = &#x27;pa2_logk pab_logk&#x27;
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a6af5803-7544-4692-811e-bce2617182cd"><div class="modal-content"><h4>modules/phase_field/test/tests/mobility_derivative/mobility_derivative_split_coupled_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 30
+  ny = 30
+  xmax = 30.0
+  ymax = 30.0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./c]
+  [../]
+  [./w]
+  [../]
+  [./d]
+  [../]
+[]
+
+[ICs]
+  [./c_IC]
+    type = CrossIC
+    x1 = 0.0
+    x2 = 30.0
+    y1 = 0.0
+    y2 = 30.0
+    variable = c
+  [../]
+  [./d_IC]
+    type = BoundingBoxIC
+    x1 = 0.0
+    x2 = 15.0
+    y1 = 0.0
+    y2 = 30.0
+    inside = 1.0
+    outside = 0.0
+    variable = d
+  [../]
+[]
+
+[Kernels]
+  [./cres]
+    type = SplitCHParsed
+    variable = c
+    kappa_name = kappa_c
+    w = w
+    f_name = F
+  [../]
+  [./wres]
+    type = SplitCHWRes
+    variable = w
+    mob_name = M
+    args = &#x27;c d&#x27;
+  [../]
+  [./time]
+    type = CoupledTimeDerivative
+    variable = w
+    v = c
+  [../]
+  [./d_dot]
+    type = TimeDerivative
+    variable = d
+  [../]
+  [./d_diff]
+    type = MatDiffusion
+    variable = d
+    diffusivity = diffusivity
+  [../]
+[]
+
+[BCs]
+  [./Periodic]
+    [./all]
+      auto_direction = &#x27;x y&#x27;
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./kappa]
+    type = GenericConstantMaterial
+    prop_names = &#x27;kappa_c&#x27;
+    prop_values = &#x27;2.0&#x27;
+  [../]
+  [./mob]
+    type = DerivativeParsedMaterial
+    f_name = M
+    args = &#x27;c d&#x27;
+    function = &#x27;if(d&gt;0.001,d,0.001)*(1-0.5*c^2)&#x27;
+    outputs = exodus
+    derivative_order = 1
+  [../]
+  [./free_energy]
+    type = MathEBFreeEnergy
+    f_name = F
+    c = c
+  [../]
+  [./d_diff]
+    type = GenericConstantMaterial
+    prop_names = diffusivity
+    prop_values = 0.1
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+   type = SMP
+   full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = &#x27;BDF2&#x27;
+
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type -ksp_gmres_restart -sub_pc_type -pc_asm_overlap&#x27;
+  petsc_options_value = &#x27;asm         31      lu      1&#x27;
+
+  l_max_its = 30
+  l_tol = 1.0e-4
+  nl_max_its = 50
+  nl_rel_tol = 1.0e-10
+
+  dt = 10.0
+  num_steps = 2
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e9135cfc-3398-4955-aa5a-9495772f4719"><div class="modal-content"><h4>modules/phase_field/test/tests/actions/both_split_2vars.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 28
+  ny = 20
+  xmin = 10
+  xmax = 40
+  ymin = 15
+  ymax = 35
+  elem_type = QUAD
+[]
+
+[Modules]
+  [./PhaseField]
+    [./Conserved]
+      [./c]
+        free_energy = F
+        mobility = 1.0
+        kappa = 20.0
+        args = &#x27;eta&#x27;
+        solve_type = REVERSE_SPLIT
+      [../]
+    [../]
+    [./Nonconserved]
+      [./eta]
+        free_energy = F
+        mobility = 1.0
+        kappa = 20
+        args = &#x27;c&#x27;
+      [../]
+    [../]
+  [../]
+[]
+
+[ICs]
+  [./c_IC]
+    type = BoundingBoxIC
+    variable = c
+    x1 = 10
+    x2 = 25
+    y1 = 15
+    y2 = 35
+    inside = 0.15
+    outside = 0.85
+  [../]
+  [./eta_IC]
+    type = ConstantIC
+    variable = eta
+    value = 0.5
+  [../]
+[]
+
+[Materials]
+  [./free_energy]
+    type = DerivativeParsedMaterial
+    f_name = F
+    args = &#x27;eta c&#x27;
+    function = &#x27;(1 - eta)*10.0*(c - 0.1)^2 + eta*(8.0*(c - 0.9)^2) + 10.0*eta^2*(1-eta)^2&#x27;
+    outputs = exodus
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = &#x27;bdf2&#x27;
+  solve_type = &#x27;NEWTON&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type&#x27;
+  petsc_options_value = &#x27;asm lu&#x27;
+
+  l_max_its = 15
+  l_tol = 1.0e-4
+
+  nl_max_its = 10
+  nl_rel_tol = 1.0e-11
+
+  start_time = 0.0
+  num_steps = 10
+  dt = 0.05
+[]
+
+[Outputs]
+  perf_graph = true
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2bb97432-2827-4a0a-be93-372def5f2458"><div class="modal-content"><h4>modules/misc/test/tests/dynamic_loading/dynamic_load_multiapp/phase_field_sub.i</h4><pre class="moose-pre"><code class="language-text"># This input file contains objects only available in phase_field
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 4
+  ny = 2
+  nz = 0
+  xmax = 50
+  ymax = 25
+  zmax = 0
+  elem_type = QUAD4
+  uniform_refine = 2
+[]
+
+[Variables]
+  [./c]
+    order = THIRD
+    family = HERMITE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 15.0
+      x2 = 35.0
+      y1 = 0.0
+      y2 = 25.0
+      inside = 1.0
+      outside = -0.8
+      variable = c
+    [../]
+  [../]
+[]
+
+[Kernels]
+  [./ie_c]
+    type = TimeDerivative
+    variable = c
+  [../]
+  [./CHSolid]
+    type = CHMath
+    variable = c
+    mob_name = M
+  [../]
+  [./CHInterface]
+    type = CHInterface
+    variable = c
+    kappa_name = kappa_c
+    mob_name = M
+  [../]
+[]
+
+[BCs]
+  [./Periodic]
+    [./all]
+      auto_direction = &#x27;x y&#x27;
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./constant]
+    type = GenericConstantMaterial
+    prop_names  = &#x27;M kappa_c&#x27;
+    prop_values = &#x27;1.0 1.0&#x27;
+    block = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre boomeramg 101&#x27;
+  l_max_its = 15
+  nl_max_its = 10
+  start_time = 0.0
+  num_steps = 2
+  dt = 1.0
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="09ed6d72-865f-4e13-a498-1dd51931119b"><div class="modal-content"><h4>modules/porous_flow/test/tests/chemistry/2species_equilibrium.i</h4><pre class="moose-pre"><code class="language-text"># PorousFlow analogy of chemical_reactions/test/tests/aqueous_equilibrium/2species.i
+#
+# Simple equilibrium reaction example to illustrate the use of PorousFlowMassFractionAqueousEquilibriumChemistry
+#
+# In this example, two primary species a and b are transported by diffusion and convection
+# from the left of the porous medium, reacting to form two equilibrium species pa2 and pab
+# according to the equilibrium reaction:
+#
+#      reactions = &#x27;2a = pa2     rate = 10^2
+#                   a + b = pab  rate = 10^-2&#x27;
+#
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+[]
+
+[Variables]
+  [./a]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.0
+      y1 = 0.0
+      x2 = 1.0e-10
+      y2 = 1
+      inside = 1.0e-2
+      outside = 1.0e-10
+    [../]
+  [../]
+  [./b]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.0
+      y1 = 0.0
+      x2 = 1.0e-10
+      y2 = 1
+      inside = 1.0e-2
+      outside = 1.0e-10
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  [./eqm_k0]
+    initial_condition = 1E2
+  [../]
+  [./eqm_k1]
+    initial_condition = 1E-2
+  [../]
+  [./pressure]
+  [../]
+  [./pa2]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./pab]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+[]
+
+[AuxKernels]
+  [./pa2]
+    type = PorousFlowPropertyAux
+    property = secondary_concentration
+    secondary_species = 0
+    variable = pa2
+  [../]
+  [./pab]
+    type = PorousFlowPropertyAux
+    property = secondary_concentration
+    secondary_species = 1
+    variable = pab
+  [../]
+[]
+
+[ICs]
+  [./pressure]
+    type = FunctionIC
+    variable = pressure
+    function = 2-x
+  [../]
+[]
+
+[GlobalParams]
+  PorousFlowDictator = dictator
+  gravity = &#x27;0 0 0&#x27;
+[]
+
+[Kernels]
+  [./mass_a]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 0
+    variable = a
+  [../]
+  [./flux_a]
+    type = PorousFlowFullySaturatedDarcyFlow
+    variable = a
+    fluid_component = 0
+  [../]
+  [./diff_a]
+    type = PorousFlowDispersiveFlux
+    variable = a
+    fluid_component = 0
+    disp_trans = 0
+    disp_long = 0
+  [../]
+  [./mass_b]
+    type = PorousFlowMassTimeDerivative
+    fluid_component = 1
+    variable = b
+  [../]
+  [./flux_b]
+    type = PorousFlowFullySaturatedDarcyFlow
+    variable = b
+    fluid_component = 1
+  [../]
+  [./diff_b]
+    type = PorousFlowDispersiveFlux
+    variable = b
+    fluid_component = 1
+    disp_trans = 0
+    disp_long = 0
+  [../]
+[]
+
+[UserObjects]
+  [./dictator]
+    type = PorousFlowDictator
+    porous_flow_vars = &#x27;a b&#x27;
+    number_fluid_phases = 1
+    number_fluid_components = 3
+    number_aqueous_equilibrium = 2
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./simple_fluid]
+      type = SimpleFluidProperties
+      bulk_modulus = 2e9 # huge, so mimic chemical_reactions
+      density0 = 1000
+      thermal_expansion = 0
+      viscosity = 1e-3
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./temperature]
+    type = PorousFlowTemperature
+  [../]
+  [./ppss]
+    type = PorousFlow1PhaseFullySaturated
+    porepressure = pressure
+  [../]
+  [./massfrac]
+    type = PorousFlowMassFractionAqueousEquilibriumChemistry
+    mass_fraction_vars = &#x27;a b&#x27;
+    num_reactions = 2
+    equilibrium_constants = &#x27;eqm_k0 eqm_k1&#x27;
+    primary_activity_coefficients = &#x27;1 1&#x27;
+    secondary_activity_coefficients = &#x27;1 1&#x27;
+    reactions = &#x27;2 0
+                 1 1&#x27;
+  [../]
+  [./simple_fluid]
+    type = PorousFlowSingleComponentFluid
+    fp = simple_fluid
+    phase = 0
+  [../]
+  [./porosity]
+    type = PorousFlowPorosityConst
+    porosity = 0.2
+  [../]
+  [./permeability]
+    type = PorousFlowPermeabilityConst
+    # porous_flow permeability / porous_flow viscosity = chemical_reactions conductivity = 1E-4
+    permeability = &#x27;1E-7 0 0 0 1E-7 0 0 0 1E-7&#x27;
+  [../]
+  [./relp]
+    type = PorousFlowRelativePermeabilityConst
+    phase = 0
+  [../]
+  [./diff]
+    type = PorousFlowDiffusivityConst
+    # porous_flow diffusion_coeff * tortuousity * porosity = chemical_reactions diffusivity = 1E-4
+    diffusion_coeff = &#x27;5E-4 5E-4 5E-4&#x27;
+    tortuosity = 1.0
+  [../]
+[]
+
+[BCs]
+  [./a_left]
+    type = DirichletBC
+    variable = a
+    boundary = left
+    value = 1.0e-2
+  [../]
+  [./b_left]
+    type = DirichletBC
+    variable = b
+    boundary = left
+    value = 1.0e-2
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  dt = 10
+  end_time = 100
+[]
+
+[Outputs]
+  print_linear_residuals = true
+  exodus = true
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9c772882-7b8e-407b-bbe4-e4bb7af51a64"><div class="modal-content"><h4>modules/phase_field/test/tests/rigidbodymotion/update_orientation.i</h4><pre class="moose-pre"><code class="language-text"># test file for applyting advection term and observing rigid body motion of grains
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 25
+  ny = 15
+  nz = 0
+  xmax = 50
+  ymax = 25
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./c]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./w]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./eta]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./c_res]
+    type = SplitCHParsed
+    variable = c
+    f_name = F
+    kappa_name = kappa_c
+    w = w
+    args = eta
+  [../]
+  [./w_res]
+    type = SplitCHWRes
+    variable = w
+    mob_name = M
+  [../]
+  [./time]
+    type = CoupledTimeDerivative
+    variable = w
+    v = c
+  [../]
+  [./motion]
+    type = MultiGrainRigidBodyMotion
+    variable = w
+    c = c
+    v = eta
+    grain_tracker_object = grain_center
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+  [../]
+  [./eta_dot]
+    type = TimeDerivative
+    variable = eta
+  [../]
+  [./vadv_eta]
+    type = SingleGrainRigidBodyMotion
+    variable = eta
+    c = c
+    v = eta
+    grain_tracker_object = grain_center
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+  [../]
+  [./acint_eta]
+    type = ACInterface
+    variable = eta
+    mob_name = M
+    args = c
+    kappa_name = kappa_eta
+  [../]
+  [./acbulk_eta]
+    type = AllenCahn
+    variable = eta
+    mob_name = M
+    f_name = F
+    args = c
+  [../]
+[]
+
+[Materials]
+  [./pfmobility]
+    type = GenericConstantMaterial
+    prop_names = &#x27;M    kappa_c  kappa_eta&#x27;
+    prop_values = &#x27;5.0  2.0      0.1&#x27;
+  [../]
+  [./free_energy]
+    type = DerivativeParsedMaterial
+    args = &#x27;c eta&#x27;
+    constant_names = &#x27;barr_height  cv_eq&#x27;
+    constant_expressions = &#x27;0.1          1.0e-2&#x27;
+    function = 16*barr_height*(c-cv_eq)^2*(1-cv_eq-c)^2+(c-eta)^2
+    derivative_order = 2
+  [../]
+[]
+
+[AuxVariables]
+  [./unique_grains]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./var_indices]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./centroids]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./vadv_x]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./vadv_y]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./angle_initial]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./euler_angle]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./unique_grains]
+    type = FeatureFloodCountAux
+    variable = unique_grains
+    flood_counter = grain_center
+    field_display = UNIQUE_REGION
+    execute_on = timestep_begin
+  [../]
+  [./var_indices]
+    type = FeatureFloodCountAux
+    variable = var_indices
+    flood_counter = grain_center
+    field_display = VARIABLE_COLORING
+    execute_on = timestep_begin
+  [../]
+  [./centroids]
+    type = FeatureFloodCountAux
+    variable = centroids
+    execute_on = timestep_begin
+    field_display = CENTROID
+    flood_counter = grain_center
+  [../]
+  [./vadv_x]
+    type = GrainAdvectionAux
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+    grain_tracker_object = grain_center
+    execute_on = timestep_begin
+    component = x
+    variable = vadv_x
+  [../]
+  [./vadv_y]
+    type = GrainAdvectionAux
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+    grain_tracker_object = grain_center
+    execute_on = timestep_begin
+    component = y
+    variable = vadv_y
+  [../]
+  [./angle_initial]
+    type = OutputEulerAngles
+    variable = angle_initial
+    euler_angle_provider = euler_angle_initial
+    grain_tracker = grain_center
+    output_euler_angle = phi2
+    execute_on = timestep_begin
+  [../]
+  [./angle]
+    type = OutputEulerAngles
+    variable = euler_angle
+    euler_angle_provider = euler_angle
+    grain_tracker = grain_center
+    output_euler_angle = phi2
+    execute_on = timestep_begin
+  [../]
+[]
+
+
+[VectorPostprocessors]
+  [./forces]
+    type = GrainForcesPostprocessor
+    grain_force = grain_force
+  [../]
+  [./grain_volumes]
+    type = FeatureVolumeVectorPostprocessor
+    flood_counter = grain_center
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./grain_center]
+    type = GrainTracker
+    variable = eta
+    outputs = none
+    compute_var_to_feature_map = true
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+  [./grain_force]
+    type = ConstantGrainForceAndTorque
+    execute_on = &#x27;initial timestep_begin linear nonlinear&#x27;
+    force = &#x27;0.5 0.0 0.0 &#x27;
+    torque = &#x27;0.0 0.0 10.0&#x27;
+  [../]
+  [./euler_angle_initial]
+    type = RandomEulerAngleProvider
+    grain_tracker_object = grain_center
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+  [./euler_angle]
+    type = EulerAngleUpdater
+    grain_tracker_object = grain_center
+    euler_angle_provider = euler_angle_initial
+    grain_torques_object = grain_force
+    grain_volumes = grain_volumes
+    execute_on = timestep_begin
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -ksp_gmres_restart -sub_ksp_type -sub_pc_type -pc_asm_overlap&#x27;
+  petsc_options_value = &#x27;asm         31   preonly   lu      1&#x27;
+  nl_max_its = 30
+  l_max_its = 30
+  l_tol = 1.0e-4
+  nl_rel_tol = 1.0e-10
+  start_time = 0.0
+  dt = 0.2
+  num_steps = 5
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[ICs]
+  [./rect_c]
+    y2 = 20.0
+    y1 = 5.0
+    inside = 1.0
+    x2 = 30.0
+    variable = c
+    x1 = 10.0
+    type = BoundingBoxIC
+  [../]
+  [./rect_eta]
+    y2 = 20.0
+    y1 = 5.0
+    inside = 1.0
+    x2 = 30.0
+    variable = eta
+    x1 = 10.0
+    type = BoundingBoxIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0aa969f0-6f6d-49d2-85fa-633993a2d877"><div class="modal-content"><h4>modules/chemical_reactions/test/tests/aqueous_equilibrium/1species_without_action.i</h4><pre class="moose-pre"><code class="language-text"># Simple equilibrium reaction example.
+# This simulation is identical to 1species.i, but explicitly includes the AuxVariables,
+# AuxKernels, and Kernels that the action in 1species.i adds
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+[]
+
+[Variables]
+  [./a]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.0
+      y1 = 0.0
+      x2 = 1e-2
+      y2 = 1
+      inside = 1.0e-2
+      outside = 1.0e-10
+      variable = a
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  [./pressure]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./pa2]
+  [../]
+[]
+
+[AuxKernels]
+  [./pa2eq]
+    type = AqueousEquilibriumRxnAux
+    variable = pa2
+    v = a
+    sto_v = 2
+    log_k = 1
+  [../]
+[]
+
+[ICs]
+  [./pressure]
+    type = FunctionIC
+    variable = pressure
+    function = 2-x
+  [../]
+[]
+
+[Kernels]
+  [./a_ie]
+    type = PrimaryTimeDerivative
+    variable = a
+  [../]
+  [./a_diff]
+    type = PrimaryDiffusion
+    variable = a
+  [../]
+  [./a_conv]
+    type = PrimaryConvection
+    variable = a
+    p = pressure
+  [../]
+  [./aeq]
+    type = CoupledBEEquilibriumSub
+    variable = a
+    log_k = 1
+    weight = 2
+    sto_u = 2
+  [../]
+  [./adiff]
+    type = CoupledDiffusionReactionSub
+    variable = a
+    log_k = 1
+    weight = 2
+    sto_u = 2
+  [../]
+  [./aconv]
+    type = CoupledConvectionReactionSub
+    variable = a
+    log_k = 1
+    weight = 2
+    sto_u = 2
+    p = pressure
+  [../]
+[]
+
+[BCs]
+  [./a_right]
+    type = ChemicalOutFlowBC
+    variable = a
+    boundary = right
+  [../]
+[]
+
+[Materials]
+  [./porous]
+    type = GenericConstantMaterial
+    prop_names = &#x27;diffusivity conductivity porosity&#x27;
+    prop_values = &#x27;1e-4 1e-4 0.2&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  nl_abs_tol = 1e-12
+  start_time = 0.0
+  end_time = 100
+  dt = 10.0
+[]
+
+[Outputs]
+  file_base = 1species_out
+  exodus = true
+  perf_graph = true
+  print_linear_residuals = true
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="612471af-0350-4c02-bb5b-7b630449f930"><div class="modal-content"><h4>test/tests/ics/from_exodus_solution/nodal_part2.i</h4><pre class="moose-pre"><code class="language-text"># Use the exodus file for restarting the problem:
+# - restart one variable
+# - and have one extra variable with IC
+#
+
+[Mesh]
+  file = out_nodal_part1.e
+[]
+
+[Functions]
+  [./exact_fn]
+    type = ParsedFunction
+    value = ((x*x)+(y*y))
+  [../]
+
+  [./forcing_fn]
+    type = ParsedFunction
+    value = -4
+  [../]
+[]
+
+[Variables]
+  active = &#x27;u v&#x27;
+
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_from_file_var = u
+    initial_from_file_timestep = 6
+  [../]
+
+  [./v]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.0
+      x2 = 1.0
+      y1 = 0.0
+      y2 = 1.0
+      inside = 3.0
+      outside = 1.0
+    [../]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./ffn]
+    type = BodyForce
+    variable = u
+    function = forcing_fn
+  [../]
+
+  [./diff_v]
+    type = Diffusion
+    variable = v
+  [../]
+[]
+
+[BCs]
+  [./all]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    function = exact_fn
+  [../]
+
+  [./left_v]
+    type = DirichletBC
+    variable = v
+    boundary = &#x27;3&#x27;
+    value = 0
+  [../]
+
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = &#x27;1&#x27;
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Outputs]
+  file_base = out_nodal_var_restart
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="41ecf1b5-a258-4dae-83c1-a5079b00a09c"><div class="modal-content"><h4>modules/combined/test/tests/linear_elasticity/extra_stress.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 128
+  ny = 1
+  xmax = 3.2
+  ymax = 0.025
+  elem_type = QUAD4
+[]
+
+[Modules/TensorMechanics/Master/All]
+  add_variables = true
+  generate_output = &#x27;stress_xx stress_xy stress_yy stress_zz strain_xx strain_xy strain_yy&#x27;
+[]
+
+[AuxVariables]
+  [./c]
+  [../]
+[]
+
+[ICs]
+  [./c_IC]
+    type = BoundingBoxIC
+    variable = c
+    x1 = -1
+    y1 = -1
+    x2 = 1.6
+    y2 = 1
+    inside = 0
+    outside = 1
+    block = 0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    block = 0
+    C_ijkl = &#x27;104 74 74 104 74 104 47.65 47.65 47.65&#x27;
+    fill_method = symmetric9
+    base_name = matrix
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+    block = 0
+    base_name = matrix
+  [../]
+  [./strain]
+    type = ComputeSmallStrain
+    block = 0
+    base_name = matrix
+  [../]
+  [./elasticity_tensor_ppt]
+    type = ComputeElasticityTensor
+    block = 0
+    C_ijkl = &#x27;0.104 0.074 0.074 0.104 0.074 0.104 0.04765 0.04765 0.04765&#x27;
+    fill_method = symmetric9
+    base_name = ppt
+  [../]
+  [./stress_ppt]
+    type = ComputeLinearElasticStress
+    block = 0
+    base_name = ppt
+  [../]
+  [./strain_ppt]
+    type = ComputeSmallStrain
+    block = 0
+    base_name = ppt
+  [../]
+  [./const_stress]
+    type = ComputeExtraStressConstant
+    block = 0
+    base_name = ppt
+    extra_stress_tensor = &#x27;-0.288 -0.373 -0.2747 0 0 0&#x27;
+  [../]
+  [./global_stress]
+    type = TwoPhaseStressMaterial
+    base_A = matrix
+    base_B = ppt
+  [../]
+  [./switching]
+    type = SwitchingFunctionMaterial
+    eta = c
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left_x right_x bottom_y top_y&#x27;
+  [./bottom_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./left_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./right_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = right
+    value = 0
+  [../]
+  [./top_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = top
+    value = 0
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c8006ae8-a96e-4d1c-897b-f878c6049e79"><div class="modal-content"><h4>modules/phase_field/test/tests/rigidbodymotion/grain_motion.i</h4><pre class="moose-pre"><code class="language-text"># test file for applyting advection term and observing rigid body motion of grains
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 25
+  ny = 15
+  nz = 0
+  xmax = 50
+  ymax = 25
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./c]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./w]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./eta]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./c_res]
+    type = SplitCHParsed
+    variable = c
+    f_name = F
+    kappa_name = kappa_c
+    w = w
+    args = eta
+  [../]
+  [./w_res]
+    type = SplitCHWRes
+    variable = w
+    mob_name = M
+  [../]
+  [./time]
+    type = CoupledTimeDerivative
+    variable = w
+    v = c
+  [../]
+  [./motion]
+    type = MultiGrainRigidBodyMotion
+    variable = w
+    c = c
+    v = eta
+    grain_tracker_object = grain_center
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+  [../]
+  [./eta_dot]
+    type = TimeDerivative
+    variable = eta
+  [../]
+  [./vadv_eta]
+    type = SingleGrainRigidBodyMotion
+    variable = eta
+    c = c
+    v = eta
+    grain_tracker_object = grain_center
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+  [../]
+  [./acint_eta]
+    type = ACInterface
+    variable = eta
+    mob_name = M
+    args = c
+    kappa_name = kappa_eta
+  [../]
+  [./acbulk_eta]
+    type = AllenCahn
+    variable = eta
+    mob_name = M
+    f_name = F
+    args = c
+  [../]
+[]
+
+[Materials]
+  [./pfmobility]
+    type = GenericConstantMaterial
+    prop_names = &#x27;M    kappa_c  kappa_eta&#x27;
+    prop_values = &#x27;5.0  2.0      0.1&#x27;
+  [../]
+  [./free_energy]
+    type = DerivativeParsedMaterial
+    args = &#x27;c eta&#x27;
+    constant_names = &#x27;barr_height  cv_eq&#x27;
+    constant_expressions = &#x27;0.1          1.0e-2&#x27;
+    function = 16*barr_height*(c-cv_eq)^2*(1-cv_eq-c)^2+(c-eta)^2
+    derivative_order = 2
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./forces]
+    type = GrainForcesPostprocessor
+    grain_force = grain_force
+  [../]
+  [./grain_volumes]
+    type = FeatureVolumeVectorPostprocessor
+    flood_counter = grain_center
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./grain_center]
+    type = GrainTracker
+    variable = eta
+    outputs = none
+    compute_var_to_feature_map = true
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+  [./grain_force]
+    type = ConstantGrainForceAndTorque
+    execute_on = &#x27;linear nonlinear&#x27;
+    force = &#x27;0.5 0.0 0.0 &#x27;
+    torque = &#x27;0.0 0.0 10.0 &#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  nl_max_its = 30
+  scheme = bdf2
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -ksp_gmres_restart -sub_ksp_type -sub_pc_type -pc_asm_overlap&#x27;
+  petsc_options_value = &#x27;asm         31   preonly   lu      1&#x27;
+  l_max_its = 30
+  l_tol = 1.0e-4
+  nl_rel_tol = 1.0e-10
+  start_time = 0.0
+  dt = 0.2
+  num_steps = 1
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[ICs]
+  [./rect_c]
+    y2 = 20.0
+    y1 = 5.0
+    inside = 1.0
+    x2 = 30.0
+    variable = c
+    x1 = 10.0
+    type = BoundingBoxIC
+  [../]
+  [./rect_eta]
+    y2 = 20.0
+    y1 = 5.0
+    inside = 1.0
+    x2 = 30.0
+    variable = eta
+    x1 = 10.0
+    type = BoundingBoxIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="479baf65-de10-47e2-9a99-f58b6f03ec9f"><div class="modal-content"><h4>modules/chemical_reactions/examples/calcium_bicarbonate/calcium_bicarbonate.i</h4><pre class="moose-pre"><code class="language-text"># Example of reactive transport model with precipitation and dissolution.
+# Calcium (ca2) and bicarbonate (hco3) reaction to form calcite (CaCO3).
+# Models bicarbonate injection following calcium injection, so that a
+# moving reaction front forms a calcite precipitation zone. As the front moves,
+# the upstream side of the front continues to form calcite via precipitation,
+# while at the downstream side, dissolution of the solid calcite occurs.
+#
+# The reaction network considered is as follows:
+# Aqueous equilibrium reactions:
+# a)  h+ + hco3- = CO2(aq),             Keq = 10^(6.341)
+# b)  hco3- = h+ + CO23-,               Keq = 10^(-10.325)
+# c)  ca2+ + hco3- = h+ + CaCO3(aq),    Keq = 10^(-7.009)
+# d)  ca2+ + hco3- = cahco3+,           Keq = 10^(-0.653)
+# e)  ca2+ = h+ + CaOh+,                Keq = 10^(-12.85)
+# f)  - h+ = oh-,                       Keq = 10^(-13.991)
+#
+# Kinetic reactions
+# g)  ca2+ + hco3- = h+ + CaCO3(s),     A = 0.461 m^2/L, k = 6.456542e-2 mol/m^2 s,
+#                                       Keq = 10^(1.8487)
+#
+# The primary chemical species are h+, hco3- and ca2+. The pressure gradient is fixed,
+# and a conservative tracer is also included.
+#
+# This example is taken from:
+# Guo et al, A parallel, fully coupled, fully implicit solution to reactive
+# transport in porous media using the preconditioned Jacobian-Free Newton-Krylov
+# Method, Advances in Water Resources, 53, 101-108 (2013).
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 100
+  xmax = 1
+  ymax = 0.25
+[]
+
+[Variables]
+  [./tracer]
+  [../]
+  [./ca2+]
+  [../]
+  [./h+]
+    initial_condition = 1.0e-7
+    scaling = 1e6
+  [../]
+  [./hco3-]
+  [../]
+[]
+
+[AuxVariables]
+  [./pressure]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[ICs]
+  [./pressure_ic]
+    type = FunctionIC
+    variable = pressure
+    function = pic
+  [../]
+  [./hco3_ic]
+    type = BoundingBoxIC
+    variable = hco3-
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 0.25
+    inside = 5.0e-2
+    outside = 1.0e-6
+  [../]
+  [./ca2_ic]
+    type = BoundingBoxIC
+    variable = ca2+
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 0.25
+    inside = 1.0e-6
+    outside = 5.0e-2
+  [../]
+  [./tracer_ic]
+    type = BoundingBoxIC
+    variable = tracer
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 0.25
+    inside = 1.0
+    outside = 0.0
+  [../]
+[]
+
+[Functions]
+  [./pic]
+    type = ParsedFunction
+    value = 60-50*x
+  [../]
+[]
+
+[ReactionNetwork]
+  [./AqueousEquilibriumReactions]
+    primary_species = &#x27;ca2+ hco3- h+&#x27;
+    secondary_species = &#x27;co2_aq co32- caco3_aq cahco3+ caoh+ oh-&#x27;
+    pressure = pressure
+    reactions = &#x27;h+ + hco3- = co2_aq 6.341,
+                 hco3- - h+ = co32- -10.325,
+                 ca2+ + hco3- - h+ = caco3_aq -7.009,
+                 ca2+ + hco3- = cahco3+ -0.653,
+                 ca2+ - h+ = caoh+ -12.85,
+                 - h+ = oh- -13.991&#x27;
+  [../]
+  [./SolidKineticReactions]
+    primary_species = &#x27;ca2+ hco3- h+&#x27;
+    kin_reactions = &#x27;ca2+ + hco3- - h+ = caco3_s&#x27;
+    secondary_species = caco3_s
+    log10_keq = 1.8487
+    reference_temperature = 298.15
+    system_temperature = 298.15
+    gas_constant = 8.314
+    specific_reactive_surface_area = 4.61e-4
+    kinetic_rate_constant = 6.456542e-7
+    activation_energy = 1.5e4
+  [../]
+[]
+
+[Kernels]
+  [./tracer_ie]
+    type = PrimaryTimeDerivative
+    variable = tracer
+  [../]
+  [./tracer_pd]
+    type = PrimaryDiffusion
+    variable = tracer
+  [../]
+  [./tracer_conv]
+    type = PrimaryConvection
+    variable = tracer
+    p = pressure
+  [../]
+  [./ca2+_ie]
+    type = PrimaryTimeDerivative
+    variable = ca2+
+  [../]
+  [./ca2+_pd]
+    type = PrimaryDiffusion
+    variable = ca2+
+  [../]
+  [./ca2+_conv]
+    type = PrimaryConvection
+    variable = ca2+
+    p = pressure
+  [../]
+  [./h+_ie]
+    type = PrimaryTimeDerivative
+    variable = h+
+  [../]
+  [./h+_pd]
+    type = PrimaryDiffusion
+    variable = h+
+  [../]
+  [./h+_conv]
+    type = PrimaryConvection
+    variable = h+
+    p = pressure
+  [../]
+  [./hco3-_ie]
+    type = PrimaryTimeDerivative
+    variable = hco3-
+  [../]
+  [./hco3-_pd]
+    type = PrimaryDiffusion
+    variable = hco3-
+  [../]
+  [./hco3-_conv]
+    type = PrimaryConvection
+    variable = hco3-
+    p = pressure
+  [../]
+[]
+
+[BCs]
+  [./tracer_left]
+    type = DirichletBC
+    variable = tracer
+    boundary = left
+    value = 1.0
+  [../]
+  [./tracer_right]
+    type = ChemicalOutFlowBC
+    variable = tracer
+    boundary = right
+  [../]
+  [./ca2+_left]
+    type = SinDirichletBC
+    variable = ca2+
+    boundary = left
+    initial = 5.0e-2
+    final = 1.0e-6
+    duration = 1
+  [../]
+  [./ca2+_right]
+    type = ChemicalOutFlowBC
+    variable = ca2+
+    boundary = right
+  [../]
+  [./hco3-_left]
+    type = SinDirichletBC
+    variable = hco3-
+    boundary = left
+    initial = 1.0e-6
+    final = 5.0e-2
+    duration = 1
+  [../]
+  [./hco3-_right]
+    type = ChemicalOutFlowBC
+    variable = hco3-
+    boundary = right
+  [../]
+  [./h+_left]
+    type = DirichletBC
+    variable = h+
+    boundary = left
+    value = 1.0e-7
+  [../]
+  [./h+_right]
+    type = ChemicalOutFlowBC
+    variable = h+
+    boundary = right
+  [../]
+[]
+
+[Materials]
+  [./porous]
+    type = GenericConstantMaterial
+    prop_names = &#x27;diffusivity conductivity porosity&#x27;
+    prop_values = &#x27;1e-7 2e-4 0.2&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  l_max_its = 50
+  l_tol = 1e-5
+  nl_max_its = 10
+  nl_rel_tol = 1e-5
+  end_time = 10
+  [./TimeStepper]
+    type = ConstantDT
+    dt = 0.1
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Outputs]
+  perf_graph = true
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0a714903-a1e2-4336-8fda-b039156d9d81"><div class="modal-content"><h4>modules/chemical_reactions/test/tests/aqueous_equilibrium/1species.i</h4><pre class="moose-pre"><code class="language-text"># Simple equilibrium reaction example to illustrate the use of the AqueousEquilibriumReactions
+# action.
+# In this example, a single primary species a is transported by diffusion and convection
+# from the left of the porous medium, reacting to form an equilibrium species pa2 according to
+# the equilibrium reaction specified in the AqueousEquilibriumReactions block as:
+#
+#  reactions = &#x27;2a = pa2 1&#x27;
+#
+# where the 2 is the weight of the equilibrium species, and the 1 refers to the equilibrium
+# constant (log10(Keq) = 1).
+#
+# The AqueousEquilibriumReactions action creates all the required kernels and auxkernels
+# to compute the reaction given by the above equilibrium reaction equation.
+#
+# Specifically, it adds to following:
+# * An AuxVariable named &#x27;pa2&#x27; (given in the reactions equations)
+# * A AqueousEquilibriumRxnAux AuxKernel for this AuxVariable with all parameters
+# * A CoupledBEEquilibriumSub Kernel for each primary species with all parameters
+# * A CoupledDiffusionReactionSub Kernel for each primary species with all parameters
+# * A CoupledConvectionReactionSub Kernel for each primary species with all parameters if
+# pressure is a coupled variable
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+[]
+
+[Variables]
+  [./a]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.0
+      y1 = 0.0
+      x2 = 1e-2
+      y2 = 1
+      inside = 1.0e-2
+      outside = 1.0e-10
+      variable = a
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  [./pressure]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[ICs]
+  [./pressure]
+    type = FunctionIC
+    variable = pressure
+    function = 2-x
+  [../]
+[]
+
+[ReactionNetwork]
+  [./AqueousEquilibriumReactions]
+    primary_species = a
+    reactions = &#x27;2a = pa2 1&#x27;
+    secondary_species = pa2
+    pressure = pressure
+  [../]
+[]
+
+[Kernels]
+  [./a_ie]
+    type = PrimaryTimeDerivative
+    variable = a
+  [../]
+  [./a_diff]
+    type = PrimaryDiffusion
+    variable = a
+  [../]
+  [./a_conv]
+    type = PrimaryConvection
+    variable = a
+    p = pressure
+  [../]
+[]
+
+[BCs]
+  [./a_right]
+    type = ChemicalOutFlowBC
+    variable = a
+    boundary = right
+  [../]
+[]
+
+[Materials]
+  [./porous]
+    type = GenericConstantMaterial
+    prop_names = &#x27;diffusivity conductivity porosity&#x27;
+    prop_values = &#x27;1e-4 1e-4 0.2&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  nl_abs_tol = 1e-12
+  start_time = 0.0
+  end_time = 100
+  dt = 10.0
+[]
+
+[Outputs]
+  file_base = 1species_out
+  exodus = true
+  perf_graph = true
+  print_linear_residuals = true
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="34fad280-de59-4afe-bcd2-ae3cc543a5b0"><div class="modal-content"><h4>modules/chemical_reactions/test/tests/parser/equilibrium_action.i</h4><pre class="moose-pre"><code class="language-text"># Test AqueousEquilibriumReactions parser
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+[]
+
+[Variables]
+  [./a]
+  [../]
+  [./b]
+  [../]
+[]
+
+[AuxVariables]
+  [./pressure]
+  [../]
+[]
+
+[ICs]
+  [./a]
+    type = BoundingBoxIC
+    variable = a
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 1
+    inside = 1.0e-2
+    outside = 1.0e-10
+  [../]
+  [./b]
+    type = BoundingBoxIC
+    variable = b
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 1
+    inside = 1.0e-2
+    outside = 1.0e-10
+  [../]
+  [./pressure]
+    type = FunctionIC
+    variable = pressure
+    function = 2-x
+  [../]
+[]
+
+[ReactionNetwork]
+  [./AqueousEquilibriumReactions]
+    primary_species = &#x27;a b&#x27;
+    reactions = &#x27;2a = pa2 2,
+                 (1.0)a + (1.0)b = pab -2&#x27;
+    secondary_species = &#x27;pa2 pab&#x27;
+    pressure = pressure
+  [../]
+[]
+
+[Kernels]
+  [./a_ie]
+    type = PrimaryTimeDerivative
+    variable = a
+  [../]
+  [./a_diff]
+    type = PrimaryDiffusion
+    variable = a
+  [../]
+  [./a_conv]
+    type = PrimaryConvection
+    variable = a
+    p = pressure
+  [../]
+  [./b_ie]
+    type = PrimaryTimeDerivative
+    variable = b
+  [../]
+  [./b_diff]
+    type = PrimaryDiffusion
+    variable = b
+  [../]
+  [./b_conv]
+    type = PrimaryConvection
+    variable = b
+    p = pressure
+  [../]
+[]
+
+[BCs]
+  [./a_left]
+    type = DirichletBC
+    variable = a
+    boundary = left
+    value = 1.0e-2
+  [../]
+  [./a_right]
+    type = ChemicalOutFlowBC
+    variable = a
+    boundary = right
+  [../]
+  [./b_left]
+    type = DirichletBC
+    variable = b
+    boundary = left
+    value = 1.0e-2
+  [../]
+  [./b_right]
+    type = ChemicalOutFlowBC
+    variable = b
+    boundary = right
+  [../]
+[]
+
+[Materials]
+  [./porous]
+    type = GenericConstantMaterial
+    prop_names = &#x27;diffusivity conductivity porosity&#x27;
+    prop_values = &#x27;1e-4 1e-4 0.2&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  nl_abs_tol = 1e-12
+  end_time = 10
+  dt = 10
+[]
+
+[Outputs]
+  file_base = equilibrium_out
+  exodus = true
+  perf_graph = true
+  print_linear_residuals = true
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="446c271a-a771-43c7-9341-8534d5676116"><div class="modal-content"><h4>modules/chemical_reactions/test/tests/aqueous_equilibrium/2species_without_action.i</h4><pre class="moose-pre"><code class="language-text"># Simple equilibrium reaction example to illustrate the use of the AqueousEquilibriumReactions
+# action.
+# In this example, two primary species a and b are transported by diffusion and convection
+# from the left of the porous medium, reacting to form two equilibrium species pa2 and pab
+# according to the equilibrium reaction specified in the AqueousEquilibriumReactions block as:
+#
+#      reactions = &#x27;2a = pa2     2
+#                   a + b = pab -2&#x27;
+#
+# where the 2 is the weight of the equilibrium species, the 2 on the RHS of the first reaction
+# refers to the equilibrium constant (log10(Keq) = 2), and the -2 on the RHS of the second
+# reaction equates to log10(Keq) = -2.
+#
+# This example is identical to 2species.i, except that it explicitly includes all AuxKernels
+# and Kernels that are set up by the action in 2species.i
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+[]
+
+[Variables]
+  [./a]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.0
+      y1 = 0.0
+      x2 = 1.0e-10
+      y2 = 1
+      inside = 1.0e-2
+      outside = 1.0e-10
+    [../]
+  [../]
+  [./b]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = 0.0
+      y1 = 0.0
+      x2 = 1.0e-10
+      y2 = 1
+      inside = 1.0e-2
+      outside = 1.0e-10
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  [./pressure]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./pa2]
+  [../]
+  [./pab]
+  [../]
+[]
+
+[AuxKernels]
+  [./pa2eq]
+    type = AqueousEquilibriumRxnAux
+    variable = pa2
+    v = a
+    sto_v = 2
+    log_k = 2
+  [../]
+  [./pabeq]
+    type = AqueousEquilibriumRxnAux
+    variable = pab
+    v = &#x27;a b&#x27;
+    sto_v = &#x27;1 1&#x27;
+    log_k = -2
+  [../]
+[]
+
+[ICs]
+  [./pressure]
+    type = FunctionIC
+    variable = pressure
+    function = 2-x
+  [../]
+[]
+
+[Kernels]
+  [./a_ie]
+    type = PrimaryTimeDerivative
+    variable = a
+  [../]
+  [./a_diff]
+    type = PrimaryDiffusion
+    variable = a
+  [../]
+  [./a_conv]
+    type = PrimaryConvection
+    variable = a
+    p = pressure
+  [../]
+  [./b_ie]
+    type = PrimaryTimeDerivative
+    variable = b
+  [../]
+  [./b_diff]
+    type = PrimaryDiffusion
+    variable = b
+  [../]
+  [./b_conv]
+    type = PrimaryConvection
+    variable = b
+    p = pressure
+  [../]
+  [./a1eq]
+    type = CoupledBEEquilibriumSub
+    variable = a
+    log_k = 2
+    weight = 2
+    sto_u = 2
+  [../]
+  [./a1diff]
+    type = CoupledDiffusionReactionSub
+    variable = a
+    log_k = 2
+    weight = 2
+    sto_u = 2
+  [../]
+  [./a1conv]
+    type = CoupledConvectionReactionSub
+    variable = a
+    log_k = 2
+    weight = 2
+    sto_u = 2
+    p = pressure
+  [../]
+  [./a2eq]
+    type = CoupledBEEquilibriumSub
+    variable = a
+    v = b
+    log_k = -2
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+  [../]
+  [./a2diff]
+    type = CoupledDiffusionReactionSub
+    variable = a
+    v = b
+    log_k = -2
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+  [../]
+  [./a2conv]
+    type = CoupledConvectionReactionSub
+    variable = a
+    v = b
+    log_k = -2
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+    p = pressure
+  [../]
+  [./b2eq]
+    type = CoupledBEEquilibriumSub
+    variable = b
+    v = a
+    log_k = -2
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+  [../]
+  [./b2diff]
+    type = CoupledDiffusionReactionSub
+    variable = b
+    v = a
+    log_k = -2
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+  [../]
+  [./b2conv]
+    type = CoupledConvectionReactionSub
+    variable = b
+    v = a
+    log_k = -2
+    weight = 1
+    sto_v = 1
+    sto_u = 1
+    p = pressure
+  [../]
+[]
+
+[BCs]
+  [./a_left]
+    type = DirichletBC
+    variable = a
+    boundary = left
+    value = 1.0e-2
+  [../]
+  [./a_right]
+    type = ChemicalOutFlowBC
+    variable = a
+    boundary = right
+  [../]
+  [./b_left]
+    type = DirichletBC
+    variable = b
+    boundary = left
+    value = 1.0e-2
+  [../]
+  [./b_right]
+    type = ChemicalOutFlowBC
+    variable = b
+    boundary = right
+  [../]
+[]
+
+[Materials]
+  [./porous]
+    type = GenericConstantMaterial
+    prop_names = &#x27;diffusivity conductivity porosity&#x27;
+    prop_values = &#x27;1e-4 1e-4 0.2&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  nl_abs_tol = 1e-12
+  start_time = 0.0
+  end_time = 100
+  dt = 10.0
+[]
+
+[Outputs]
+  file_base = 2species_out
+  exodus = true
+  perf_graph = true
+  print_linear_residuals = true
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6f307cab-5e89-4e46-a0d5-0f8b3ac7c2e3"><div class="modal-content"><h4>test/tests/mesh/adapt/initial_adaptivity_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -1
+  xmax = 1
+  ymin = -1
+  ymax = 1
+  nx = 2
+  ny = 2
+  elem_type = QUAD9
+[]
+
+[Functions]
+  [./exact_fn]
+    type = ParsedFunction
+    value = x*x+y*y
+  [../]
+
+  [./ffn]
+    type = ParsedFunction
+    value = -4
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = SECOND
+    family = LAGRANGE
+    [./InitialCondition]
+      type = BoundingBoxIC
+      x1 = -2
+      y1 = -2
+      x2 =  0
+      y2 =  2
+      inside = 1
+      outside = 0
+    [../]
+  [../]
+[]
+
+[Kernels]
+  [./udiff]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./forcing_fn]
+    type = BodyForce
+    variable = u
+    function = ffn
+  [../]
+[]
+
+[BCs]
+  [./all]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+    function = exact_fn
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  [./Adaptivity]
+    initial_adaptivity = 5
+    refine_fraction = 0.2
+    coarsen_fraction = 0.3
+    max_h_level = 4
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6f1ef841-3b9d-4375-b775-66075df7853d"><div class="modal-content"><h4>modules/phase_field/test/tests/rigidbodymotion/update_orientation_verify.i</h4><pre class="moose-pre"><code class="language-text"># test file for applyting advection term and observing rigid body motion of grains
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 14
+  ny = 7
+  nz = 7
+  xmax = 40
+  ymax = 25
+  zmax = 25
+  elem_type = HEX8
+[]
+
+[Variables]
+  [./c]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./w]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./eta]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./c_res]
+    type = SplitCHParsed
+    variable = c
+    f_name = F
+    kappa_name = kappa_c
+    w = w
+    args = eta
+  [../]
+  [./w_res]
+    type = SplitCHWRes
+    variable = w
+    mob_name = M
+  [../]
+  [./time]
+    type = CoupledTimeDerivative
+    variable = w
+    v = c
+  [../]
+  [./motion]
+    type = MultiGrainRigidBodyMotion
+    variable = w
+    c = c
+    v = eta
+    grain_tracker_object = grain_center
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+  [../]
+  [./eta_dot]
+    type = TimeDerivative
+    variable = eta
+  [../]
+  [./vadv_eta]
+    type = SingleGrainRigidBodyMotion
+    variable = eta
+    c = c
+    v = eta
+    grain_tracker_object = grain_center
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+  [../]
+  [./acint_eta]
+    type = ACInterface
+    variable = eta
+    mob_name = M
+    args = c
+    kappa_name = kappa_eta
+  [../]
+  [./acbulk_eta]
+    type = AllenCahn
+    variable = eta
+    mob_name = M
+    f_name = F
+    args = c
+  [../]
+[]
+
+[Materials]
+  [./pfmobility]
+    type = GenericConstantMaterial
+    prop_names = &#x27;M    kappa_c  kappa_eta&#x27;
+    prop_values = &#x27;5.0  2.0      0.1&#x27;
+  [../]
+  [./free_energy]
+    type = DerivativeParsedMaterial
+    args = &#x27;c eta&#x27;
+    constant_names = &#x27;barr_height  cv_eq&#x27;
+    constant_expressions = &#x27;0.1          1.0e-2&#x27;
+    function = 16*barr_height*(c-cv_eq)^2*(1-cv_eq-c)^2+(c-eta)^2
+    derivative_order = 2
+  [../]
+[]
+
+[AuxVariables]
+  [./unique_grains]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./var_indices]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./centroids]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./vadv_x]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./vadv_y]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./angle_initial]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./euler_angle]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./unique_grains]
+    type = FeatureFloodCountAux
+    variable = unique_grains
+    flood_counter = grain_center
+    field_display = UNIQUE_REGION
+    execute_on = timestep_begin
+  [../]
+  [./var_indices]
+    type = FeatureFloodCountAux
+    variable = var_indices
+    flood_counter = grain_center
+    field_display = VARIABLE_COLORING
+    execute_on = timestep_begin
+  [../]
+  [./centroids]
+    type = FeatureFloodCountAux
+    variable = centroids
+    execute_on = timestep_begin
+    field_display = CENTROID
+    flood_counter = grain_center
+  [../]
+  [./vadv_x]
+    type = GrainAdvectionAux
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+    grain_tracker_object = grain_center
+    execute_on = timestep_begin
+    component = x
+    variable = vadv_x
+  [../]
+  [./vadv_y]
+    type = GrainAdvectionAux
+    grain_force = grain_force
+    grain_volumes = grain_volumes
+    grain_tracker_object = grain_center
+    execute_on = timestep_begin
+    component = y
+    variable = vadv_y
+  [../]
+  [./angle_initial]
+    type = OutputEulerAngles
+    variable = angle_initial
+    euler_angle_provider = euler_angle_initial
+    grain_tracker = grain_center
+    output_euler_angle = phi2
+    execute_on = timestep_begin
+  [../]
+  [./angle]
+    type = OutputEulerAngles
+    variable = euler_angle
+    euler_angle_provider = euler_angle
+    grain_tracker = grain_center
+    output_euler_angle = phi2
+    execute_on = timestep_begin
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./forces]
+    type = GrainForcesPostprocessor
+    grain_force = grain_force
+  [../]
+  [./grain_volumes]
+    type = FeatureVolumeVectorPostprocessor
+    flood_counter = grain_center
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+  [./angle_check]
+    type = EulerAngleUpdaterCheck
+    grain_tracker_object = grain_center
+    euler_angle_updater = euler_angle
+    grain_torques_object = grain_force
+    grain_volumes = grain_volumes
+    execute_on = timestep_begin
+  [../]
+[]
+
+[UserObjects]
+  [./grain_center]
+    type = GrainTracker
+    variable = eta
+    outputs = none
+    compute_var_to_feature_map = true
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+  [./grain_force]
+    type = ConstantGrainForceAndTorque
+    execute_on = &#x27;initial timestep_begin linear nonlinear&#x27;
+    force = &#x27;0.5 0.0 0.0 &#x27;
+    torque = &#x27;-200.0 -120.0 1000.0&#x27;
+  [../]
+  [./euler_angle_initial]
+    type = RandomEulerAngleProvider
+    grain_tracker_object = grain_center
+    seed = 12356
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+  [./euler_angle]
+    type = EulerAngleUpdater
+    grain_tracker_object = grain_center
+    euler_angle_provider = euler_angle_initial
+    grain_torques_object = grain_force
+    grain_volumes = grain_volumes
+    execute_on = timestep_begin
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -ksp_gmres_restart -sub_ksp_type -sub_pc_type -pc_asm_overlap&#x27;
+  petsc_options_value = &#x27;asm         31   preonly   lu      1&#x27;
+  nl_max_its = 30
+  l_max_its = 30
+  l_tol = 1.0e-4
+  nl_rel_tol = 1.0e-10
+  start_time = 0.0
+  dt = 0.2
+  num_steps = 2
+[]
+
+[Outputs]
+  csv = true
+  exodus = true
+[]
+
+[ICs]
+  [./rect_c]
+    y2 = 20.0
+    y1 = 5.0
+    z1 = 5.0
+    z2 = 20.0
+    inside = 1.0
+    x2 = 30.0
+    variable = c
+    x1 = 10.0
+    type = BoundingBoxIC
+  [../]
+  [./rect_eta]
+    y2 = 20.0
+    y1 = 5.0
+    inside = 1.0
+    x2 = 30.0
+    variable = eta
+    x1 = 10.0
+    z1 = 5.0
+    z2 = 20.0
+    type = BoundingBoxIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3c801217-4007-4721-991b-3bb1b08ac4c1"><div class="modal-content"><h4>modules/phase_field/test/tests/MultiPhase/switchingfunctionmultiphasematerial.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 30
+  ny = 30
+  xmin = 0
+  xmax = 30
+  ymin = 0
+  ymax = 30
+[]
+
+[GlobalParams]
+  block = 0
+[]
+
+[Variables]
+  [./c]
+  [../]
+  [./w]
+  [../]
+  [./eta1]
+  [../]
+  [./eta2]
+  [../]
+  [./eta3]
+  [../]
+  [./eta0]
+  [../]
+[]
+
+[ICs]
+
+  [./IC_eta2]
+    x1 = 0
+    y1 = 15
+    x2 = 30
+    y2 = 30
+    inside = 1.0
+    outside = 0.0
+    type = BoundingBoxIC
+    variable = eta2
+    int_width = 0
+  [../]
+  [./IC_eta3]
+    x1 = 15
+    y1 = 0
+    x2 = 30
+    y2 = 15
+    inside = 1.0
+    outside = 0.0
+    type = BoundingBoxIC
+    variable = eta3
+    int_width = 0
+  [../]
+  [./IC_eta4]
+    x1 = 0
+    y1 = 0
+    x2 = 15
+    y2 = 15
+    inside = 1.0
+    outside = 0.0
+    type = BoundingBoxIC
+    variable = eta0
+    int_width = 0
+  [../]
+  [./IC_c]
+    x1 = 15
+    y1 = 15
+    radius = 8.0
+    outvalue = 0.05
+    variable = c
+    invalue = 1.0
+    type = SmoothCircleIC
+    int_width = 3.0
+  [../]
+  [./IC_eta1]
+    x1 = 15
+    y1 = 15
+    radius = 8.0
+    outvalue = 0.0
+    variable = eta1
+    invalue = 1.0
+    type = SmoothCircleIC
+    int_width = 3.0
+  [../]
+[]
+
+# Not evalulating time evolution to improve test performance, since we are only testing
+# the material property. However, the kernel and free energy are left in place to allow
+# this test to be easily turned in to a working example
+
+#[Kernels]
+#  [./c_dot]
+#    type = CoupledTimeDerivative
+#    variable = w
+#    v = c
+#  [../]
+#  [./c_res]
+#    type = SplitCHParsed
+#    variable = c
+#    f_name = F
+#    kappa_name = kappa_c
+#    w = w
+#    args = &#x27;eta1 eta2 eta3 eta0&#x27;
+#  [../]
+#  [./w_res]
+#    # args = &#x27;c&#x27;
+#    type = SplitCHWRes
+#    variable = w
+#    mob_name = M
+#  [../]
+#  [./AC1_bulk]
+#    type = AllenCahn
+#    variable = eta1
+#    f_name = F
+#    args = &#x27;c eta2 eta3 eta0&#x27;
+#  [../]
+#  [./AC1_int]
+#    type = ACInterface
+#    variable = eta1
+#    kappa_name = kappa_s
+#  [../]
+#  [./e1_dot]
+#    type = TimeDerivative
+#    variable = eta1
+#  [../]
+#  [./AC2_bulk]
+#    type = AllenCahn
+#    variable = eta2
+#    f_name = F
+#    args = &#x27;c eta1 eta3 eta0&#x27;
+#  [../]
+#  [./AC2_int]
+#    type = ACInterface
+#    variable = eta2
+#  [../]
+#  [./e2_dot]
+#    type = TimeDerivative
+#    variable = eta2
+#  [../]
+#  [./AC3_bulk]
+#    type = AllenCahn
+#    variable = eta3
+#    f_name = F
+#    args = &#x27;c eta2 eta1 eta0&#x27;
+#  [../]
+#  [./AC3_int]
+#    type = ACInterface
+#    variable = eta3
+#  [../]
+#  [./e3_dot]
+#    type = TimeDerivative
+#    variable = eta3
+#  [../]
+#  [./AC4_bulk]
+#    type = AllenCahn
+#    variable = eta0
+#    f_name = F
+#    args = &#x27;c eta2 eta3 eta1&#x27;
+#  [../]
+#  [./AC4_int]
+#    type = ACInterface
+#    variable = eta0
+#  [../]
+#  [./e4_dot]
+#    type = TimeDerivative
+#    variable = eta0
+#  [../]
+#[]
+
+[Materials]
+  [./ha_test]
+    type = SwitchingFunctionMultiPhaseMaterial
+    h_name = ha
+    all_etas = &#x27;eta0 eta1 eta2 eta3&#x27;
+    phase_etas = &#x27;eta1&#x27;
+    outputs = exodus
+  [../]
+  [./hb_test]
+    type = SwitchingFunctionMultiPhaseMaterial
+    h_name = hb
+    all_etas = &#x27;eta0 eta1 eta2 eta3&#x27;
+    phase_etas = &#x27;eta0 eta2 eta3&#x27;
+    outputs = exodus
+  [../]
+  #[./ha]
+  #  type = DerivativeParsedMaterial
+  #  args = &#x27;eta1 eta2 eta3 eta0&#x27;
+  #  f_name = ha_parsed
+  #  function = &#x27;eta1^2/(eta1^2+eta2^2+eta3^2+eta0^2)&#x27;
+  #  derivative_order = 2
+  #  outputs = exodus
+  #[../]
+  #[./hb]
+  #  type = DerivativeParsedMaterial
+  #  args = &#x27;eta1 eta2 eta3 eta0&#x27;
+  #  f_name = hb_parsed
+  #  function = &#x27;(eta2^2+eta3^2+eta0^2)/(eta1^2+eta2^2+eta3^2+eta0^2)&#x27;
+  #  derivative_order = 2
+  #  outputs = exodus
+  #[../]
+
+  #[./FreeEng]
+  #  type = DerivativeParsedMaterial
+  #  args = &#x27;c eta1 eta2 eta3 eta0&#x27;
+  #  f_name = F
+  #  constant_names = &#x27;c1 c2 s g d e h z&#x27;
+  #  constant_expressions = &#x27;1.0 0.0 1.5 1.5 1.0 1.0 1 1.0&#x27;
+  #  material_property_names = &#x27;ha(eta1,eta2,eta3,eta0) hb(eta1,eta2,eta3,eta0)&#x27;
+  #  function = &#x27;a:=eta1^2/(eta1^2+eta2^2+eta3^2+eta0^2);f1:=ha*(c-c1)^2;b:=(eta2^2+eta3^2+eta0^2)/(eta1^2+eta2^2+eta3^2+eta0^2);f2:=hb*(c-c2)^2
+  #  ;f3:=1/4*eta1^4-1/2*eta1^2+1/4*eta2^4-1/2*eta2^2+1/4*eta3^4-1/2*eta3^2+1/4*eta0^4-1/2*eta0^2
+  #  ;f4:=z*s*(eta1^2*eta2^2+eta1^2*eta3^2+eta1^2*eta0^2)+g*(eta2^2*eta3^2+eta2^2*eta0^2+eta3^2*eta0^2);f:=1/4+e*f1+d*f2+h*(f3+f4);f&#x27;
+  #  derivative_order = 2
+  #[../]
+  [./const]
+    type = GenericConstantMaterial
+    prop_names = &#x27;kappa_c kappa_s kappa_op L M&#x27;
+    prop_values = &#x27;0 3 3 1.0 1.0&#x27;
+    outputs = exodus
+  [../]
+
+[]
+
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+[]
+
+[Problem]
+  solve = false
+  kernel_coverage_check = false
+[]
+
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c9a0cb89-7d1a-431d-887c-4a7aaec81829"><div class="modal-content"><h4>test/tests/indicators/value_jump_indicator/value_jump_indicator_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Adaptivity]
+  [./Indicators]
+    [./error]
+      type = ValueJumpIndicator
+      variable = something
+    [../]
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[ICs]
+  [./leftright]
+    type = BoundingBoxIC
+    variable = something
+    inside = 1
+    y2 = 1
+    y1 = 0
+    x2 = 0.5
+    x1 = 0
+  [../]
+[]
+
+[AuxVariables]
+  [./something]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;left&#x27;
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;right&#x27;
+    value = 1
+  [../]
+[]
+
+[Problem]
+  type = FEProblem
+  solve = false
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="3d2d0ceb-c668-4a60-9997-5adf8e284629" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#ae8857fb-7c62-4f6e-8446-899bd12b2d80" class="tooltipped" data-position="left" data-tooltip="Class Description">Class Description</a></li><li><a href="#fa1a6d22-b541-458d-b7db-fadccd263871" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#748458ce-8c6c-4a97-a816-8b67bc9b31d2" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li><li><a href="#3d2d0ceb-c668-4a60-9997-5adf8e284629" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

@@ -1,0 +1,1237 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>GreaterThanLessThanPostprocessor.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="09820b8a-49df-47aa-a17b-b93519df5961"><i class="material-icons">menu</i></a><ul class="sidenav" id="09820b8a-49df-47aa-a17b-b93519df5961"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">postprocessors</span><a href="#" class="breadcrumb">GreaterThanLessThanPostprocessor</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="06fe20c0-6afe-401a-bbc8-6ee4086c1110" data-section-level="1" data-section-text="GreaterThanLessThanPostprocessor"><h1 id="greaterthanlessthanpostprocessor">GreaterThanLessThanPostprocessor</h1><p>Count number of DOFs of a non-linear variable that are greater than or less than a given threshold</p><section class="scrollspy" id="f4c3662d-dd0d-4c99-87e5-d6e97de60eb7" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The <code>GreaterThanLessThanPostprocessor</code> computes the total number of degrees of freedom of a non-linear <code>variable</code> that are greater than or less than the parameter <code>value</code>. The comparison of greater or less is specified using the <code>MooseEnum</code> parameter <code>comparator</code>; the possible values of <code>comparator</code> are <code>greater</code> or <code>less</code>. The computation may also be restricted to a subdomain using the parameter <code>subdomain</code>.</p></section><section class="scrollspy" id="8e55e964-8735-465e-ac87-965d58e48736" data-section-level="2" data-section-text="Example Syntax"><h2 id="example-syntax">Example Syntax</h2><pre class="moose-pre"><code class="language-text">[Postprocessors]
+  [active_lm]
+    type = GreaterThanLessThanPostprocessor
+    variable = lm
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = 1e-8
+  []
+  [violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = -1e-8
+    comparator = &#x27;less&#x27;
+  []
+[]
+</code></pre><a href="#aab4ad22-612f-4d09-827c-62740e472a4c" class="modal-trigger">(test/tests/nodalkernels/constraint_enforcement/lower-bound.i)</a><div class="modal moose-modal" id="aab4ad22-612f-4d09-827c-62740e472a4c"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/nodalkernels/constraint_enforcement/lower-bound.i</h4><pre class="moose-pre"><code class="language-text">l=10
+nx=100
+num_steps=10
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmax = ${l}
+  nx = ${nx}
+[]
+
+[Variables]
+  [u]
+  []
+  [lm]
+  []
+[]
+
+[ICs]
+  [u]
+    type = FunctionIC
+    variable = u
+    function = &#x27;${l} - x&#x27;
+  []
+[]
+
+[Kernels]
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [ffn]
+    type = BodyForce
+    variable = u
+    function = &#x27;-1&#x27;
+  []
+[]
+
+[NodalKernels]
+  [positive_constraint]
+    type = LowerBoundNodalKernel
+    variable = lm
+    v = u
+    exclude_boundaries = &#x27;left right&#x27;
+  []
+  [forces]
+    type = CoupledForceNodalKernel
+    variable = u
+    v = lm
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    boundary = left
+    value = ${l}
+    variable = u
+  []
+  [right]
+    type = DirichletBC
+    boundary = right
+    value = 0
+    variable = u
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = ${num_steps}
+  solve_type = NEWTON
+  dtmin = 1
+  petsc_options_iname = &#x27;-snes_max_linear_solve_fail -ksp_max_it -pc_type -sub_pc_factor_levels -snes_linesearch_type&#x27;
+  petsc_options_value = &#x27;0                           30          asm      16                    basic&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [csv]
+    type = CSV
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+  [dof]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Postprocessors]
+  [active_lm]
+    type = GreaterThanLessThanPostprocessor
+    variable = lm
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = 1e-8
+  []
+  [violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = -1e-8
+    comparator = &#x27;less&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="25354f1c-2b58-4b49-803a-e04bba78f5bc" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="0ae59d30-f7cc-4136-ac8b-2c56c9e8c1e9" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable to conduct a comparison for</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>VariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable to conduct a comparison for</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="b3dcee37-1160-479f-89f4-81f06a020475" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">comparator</span><span class="moose-parameter-header-default">greater</span><span class="moose-parameter-header-description">The comparison to perform between the variable and the provided value</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>greater</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>greater less</p><p class="moose-parameter-description"><span>Description:</span>The comparison to perform between the variable and the provided value</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM TRANSFER</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">subdomain</span><span class="moose-parameter-header-description">The subdomain that the variable lives on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>SubdomainName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The subdomain that the variable lives on</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">value</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The value to compare against</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The value to compare against</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="98a28b75-7e63-464c-9c3f-a87af478468c" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">allow_duplicate_execution_on_initial</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preaux</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREAUX</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREAUX</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preic</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREIC during initial setup</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREIC during initial setup</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="ca3a8956-252d-4056-9fa3-04c0c44bc897" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#b648c844-b924-422d-ab99-1ae4561b90ea" class="modal-trigger">test/tests/nodalkernels/constraint_enforcement/upper-and-lower-bound.i</a></li><li><a href="#84622f1f-4b8e-416d-b18d-305085895775" class="modal-trigger">test/tests/multiapps/grid-sequencing/vi-coarser.i</a></li><li><a href="#a941bd04-2075-4e0c-b569-f66c682cd046" class="modal-trigger">test/tests/multiapps/grid-sequencing/vi-fine-alone.i</a></li><li><a href="#da2ef3f6-98ed-4fcd-a363-383eb3c777cf" class="modal-trigger">test/tests/nodalkernels/constraint_enforcement/upper-bound.i</a></li><li><a href="#324ede6d-3e01-4487-b046-43ce2e32906d" class="modal-trigger">test/tests/nodalkernels/constraint_enforcement/lower-bound.i</a></li><li><a href="#4679e4ff-b35d-4e66-8c40-11d4547bb35a" class="modal-trigger">test/tests/multiapps/grid-sequencing/vi-fine.i</a></li><li><a href="#1a7ecbb3-4ca0-4704-87eb-74098ecee634" class="modal-trigger">test/tests/nodalkernels/constraint_enforcement/vi-bounding.i</a></li><li><a href="#bbddd12c-a894-4e1c-bac6-e778f9e04bf7" class="modal-trigger">test/tests/multiapps/grid-sequencing/vi-coarse.i</a></li></ul><div class="modal moose-modal" id="b648c844-b924-422d-ab99-1ae4561b90ea"><div class="modal-content"><h4>test/tests/nodalkernels/constraint_enforcement/upper-and-lower-bound.i</h4><pre class="moose-pre"><code class="language-text">l=10
+nx=100
+num_steps=10
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmax = ${l}
+  nx = ${nx}
+[]
+
+[Variables]
+  [u]
+  []
+  [lm_upper]
+  []
+  [lm_lower]
+  []
+[]
+
+[ICs]
+  [u]
+    type = FunctionIC
+    variable = u
+    function = &#x27;x&#x27;
+  []
+[]
+
+[Kernels]
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [ffn]
+    type = BodyForce
+    variable = u
+    function = &#x27;if(x&lt;5,-1,1)&#x27;
+  []
+[]
+
+[NodalKernels]
+  [upper_bound]
+    type = UpperBoundNodalKernel
+    variable = lm_upper
+    v = u
+    exclude_boundaries = &#x27;left right&#x27;
+    upper_bound = 10
+  []
+  [forces_from_upper]
+    type = CoupledForceNodalKernel
+    variable = u
+    v = lm_upper
+    coef = -1
+  []
+  [lower_bound]
+    type = LowerBoundNodalKernel
+    variable = lm_lower
+    v = u
+    exclude_boundaries = &#x27;left right&#x27;
+    lower_bound = 0
+  []
+  [forces_from_lower]
+    type = CoupledForceNodalKernel
+    variable = u
+    v = lm_lower
+    coef = 1
+  []
+[]
+
+
+[BCs]
+  [left]
+    type = DirichletBC
+    boundary = left
+    value = 0
+    variable = u
+  []
+  [right]
+    type = DirichletBC
+    boundary = right
+    value = ${l}
+    variable = u
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = ${num_steps}
+  solve_type = NEWTON
+  dtmin = 1
+  petsc_options_iname = &#x27;-snes_max_linear_solve_fail -ksp_max_it -pc_type -sub_pc_factor_levels -snes_linesearch_type&#x27;
+  petsc_options_value = &#x27;0                           30          asm      16                    basic&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [csv]
+    type = CSV
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+  [dof]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Postprocessors]
+  [active_upper_lm]
+    type = GreaterThanLessThanPostprocessor
+    variable = lm_upper
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = 1e-8
+    comparator = &#x27;greater&#x27;
+  []
+  [upper_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = ${fparse 10+1e-8}
+    comparator = &#x27;greater&#x27;
+  []
+  [active_lower_lm]
+    type = GreaterThanLessThanPostprocessor
+    variable = lm_lower
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = 1e-8
+    comparator = &#x27;greater&#x27;
+  []
+  [lower_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = -1e-8
+    comparator = &#x27;less&#x27;
+  []
+  [nls]
+    type = NumNonlinearIterations
+  []
+  [cum_nls]
+    type = CumulativeValuePostprocessor
+    postprocessor = nls
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="84622f1f-4b8e-416d-b18d-305085895775"><div class="modal-content"><h4>test/tests/multiapps/grid-sequencing/vi-coarser.i</h4><pre class="moose-pre"><code class="language-text">l=10
+nx=20
+num_steps=2
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmax = ${l}
+  nx = ${nx}
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[AuxVariables]
+  [bounds][]
+[]
+
+[Bounds]
+  [./u_upper_bounds]
+    type = ConstantBoundsAux
+    variable = bounds
+    bounded_variable = u
+    bound_type = upper
+    bound_value = ${l}
+  [../]
+  [./u_lower_bounds]
+    type = ConstantBoundsAux
+    variable = bounds
+    bounded_variable = u
+    bound_type = lower
+    bound_value = 0
+  [../]
+[]
+
+[ICs]
+  [u]
+    type = FunctionIC
+    variable = u
+    function = &#x27;x&#x27;
+  []
+[]
+
+[Kernels]
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [ffn]
+    type = BodyForce
+    variable = u
+    function = &#x27;if(x&lt;5,-1,1)&#x27;
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    boundary = left
+    value = 0
+    variable = u
+  []
+  [right]
+    type = DirichletBC
+    boundary = right
+    value = ${l}
+    variable = u
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = ${num_steps}
+  solve_type = NEWTON
+  dtmin = 1
+  petsc_options = &#x27;-snes_vi_monitor&#x27;
+  petsc_options_iname = &#x27;-snes_max_linear_solve_fail -ksp_max_it -pc_type -sub_pc_factor_levels -snes_linesearch_type -snes_type&#x27;
+  petsc_options_value = &#x27;0                           30          asm      16                    basic                 vinewtonrsls&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [csv]
+    type = CSV
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+  [dof]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Postprocessors]
+  active = &#x27;upper_violations lower_violations&#x27;
+  [upper_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = ${fparse 10+1e-8}
+    comparator = &#x27;greater&#x27;
+  []
+  [lower_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = -1e-8
+    comparator = &#x27;less&#x27;
+  []
+  [nls]
+    type = NumNonlinearIterations
+  []
+  [cum_nls]
+    type = CumulativeValuePostprocessor
+    postprocessor = nls
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a941bd04-2075-4e0c-b569-f66c682cd046"><div class="modal-content"><h4>test/tests/multiapps/grid-sequencing/vi-fine-alone.i</h4><pre class="moose-pre"><code class="language-text">l=10
+nx=80
+num_steps=2
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmax = ${l}
+  nx = ${nx}
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[AuxVariables]
+  [bounds][]
+[]
+
+[Bounds]
+  [./u_upper_bounds]
+    type = ConstantBoundsAux
+    variable = bounds
+    bounded_variable = u
+    bound_type = upper
+    bound_value = ${l}
+  [../]
+  [./u_lower_bounds]
+    type = ConstantBoundsAux
+    variable = bounds
+    bounded_variable = u
+    bound_type = lower
+    bound_value = 0
+  [../]
+[]
+
+[ICs]
+  [u]
+    type = FunctionIC
+    variable = u
+    function = &#x27;x&#x27;
+  []
+[]
+
+[Kernels]
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [ffn]
+    type = BodyForce
+    variable = u
+    function = &#x27;if(x&lt;5,-1,1)&#x27;
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    boundary = left
+    value = 0
+    variable = u
+  []
+  [right]
+    type = DirichletBC
+    boundary = right
+    value = ${l}
+    variable = u
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = ${num_steps}
+  solve_type = NEWTON
+  dtmin = 1
+  petsc_options = &#x27;-snes_vi_monitor&#x27;
+  petsc_options_iname = &#x27;-snes_max_linear_solve_fail -ksp_max_it -pc_type -sub_pc_factor_levels -snes_linesearch_type -snes_type&#x27;
+  petsc_options_value = &#x27;0                           30          asm      16                    basic                 vinewtonrsls&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [csv]
+    type = CSV
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+  [dof]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Postprocessors]
+  active = &#x27;upper_violations lower_violations&#x27;
+  [upper_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = ${fparse 10+1e-8}
+    comparator = &#x27;greater&#x27;
+  []
+  [lower_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = -1e-8
+    comparator = &#x27;less&#x27;
+  []
+  [nls]
+    type = NumNonlinearIterations
+  []
+  [cum_nls]
+    type = CumulativeValuePostprocessor
+    postprocessor = nls
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="da2ef3f6-98ed-4fcd-a363-383eb3c777cf"><div class="modal-content"><h4>test/tests/nodalkernels/constraint_enforcement/upper-bound.i</h4><pre class="moose-pre"><code class="language-text">l=10
+nx=100
+num_steps=10
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmax = ${l}
+  nx = ${nx}
+[]
+
+[Variables]
+  [u]
+  []
+  [lm]
+  []
+[]
+
+[ICs]
+  [u]
+    type = FunctionIC
+    variable = u
+    function = &#x27;${l} - x&#x27;
+  []
+[]
+
+[Kernels]
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [ffn]
+    type = BodyForce
+    variable = u
+    function = &#x27;1&#x27;
+  []
+[]
+
+[NodalKernels]
+  [positive_constraint]
+    type = UpperBoundNodalKernel
+    variable = lm
+    v = u
+    exclude_boundaries = &#x27;left right&#x27;
+    upper_bound = 10
+  []
+  [forces]
+    type = CoupledForceNodalKernel
+    variable = u
+    v = lm
+    coef = -1
+  []
+[]
+
+
+[BCs]
+  [left]
+    type = DirichletBC
+    boundary = left
+    value = ${l}
+    variable = u
+  []
+  [right]
+    type = DirichletBC
+    boundary = right
+    value = 0
+    variable = u
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = ${num_steps}
+  solve_type = NEWTON
+  dtmin = 1
+  petsc_options_iname = &#x27;-snes_max_linear_solve_fail -ksp_max_it -pc_type -sub_pc_factor_levels -snes_linesearch_type&#x27;
+  petsc_options_value = &#x27;0                           30          asm      16                    basic&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [csv]
+    type = CSV
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+  [dof]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Postprocessors]
+  [active_lm]
+    type = GreaterThanLessThanPostprocessor
+    variable = lm
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = 1e-8
+  []
+  [violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = ${fparse 10+1e-8}
+    comparator = &#x27;greater&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="324ede6d-3e01-4487-b046-43ce2e32906d"><div class="modal-content"><h4>test/tests/nodalkernels/constraint_enforcement/lower-bound.i</h4><pre class="moose-pre"><code class="language-text">l=10
+nx=100
+num_steps=10
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmax = ${l}
+  nx = ${nx}
+[]
+
+[Variables]
+  [u]
+  []
+  [lm]
+  []
+[]
+
+[ICs]
+  [u]
+    type = FunctionIC
+    variable = u
+    function = &#x27;${l} - x&#x27;
+  []
+[]
+
+[Kernels]
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [ffn]
+    type = BodyForce
+    variable = u
+    function = &#x27;-1&#x27;
+  []
+[]
+
+[NodalKernels]
+  [positive_constraint]
+    type = LowerBoundNodalKernel
+    variable = lm
+    v = u
+    exclude_boundaries = &#x27;left right&#x27;
+  []
+  [forces]
+    type = CoupledForceNodalKernel
+    variable = u
+    v = lm
+  []
+[]
+
+
+[BCs]
+  [left]
+    type = DirichletBC
+    boundary = left
+    value = ${l}
+    variable = u
+  []
+  [right]
+    type = DirichletBC
+    boundary = right
+    value = 0
+    variable = u
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = ${num_steps}
+  solve_type = NEWTON
+  dtmin = 1
+  petsc_options_iname = &#x27;-snes_max_linear_solve_fail -ksp_max_it -pc_type -sub_pc_factor_levels -snes_linesearch_type&#x27;
+  petsc_options_value = &#x27;0                           30          asm      16                    basic&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [csv]
+    type = CSV
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+  [dof]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Postprocessors]
+  [active_lm]
+    type = GreaterThanLessThanPostprocessor
+    variable = lm
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = 1e-8
+  []
+  [violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = -1e-8
+    comparator = &#x27;less&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4679e4ff-b35d-4e66-8c40-11d4547bb35a"><div class="modal-content"><h4>test/tests/multiapps/grid-sequencing/vi-fine.i</h4><pre class="moose-pre"><code class="language-text">l=10
+nx=80
+num_steps=2
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmax = ${l}
+  nx = ${nx}
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[AuxVariables]
+  [bounds][]
+[]
+
+[Bounds]
+  [./u_upper_bounds]
+    type = ConstantBoundsAux
+    variable = bounds
+    bounded_variable = u
+    bound_type = upper
+    bound_value = ${l}
+  [../]
+  [./u_lower_bounds]
+    type = ConstantBoundsAux
+    variable = bounds
+    bounded_variable = u
+    bound_type = lower
+    bound_value = 0
+  [../]
+[]
+
+[ICs]
+  [u]
+    type = FunctionIC
+    variable = u
+    function = &#x27;x&#x27;
+  []
+[]
+
+[Kernels]
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [ffn]
+    type = BodyForce
+    variable = u
+    function = &#x27;if(x&lt;5,-1,1)&#x27;
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    boundary = left
+    value = 0
+    variable = u
+  []
+  [right]
+    type = DirichletBC
+    boundary = right
+    value = ${l}
+    variable = u
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = ${num_steps}
+  solve_type = NEWTON
+  dtmin = 1
+  petsc_options = &#x27;-snes_vi_monitor&#x27;
+  petsc_options_iname = &#x27;-snes_max_linear_solve_fail -ksp_max_it -pc_type -sub_pc_factor_levels -snes_linesearch_type -snes_type&#x27;
+  petsc_options_value = &#x27;0                           30          asm      16                    basic                 vinewtonrsls&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [csv]
+    type = CSV
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+  [dof]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Postprocessors]
+  active = &#x27;upper_violations lower_violations&#x27;
+  [upper_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = ${fparse 10+1e-8}
+    comparator = &#x27;greater&#x27;
+  []
+  [lower_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = -1e-8
+    comparator = &#x27;less&#x27;
+  []
+  [nls]
+    type = NumNonlinearIterations
+  []
+  [cum_nls]
+    type = CumulativeValuePostprocessor
+    postprocessor = nls
+  []
+[]
+
+[MultiApps]
+  [./coarse]
+    type = TransientMultiApp
+    app_type = MooseTestApp
+    execute_on = timestep_begin
+    positions = &#x27;0 0 0&#x27;
+    input_files = vi-coarse.i
+  [../]
+[]
+
+[Transfers]
+  [./mesh_function_begin]
+    type = MultiAppMeshFunctionTransfer
+    direction = from_multiapp
+    multi_app = coarse
+    source_variable = u
+    variable = u
+    execute_on = timestep_begin
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1a7ecbb3-4ca0-4704-87eb-74098ecee634"><div class="modal-content"><h4>test/tests/nodalkernels/constraint_enforcement/vi-bounding.i</h4><pre class="moose-pre"><code class="language-text">l=10
+nx=100
+num_steps=10
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmax = ${l}
+  nx = ${nx}
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[AuxVariables]
+  [bounds][]
+[]
+
+[Bounds]
+  [./u_upper_bounds]
+    type = ConstantBoundsAux
+    variable = bounds
+    bounded_variable = u
+    bound_type = upper
+    bound_value = ${l}
+  [../]
+  [./u_lower_bounds]
+    type = ConstantBoundsAux
+    variable = bounds
+    bounded_variable = u
+    bound_type = lower
+    bound_value = 0
+  [../]
+[]
+
+[ICs]
+  [u]
+    type = FunctionIC
+    variable = u
+    function = &#x27;x&#x27;
+  []
+[]
+
+[Kernels]
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [ffn]
+    type = BodyForce
+    variable = u
+    function = &#x27;if(x&lt;5,-1,1)&#x27;
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    boundary = left
+    value = 0
+    variable = u
+  []
+  [right]
+    type = DirichletBC
+    boundary = right
+    value = ${l}
+    variable = u
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = ${num_steps}
+  solve_type = NEWTON
+  dtmin = 1
+  petsc_options_iname = &#x27;-snes_max_linear_solve_fail -ksp_max_it -pc_type -sub_pc_factor_levels -snes_linesearch_type -snes_type&#x27;
+  petsc_options_value = &#x27;0                           30          asm      16                    basic                 vinewtonrsls&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [csv]
+    type = CSV
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+  [dof]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Postprocessors]
+  [upper_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = ${fparse 10+1e-8}
+    comparator = &#x27;greater&#x27;
+  []
+  [lower_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = -1e-8
+    comparator = &#x27;less&#x27;
+  []
+  [nls]
+    type = NumNonlinearIterations
+  []
+  [cum_nls]
+    type = CumulativeValuePostprocessor
+    postprocessor = nls
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="bbddd12c-a894-4e1c-bac6-e778f9e04bf7"><div class="modal-content"><h4>test/tests/multiapps/grid-sequencing/vi-coarse.i</h4><pre class="moose-pre"><code class="language-text">l=10
+nx=40
+num_steps=2
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmax = ${l}
+  nx = ${nx}
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[AuxVariables]
+  [bounds][]
+[]
+
+[Bounds]
+  [./u_upper_bound]
+    type = ConstantBoundsAux
+    variable = bounds
+    bounded_variable = u
+    bound_type = upper
+    bound_value = ${l}
+  [../]
+  [./u_lower_bound]
+    type = ConstantBoundsAux
+    variable = bounds
+    bounded_variable = u
+    bound_type = lower
+    bound_value = 0
+  [../]
+[]
+
+[ICs]
+  [u]
+    type = FunctionIC
+    variable = u
+    function = &#x27;x&#x27;
+  []
+[]
+
+[Kernels]
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [ffn]
+    type = BodyForce
+    variable = u
+    function = &#x27;if(x&lt;5,-1,1)&#x27;
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    boundary = left
+    value = 0
+    variable = u
+  []
+  [right]
+    type = DirichletBC
+    boundary = right
+    value = ${l}
+    variable = u
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = ${num_steps}
+  solve_type = NEWTON
+  dtmin = 1
+  petsc_options = &#x27;-snes_vi_monitor&#x27;
+  petsc_options_iname = &#x27;-snes_max_linear_solve_fail -ksp_max_it -pc_type -sub_pc_factor_levels -snes_linesearch_type -snes_type&#x27;
+  petsc_options_value = &#x27;0                           30          asm      16                    basic                 vinewtonrsls&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [csv]
+    type = CSV
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+  [dof]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Postprocessors]
+  active = &#x27;upper_violations lower_violations&#x27;
+  [upper_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = ${fparse 10+1e-8}
+    comparator = &#x27;greater&#x27;
+  []
+  [lower_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = -1e-8
+    comparator = &#x27;less&#x27;
+  []
+  [nls]
+    type = NumNonlinearIterations
+  []
+  [cum_nls]
+    type = CumulativeValuePostprocessor
+    postprocessor = nls
+  []
+[]
+
+[MultiApps]
+  [./coarser]
+    type = TransientMultiApp
+    app_type = MooseTestApp
+    execute_on = timestep_begin
+    positions = &#x27;0 0 0&#x27;
+    input_files = vi-coarser.i
+  [../]
+[]
+
+[Transfers]
+  [./mesh_function_begin]
+    type = MultiAppMeshFunctionTransfer
+    direction = from_multiapp
+    multi_app = coarser
+    source_variable = u
+    variable = u
+    execute_on = timestep_begin
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="1d14b2fb-e31e-42cb-93a3-de6731f71a86" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#f4c3662d-dd0d-4c99-87e5-d6e97de60eb7" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#8e55e964-8735-465e-ac87-965d58e48736" class="tooltipped" data-position="left" data-tooltip="Example Syntax">Example Syntax</a></li><li><a href="#25354f1c-2b58-4b49-803a-e04bba78f5bc" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#ca3a8956-252d-4056-9fa3-04c0c44bc897" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li><li><a href="#1d14b2fb-e31e-42cb-93a3-de6731f71a86" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

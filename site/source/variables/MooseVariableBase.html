@@ -1,0 +1,383 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>MooseVariableBase.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="9c8f0698-035a-4133-b145-6b27e9454802"><i class="material-icons">menu</i></a><ul class="sidenav" id="9c8f0698-035a-4133-b145-6b27e9454802"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">variables</span><a href="#" class="breadcrumb">MooseVariableBase</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="9d895e8b-34f6-4424-9b8a-83f9ef256749" data-section-level="1" data-section-text="MooseVariableBase"><h1 id="moosevariablebase">MooseVariableBase</h1><p>Base class for Moose variables. This should never be the terminal object type</p><p>The current class hierarchy for Moose variables is shown below:</p><div class="card moose-float" style="width:50%;"><div class="card-content"><img src="../../media/variables/moose_variable_hierarchy.svg" class="materialboxed moose-image"></img><p class="moose-caption"><span class="moose-caption-text">Moose variable hierarchy.</span></p></div></div><p><code>MooseVariableBase</code> is the primitive base class from which all variables inherit. It includes methods for accessing the variable finite element type and order, degress of freedom, scaling factor, name, and associated <code>SystemBase</code>. Two classes inherit directly from <code>MooseVariableBase</code>: <code>MooseVariableFEBase</code> and <code>MooseVariableScalar</code>. <code>MooseVariableScalar</code> represents a Moose variable that is constant over the spatial domain. It has a number of degrees of freedom equal to the order of the variable, e.g. the following variable block would declare a <code>MooseVariableScalar</code> with two associated degrees of freedom:</p><pre class="moose-pre"><code class="language-text">
+[AuxVariables]
+  [aux_scalar]
+    order = SECOND
+    family = SCALAR
+  []
+[]
+</code></pre><p><code>MooseVariableFEBase</code> is an abstract class that encompasses all finite-element type variables; all variables that vary spatially ultimately inherit from <code>MooseVariableFEBase</code>. The class implements all the relevant variable methods other than those that return the actual variable solution or variable shape functions, since the return type in the latter case depends on whether the finite-element variable is scalar-valued (single-component) or vector-valued (multi-component) in nature. The existence of the <code>MooseVariableFEBase</code> class allows construction of containers that hold both single- and multi-component finite element variables. This is useful for instance in the <code>Assembly</code> class where we can abstract the coupling matrix entries or in Jacobian computing objects like <code>Kernels</code> when we want to fetch the numerical ID of the variable using <code>coupled</code>. Moreoever, this design structure mirrors that of the <code>FE</code> design in LibMesh, where <code>FEAbstract</code> is an abstract base class that implements all methods independent of <code>FE</code> type and the class template <code>FEGenericBase&lt;T&gt;</code> implements the type dependent methods analogous to <code>MooseVariableFE&lt;T&gt;</code>.</p><p><code>MooseVariableFE&lt;T&gt;</code> implements methods that return the variable&#x27;s solution and its associated shape functions. Additionally, it contains the methods responsible for computing the variable solution at quadrature points given the degree of freedom values computed from the previous non-linear solution. &quot;Standard&quot; or &quot;traditional&quot; finite element variables that are single-component are instantiated with the template argument <code>Real</code>; these hold variables of finite element families <code>LAGRANGE</code>, <code>MONOMIAL</code>, <code>HERMITE</code>, etc. Multi-component vector finite element variables are instantiated with the template argument <code>RealVectorValue</code> and currently encompass the finite element familes <code>NEDELEC_ONE</code> and <code>LAGRANGE_VEC</code>. The former is useful for electromagnetic applications or for general PDEs that involve a curl operation. The latter is potentially useful for tensor mechanic or Navier-Stokes simulations where historically displacement or velocity variables have been broken up component-wise. To hide the templating of the Moose variable system from other framework code, <code>MooseVariableFE&lt;Real&gt;</code> and <code>MooseVariableFE&lt;RealVectorValue&gt;</code> have been aliased to <code>MooseVariable</code> and <code>VectorMooseVariable</code> respectively.</p><p>Finally, <code>MooseVariableConstMonomial</code> is a class that takes advantage of its finite element type (constant value on an element) to optimize its solution computing routines. Consequently, it overrides the <code>computeElemValues</code> and similar methods of <code>MooseVariableFE&lt;Real&gt;</code>.</p><section class="scrollspy" id="b022c048-4242-451a-8087-091e9e80d7ce" data-section-level="2" data-section-text="Accessors"><h2 id="accessors">Accessors</h2><p>There are a myriad of ways to access Moose variables from user interfaces. We&#x27;ll outline a few below.</p><section id="251f1db7-763a-4969-ac2f-02864f920ed1" data-section-level="3" data-section-text="SystemBase"><h3 id="systembase">SystemBase</h3><p>It&#x27;s common for interface objects (<code>Kernel</code> objects for example) to have a <code>_sys</code> member. The <code>_sys</code> member has the following variable accessor methods which take a <code>THREAD_ID</code> and either a <code>std::string</code> variable name or <code>unsigned</code> variable ID as arguments:</p><ul class="browser-default"><li><p><code>getVariable</code>: returns a reference to a <code>MooseVariableFEBase</code>. Useful when access to the variable finite element solution or shape functions is not needed </p></li><li><p><code>getFieldVariable</code>: this is a templated method that takes as its template argument either <code>Real</code> or <code>RealVectorValue</code> and returns a reference to a <code>MooseVariable</code> or a <code>VectorMooseVariable</code> respectively. Useful when the user knows and needs the complete type </p></li><li><p><code>getScalarVariable</code>: returns a reference to a <code>MooseVariableScalar</code></p></li></ul><p>These getter methods ultimately query different map containers in the <code>VariableWarehouse</code>.</p></section><section id="dc826707-a887-496b-9e62-64bdeedb7046" data-section-level="3" data-section-text="SubProblem"><h3 id="subproblem">SubProblem</h3><p>Another common interface object member is <code>_subproblem</code>. <code>_subproblem</code> has the following acessors methods which take <code>THREAD_ID</code> and a <code>std::string</code> variable name as arguments (note that acessors through variable IDs do not exist through <code>SubProblem</code>):</p><ul class="browser-default"><li><p><code>getVariable</code>: returns a reference to a <code>MooseVariableFEBase</code>. Useful when access to the variable finite element solution or shape functions is not needed. Calls <code>SystemBase::getVariable</code> </p></li><li><p><code>getStandardVariable</code>: returns a reference to a <code>MooseVariable</code>. Useful when the user knows and needs the complete type. Calls <code>SystemBase::getFieldVariable&lt;Real&gt;</code> </p></li><li><p><code>getVectorVariable</code>: returns a reference to a <code>VectorMooseVariable</code>. Useful when the user knows and needs the complete type. Calls <code>SystemBase::getFieldVariable&lt;RealVectorValue&gt;</code> </p></li><li><p><code>getScalarVariable</code>: returns a reference to a <code>MooseVariableScalar</code></p></li></ul><p>Note that the template abstraction available in <code>SystemBase</code> is not available in <code>SubProblem</code>. This is because the accessor methods in <code>SubProblem</code> are pure virtual, i.e. their implementations are made in derived classes which eliminates the choice of a templated accessor method in the base <code>SubProblem</code> class.</p></section><section id="d4141664-2163-49b6-b8c9-b3fe43aa1b62" data-section-level="3" data-section-text="Coupleable"><h3 id="coupleable">Coupleable</h3><p>Since most interface objects already supply the user with the primary variable, the most common way a user should be accessing Moose variables is through <code>Coupleable</code> methods. The following accessor methods return actual Moose variable objects and take as arguments the variable name and the &quot;component&quot; which is used when the user passes in multiple variables to a single <code>CoupledVar</code> parameter:</p><ul class="browser-default"><li><p><code>getFEVar</code>: returns a pointer to a <code>MooseVariableFEBase</code>. Useful when access to the variable finite element solution or shape functions is not needed </p></li><li><p><code>getVar</code>: returns a pointer to a <code>MooseVariable</code>. Useful when the complete type is needed </p></li><li><p><code>getVectorVar</code>: returns a pointer to a <code>VectorMooseVariable</code>. Useful when the complete type is needed</p></li></ul><p>When the user/developer wants access to multiple/all coupled variables, they can call the following methods which take no arguments:</p><ul class="browser-default"><li><p><code>getCoupledMooseVars</code>: returns <strong>all</strong> coupled Moose variables, i.e. both single-component <code>MooseVariables</code> and multi-component <code>VectorMooseVariables</code>. Consequently the return type is <code>std::vector&lt;MooseVariableFEBase *&gt;</code> </p></li><li><p><code>getCoupledStandardMooseVars</code>: returns all coupled single-component <code>MooseVariables</code> as a <code>std::vector&lt;MooseVariable *&gt;</code> </p></li><li><p><code>getCoupledVectorMooseVars</code>: returns all coupled multi-component <code>VectorMooseVariables</code> as a <code>std::vector&lt;VectorMooseVariable *&gt;</code></p></li></ul><p>Often times there is no need for the user/developer to access the actual Moose variable object. Instead they require the variable finite element solution or gradient. Some of these methods are exemplified below:</p><ul class="browser-default"><li><p><code>coupledValue</code>: takes a variable name (should correspond to a <strong>single-component</strong> <code>MooseVariable</code>) and returns the finite element solution at the quadrature points (<code>VariableValue</code>) </p></li><li><p><code>coupledVectorValue</code>: takes a variable name (should correspond to a <strong>multi-component</strong> <code>VectorMooseVariable</code>) and returns the finite element solution at the quadrature points (<code>VectorVariableValue</code>) </p></li><li><p><code>coupledGradient</code>: takes a variable name (should correspond to a <strong>single-component</strong> <code>MooseVariable</code>) and returns the finite element solution gradient at the quadrature points (<code>VariableGradient</code>) </p></li><li><p><code>coupledCurl</code>: takes a variable name (should correspond to a <strong>multi-component</strong> <code>VectorMooseVariable</code>) and returns the curl of the finite element solution at the quadrature points (<code>VectorVariableCurl</code>)</p></li></ul></section></section><section class="scrollspy" id="4ce85be6-2cfd-4ac0-90f6-c572d7f2f83a" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="3488ab74-c969-41f4-b449-5ef6b32af220" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">components</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">Number of components for an array variable</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Number of components for an array variable</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">family</span><span class="moose-parameter-header-default">LAGRANGE</span><span class="moose-parameter-header-description">Specifies the family of FE shape functions to use for this variable.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>LAGRANGE</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>LAGRANGE MONOMIAL HERMITE SCALAR HIERARCHIC CLOUGH XYZ SZABAB BERNSTEIN L2_LAGRANGE L2_HIERARCHIC NEDELEC_ONE LAGRANGE_VEC MONOMIAL_VEC</p><p class="moose-parameter-description"><span>Description:</span>Specifies the family of FE shape functions to use for this variable.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">fv</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">True to make this variable a finite volume variable</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>True to make this variable a finite volume variable</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">initial_condition</span><span class="moose-parameter-header-description">Specifies the initial condition for this variable</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Specifies the initial condition for this variable</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">order</span><span class="moose-parameter-header-default">FIRST</span><span class="moose-parameter-header-description">Order of the FE shape function to use for this variable (additional orders not listed here are allowed, depending on the family).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>FIRST</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>CONSTANT FIRST SECOND THIRD FOURTH FIFTH SIXTH SEVENTH EIGHTH NINTH TENTH ELEVENTH TWELFTH THIRTEENTH FOURTEENTH FIFTEENTH SIXTEENTH SEVENTEENTH EIGHTTEENTH NINETEENTH TWENTIETH TWENTYFIRST TWENTYSECOND TWENTYTHIRD TWENTYFOURTH TWENTYFIFTH TWENTYSIXTH TWENTYSEVENTH TWENTYEIGHTH TWENTYNINTH THIRTIETH THIRTYFIRST THIRTYSECOND THIRTYTHIRD THIRTYFOURTH THIRTYFIFTH THIRTYSIXTH THIRTYSEVENTH THIRTYEIGHTH THIRTYNINTH FORTIETH FORTYFIRST FORTYSECOND FORTYTHIRD</p><p class="moose-parameter-description"><span>Description:</span>Order of the FE shape function to use for this variable (additional orders not listed here are allowed, depending on the family).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_dual</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">True to use dual basis for Lagrange multipliers</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>True to use dual basis for Lagrange multipliers</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="508fbf63-1f8f-478b-86d3-ca6bb4429ece" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">eigen</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">True to make this variable an eigen variable</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>True to make this variable an eigen variable</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">scaling</span><span class="moose-parameter-header-description">Specifies a scaling factor to apply to this variable</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Specifies a scaling factor to apply to this variable</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="9a5acced-fda3-4166-9e91-a94c4d8c32d5" data-section-level="2" data-section-text="Child Objects"><h2 id="child-objects">Child Objects</h2><ul class="moose-list-children browser-default"><li><a href="#1dba7383-bd7e-49fe-a58f-31a003613a1a" class="modal-trigger">framework/include/variables/MooseVariableScalar.h</a></li><li><a href="#d9030a0d-a049-4b79-9c03-80d3ace7dafc" class="modal-trigger">framework/include/variables/MooseVariableFieldBase.h</a></li></ul><div class="modal moose-modal" id="1dba7383-bd7e-49fe-a58f-31a003613a1a"><div class="modal-content"><h4>framework/include/variables/MooseVariableScalar.h</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#pragma once
+
+#include &quot;MooseVariableBase.h&quot;
+#include &quot;SystemBase.h&quot;
+
+// libMesh forward declarations
+namespace libMesh
+{
+template &lt;typename T&gt;
+class NumericVector;
+}
+
+class MooseVariableScalar;
+
+template &lt;&gt;
+InputParameters validParams&lt;MooseVariableScalar&gt;();
+
+class Assembly;
+class TimeIntegrator;
+
+/**
+ * Class for scalar variables (they are different).
+ */
+class MooseVariableScalar : public MooseVariableBase
+{
+public:
+  static InputParameters validParams();
+
+  MooseVariableScalar(const InputParameters &amp; parameters);
+  virtual ~MooseVariableScalar();
+
+  /**
+   * Fill out the VariableValue arrays from the system solution vector
+   * @param reinit_for_derivative_reordering A flag indicating whether we are reinitializing for the
+   *        purpose of re-ordering derivative information for ADNodalBCs
+   */
+  void reinit(bool reinit_for_derivative_reordering = false);
+
+  //
+  VariableValue &amp; sln() { return _u; }
+
+  /**
+   * Return the solution with derivative information
+   */
+  const ADVariableValue &amp; adSln() const;
+
+  VariableValue &amp; slnOld() { return _u_old; }
+  VariableValue &amp; slnOlder() { return _u_older; }
+  VariableValue &amp; vectorTagSln(TagID tag)
+  {
+    _need_vector_tag_u[tag] = true;
+    return _vector_tag_u[tag];
+  }
+  VariableValue &amp; matrixTagSln(TagID tag)
+  {
+    _need_matrix_tag_u[tag] = true;
+    return _matrix_tag_u[tag];
+  }
+
+  VariableValue &amp; uDot()
+  {
+    if (_sys.solutionUDot())
+    {
+      _need_u_dot = true;
+      return _u_dot;
+    }
+    else
+      mooseError(&quot;MooseVariableScalar: Time derivative of solution (`u_dot`) is not stored. Please &quot;
+                 &quot;set uDotRequested() to true in FEProblemBase before requesting `u_dot`.&quot;);
+  }
+
+  VariableValue &amp; uDotDot()
+  {
+    if (_sys.solutionUDotDot())
+    {
+      _need_u_dotdot = true;
+      return _u_dotdot;
+    }
+    else
+      mooseError(&quot;MooseVariableScalar: Second time derivative of solution (`u_dotdot`) is not &quot;
+                 &quot;stored. Please set uDotDotRequested() to true in FEProblemBase before requesting &quot;
+                 &quot;`u_dotdot`.&quot;);
+  }
+
+  VariableValue &amp; uDotOld()
+  {
+    if (_sys.solutionUDotOld())
+    {
+      _need_u_dot_old = true;
+      return _u_dot_old;
+    }
+    else
+      mooseError(&quot;MooseVariableScalar: Old time derivative of solution (`u_dot_old`) is not &quot;
+                 &quot;stored. Please set uDotOldRequested() to true in FEProblemBase before requesting &quot;
+                 &quot;`u_dot_old`.&quot;);
+  }
+
+  VariableValue &amp; uDotDotOld()
+  {
+    if (_sys.solutionUDotDotOld())
+    {
+      _need_u_dotdot_old = true;
+      return _u_dotdot_old;
+    }
+    else
+      mooseError(&quot;MooseVariableScalar: Old second time derivative of solution (`u_dotdot_old`) is &quot;
+                 &quot;not stored. Please set uDotDotOldRequested() to true in FEProblemBase before &quot;
+                 &quot;requesting `u_dotdot_old`.&quot;);
+  }
+
+  VariableValue &amp; duDotDu()
+  {
+    _need_du_dot_du = true;
+    return _du_dot_du;
+  }
+
+  VariableValue &amp; duDotDotDu()
+  {
+    _need_du_dotdot_du = true;
+    return _du_dotdot_du;
+  }
+
+  /**
+   * Set the nodal value for this variable (to keep everything up to date
+   */
+  void setValue(unsigned int i, Number value);
+
+  /**
+   * Set all of the values of this scalar variable to the same value
+   */
+  void setValues(Number value);
+
+  void insert(NumericVector&lt;Number&gt; &amp; soln);
+
+protected:
+  /// The value of scalar variable
+  VariableValue _u;
+  /// The old value of scalar variable
+  VariableValue _u_old;
+  /// The older value of scalar variable
+  VariableValue _u_older;
+  /// Tagged vectors
+  std::vector&lt;VariableValue&gt; _vector_tag_u;
+  /// Only cache data when need it
+  std::vector&lt;bool&gt; _need_vector_tag_u;
+  /// Tagged matrices
+  std::vector&lt;VariableValue&gt; _matrix_tag_u;
+  /// Only cache data when need it
+  std::vector&lt;bool&gt; _need_matrix_tag_u;
+
+  VariableValue _u_dot;
+  VariableValue _u_dotdot;
+  VariableValue _u_dot_old;
+  VariableValue _u_dotdot_old;
+  VariableValue _du_dot_du;
+  VariableValue _du_dotdot_du;
+
+  bool _need_u_dot;
+  bool _need_u_dotdot;
+  bool _need_u_dot_old;
+  bool _need_u_dotdot_old;
+  bool _need_du_dot_du;
+  bool _need_du_dotdot_du;
+
+  /// Whether any dual number calculations are needed
+  mutable bool _need_dual;
+  /// whether dual_u is needed
+  mutable bool _need_dual_u;
+  /// The scalar solution with derivative information
+  ADVariableValue _dual_u;
+
+private:
+  /**
+   * Adds derivative information to the scalar variable value arrays
+   * @param nodal_ordering Whether we are doing a nodal ordering of the derivative vector, e.g.
+   *        whether the spacing between variable groups in the derivative vector is equal to the
+   *        number of dofs per node or the number of dofs per elem
+   */
+  void computeAD(bool nodal_ordering);
+};
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d9030a0d-a049-4b79-9c03-80d3ace7dafc"><div class="modal-content"><h4>framework/include/variables/MooseVariableFieldBase.h</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#pragma once
+
+#include &quot;MooseVariableBase.h&quot;
+
+namespace libMesh
+{
+template &lt;typename&gt;
+class DenseVector;
+template &lt;typename&gt;
+class NumericVector;
+class Point;
+}
+
+class FaceInfo;
+
+class MooseVariableFieldBase;
+template &lt;&gt;
+InputParameters validParams&lt;MooseVariableFieldBase&gt;();
+
+/**
+ * This class provides an interface for common operations on field variables of
+ * both FE and FV types with all their scalar, vector, eigenvector
+ * permuations.
+ */
+class MooseVariableFieldBase : public MooseVariableBase
+{
+public:
+  static InputParameters validParams();
+
+  MooseVariableFieldBase(const InputParameters &amp; parameters);
+
+  /**
+   * Clear out the dof indices.  We do this in case this variable is not going to be prepared at
+   * all...
+   */
+  virtual void clearDofIndices() = 0;
+
+  /**
+   * Prepare the elemental degrees of freedom
+   */
+  virtual void prepare() = 0;
+
+  /**
+   * Prepare the neighbor element degrees of freedom
+   */
+  virtual void prepareNeighbor() = 0;
+
+  /**
+   * Prepare a lower dimensional element&#x27;s degrees of freedom
+   */
+  virtual void prepareLowerD() = 0;
+
+  virtual void prepareAux() = 0;
+
+  virtual void reinitNode() = 0;
+  virtual void reinitAux() = 0;
+  virtual void reinitAuxNeighbor() = 0;
+
+  virtual void reinitNodes(const std::vector&lt;dof_id_type&gt; &amp; nodes) = 0;
+  virtual void reinitNodesNeighbor(const std::vector&lt;dof_id_type&gt; &amp; nodes) = 0;
+
+  /**
+   * Filed type of this variable
+   */
+  virtual Moose::VarFieldType fieldType() const = 0;
+
+  /**
+   * @returns true if this is a vector-valued element, false otherwise.
+   */
+  virtual bool isVector() const = 0;
+
+  virtual bool isFV() const { return false; }
+
+  /**
+   * Is this variable defined at nodes
+   * @return true if it the variable is defined at nodes, otherwise false
+   */
+  virtual bool isNodalDefined() const = 0;
+
+  virtual const dof_id_type &amp; nodalDofIndex() const = 0;
+  virtual const dof_id_type &amp; nodalDofIndexNeighbor() const = 0;
+
+  /**
+   * Current element this variable is evaluated at
+   */
+  virtual const Elem * const &amp; currentElem() const = 0;
+
+  /**
+   * The subdomains the variable is active on
+   */
+  virtual const std::set&lt;SubdomainID&gt; &amp; activeSubdomains() const = 0;
+  /**
+   * Is the variable active on the subdomain?
+   * @param subdomain The subdomain id in question
+   * @return true if active on subdomain, false otherwise
+   */
+  virtual bool activeOnSubdomain(SubdomainID subdomain) const = 0;
+
+  /**
+   * Prepare the initial condition
+   */
+  virtual void prepareIC() = 0;
+
+  /**
+   * Compute values at face quadrature points for the element+neighbor (both
+   * sides of the face).
+   */
+  virtual void computeFaceValues(const FaceInfo &amp; /*fi*/) { mooseError(&quot;not implemented&quot;); }
+
+  /**
+   * Compute values at interior quadrature points
+   */
+  virtual void computeElemValues() = 0;
+  /**
+   * Compute values at facial quadrature points
+   */
+  virtual void computeElemValuesFace() = 0;
+  /**
+   * Compute values at facial quadrature points for the neighbor
+   */
+  virtual void computeNeighborValuesFace() = 0;
+  /**
+   * Compute values at quadrature points for the neighbor
+   */
+  virtual void computeNeighborValues() = 0;
+  /**
+   * compute values at quadrature points on the lower dimensional element
+   */
+  virtual void computeLowerDValues() = 0;
+  /**
+   * Compute nodal values of this variable in the neighbor
+   */
+  virtual void computeNodalNeighborValues() = 0;
+  /**
+   * Compute nodal values of this variable
+   */
+  virtual void computeNodalValues() = 0;
+
+  /**
+   * Get neighbor DOF indices for currently selected element
+   * @return the neighbor degree of freedom indices
+   */
+  virtual const std::vector&lt;dof_id_type&gt; &amp; dofIndicesNeighbor() const = 0;
+
+  /**
+   * Get dof indices for the current lower dimensional element (this is meaningful when performing
+   * mortar FEM)
+   * @return the lower dimensional element&#x27;s dofs
+   */
+  virtual const std::vector&lt;dof_id_type&gt; &amp; dofIndicesLower() const = 0;
+
+  virtual unsigned int numberOfDofsNeighbor() = 0;
+
+  virtual void insert(NumericVector&lt;Number&gt; &amp; residual) = 0;
+  virtual void add(NumericVector&lt;Number&gt; &amp; residual) = 0;
+
+  /**
+   * Return phi size
+   */
+  virtual size_t phiSize() const = 0;
+  /**
+   * Return phiFace size
+   */
+  virtual size_t phiFaceSize() const = 0;
+  /**
+   * Return phiNeighbor size
+   */
+  virtual size_t phiNeighborSize() const = 0;
+  /**
+   * Return phiFaceNeighbor size
+   */
+  virtual size_t phiFaceNeighborSize() const = 0;
+  /**
+   * Return the number of shape functions on the lower dimensional element for this variable
+   */
+  virtual size_t phiLowerSize() const = 0;
+};
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#b022c048-4242-451a-8087-091e9e80d7ce" class="tooltipped" data-position="left" data-tooltip="Accessors">Accessors</a></li><li><a href="#4ce85be6-2cfd-4ac0-90f6-c572d7f2f83a" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#9a5acced-fda3-4166-9e91-a94c4d8c32d5" class="tooltipped" data-position="left" data-tooltip="Child Objects">Child Objects</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

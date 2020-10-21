@@ -1,0 +1,678 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>ConstantDT.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="e046a56b-c80c-404f-a543-d04a5bb4de33"><i class="material-icons">menu</i></a><ul class="sidenav" id="e046a56b-c80c-404f-a543-d04a5bb4de33"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">timesteppers</span><a href="#" class="breadcrumb">ConstantDT</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="bf347b7a-6efb-452e-aecf-ebd15c3b39a3" data-section-level="1" data-section-text="ConstantDT"><h1 id="constantdt">ConstantDT</h1><p>Timestepper that takes a constant time step size</p><section class="scrollspy" id="63fe365d-8326-4e69-a958-e241b286883d" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The <code>ConstantDT</code> TimeStepper simply takes a constant time step size throughout the analysis, unless the solver fails to converge on an iteration.</p><p><code>ConstantDT</code> begins the analysis taking the step specified by the user with the <code>dt</code> parameter. If the solver fails to obtain a converged solution for a given step, the executioner cuts back the step size and attempts to advance the time from the previous step using a smaller time step. The time step is cut back by multiplying the time step by 0.5.</p><p>If the solution with the cut-back time step is still unsuccessful, the time step size is repeatedly cut back until a successful solution is obtained. The user can specify a minimum time step through the <code>dtmin</code> parameter in the <code>Executioner</code> block. If the time step must be cut back below the minimum size without obtaining a solution, the problem exits with an error. If the time step is cut back using <code>ConstantDT</code>, that cut-back step size will be used for the remainder of the the analysis.</p></section><section class="scrollspy" id="9dc8c63b-ddd9-4674-b82e-ca13beb1e43a" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">[Executioner]
+  type = Transient
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  line_search = none
+  nl_rel_tol = 1e-6
+  nl_max_its = 10
+  l_tol = 1e-8
+  l_max_its = 50
+  num_steps = 2 # 200
+  nl_abs_tol = 1e-10
+  nl_rel_step_tol = 1e-10
+  nl_abs_step_tol = 1e-10
+  [./TimeStepper]
+    type = ConstantDT
+    dt = 0.001
+  [../]
+  dtmin = .001
+[]
+</code></pre><a href="#ab00b44e-4ea9-478f-80c7-a2664c40734b" class="modal-trigger">(test/tests/misc/check_error/wrong_displacement_order.i)</a><div class="modal moose-modal" id="ab00b44e-4ea9-478f-80c7-a2664c40734b"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/misc/check_error/wrong_displacement_order.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  # Mesh uses second-order elements
+  elem_type = QUAD8
+  displacements = &#x27;disp_x disp_y&#x27;
+  block_name = pore
+  block_id = 0
+[]
+
+[Variables]
+  [./temperature]
+    order = SECOND
+    [./InitialCondition]
+      type = ConstantIC
+      value = 0.0
+    [../]
+  [../]
+[]
+
+# We are *not* allowed to use FIRST-order displacement vars!
+[AuxVariables]
+  [./disp_x]
+  [../]
+
+  [./disp_y]
+    [./InitialCondition]
+      type = FunctionIC
+      function = displ
+    [../]
+  [../]
+[]
+
+[Functions]
+  [./displ]
+    type = ParsedFunction
+    value = -1/2*x*(y-0.5)
+  [../]
+[]
+
+[Kernels]
+  [./diffusion]
+    type = Diffusion
+    variable = temperature
+    use_displaced_mesh = true
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = temperature
+    boundary = left
+    value = 1
+    use_displaced_mesh = true
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = temperature
+    boundary = right
+    value = 0
+    use_displaced_mesh = true
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP_PJFNK]
+    type = SMP
+    full = true
+    solve_type = PJFNK
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  line_search = none
+  nl_rel_tol = 1e-6
+  nl_max_its = 10
+  l_tol = 1e-8
+  l_max_its = 50
+  num_steps = 2 # 200
+  nl_abs_tol = 1e-10
+  nl_rel_step_tol = 1e-10
+  nl_abs_step_tol = 1e-10
+  [./TimeStepper]
+    type = ConstantDT
+    dt = 0.001
+  [../]
+  dtmin = .001
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="6655019c-43c1-4c8e-b06d-5d43a6ac5545" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="bd23da1c-b9b3-46f0-84cd-4681d75f152a" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">dt</span><span class="moose-parameter-header-description">Size of the time step</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Size of the time step</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="f9ea1d36-b0be-437b-b892-525f49e9640a" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">cutback_factor_at_failure</span><span class="moose-parameter-header-default">0.5</span><span class="moose-parameter-header-description">Factor to apply to timestep if it a time step fails to convergence.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0.5</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Factor to apply to timestep if it a time step fails to convergence.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">growth_factor</span><span class="moose-parameter-header-default">2</span><span class="moose-parameter-header-description">Maximum ratio of new to previous timestep sizes following a step that required the time step to be cut due to a failed solve.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>2</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Maximum ratio of new to previous timestep sizes following a step that required the time step to be cut due to a failed solve.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">reset_dt</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Use when restarting a calculation to force a change in dt.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Use when restarting a calculation to force a change in dt.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="dee50c66-83f3-4882-a60b-78d57b16b3cb" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="75348f5b-f5f0-4da3-aab9-b9dd25ee8e83" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#26c2ee98-3ae8-4358-850c-b1357351d8e0" class="modal-trigger">test/tests/time_steppers/constant_dt/constant_dt.i</a></li><li><a href="#e8068256-5ea8-421e-8ced-7a5d8e54198d" class="modal-trigger">test/tests/misc/check_error/wrong_displacement_order.i</a></li><li><a href="#413469ae-a26d-4e83-a69e-bf4e437c9e3e" class="modal-trigger">test/tests/time_steppers/cutback_factor_at_failure/constant_dt_cutback.i</a></li><li><a href="#d9098c4b-d9d1-48a1-928f-05304b6cf9ba" class="modal-trigger">test/tests/postprocessors/cumulative_value_postprocessor/cumulative_value_postprocessor.i</a></li><li><a href="#4c13ade2-6683-4207-99f9-bf7218cc3fe6" class="modal-trigger">modules/chemical_reactions/examples/calcium_bicarbonate/calcium_bicarbonate.i</a></li></ul><div class="modal moose-modal" id="26c2ee98-3ae8-4358-850c-b1357351d8e0"><div class="modal-content"><h4>test/tests/time_steppers/constant_dt/constant_dt.i</h4><pre class="moose-pre"><code class="language-text">###########################################################
+# This is a simple test with a time-dependent problem
+# demonstrating the use of the TimeStepper system.
+#
+# @Requirement F1.20
+###########################################################
+
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = CoefDiffusion
+    variable = u
+    coef = 0.1
+  [../]
+  [./time]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 10
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+
+  # Pluggable TimeStepper System
+  [./TimeStepper]
+    type = ConstantDT
+    dt = 0.2
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e8068256-5ea8-421e-8ced-7a5d8e54198d"><div class="modal-content"><h4>test/tests/misc/check_error/wrong_displacement_order.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  # Mesh uses second-order elements
+  elem_type = QUAD8
+  displacements = &#x27;disp_x disp_y&#x27;
+  block_name = pore
+  block_id = 0
+[]
+
+[Variables]
+  [./temperature]
+    order = SECOND
+    [./InitialCondition]
+      type = ConstantIC
+      value = 0.0
+    [../]
+  [../]
+[]
+
+# We are *not* allowed to use FIRST-order displacement vars!
+[AuxVariables]
+  [./disp_x]
+  [../]
+
+  [./disp_y]
+    [./InitialCondition]
+      type = FunctionIC
+      function = displ
+    [../]
+  [../]
+[]
+
+[Functions]
+  [./displ]
+    type = ParsedFunction
+    value = -1/2*x*(y-0.5)
+  [../]
+[]
+
+[Kernels]
+  [./diffusion]
+    type = Diffusion
+    variable = temperature
+    use_displaced_mesh = true
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = temperature
+    boundary = left
+    value = 1
+    use_displaced_mesh = true
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = temperature
+    boundary = right
+    value = 0
+    use_displaced_mesh = true
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP_PJFNK]
+    type = SMP
+    full = true
+    solve_type = PJFNK
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  line_search = none
+  nl_rel_tol = 1e-6
+  nl_max_its = 10
+  l_tol = 1e-8
+  l_max_its = 50
+  num_steps = 2 # 200
+  nl_abs_tol = 1e-10
+  nl_rel_step_tol = 1e-10
+  nl_abs_step_tol = 1e-10
+  [./TimeStepper]
+    type = ConstantDT
+    dt = 0.001
+  [../]
+  dtmin = .001
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="413469ae-a26d-4e83-a69e-bf4e437c9e3e"><div class="modal-content"><h4>test/tests/time_steppers/cutback_factor_at_failure/constant_dt_cutback.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = CoefDiffusion
+    variable = u
+    coef = 0.1
+  [../]
+  [./time]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Problem]
+  type = FailingProblem
+  fail_step = 3
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 10
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+
+  [./TimeStepper]
+    type = ConstantDT
+    dt = 0.1
+    cutback_factor_at_failure = 0.8
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d9098c4b-d9d1-48a1-928f-05304b6cf9ba"><div class="modal-content"><h4>test/tests/postprocessors/cumulative_value_postprocessor/cumulative_value_postprocessor.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./time_derivative]
+    type = TimeDerivative
+    variable = u
+  [../]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Problem]
+  type = FEProblem
+  coord_type = RZ
+  rz_coord_axis = X
+[]
+
+[Executioner]
+  type = Transient
+  scheme = implicit-euler
+
+  [./TimeStepper]
+    type = ConstantDT
+    dt = 0.01
+  [../]
+
+  start_time = 0.0
+  num_steps = 2
+
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type&#x27;
+  petsc_options_value = &#x27;lu&#x27;
+[]
+
+[Postprocessors]
+  [./nonlin_it]
+    type = NumNonlinearIterations
+  [../]
+  [./cumulative_nonlin_it]
+    type = CumulativeValuePostprocessor
+    postprocessor = nonlin_it
+  [../]
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4c13ade2-6683-4207-99f9-bf7218cc3fe6"><div class="modal-content"><h4>modules/chemical_reactions/examples/calcium_bicarbonate/calcium_bicarbonate.i</h4><pre class="moose-pre"><code class="language-text"># Example of reactive transport model with precipitation and dissolution.
+# Calcium (ca2) and bicarbonate (hco3) reaction to form calcite (CaCO3).
+# Models bicarbonate injection following calcium injection, so that a
+# moving reaction front forms a calcite precipitation zone. As the front moves,
+# the upstream side of the front continues to form calcite via precipitation,
+# while at the downstream side, dissolution of the solid calcite occurs.
+#
+# The reaction network considered is as follows:
+# Aqueous equilibrium reactions:
+# a)  h+ + hco3- = CO2(aq),             Keq = 10^(6.341)
+# b)  hco3- = h+ + CO23-,               Keq = 10^(-10.325)
+# c)  ca2+ + hco3- = h+ + CaCO3(aq),    Keq = 10^(-7.009)
+# d)  ca2+ + hco3- = cahco3+,           Keq = 10^(-0.653)
+# e)  ca2+ = h+ + CaOh+,                Keq = 10^(-12.85)
+# f)  - h+ = oh-,                       Keq = 10^(-13.991)
+#
+# Kinetic reactions
+# g)  ca2+ + hco3- = h+ + CaCO3(s),     A = 0.461 m^2/L, k = 6.456542e-2 mol/m^2 s,
+#                                       Keq = 10^(1.8487)
+#
+# The primary chemical species are h+, hco3- and ca2+. The pressure gradient is fixed,
+# and a conservative tracer is also included.
+#
+# This example is taken from:
+# Guo et al, A parallel, fully coupled, fully implicit solution to reactive
+# transport in porous media using the preconditioned Jacobian-Free Newton-Krylov
+# Method, Advances in Water Resources, 53, 101-108 (2013).
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 100
+  xmax = 1
+  ymax = 0.25
+[]
+
+[Variables]
+  [./tracer]
+  [../]
+  [./ca2+]
+  [../]
+  [./h+]
+    initial_condition = 1.0e-7
+    scaling = 1e6
+  [../]
+  [./hco3-]
+  [../]
+[]
+
+[AuxVariables]
+  [./pressure]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[ICs]
+  [./pressure_ic]
+    type = FunctionIC
+    variable = pressure
+    function = pic
+  [../]
+  [./hco3_ic]
+    type = BoundingBoxIC
+    variable = hco3-
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 0.25
+    inside = 5.0e-2
+    outside = 1.0e-6
+  [../]
+  [./ca2_ic]
+    type = BoundingBoxIC
+    variable = ca2+
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 0.25
+    inside = 1.0e-6
+    outside = 5.0e-2
+  [../]
+  [./tracer_ic]
+    type = BoundingBoxIC
+    variable = tracer
+    x1 = 0.0
+    y1 = 0.0
+    x2 = 1.0e-10
+    y2 = 0.25
+    inside = 1.0
+    outside = 0.0
+  [../]
+[]
+
+[Functions]
+  [./pic]
+    type = ParsedFunction
+    value = 60-50*x
+  [../]
+[]
+
+[ReactionNetwork]
+  [./AqueousEquilibriumReactions]
+    primary_species = &#x27;ca2+ hco3- h+&#x27;
+    secondary_species = &#x27;co2_aq co32- caco3_aq cahco3+ caoh+ oh-&#x27;
+    pressure = pressure
+    reactions = &#x27;h+ + hco3- = co2_aq 6.341,
+                 hco3- - h+ = co32- -10.325,
+                 ca2+ + hco3- - h+ = caco3_aq -7.009,
+                 ca2+ + hco3- = cahco3+ -0.653,
+                 ca2+ - h+ = caoh+ -12.85,
+                 - h+ = oh- -13.991&#x27;
+  [../]
+  [./SolidKineticReactions]
+    primary_species = &#x27;ca2+ hco3- h+&#x27;
+    kin_reactions = &#x27;ca2+ + hco3- - h+ = caco3_s&#x27;
+    secondary_species = caco3_s
+    log10_keq = 1.8487
+    reference_temperature = 298.15
+    system_temperature = 298.15
+    gas_constant = 8.314
+    specific_reactive_surface_area = 4.61e-4
+    kinetic_rate_constant = 6.456542e-7
+    activation_energy = 1.5e4
+  [../]
+[]
+
+[Kernels]
+  [./tracer_ie]
+    type = PrimaryTimeDerivative
+    variable = tracer
+  [../]
+  [./tracer_pd]
+    type = PrimaryDiffusion
+    variable = tracer
+  [../]
+  [./tracer_conv]
+    type = PrimaryConvection
+    variable = tracer
+    p = pressure
+  [../]
+  [./ca2+_ie]
+    type = PrimaryTimeDerivative
+    variable = ca2+
+  [../]
+  [./ca2+_pd]
+    type = PrimaryDiffusion
+    variable = ca2+
+  [../]
+  [./ca2+_conv]
+    type = PrimaryConvection
+    variable = ca2+
+    p = pressure
+  [../]
+  [./h+_ie]
+    type = PrimaryTimeDerivative
+    variable = h+
+  [../]
+  [./h+_pd]
+    type = PrimaryDiffusion
+    variable = h+
+  [../]
+  [./h+_conv]
+    type = PrimaryConvection
+    variable = h+
+    p = pressure
+  [../]
+  [./hco3-_ie]
+    type = PrimaryTimeDerivative
+    variable = hco3-
+  [../]
+  [./hco3-_pd]
+    type = PrimaryDiffusion
+    variable = hco3-
+  [../]
+  [./hco3-_conv]
+    type = PrimaryConvection
+    variable = hco3-
+    p = pressure
+  [../]
+[]
+
+[BCs]
+  [./tracer_left]
+    type = DirichletBC
+    variable = tracer
+    boundary = left
+    value = 1.0
+  [../]
+  [./tracer_right]
+    type = ChemicalOutFlowBC
+    variable = tracer
+    boundary = right
+  [../]
+  [./ca2+_left]
+    type = SinDirichletBC
+    variable = ca2+
+    boundary = left
+    initial = 5.0e-2
+    final = 1.0e-6
+    duration = 1
+  [../]
+  [./ca2+_right]
+    type = ChemicalOutFlowBC
+    variable = ca2+
+    boundary = right
+  [../]
+  [./hco3-_left]
+    type = SinDirichletBC
+    variable = hco3-
+    boundary = left
+    initial = 1.0e-6
+    final = 5.0e-2
+    duration = 1
+  [../]
+  [./hco3-_right]
+    type = ChemicalOutFlowBC
+    variable = hco3-
+    boundary = right
+  [../]
+  [./h+_left]
+    type = DirichletBC
+    variable = h+
+    boundary = left
+    value = 1.0e-7
+  [../]
+  [./h+_right]
+    type = ChemicalOutFlowBC
+    variable = h+
+    boundary = right
+  [../]
+[]
+
+[Materials]
+  [./porous]
+    type = GenericConstantMaterial
+    prop_names = &#x27;diffusivity conductivity porosity&#x27;
+    prop_values = &#x27;1e-7 2e-4 0.2&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  l_max_its = 50
+  l_tol = 1e-5
+  nl_max_its = 10
+  nl_rel_tol = 1e-5
+  end_time = 10
+  [./TimeStepper]
+    type = ConstantDT
+    dt = 0.1
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Outputs]
+  perf_graph = true
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#63fe365d-8326-4e69-a958-e241b286883d" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#9dc8c63b-ddd9-4674-b82e-ca13beb1e43a" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#6655019c-43c1-4c8e-b06d-5d43a6ac5545" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#75348f5b-f5f0-4da3-aab9-b9dd25ee8e83" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

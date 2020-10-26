@@ -1,328 +1,14 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>VectorDiffusion.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="caebf581-3103-4c86-88e2-fb96d535342a"><i class="material-icons">menu</i></a><ul class="sidenav" id="caebf581-3103-4c86-88e2-fb96d535342a"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">kernels</span><a href="#" class="breadcrumb">VectorDiffusion</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="a47c38f5-e96c-415d-8f4d-4170a21bf295" data-section-level="1" data-section-text="VectorDiffusion"><h1 id="vectordiffusion">VectorDiffusion</h1><section class="scrollspy" id="25e2ad93-c34b-437d-80a8-5a88efb6fe1e" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>VectorDiffusion</code> is analogous to <a href="Diffusion.html"><code>Diffusion</code></a> except it is applied to vector finite element variables.</p></section><section class="scrollspy" id="2347dd74-4111-42f6-a9fd-74d5212e1244" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="ee7ea1fe-410c-4d53-8ba4-0265d6b8b7e6" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this Kernel operates on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this Kernel operates on</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="74ecf4ef-2450-435a-bb77-909f94b4af61" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="91cb1252-6b11-4b8c-b423-b883a304505c" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="000e4756-269e-4034-809a-f88da198eb71" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="67646a94-f03b-48f8-98ad-81cb94e26314" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#7a7ab7f4-b6a0-4f7e-ad71-89909cf96e33" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/gravity-object.i</a></li><li><a href="#78813083-4473-4443-9faf-5b6a75067fd6" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/steady.i</a></li><li><a href="#b4950ddb-dd38-4344-82f5-979e22e16e42" class="modal-trigger">test/tests/kernels/transient_vector_diffusion/transient_vector_diffusion.i</a></li><li><a href="#a0d74058-7ccf-4978-b2e9-a4783c090ebc" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/steady-action-function.i</a></li><li><a href="#4b658dd1-5121-4183-ac67-6d33fbc95b65" class="modal-trigger">test/tests/kernels/vector_fe/lagrange_vec_1d.i</a></li><li><a href="#869c54b7-efbd-4913-bed4-b9f795813db3" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/steady-function.i</a></li><li><a href="#782698d1-de85-4d98-9af8-afdb37fa93fc" class="modal-trigger">test/tests/kernels/coupled_time_derivative/vector_coupled_time_derivative_test.i</a></li><li><a href="#70dd852e-cc35-4546-9682-0df9c649193c" class="modal-trigger">test/tests/kernels/vector_fe/coupled_vector_gradient.i</a></li><li><a href="#ce149e13-0032-4f2f-aed6-10aa75d43992" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/gravity-through-coupled-force-action.i</a></li><li><a href="#ac8d0845-912a-4ca2-b3fb-6242d8e292d4" class="modal-trigger">test/tests/kernels/vector_fe/lagrange_vec.i</a></li><li><a href="#1dd70135-5201-4b6f-9e5e-45243f1663ef" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/gravity-through-coupled-force.i</a></li><li><a href="#c30dcc2d-3326-4831-8b3b-c37fc888fbe9" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/steady-action.i</a></li><li><a href="#e2055e56-db46-4e9b-9dd9-341ec3ce5db7" class="modal-trigger">test/tests/misc/check_error/vector_kernel_with_standard_var.i</a></li><li><a href="#12c3deb7-50a5-4852-9049-94fdcd731006" class="modal-trigger">test/tests/interfacekernels/ad_coupled_vector_value/coupled.i</a></li></ul><div class="modal moose-modal" id="7a7ab7f4-b6a0-4f7e-ad71-89909cf96e33"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/gravity-object.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  [gen]
-    type = GeneratedMeshGenerator
-    dim = 2
-    xmin = 0
-    xmax = 1.0
-    ymin = 0
-    ymax = 1.0
-    nx = 16
-    ny = 16
-  []
-  [./corner_node]
-    type = ExtraNodesetGenerator
-    new_boundary = &#x27;pinned_node&#x27;
-    nodes = &#x27;0&#x27;
-    input = gen
-  [../]
-[]
-
-[Variables]
-  [./velocity]
-    family = LAGRANGE_VEC
-  [../]
-  [./p]
-  [../]
-  [u]
-    family = LAGRANGE_VEC
-  []
-[]
-
-[ICs]
-  [velocity]
-    type = VectorConstantIC
-    x_value = 1e-15
-    y_value = 1e-15
-    variable = velocity
-  []
-[]
-
-[Kernels]
-  [./mass]
-    type = INSADMass
-    variable = p
-  [../]
-  [./mass_pspg]
-    type = INSADMassPSPG
-    variable = p
-  [../]
-
-  [./momentum_convection]
-    type = INSADMomentumAdvection
-    variable = velocity
-  [../]
-
-  [./momentum_viscous]
-    type = INSADMomentumViscous
-    variable = velocity
-  [../]
-
-  [./momentum_pressure]
-    type = INSADMomentumPressure
-    variable = velocity
-    p = p
-    integrate_p_by_parts = true
-  [../]
-
-  [momentum_coupled_force]
-    type = INSADMomentumCoupledForce
-    variable = velocity
-    coupled_vector_var = u
-  []
-
-  [gravity]
-    type = INSADGravityForce
-    variable = velocity
-    gravity = &#x27;0 -9.81 0&#x27;
-  []
-
-  [./momentum_supg]
-    type = INSADMomentumSUPG
-    variable = velocity
-    velocity = velocity
-  [../]
-
-  [u_diff]
-    type = VectorDiffusion
-    variable = u
-  []
-[]
-
-[BCs]
-  [./no_slip]
-    type = VectorFunctionDirichletBC
-    variable = velocity
-    boundary = &#x27;bottom right left top&#x27;
-  [../]
-
-  [./pressure_pin]
-    type = DirichletBC
-    variable = p
-    boundary = &#x27;pinned_node&#x27;
-    value = 0
-  [../]
-
-  [u_left]
-    type = VectorFunctionDirichletBC
-    variable = u
-    boundary = &#x27;left&#x27;
-    function_x = 1
-    function_y = 1
-  []
-
-  [u_right]
-    type = VectorFunctionDirichletBC
-    variable = u
-    boundary = &#x27;right&#x27;
-    function_x = -1
-    function_y = -1
-  []
-[]
-
-[Materials]
-  [./const]
-    type = ADGenericConstantMaterial
-    prop_names = &#x27;rho mu&#x27;
-    prop_values = &#x27;1  1&#x27;
-  [../]
-  [ins_mat]
-    type = INSADTauMaterial
-    velocity = velocity
-    pressure = p
-  []
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = &#x27;NEWTON&#x27;
-  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
-  petsc_options_value = &#x27;asm      6                     200&#x27;
-  line_search = &#x27;none&#x27;
-  nl_rel_tol = 1e-12
-  nl_max_its = 6
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="78813083-4473-4443-9faf-5b6a75067fd6"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/steady.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  [gen]
-    type = GeneratedMeshGenerator
-    dim = 2
-    xmin = 0
-    xmax = 1.0
-    ymin = 0
-    ymax = 1.0
-    nx = 16
-    ny = 16
-  []
-  [./corner_node]
-    type = ExtraNodesetGenerator
-    new_boundary = &#x27;pinned_node&#x27;
-    nodes = &#x27;0&#x27;
-    input = gen
-  [../]
-[]
-
-[Variables]
-  [./velocity]
-    family = LAGRANGE_VEC
-  [../]
-  [./p]
-  [../]
-  [u]
-    family = LAGRANGE_VEC
-  []
-[]
-
-[ICs]
-  [velocity]
-    type = VectorConstantIC
-    x_value = 1e-15
-    y_value = 1e-15
-    variable = velocity
-  []
-[]
-
-[Kernels]
-  [./mass]
-    type = INSADMass
-    variable = p
-  [../]
-  [./mass_pspg]
-    type = INSADMassPSPG
-    variable = p
-  [../]
-
-  [./momentum_convection]
-    type = INSADMomentumAdvection
-    variable = velocity
-  [../]
-
-  [./momentum_viscous]
-    type = INSADMomentumViscous
-    variable = velocity
-  [../]
-
-  [./momentum_pressure]
-    type = INSADMomentumPressure
-    variable = velocity
-    p = p
-    integrate_p_by_parts = true
-  [../]
-
-  [momentum_coupled_force]
-    type = INSADMomentumCoupledForce
-    variable = velocity
-    coupled_vector_var = u
-  []
-
-  [./momentum_supg]
-    type = INSADMomentumSUPG
-    variable = velocity
-    velocity = velocity
-  [../]
-
-  [u_diff]
-    type = VectorDiffusion
-    variable = u
-  []
-[]
-
-[BCs]
-  [./no_slip]
-    type = VectorFunctionDirichletBC
-    variable = velocity
-    boundary = &#x27;bottom right left top&#x27;
-  [../]
-
-  [./pressure_pin]
-    type = DirichletBC
-    variable = p
-    boundary = &#x27;pinned_node&#x27;
-    value = 0
-  [../]
-
-  [u_left]
-    type = VectorFunctionDirichletBC
-    variable = u
-    boundary = &#x27;left&#x27;
-    function_x = 1
-    function_y = 1
-  []
-
-  [u_right]
-    type = VectorFunctionDirichletBC
-    variable = u
-    boundary = &#x27;right&#x27;
-    function_x = -1
-    function_y = -1
-  []
-[]
-
-[Materials]
-  [./const]
-    type = ADGenericConstantMaterial
-    prop_names = &#x27;rho mu&#x27;
-    prop_values = &#x27;1  1&#x27;
-  [../]
-  [ins_mat]
-    type = INSADTauMaterial
-    velocity = velocity
-    pressure = p
-  []
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = &#x27;NEWTON&#x27;
-  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
-  petsc_options_value = &#x27;asm      6                     200&#x27;
-  line_search = &#x27;none&#x27;
-  nl_rel_tol = 1e-12
-  nl_max_its = 6
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b4950ddb-dd38-4344-82f5-979e22e16e42"><div class="modal-content"><h4>test/tests/kernels/transient_vector_diffusion/transient_vector_diffusion.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  [./generator]
-    type = GeneratedMeshGenerator
-    dim = 2
-    nx = 10
-    ny = 10
-  [../]
-  [./block1]
-    type = SubdomainBoundingBoxGenerator
-    input = generator
-    bottom_left = &#x27;0 0 -1&#x27;
-    top_right = &#x27;1 1 1&#x27;
-    block_id = 1
-  [../]
-  [./block2]
-    type = SubdomainBoundingBoxGenerator
-    input = block1
-    bottom_left = &#x27;0.33 0.33 -1&#x27;
-    top_right = &#x27;0.67 0.67 1&#x27;
-    block_id = 2
-  [../]
+<!DOCTYPE html><head><meta charset="UTF-8"><title>VectorDiffusion.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="ad093d55-fbe3-4775-883b-4c45a7b00756"><i class="material-icons">menu</i></a><ul class="sidenav" id="ad093d55-fbe3-4775-883b-4c45a7b00756"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">kernels</span><a href="#" class="breadcrumb">VectorDiffusion</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="9a647160-b561-4d75-a7e5-5079258ac5f1" data-section-level="1" data-section-text="VectorDiffusion"><h1 id="vectordiffusion">VectorDiffusion</h1><section class="scrollspy" id="e0f07889-8d70-4323-a549-2918ccf8285b" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>VectorDiffusion</code> is analogous to <a href="Diffusion.html"><code>Diffusion</code></a> except it is applied to vector finite element variables.</p></section><section class="scrollspy" id="a807e53c-9ae2-4174-9364-2055e793fe85" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="ce636cf0-f57f-48c0-b496-96bfbb89eb69" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this Kernel operates on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this Kernel operates on</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="6271c4d6-5944-4fb0-b630-47598ea11007" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="75e78607-520f-4cee-be98-e1523a9e3e4e" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="f82c3b2a-627a-42ae-97e4-a6002012422f" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="ab548133-1c2f-45ff-a072-8843e260c26e" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#1e228fb9-00e3-4aca-a0d9-3377f5bfe517" class="modal-trigger">test/tests/misc/check_error/vector_kernel_with_standard_var.i</a></li><li><a href="#7e2fb842-75d0-4c71-b538-513e24eaa3a5" class="modal-trigger">test/tests/kernels/coupled_time_derivative/vector_coupled_time_derivative_test.i</a></li><li><a href="#95b4e593-d4df-4c27-a3e4-87f74e1c9fa7" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/steady-action.i</a></li><li><a href="#499e38ad-0c9b-430f-93e0-6a0e39a62adc" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/steady-function.i</a></li><li><a href="#92221deb-96f7-42d4-ae54-cb84c4adcc00" class="modal-trigger">test/tests/kernels/transient_vector_diffusion/transient_vector_diffusion.i</a></li><li><a href="#0be9e546-35ad-4385-b437-e8e8959a5068" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/gravity-through-coupled-force-action.i</a></li><li><a href="#b04bd599-d27f-42be-8cf5-81f7484b8483" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/steady-action-function.i</a></li><li><a href="#97e503e5-a702-48c5-9f6c-56577259e428" class="modal-trigger">test/tests/kernels/vector_fe/lagrange_vec.i</a></li><li><a href="#90e9ea57-aeba-44f0-86ef-bef4e8501f90" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/gravity-object.i</a></li><li><a href="#f7d77002-a424-4f00-80bd-fcf19bdf4fc1" class="modal-trigger">test/tests/interfacekernels/ad_coupled_vector_value/coupled.i</a></li><li><a href="#1319d971-4b81-4503-95a3-95509bb54c26" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/gravity-through-coupled-force.i</a></li><li><a href="#102dfd29-4fcd-4f91-b79e-dfe4f85f7bdd" class="modal-trigger">test/tests/kernels/vector_fe/coupled_vector_gradient.i</a></li><li><a href="#1064c203-0c69-488e-872c-5f3b129f3196" class="modal-trigger">modules/navier_stokes/test/tests/ins/coupled-force/steady.i</a></li><li><a href="#b9545dad-ad08-4308-b27f-5262e30c0330" class="modal-trigger">test/tests/kernels/vector_fe/lagrange_vec_1d.i</a></li></ul><div class="modal moose-modal" id="1e228fb9-00e3-4aca-a0d9-3377f5bfe517"><div class="modal-content"><h4>test/tests/misc/check_error/vector_kernel_with_standard_var.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 2
+  ny = 2
 []
 
 [Variables]
   [./u]
-    family = LAGRANGE_VEC
-  [../]
-[]
-
-[ICs]
-  [./u]
-    type = VectorConstantIC
-    variable = u
-    x_value = 1
-    y_value = 2
-    z_value = 3
-    block = 2
+    order = FIRST
+    family = LAGRANGE
   [../]
 []
 
@@ -331,25 +17,103 @@
     type = VectorDiffusion
     variable = u
   [../]
-  [./time]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 0
+  [../]
+
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 2
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+[]
+
+[Outputs]
+  file_base = out
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="7e2fb842-75d0-4c71-b538-513e24eaa3a5"><div class="modal-content"><h4>test/tests/kernels/coupled_time_derivative/vector_coupled_time_derivative_test.i</h4><pre class="moose-pre"><code class="language-text">###########################################################
+# This is a simple test of the VectorCoupledTimeDerivative kernel.
+# The expected solution for the vector variable v is
+# v_x(x) = 1/2 * (x^2 + x)
+# v_y(x) = 1/2 * (x^2 + x)
+###########################################################
+
+[Mesh]
+  type = GeneratedMesh
+  nx = 5
+  ny = 5
+  dim = 2
+[]
+
+[Variables]
+  [./u]
+    family = LAGRANGE_VEC
+  [../]
+  [./v]
+    family = LAGRANGE_VEC
+  [../]
+[]
+
+[Kernels]
+  [./time_u]
     type = VectorTimeDerivative
     variable = u
+  [../]
+  [./fn_u]
+    type = VectorBodyForce
+    variable = u
+    function_x = 1
+    function_y = 1
+  [../]
+  [./time_v]
+    type = VectorCoupledTimeDerivative
+    variable = v
+    v = u
+  [../]
+  [./diff_v]
+    type = VectorDiffusion
+    variable = v
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = VectorDirichletBC
+    variable = v
+    boundary = &#x27;left&#x27;
+    values = &#x27;0 0 0&#x27;
+  [../]
+  [./right]
+    type = VectorDirichletBC
+    variable = v
+    boundary = &#x27;right&#x27;
+    values = &#x27;1 1 0&#x27;
   [../]
 []
 
 [Executioner]
   type = Transient
-  num_steps = 20
-  dt = 0.01
-  solve_type = NEWTON
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  num_steps = 1
+  solve_type = &#x27;NEWTON&#x27;
 []
 
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a0d74058-7ccf-4978-b2e9-a4783c090ebc"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/steady-action-function.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="95b4e593-d4df-4c27-a3e4-87f74e1c9fa7"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/steady-action.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   [gen]
     type = GeneratedMeshGenerator
     dim = 2
@@ -390,7 +154,7 @@
     pspg = true
 
     has_coupled_force = true
-    coupled_force_vector_function = &#x27;vector_func&#x27;
+    coupled_force_var = u
   []
 []
 
@@ -447,78 +211,7 @@
 [Outputs]
   exodus = true
 []
-
-[Functions]
-  [vector_func]
-    type = ParsedVectorFunction
-    value_x = &#x27;-2*x + 1&#x27;
-    value_y = &#x27;-2*x + 1&#x27;
-  []
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4b658dd1-5121-4183-ac67-6d33fbc95b65"><div class="modal-content"><h4>test/tests/kernels/vector_fe/lagrange_vec_1d.i</h4><pre class="moose-pre"><code class="language-text"># This example reproduces the libmesh vector_fe example 1 results
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 15
-  xmin = -1
-  elem_type = EDGE3
-[]
-
-[Variables]
-  [./u]
-    family = LAGRANGE_VEC
-    order = SECOND
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = VectorDiffusion
-    variable = u
-  [../]
-  [./body_force]
-    type = VectorBodyForce
-    variable = u
-    function_x = &#x27;ffx&#x27;
-  [../]
-[]
-
-[BCs]
-  [./bnd]
-    type = VectorFunctionDirichletBC
-    variable = u
-    function_x = &#x27;x_exact_sln&#x27;
-    boundary = &#x27;left right&#x27;
-  [../]
-[]
-
-[Functions]
-  [./x_exact_sln]
-    type = ParsedFunction
-    value = &#x27;cos(.5*pi*x)&#x27;
-  [../]
-  [./ffx]
-    type = ParsedFunction
-    value = &#x27;.25*pi*pi*cos(.5*pi*x)&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  [./pre]
-    type = SMP
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = NEWTON
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="869c54b7-efbd-4913-bed4-b9f795813db3"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/steady-function.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="499e38ad-0c9b-430f-93e0-6a0e39a62adc"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/steady-function.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   [gen]
     type = GeneratedMeshGenerator
     dim = 2
@@ -667,55 +360,595 @@
     value_y = &#x27;-2*x + 1&#x27;
   []
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="782698d1-de85-4d98-9af8-afdb37fa93fc"><div class="modal-content"><h4>test/tests/kernels/coupled_time_derivative/vector_coupled_time_derivative_test.i</h4><pre class="moose-pre"><code class="language-text">###########################################################
-# This is a simple test of the VectorCoupledTimeDerivative kernel.
-# The expected solution for the vector variable v is
-# v_x(x) = 1/2 * (x^2 + x)
-# v_y(x) = 1/2 * (x^2 + x)
-###########################################################
-
-[Mesh]
-  type = GeneratedMesh
-  nx = 5
-  ny = 5
-  dim = 2
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="92221deb-96f7-42d4-ae54-cb84c4adcc00"><div class="modal-content"><h4>test/tests/kernels/transient_vector_diffusion/transient_vector_diffusion.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [./generator]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 10
+    ny = 10
+  [../]
+  [./block1]
+    type = SubdomainBoundingBoxGenerator
+    input = generator
+    bottom_left = &#x27;0 0 -1&#x27;
+    top_right = &#x27;1 1 1&#x27;
+    block_id = 1
+  [../]
+  [./block2]
+    type = SubdomainBoundingBoxGenerator
+    input = block1
+    bottom_left = &#x27;0.33 0.33 -1&#x27;
+    top_right = &#x27;0.67 0.67 1&#x27;
+    block_id = 2
+  [../]
 []
 
 [Variables]
   [./u]
     family = LAGRANGE_VEC
   [../]
-  [./v]
-    family = LAGRANGE_VEC
+[]
+
+[ICs]
+  [./u]
+    type = VectorConstantIC
+    variable = u
+    x_value = 1
+    y_value = 2
+    z_value = 3
+    block = 2
   [../]
 []
 
 [Kernels]
-  [./time_u]
+  [./diff]
+    type = VectorDiffusion
+    variable = u
+  [../]
+  [./time]
     type = VectorTimeDerivative
     variable = u
   [../]
-  [./fn_u]
-    type = VectorBodyForce
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 20
+  dt = 0.01
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0be9e546-35ad-4385-b437-e8e8959a5068"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/gravity-through-coupled-force-action.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+  []
+[]
+
+[Variables]
+  [u]
+    family = LAGRANGE_VEC
+  []
+[]
+
+[AuxVariables]
+  [gravity]
+    family = LAGRANGE_VEC
+  []
+[]
+
+[ICs]
+  [gravity]
+    type = VectorConstantIC
+    x_value = &#x27;0&#x27;
+    y_value = &#x27;-9.81&#x27;
+    variable = gravity
+  []
+[]
+
+[Modules]
+  [IncompressibleNavierStokes]
+    equation_type = steady-state
+
+    velocity_boundary = &#x27;bottom right top left&#x27;
+    velocity_function = &#x27;0 0    0 0   0 0 0 0&#x27;
+    add_standard_velocity_variables_for_ad = false
+
+    pressure_pinned_node = 0
+
+    density_name = rho
+    dynamic_viscosity_name = mu
+
+    use_ad = true
+    laplace = true
+    family = LAGRANGE
+    order = FIRST
+
+    supg = true
+    pspg = true
+
+    has_coupled_force = true
+  []
+[]
+
+[Kernels]
+  [u_diff]
+    type = VectorDiffusion
     variable = u
+  []
+[]
+
+[BCs]
+  [u_left]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;left&#x27;
     function_x = 1
     function_y = 1
+  []
+
+  [u_right]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;right&#x27;
+    function_x = -1
+    function_y = -1
+  []
+[]
+
+[Materials]
+  [const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  []
+[]
+
+[Preconditioning]
+  [SMP]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm      6                     200&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  [out]
+    type = Exodus
+    hide = &#x27;gravity&#x27;
+  []
+[]
+
+[Functions]
+  [vector_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;-2*x + 1&#x27;
+    value_y = &#x27;-2*x + 1&#x27;
+  []
+  [vector_gravity_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;0&#x27;
+    value_y = &#x27;-9.81&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b04bd599-d27f-42be-8cf5-81f7484b8483"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/steady-action-function.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+  []
+[]
+
+[Variables]
+  [u]
+    family = LAGRANGE_VEC
+  []
+[]
+
+[Modules]
+  [IncompressibleNavierStokes]
+    equation_type = steady-state
+
+    velocity_boundary = &#x27;bottom right top left&#x27;
+    velocity_function = &#x27;0 0    0 0   0 0 0 0&#x27;
+    add_standard_velocity_variables_for_ad = false
+
+    pressure_pinned_node = 0
+
+    density_name = rho
+    dynamic_viscosity_name = mu
+
+    use_ad = true
+    laplace = true
+    family = LAGRANGE
+    order = FIRST
+
+    supg = true
+    pspg = true
+
+    has_coupled_force = true
+    coupled_force_vector_function = &#x27;vector_func&#x27;
+  []
+[]
+
+[Kernels]
+  [u_diff]
+    type = VectorDiffusion
+    variable = u
+  []
+[]
+
+[BCs]
+  [u_left]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;left&#x27;
+    function_x = 1
+    function_y = 1
+  []
+
+  [u_right]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;right&#x27;
+    function_x = -1
+    function_y = -1
+  []
+[]
+
+[Materials]
+  [const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  []
+[]
+
+[Preconditioning]
+  [SMP]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm      6                     200&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[Functions]
+  [vector_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;-2*x + 1&#x27;
+    value_y = &#x27;-2*x + 1&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="97e503e5-a702-48c5-9f6c-56577259e428"><div class="modal-content"><h4>test/tests/kernels/vector_fe/lagrange_vec.i</h4><pre class="moose-pre"><code class="language-text"># This example reproduces the libmesh vector_fe example 1 results
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 15
+  ny = 15
+  xmin = -1
+  ymin = -1
+  elem_type = QUAD9
+[]
+
+[Variables]
+  [./u]
+    family = LAGRANGE_VEC
+    order = SECOND
   [../]
-  [./time_v]
-    type = VectorCoupledTimeDerivative
-    variable = v
-    v = u
+[]
+
+[Kernels]
+  [./diff]
+    type = VectorDiffusion
+    variable = u
+  [../]
+  [./body_force]
+    type = VectorBodyForce
+    variable = u
+    function_x = &#x27;ffx&#x27;
+    function_y = &#x27;ffy&#x27;
+  [../]
+[]
+
+[BCs]
+  [./bnd]
+    type = VectorFunctionDirichletBC
+    variable = u
+    function_x = &#x27;x_exact_sln&#x27;
+    function_y = &#x27;y_exact_sln&#x27;
+    function_z = &#x27;0&#x27;
+    boundary = &#x27;left right top bottom&#x27;
+  [../]
+[]
+
+[Functions]
+  [./x_exact_sln]
+    type = ParsedFunction
+    value = &#x27;cos(.5*pi*x)*sin(.5*pi*y)&#x27;
+  [../]
+  [./y_exact_sln]
+    type = ParsedFunction
+    value = &#x27;sin(.5*pi*x)*cos(.5*pi*y)&#x27;
+  [../]
+  [./ffx]
+    type = ParsedFunction
+    value = &#x27;.5*pi*pi*cos(.5*pi*x)*sin(.5*pi*y)&#x27;
+  [../]
+  [./ffy]
+    type = ParsedFunction
+    value = &#x27;.5*pi*pi*sin(.5*pi*x)*cos(.5*pi*y)&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./pre]
+    type = SMP
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="90e9ea57-aeba-44f0-86ef-bef4e8501f90"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/gravity-object.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+  []
+  [./corner_node]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;pinned_node&#x27;
+    nodes = &#x27;0&#x27;
+    input = gen
+  [../]
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+  [u]
+    family = LAGRANGE_VEC
+  []
+[]
+
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+[]
+
+[Kernels]
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [./mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  [../]
+
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+    integrate_p_by_parts = true
+  [../]
+
+  [momentum_coupled_force]
+    type = INSADMomentumCoupledForce
+    variable = velocity
+    coupled_vector_var = u
+  []
+
+  [gravity]
+    type = INSADGravityForce
+    variable = velocity
+    gravity = &#x27;0 -9.81 0&#x27;
+  []
+
+  [./momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  [../]
+
+  [u_diff]
+    type = VectorDiffusion
+    variable = u
+  []
+[]
+
+[BCs]
+  [./no_slip]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom right left top&#x27;
+  [../]
+
+  [./pressure_pin]
+    type = DirichletBC
+    variable = p
+    boundary = &#x27;pinned_node&#x27;
+    value = 0
+  [../]
+
+  [u_left]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;left&#x27;
+    function_x = 1
+    function_y = 1
+  []
+
+  [u_right]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;right&#x27;
+    function_x = -1
+    function_y = -1
+  []
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADTauMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm      6                     200&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f7d77002-a424-4f00-80bd-fcf19bdf4fc1"><div class="modal-content"><h4>test/tests/interfacekernels/ad_coupled_vector_value/coupled.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 1
+    nx = 20
+    xmax = 2
+  []
+  [./subdomain1]
+    input = gen
+    type = SubdomainBoundingBoxGenerator
+    bottom_left = &#x27;1.0 0 0&#x27;
+    block_id = 1
+    top_right = &#x27;2.0 1.0 0&#x27;
+  [../]
+  [./interface]
+    input = subdomain1
+    type = SideSetsBetweenSubdomainsGenerator
+    primary_block = &#x27;0&#x27;
+    paired_block = &#x27;1&#x27;
+    new_boundary = &#x27;primary0_interface&#x27;
+  [../]
+[]
+
+[Variables]
+  [./u]
+    block = &#x27;0&#x27;
+    family = LAGRANGE_VEC
+  [../]
+  [./v]
+    block = &#x27;1&#x27;
+    family = LAGRANGE_VEC
+  [../]
+  [w]
+    family = LAGRANGE_VEC
+  []
+[]
+
+[Kernels]
+  [./diff_u]
+    type = VectorDiffusion
+    variable = u
+    block = 0
   [../]
   [./diff_v]
     type = VectorDiffusion
     variable = v
+    block = 1
+  [../]
+  [diff_w]
+    type = VectorDiffusion
+    variable = w
+  []
+[]
+
+[InterfaceKernels]
+  [./interface]
+    type = ADVectorCoupledInterfacialSource
+    variable = u
+    neighbor_var = v
+    var_source = w
+    boundary = primary0_interface
+    D = 1
+    D_neighbor = 1
   [../]
 []
 
 [BCs]
   [./left]
     type = VectorDirichletBC
-    variable = v
+    variable = u
     boundary = &#x27;left&#x27;
     values = &#x27;0 0 0&#x27;
   [../]
@@ -723,20 +956,221 @@
     type = VectorDirichletBC
     variable = v
     boundary = &#x27;right&#x27;
-    values = &#x27;1 1 0&#x27;
+    values = &#x27;10 0 0&#x27;
   [../]
+  [./middle]
+    type = ADVectorMatchedValueBC
+    variable = v
+    boundary = &#x27;primary0_interface&#x27;
+    v = u
+  [../]
+  [w_left]
+    type = VectorDirichletBC
+    variable = w
+    boundary = &#x27;left&#x27;
+    values = &#x27;0 0 0&#x27;
+  []
+  [w_right]
+    type = VectorDirichletBC
+    variable = w
+    boundary = &#x27;right&#x27;
+    values = &#x27;4 0 0&#x27;
+  []
 []
 
 [Executioner]
-  type = Transient
-  num_steps = 1
-  solve_type = &#x27;NEWTON&#x27;
+  type = Steady
+  solve_type = NEWTON
 []
 
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="70dd852e-cc35-4546-9682-0df9c649193c"><div class="modal-content"><h4>test/tests/kernels/vector_fe/coupled_vector_gradient.i</h4><pre class="moose-pre"><code class="language-text"># This example demonstrates ability to set Dirichlet boundary conditions for LAGRANGE_VEC variables
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1319d971-4b81-4503-95a3-95509bb54c26"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/gravity-through-coupled-force.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 0
+    xmax = 1.0
+    ymin = 0
+    ymax = 1.0
+    nx = 16
+    ny = 16
+  []
+  [./corner_node]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;pinned_node&#x27;
+    nodes = &#x27;0&#x27;
+    input = gen
+  [../]
+[]
+
+[Variables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+  [./p]
+  [../]
+  [u]
+    family = LAGRANGE_VEC
+  []
+[]
+
+[AuxVariables]
+  [gravity]
+    family = LAGRANGE_VEC
+  []
+[]
+
+[ICs]
+  [velocity]
+    type = VectorConstantIC
+    x_value = 1e-15
+    y_value = 1e-15
+    variable = velocity
+  []
+  [gravity]
+    type = VectorConstantIC
+    x_value = &#x27;0&#x27;
+    y_value = &#x27;-9.81&#x27;
+    variable = gravity
+  []
+[]
+
+[Kernels]
+  inactive = &#x27;momentum_coupled_forces_two_vars momentum_coupled_forces_two_funcs&#x27;
+
+  [./mass]
+    type = INSADMass
+    variable = p
+  [../]
+  [./mass_pspg]
+    type = INSADMassPSPG
+    variable = p
+  [../]
+
+  [./momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
+  [../]
+
+  [./momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  [../]
+
+  [./momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
+    p = p
+    integrate_p_by_parts = true
+  [../]
+
+  [momentum_coupled_forces_var_and_func]
+    type = INSADMomentumCoupledForce
+    variable = velocity
+    coupled_vector_var = u
+    vector_function = &#x27;vector_gravity_func&#x27;
+  []
+
+  [momentum_coupled_forces_two_vars]
+    type = INSADMomentumCoupledForce
+    variable = velocity
+    coupled_vector_var = &#x27;u gravity&#x27;
+  []
+
+  [momentum_coupled_forces_two_funcs]
+    type = INSADMomentumCoupledForce
+    variable = velocity
+    vector_function = &#x27;vector_func vector_gravity_func&#x27;
+  []
+
+  [./momentum_supg]
+    type = INSADMomentumSUPG
+    variable = velocity
+    velocity = velocity
+  [../]
+
+  [u_diff]
+    type = VectorDiffusion
+    variable = u
+  []
+[]
+
+[BCs]
+  [./no_slip]
+    type = VectorFunctionDirichletBC
+    variable = velocity
+    boundary = &#x27;bottom right left top&#x27;
+  [../]
+
+  [./pressure_pin]
+    type = DirichletBC
+    variable = p
+    boundary = &#x27;pinned_node&#x27;
+    value = 0
+  [../]
+
+  [u_left]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;left&#x27;
+    function_x = 1
+    function_y = 1
+  []
+
+  [u_right]
+    type = VectorFunctionDirichletBC
+    variable = u
+    boundary = &#x27;right&#x27;
+    function_x = -1
+    function_y = -1
+  []
+[]
+
+[Materials]
+  [./const]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;rho mu&#x27;
+    prop_values = &#x27;1  1&#x27;
+  [../]
+  [ins_mat]
+    type = INSADTauMaterial
+    velocity = velocity
+    pressure = p
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm      6                     200&#x27;
+  line_search = &#x27;none&#x27;
+  nl_rel_tol = 1e-12
+  nl_max_its = 6
+[]
+
+[Outputs]
+  [out]
+    type = Exodus
+    hide = &#x27;gravity&#x27;
+  []
+[]
+
+[Functions]
+  [vector_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;-2*x + 1&#x27;
+    value_y = &#x27;-2*x + 1&#x27;
+  []
+  [vector_gravity_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;0&#x27;
+    value_y = &#x27;-9.81&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="102dfd29-4fcd-4f91-b79e-dfe4f85f7bdd"><div class="modal-content"><h4>test/tests/kernels/vector_fe/coupled_vector_gradient.i</h4><pre class="moose-pre"><code class="language-text"># This example demonstrates ability to set Dirichlet boundary conditions for LAGRANGE_VEC variables
 
 [Mesh]
   type = GeneratedMesh
@@ -923,210 +1357,7 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ce149e13-0032-4f2f-aed6-10aa75d43992"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/gravity-through-coupled-force-action.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  [gen]
-    type = GeneratedMeshGenerator
-    dim = 2
-    xmin = 0
-    xmax = 1.0
-    ymin = 0
-    ymax = 1.0
-    nx = 16
-    ny = 16
-  []
-[]
-
-[Variables]
-  [u]
-    family = LAGRANGE_VEC
-  []
-[]
-
-[AuxVariables]
-  [gravity]
-    family = LAGRANGE_VEC
-  []
-[]
-
-[ICs]
-  [gravity]
-    type = VectorConstantIC
-    x_value = &#x27;0&#x27;
-    y_value = &#x27;-9.81&#x27;
-    variable = gravity
-  []
-[]
-
-[Modules]
-  [IncompressibleNavierStokes]
-    equation_type = steady-state
-
-    velocity_boundary = &#x27;bottom right top left&#x27;
-    velocity_function = &#x27;0 0    0 0   0 0 0 0&#x27;
-    add_standard_velocity_variables_for_ad = false
-
-    pressure_pinned_node = 0
-
-    density_name = rho
-    dynamic_viscosity_name = mu
-
-    use_ad = true
-    laplace = true
-    family = LAGRANGE
-    order = FIRST
-
-    supg = true
-    pspg = true
-
-    has_coupled_force = true
-  []
-[]
-
-[Kernels]
-  [u_diff]
-    type = VectorDiffusion
-    variable = u
-  []
-[]
-
-[BCs]
-  [u_left]
-    type = VectorFunctionDirichletBC
-    variable = u
-    boundary = &#x27;left&#x27;
-    function_x = 1
-    function_y = 1
-  []
-
-  [u_right]
-    type = VectorFunctionDirichletBC
-    variable = u
-    boundary = &#x27;right&#x27;
-    function_x = -1
-    function_y = -1
-  []
-[]
-
-[Materials]
-  [const]
-    type = ADGenericConstantMaterial
-    prop_names = &#x27;rho mu&#x27;
-    prop_values = &#x27;1  1&#x27;
-  []
-[]
-
-[Preconditioning]
-  [SMP]
-    type = SMP
-    full = true
-  []
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = &#x27;NEWTON&#x27;
-  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
-  petsc_options_value = &#x27;asm      6                     200&#x27;
-  line_search = &#x27;none&#x27;
-  nl_rel_tol = 1e-12
-  nl_max_its = 6
-[]
-
-[Outputs]
-  [out]
-    type = Exodus
-    hide = &#x27;gravity&#x27;
-  []
-[]
-
-[Functions]
-  [vector_func]
-    type = ParsedVectorFunction
-    value_x = &#x27;-2*x + 1&#x27;
-    value_y = &#x27;-2*x + 1&#x27;
-  []
-  [vector_gravity_func]
-    type = ParsedVectorFunction
-    value_x = &#x27;0&#x27;
-    value_y = &#x27;-9.81&#x27;
-  []
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ac8d0845-912a-4ca2-b3fb-6242d8e292d4"><div class="modal-content"><h4>test/tests/kernels/vector_fe/lagrange_vec.i</h4><pre class="moose-pre"><code class="language-text"># This example reproduces the libmesh vector_fe example 1 results
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 15
-  ny = 15
-  xmin = -1
-  ymin = -1
-  elem_type = QUAD9
-[]
-
-[Variables]
-  [./u]
-    family = LAGRANGE_VEC
-    order = SECOND
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = VectorDiffusion
-    variable = u
-  [../]
-  [./body_force]
-    type = VectorBodyForce
-    variable = u
-    function_x = &#x27;ffx&#x27;
-    function_y = &#x27;ffy&#x27;
-  [../]
-[]
-
-[BCs]
-  [./bnd]
-    type = VectorFunctionDirichletBC
-    variable = u
-    function_x = &#x27;x_exact_sln&#x27;
-    function_y = &#x27;y_exact_sln&#x27;
-    function_z = &#x27;0&#x27;
-    boundary = &#x27;left right top bottom&#x27;
-  [../]
-[]
-
-[Functions]
-  [./x_exact_sln]
-    type = ParsedFunction
-    value = &#x27;cos(.5*pi*x)*sin(.5*pi*y)&#x27;
-  [../]
-  [./y_exact_sln]
-    type = ParsedFunction
-    value = &#x27;sin(.5*pi*x)*cos(.5*pi*y)&#x27;
-  [../]
-  [./ffx]
-    type = ParsedFunction
-    value = &#x27;.5*pi*pi*cos(.5*pi*x)*sin(.5*pi*y)&#x27;
-  [../]
-  [./ffy]
-    type = ParsedFunction
-    value = &#x27;.5*pi*pi*sin(.5*pi*x)*cos(.5*pi*y)&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  [./pre]
-    type = SMP
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1dd70135-5201-4b6f-9e5e-45243f1663ef"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/gravity-through-coupled-force.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1064c203-0c69-488e-872c-5f3b129f3196"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/steady.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   [gen]
     type = GeneratedMeshGenerator
     dim = 2
@@ -1156,12 +1387,6 @@
   []
 []
 
-[AuxVariables]
-  [gravity]
-    family = LAGRANGE_VEC
-  []
-[]
-
 [ICs]
   [velocity]
     type = VectorConstantIC
@@ -1169,17 +1394,9 @@
     y_value = 1e-15
     variable = velocity
   []
-  [gravity]
-    type = VectorConstantIC
-    x_value = &#x27;0&#x27;
-    y_value = &#x27;-9.81&#x27;
-    variable = gravity
-  []
 []
 
 [Kernels]
-  inactive = &#x27;momentum_coupled_forces_two_vars momentum_coupled_forces_two_funcs&#x27;
-
   [./mass]
     type = INSADMass
     variable = p
@@ -1206,23 +1423,10 @@
     integrate_p_by_parts = true
   [../]
 
-  [momentum_coupled_forces_var_and_func]
+  [momentum_coupled_force]
     type = INSADMomentumCoupledForce
     variable = velocity
     coupled_vector_var = u
-    vector_function = &#x27;vector_gravity_func&#x27;
-  []
-
-  [momentum_coupled_forces_two_vars]
-    type = INSADMomentumCoupledForce
-    variable = velocity
-    coupled_vector_var = &#x27;u gravity&#x27;
-  []
-
-  [momentum_coupled_forces_two_funcs]
-    type = INSADMomentumCoupledForce
-    variable = velocity
-    vector_function = &#x27;vector_func vector_gravity_func&#x27;
   []
 
   [./momentum_supg]
@@ -1292,133 +1496,22 @@
 []
 
 [Outputs]
-  [out]
-    type = Exodus
-    hide = &#x27;gravity&#x27;
-  []
-[]
-
-[Functions]
-  [vector_func]
-    type = ParsedVectorFunction
-    value_x = &#x27;-2*x + 1&#x27;
-    value_y = &#x27;-2*x + 1&#x27;
-  []
-  [vector_gravity_func]
-    type = ParsedVectorFunction
-    value_x = &#x27;0&#x27;
-    value_y = &#x27;-9.81&#x27;
-  []
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c30dcc2d-3326-4831-8b3b-c37fc888fbe9"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/coupled-force/steady-action.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  [gen]
-    type = GeneratedMeshGenerator
-    dim = 2
-    xmin = 0
-    xmax = 1.0
-    ymin = 0
-    ymax = 1.0
-    nx = 16
-    ny = 16
-  []
-[]
-
-[Variables]
-  [u]
-    family = LAGRANGE_VEC
-  []
-[]
-
-[Modules]
-  [IncompressibleNavierStokes]
-    equation_type = steady-state
-
-    velocity_boundary = &#x27;bottom right top left&#x27;
-    velocity_function = &#x27;0 0    0 0   0 0 0 0&#x27;
-    add_standard_velocity_variables_for_ad = false
-
-    pressure_pinned_node = 0
-
-    density_name = rho
-    dynamic_viscosity_name = mu
-
-    use_ad = true
-    laplace = true
-    family = LAGRANGE
-    order = FIRST
-
-    supg = true
-    pspg = true
-
-    has_coupled_force = true
-    coupled_force_var = u
-  []
-[]
-
-[Kernels]
-  [u_diff]
-    type = VectorDiffusion
-    variable = u
-  []
-[]
-
-[BCs]
-  [u_left]
-    type = VectorFunctionDirichletBC
-    variable = u
-    boundary = &#x27;left&#x27;
-    function_x = 1
-    function_y = 1
-  []
-
-  [u_right]
-    type = VectorFunctionDirichletBC
-    variable = u
-    boundary = &#x27;right&#x27;
-    function_x = -1
-    function_y = -1
-  []
-[]
-
-[Materials]
-  [const]
-    type = ADGenericConstantMaterial
-    prop_names = &#x27;rho mu&#x27;
-    prop_values = &#x27;1  1&#x27;
-  []
-[]
-
-[Preconditioning]
-  [SMP]
-    type = SMP
-    full = true
-  []
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = &#x27;NEWTON&#x27;
-  petsc_options_iname = &#x27;-pc_type -sub_pc_factor_levels -ksp_gmres_restart&#x27;
-  petsc_options_value = &#x27;asm      6                     200&#x27;
-  line_search = &#x27;none&#x27;
-  nl_rel_tol = 1e-12
-  nl_max_its = 6
-[]
-
-[Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e2055e56-db46-4e9b-9dd9-341ec3ce5db7"><div class="modal-content"><h4>test/tests/misc/check_error/vector_kernel_with_standard_var.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b9545dad-ad08-4308-b27f-5262e30c0330"><div class="modal-content"><h4>test/tests/kernels/vector_fe/lagrange_vec_1d.i</h4><pre class="moose-pre"><code class="language-text"># This example reproduces the libmesh vector_fe example 1 results
+
+[Mesh]
   type = GeneratedMesh
-  dim = 2
-  nx = 2
-  ny = 2
+  dim = 1
+  nx = 15
+  xmin = -1
+  elem_type = EDGE3
 []
 
 [Variables]
   [./u]
-    order = FIRST
-    family = LAGRANGE
+    family = LAGRANGE_VEC
+    order = SECOND
   [../]
 []
 
@@ -1427,130 +1520,37 @@
     type = VectorDiffusion
     variable = u
   [../]
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
+  [./body_force]
+    type = VectorBodyForce
     variable = u
-    boundary = 1
-    value = 0
-  [../]
-
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = 2
-    value = 1
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = &#x27;NEWTON&#x27;
-[]
-
-[Outputs]
-  file_base = out
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="12c3deb7-50a5-4852-9049-94fdcd731006"><div class="modal-content"><h4>test/tests/interfacekernels/ad_coupled_vector_value/coupled.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  [gen]
-    type = GeneratedMeshGenerator
-    dim = 1
-    nx = 20
-    xmax = 2
-  []
-  [./subdomain1]
-    input = gen
-    type = SubdomainBoundingBoxGenerator
-    bottom_left = &#x27;1.0 0 0&#x27;
-    block_id = 1
-    top_right = &#x27;2.0 1.0 0&#x27;
-  [../]
-  [./interface]
-    input = subdomain1
-    type = SideSetsBetweenSubdomainsGenerator
-    primary_block = &#x27;0&#x27;
-    paired_block = &#x27;1&#x27;
-    new_boundary = &#x27;primary0_interface&#x27;
-  [../]
-[]
-
-[Variables]
-  [./u]
-    block = &#x27;0&#x27;
-    family = LAGRANGE_VEC
-  [../]
-  [./v]
-    block = &#x27;1&#x27;
-    family = LAGRANGE_VEC
-  [../]
-  [w]
-    family = LAGRANGE_VEC
-  []
-[]
-
-[Kernels]
-  [./diff_u]
-    type = VectorDiffusion
-    variable = u
-    block = 0
-  [../]
-  [./diff_v]
-    type = VectorDiffusion
-    variable = v
-    block = 1
-  [../]
-  [diff_w]
-    type = VectorDiffusion
-    variable = w
-  []
-[]
-
-[InterfaceKernels]
-  [./interface]
-    type = ADVectorCoupledInterfacialSource
-    variable = u
-    neighbor_var = v
-    var_source = w
-    boundary = primary0_interface
-    D = 1
-    D_neighbor = 1
+    function_x = &#x27;ffx&#x27;
   [../]
 []
 
 [BCs]
-  [./left]
-    type = VectorDirichletBC
+  [./bnd]
+    type = VectorFunctionDirichletBC
     variable = u
-    boundary = &#x27;left&#x27;
-    values = &#x27;0 0 0&#x27;
+    function_x = &#x27;x_exact_sln&#x27;
+    boundary = &#x27;left right&#x27;
   [../]
-  [./right]
-    type = VectorDirichletBC
-    variable = v
-    boundary = &#x27;right&#x27;
-    values = &#x27;10 0 0&#x27;
+[]
+
+[Functions]
+  [./x_exact_sln]
+    type = ParsedFunction
+    value = &#x27;cos(.5*pi*x)&#x27;
   [../]
-  [./middle]
-    type = ADVectorMatchedValueBC
-    variable = v
-    boundary = &#x27;primary0_interface&#x27;
-    v = u
+  [./ffx]
+    type = ParsedFunction
+    value = &#x27;.25*pi*pi*cos(.5*pi*x)&#x27;
   [../]
-  [w_left]
-    type = VectorDirichletBC
-    variable = w
-    boundary = &#x27;left&#x27;
-    values = &#x27;0 0 0&#x27;
-  []
-  [w_right]
-    type = VectorDirichletBC
-    variable = w
-    boundary = &#x27;right&#x27;
-    values = &#x27;4 0 0&#x27;
-  []
+[]
+
+[Preconditioning]
+  [./pre]
+    type = SMP
+  [../]
 []
 
 [Executioner]
@@ -1561,4 +1561,4 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#25e2ad93-c34b-437d-80a8-5a88efb6fe1e" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#2347dd74-4111-42f6-a9fd-74d5212e1244" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#67646a94-f03b-48f8-98ad-81cb94e26314" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#e0f07889-8d70-4323-a549-2918ccf8285b" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#a807e53c-9ae2-4174-9364-2055e793fe85" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#ab548133-1c2f-45ff-a072-8843e260c26e" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

@@ -1,535 +1,4 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>LogConstantDT.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="32ce6bd1-58e8-4242-a439-b596c4c84f1b"><i class="material-icons">menu</i></a><ul class="sidenav" id="32ce6bd1-58e8-4242-a439-b596c4c84f1b"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">timesteppers</span><a href="#" class="breadcrumb">LogConstantDT</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="a0141301-9833-4f57-a5dd-3c37ec1b9634" data-section-level="1" data-section-text="LogConstantDT"><h1 id="logconstantdt">LogConstantDT</h1><p>Sets the time step so that it is constant in the logarithmic space. The initial time step must be set up independently.</p><p>TimeStepper which imposes a time step constant in the logarithmic space</p><section class="scrollspy" id="eebb7507-01f4-41b8-a91d-d460f279d364" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="8390d860-2c7c-474c-9fe0-7cea77c65388" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">first_dt</span><span class="moose-parameter-header-description">Initial time step (in absolute time)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Initial time step (in absolute time)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">log_dt</span><span class="moose-parameter-header-description">Time step in log10(time)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Time step in log10(time)</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="b4fdde92-0774-4bb8-b2d1-9c9d3ec92e5a" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">cutback_factor_at_failure</span><span class="moose-parameter-header-default">0.5</span><span class="moose-parameter-header-description">Factor to apply to timestep if it a time step fails to convergence.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0.5</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Factor to apply to timestep if it a time step fails to convergence.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">growth_factor</span><span class="moose-parameter-header-default">2</span><span class="moose-parameter-header-description">Maximum ratio of new to previous timestep sizes following a step that required the time step to be cut due to a failed solve.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>2</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Maximum ratio of new to previous timestep sizes following a step that required the time step to be cut due to a failed solve.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">reset_dt</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Use when restarting a calculation to force a change in dt.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Use when restarting a calculation to force a change in dt.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="a2601bdc-a107-4f11-a5ca-039f3d0f289a" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="05114692-7e57-4f84-9481-1d65d0912e45" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#0a70e9ae-0167-4487-b0b0-1ed5ad1320ea" class="modal-trigger">modules/tensor_mechanics/test/tests/visco/gen_maxwell_relax.i</a></li><li><a href="#f814bd51-2cc5-4125-9b6f-9e3ac522a108" class="modal-trigger">modules/tensor_mechanics/test/tests/visco/visco_finite_strain.i</a></li><li><a href="#a84a7aac-102c-4ec6-93b6-a864bc3687d2" class="modal-trigger">modules/tensor_mechanics/test/tests/visco/burgers_creep.i</a></li><li><a href="#ac33cd85-2f8a-4bb3-804a-1c7d0186ce15" class="modal-trigger">modules/tensor_mechanics/test/tests/visco/gen_kv_creep.i</a></li><li><a href="#cda250eb-a1a2-4291-8020-0b24cb645624" class="modal-trigger">modules/tensor_mechanics/test/tests/visco/visco_small_strain.i</a></li><li><a href="#506bd04d-9659-4e05-8023-bef9fa04308e" class="modal-trigger">modules/tensor_mechanics/test/tests/visco/gen_kv_driving.i</a></li><li><a href="#190caaa3-3332-4b01-a869-2e5dbf3afa24" class="modal-trigger">test/tests/time_steppers/logconstant_dt/logconstant_dt.i</a></li><li><a href="#1ec71d6c-5862-4f35-b84f-0d48b9143603" class="modal-trigger">modules/tensor_mechanics/test/tests/visco/gen_maxwell_driving.i</a></li></ul><div class="modal moose-modal" id="0a70e9ae-0167-4487-b0b0-1ed5ad1320ea"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/visco/gen_maxwell_relax.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 3
-  nx = 1
-  ny = 1
-  nz = 1
-  elem_type = HEX8
-  displacements = &#x27;disp_x disp_y disp_z&#x27;
-[]
-
-[Variables]
-  [./disp_x]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./disp_y]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./disp_z]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[AuxVariables]
-  [./stress_xx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./strain_xx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./creep_strain_xx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-[]
-
-[Kernels]
-  [./TensorMechanics]
-    displacements = &#x27;disp_x disp_y disp_z&#x27;
-    use_displaced_mesh = true
-  [../]
-[]
-
-[AuxKernels]
-  [./stress_xx]
-    type = RankTwoAux
-    variable = stress_xx
-    rank_two_tensor = stress
-    index_j = 0
-    index_i = 0
-    execute_on = timestep_end
-  [../]
-  [./strain_xx]
-    type = RankTwoAux
-    variable = strain_xx
-    rank_two_tensor = total_strain
-    index_j = 0
-    index_i = 0
-    execute_on = timestep_end
-  [../]
-  [./creep_strain_xx]
-    type = RankTwoAux
-    variable = creep_strain_xx
-    rank_two_tensor = creep_strain
-    index_j = 0
-    index_i = 0
-    execute_on = timestep_end
-  [../]
-[]
-
-[BCs]
-  [./symmy]
-    type = DirichletBC
-    variable = disp_y
-    boundary = bottom
-    value = 0
-  [../]
-  [./symmx]
-    type = DirichletBC
-    variable = disp_x
-    boundary = left
-    value = 0
-  [../]
-  [./symmz]
-    type = DirichletBC
-    variable = disp_z
-    boundary = back
-    value = 0
-  [../]
-  [./disp]
-    type = DirichletBC
-    variable = disp_x
-    boundary = right
-    value    = 0.001
-  [../]
-[]
-
-[Materials]
-  [./maxwell]
-    type = GeneralizedMaxwellModel
-    creep_modulus = &#x27;3.333333e9 3.333333e9&#x27;
-    creep_viscosity = &#x27;1 10&#x27;
-    poisson_ratio = 0.2
-    young_modulus = 10e9
-  [../]
-  [./stress]
-    type = ComputeMultipleInelasticStress
-    inelastic_models = &#x27;creep&#x27;
-  [../]
-  [./creep]
-    type = LinearViscoelasticStressUpdate
-  [../]
-  [./strain]
-    type = ComputeIncrementalSmallStrain
-    displacements = &#x27;disp_x disp_y disp_z&#x27;
-  [../]
-[]
-
-[UserObjects]
-  [./update]
-    type = LinearViscoelasticityManager
-    viscoelastic_model = maxwell
-  [../]
-[]
-
-[Postprocessors]
-  [./stress_xx]
-    type = ElementAverageValue
-    variable = stress_xx
-    block = &#x27;ANY_BLOCK_ID 0&#x27;
-  [../]
-  [./strain_xx]
-    type = ElementAverageValue
-    variable = strain_xx
-    block = &#x27;ANY_BLOCK_ID 0&#x27;
-  [../]
-  [./creep_strain_xx]
-    type = ElementAverageValue
-    variable = creep_strain_xx
-    block = &#x27;ANY_BLOCK_ID 0&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  [./smp]
-    type = SMP
-    full = true
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-
-  l_max_its  = 50
-  l_tol      = 1e-8
-  nl_max_its = 20
-  nl_rel_tol = 1e-8
-  nl_abs_tol = 1e-6
-
-  dtmin = 0.01
-  end_time = 100
-  [./TimeStepper]
-    type = LogConstantDT
-    first_dt = 0.1
-    log_dt = 0.1
-  [../]
-
-[]
-
-[Outputs]
-  file_base = gen_maxwell_relax_out
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f814bd51-2cc5-4125-9b6f-9e3ac522a108"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/visco/visco_finite_strain.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 3
-  nx = 1
-  ny = 1
-  nz = 1
-  elem_type = HEX8
-  displacements = &#x27;disp_x disp_y disp_z&#x27;
-[]
-
-[Variables]
-  [./disp_x]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./disp_y]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./disp_z]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[AuxVariables]
-  [./stress_xx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./strain_xx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./creep_strain_xx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-[]
-
-[Kernels]
-  [./TensorMechanics]
-    displacements = &#x27;disp_x disp_y disp_z&#x27;
-    use_displaced_mesh = true
-  [../]
-[]
-
-[AuxKernels]
-  [./stress_xx]
-    type = RankTwoAux
-    variable = stress_xx
-    rank_two_tensor = stress
-    index_j = 0
-    index_i = 0
-    execute_on = timestep_end
-  [../]
-  [./strain_xx]
-    type = RankTwoAux
-    variable = strain_xx
-    rank_two_tensor = total_strain
-    index_j = 0
-    index_i = 0
-    execute_on = timestep_end
-  [../]
-  [./creep_strain_xx]
-    type = RankTwoAux
-    variable = creep_strain_xx
-    rank_two_tensor = creep_strain
-    index_j = 0
-    index_i = 0
-    execute_on = timestep_end
-  [../]
-[]
-
-[BCs]
-  [./symmy]
-    type = DirichletBC
-    variable = disp_y
-    boundary = bottom
-    value = 0
-  [../]
-  [./symmx]
-    type = DirichletBC
-    variable = disp_x
-    boundary = left
-    value = 0
-  [../]
-  [./symmz]
-    type = DirichletBC
-    variable = disp_z
-    boundary = back
-    value = 0
-  [../]
-  [./axial_load]
-    type = NeumannBC
-    variable = disp_x
-    boundary = right
-    value    = 10e6
-  [../]
-[]
-
-[Materials]
-  [./kelvin_voigt]
-    type = GeneralizedKelvinVoigtModel
-    creep_modulus = &#x27;10e9 10e9&#x27;
-    creep_viscosity = &#x27;1 10&#x27;
-    poisson_ratio = 0.2
-    young_modulus = 10e9
-  [../]
-  [./stress]
-    type = ComputeMultipleInelasticStress
-    inelastic_models = &#x27;creep&#x27;
-  [../]
-  [./creep]
-    type = LinearViscoelasticStressUpdate
-  [../]
-  [./strain]
-    type = ComputeFiniteStrain
-    displacements = &#x27;disp_x disp_y disp_z&#x27;
-  [../]
-[]
-
-[UserObjects]
-  [./update]
-    type = LinearViscoelasticityManager
-    viscoelastic_model = kelvin_voigt
-  [../]
-[]
-
-[Postprocessors]
-  [./stress_xx]
-    type = ElementAverageValue
-    variable = stress_xx
-    block = &#x27;ANY_BLOCK_ID 0&#x27;
-  [../]
-  [./strain_xx]
-    type = ElementAverageValue
-    variable = strain_xx
-    block = &#x27;ANY_BLOCK_ID 0&#x27;
-  [../]
-  [./creep_strain_xx]
-    type = ElementAverageValue
-    variable = creep_strain_xx
-    block = &#x27;ANY_BLOCK_ID 0&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  [./smp]
-    type = SMP
-    full = true
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-
-  l_max_its  = 100
-  l_tol      = 1e-8
-  nl_max_its = 50
-  nl_rel_tol = 1e-8
-  nl_abs_tol = 1e-8
-
-  dtmin = 0.01
-  end_time = 100
-  [./TimeStepper]
-    type = LogConstantDT
-    first_dt = 0.1
-    log_dt = 0.1
-  [../]
-
-[]
-
-[Outputs]
-  file_base = visco_finite_strain_out
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a84a7aac-102c-4ec6-93b6-a864bc3687d2"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/visco/burgers_creep.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 3
-  nx = 1
-  ny = 1
-  nz = 1
-  elem_type = HEX8
-  displacements = &#x27;disp_x disp_y disp_z&#x27;
-[]
-
-[Variables]
-  [./disp_x]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./disp_y]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./disp_z]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[AuxVariables]
-  [./stress_xx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./strain_xx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./creep_strain_xx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-[]
-
-[Kernels]
-  [./TensorMechanics]
-    displacements = &#x27;disp_x disp_y disp_z&#x27;
-    use_displaced_mesh = true
-  [../]
-[]
-
-[AuxKernels]
-  [./stress_xx]
-    type = RankTwoAux
-    variable = stress_xx
-    rank_two_tensor = stress
-    index_j = 0
-    index_i = 0
-    execute_on = timestep_end
-  [../]
-  [./strain_xx]
-    type = RankTwoAux
-    variable = strain_xx
-    rank_two_tensor = total_strain
-    index_j = 0
-    index_i = 0
-    execute_on = timestep_end
-  [../]
-  [./creep_strain_xx]
-    type = RankTwoAux
-    variable = creep_strain_xx
-    rank_two_tensor = creep_strain
-    index_j = 0
-    index_i = 0
-    execute_on = timestep_end
-  [../]
-[]
-
-[BCs]
-  [./symmy]
-    type = DirichletBC
-    variable = disp_y
-    boundary = bottom
-    value = 0
-  [../]
-  [./symmx]
-    type = DirichletBC
-    variable = disp_x
-    boundary = left
-    value = 0
-  [../]
-  [./symmz]
-    type = DirichletBC
-    variable = disp_z
-    boundary = back
-    value = 0
-  [../]
-  [./axial_load]
-    type = NeumannBC
-    variable = disp_x
-    boundary = right
-    value    = 10e6
-  [../]
-[]
-
-[Materials]
-  [./burgers]
-    type = GeneralizedKelvinVoigtModel
-    creep_modulus = &#x27;10e9&#x27;
-    creep_viscosity = &#x27;1 10&#x27;
-    poisson_ratio = 0.2
-    young_modulus = 10e9
-  [../]
-  [./stress]
-    type = ComputeMultipleInelasticStress
-    inelastic_models = &#x27;creep&#x27;
-  [../]
-  [./creep]
-    type = LinearViscoelasticStressUpdate
-  [../]
-  [./strain]
-    type = ComputeIncrementalSmallStrain
-    displacements = &#x27;disp_x disp_y disp_z&#x27;
-  [../]
-[]
-
-[UserObjects]
-  [./update]
-    type = LinearViscoelasticityManager
-    viscoelastic_model = burgers
-  [../]
-[]
-
-[Postprocessors]
-  [./stress_xx]
-    type = ElementAverageValue
-    variable = stress_xx
-    block = &#x27;ANY_BLOCK_ID 0&#x27;
-  [../]
-  [./strain_xx]
-    type = ElementAverageValue
-    variable = strain_xx
-    block = &#x27;ANY_BLOCK_ID 0&#x27;
-  [../]
-  [./creep_strain_xx]
-    type = ElementAverageValue
-    variable = creep_strain_xx
-    block = &#x27;ANY_BLOCK_ID 0&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  [./smp]
-    type = SMP
-    full = true
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-
-  l_max_its  = 50
-  l_tol      = 1e-10
-  nl_max_its = 20
-  nl_rel_tol = 1e-10
-  nl_abs_tol = 1e-10
-
-  dtmin = 0.01
-  end_time = 100
-  [./TimeStepper]
-    type = LogConstantDT
-    first_dt = 0.1
-    log_dt = 0.1
-  [../]
-
-[]
-
-[Outputs]
-  file_base = burgers_creep_out
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ac33cd85-2f8a-4bb3-804a-1c7d0186ce15"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/visco/gen_kv_creep.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+<!DOCTYPE html><head><meta charset="UTF-8"><title>LogConstantDT.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="4f921ddd-2539-4487-a714-f852d20c9c6d"><i class="material-icons">menu</i></a><ul class="sidenav" id="4f921ddd-2539-4487-a714-f852d20c9c6d"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">timesteppers</span><a href="#" class="breadcrumb">LogConstantDT</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="ec9eadfc-27ce-41c5-9a23-965d29a66861" data-section-level="1" data-section-text="LogConstantDT"><h1 id="logconstantdt">LogConstantDT</h1><p>Sets the time step so that it is constant in the logarithmic space. The initial time step must be set up independently.</p><p>TimeStepper which imposes a time step constant in the logarithmic space</p><section class="scrollspy" id="88eb3afa-762a-4da4-9b23-592917acc228" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="928f8f3f-6703-4d3f-a65d-1687c47d8193" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">first_dt</span><span class="moose-parameter-header-description">Initial time step (in absolute time)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Initial time step (in absolute time)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">log_dt</span><span class="moose-parameter-header-description">Time step in log10(time)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Time step in log10(time)</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="833500db-8e05-45fd-8f7d-afee48c8ee53" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">cutback_factor_at_failure</span><span class="moose-parameter-header-default">0.5</span><span class="moose-parameter-header-description">Factor to apply to timestep if it a time step fails to convergence.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0.5</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Factor to apply to timestep if it a time step fails to convergence.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">growth_factor</span><span class="moose-parameter-header-default">2</span><span class="moose-parameter-header-description">Maximum ratio of new to previous timestep sizes following a step that required the time step to be cut due to a failed solve.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>2</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Maximum ratio of new to previous timestep sizes following a step that required the time step to be cut due to a failed solve.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">reset_dt</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Use when restarting a calculation to force a change in dt.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Use when restarting a calculation to force a change in dt.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="18c40a17-106d-4aaf-b634-bff36894db47" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="cd1367b8-f9e2-4a7d-81ff-df9c8d9cb8a9" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#a5779c2b-3b5b-4e56-a9ab-a4e1a1023766" class="modal-trigger">modules/tensor_mechanics/test/tests/visco/gen_kv_creep.i</a></li><li><a href="#2f02213c-cbc0-4d88-9a94-041160c7f293" class="modal-trigger">modules/tensor_mechanics/test/tests/visco/gen_maxwell_relax.i</a></li><li><a href="#745b673a-d823-4f9e-9386-b031e7570fd0" class="modal-trigger">modules/tensor_mechanics/test/tests/visco/burgers_creep.i</a></li><li><a href="#93132fce-7266-4e15-a282-ff033ce881fc" class="modal-trigger">test/tests/time_steppers/logconstant_dt/logconstant_dt.i</a></li><li><a href="#b9be2c99-7a11-4798-a55b-44dc233bbaf1" class="modal-trigger">modules/tensor_mechanics/test/tests/visco/visco_small_strain.i</a></li><li><a href="#25f20e50-b710-4bc3-9383-ff2a5c7e33a0" class="modal-trigger">modules/tensor_mechanics/test/tests/visco/gen_kv_driving.i</a></li><li><a href="#dda54f18-9cc6-4176-ba73-d01aa22bb500" class="modal-trigger">modules/tensor_mechanics/test/tests/visco/gen_maxwell_driving.i</a></li><li><a href="#10a3a71c-45f4-40c0-8857-24f81c1689ba" class="modal-trigger">modules/tensor_mechanics/test/tests/visco/visco_finite_strain.i</a></li></ul><div class="modal moose-modal" id="a5779c2b-3b5b-4e56-a9ab-a4e1a1023766"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/visco/gen_kv_creep.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 3
   nx = 1
@@ -706,7 +175,418 @@
   file_base = gen_kv_creep_out
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="cda250eb-a1a2-4291-8020-0b24cb645624"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/visco/visco_small_strain.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2f02213c-cbc0-4d88-9a94-041160c7f293"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/visco/gen_maxwell_relax.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 1
+  ny = 1
+  nz = 1
+  elem_type = HEX8
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_z]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./creep_strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    use_displaced_mesh = true
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_xx]
+    type = RankTwoAux
+    variable = stress_xx
+    rank_two_tensor = stress
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+  [./strain_xx]
+    type = RankTwoAux
+    variable = strain_xx
+    rank_two_tensor = total_strain
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+  [./creep_strain_xx]
+    type = RankTwoAux
+    variable = creep_strain_xx
+    rank_two_tensor = creep_strain
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./symmy]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./symmx]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./symmz]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0
+  [../]
+  [./disp]
+    type = DirichletBC
+    variable = disp_x
+    boundary = right
+    value    = 0.001
+  [../]
+[]
+
+[Materials]
+  [./maxwell]
+    type = GeneralizedMaxwellModel
+    creep_modulus = &#x27;3.333333e9 3.333333e9&#x27;
+    creep_viscosity = &#x27;1 10&#x27;
+    poisson_ratio = 0.2
+    young_modulus = 10e9
+  [../]
+  [./stress]
+    type = ComputeMultipleInelasticStress
+    inelastic_models = &#x27;creep&#x27;
+  [../]
+  [./creep]
+    type = LinearViscoelasticStressUpdate
+  [../]
+  [./strain]
+    type = ComputeIncrementalSmallStrain
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./update]
+    type = LinearViscoelasticityManager
+    viscoelastic_model = maxwell
+  [../]
+[]
+
+[Postprocessors]
+  [./stress_xx]
+    type = ElementAverageValue
+    variable = stress_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+  [./strain_xx]
+    type = ElementAverageValue
+    variable = strain_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+  [./creep_strain_xx]
+    type = ElementAverageValue
+    variable = creep_strain_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  l_max_its  = 50
+  l_tol      = 1e-8
+  nl_max_its = 20
+  nl_rel_tol = 1e-8
+  nl_abs_tol = 1e-6
+
+  dtmin = 0.01
+  end_time = 100
+  [./TimeStepper]
+    type = LogConstantDT
+    first_dt = 0.1
+    log_dt = 0.1
+  [../]
+
+[]
+
+[Outputs]
+  file_base = gen_maxwell_relax_out
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="745b673a-d823-4f9e-9386-b031e7570fd0"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/visco/burgers_creep.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 1
+  ny = 1
+  nz = 1
+  elem_type = HEX8
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_z]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./creep_strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    use_displaced_mesh = true
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_xx]
+    type = RankTwoAux
+    variable = stress_xx
+    rank_two_tensor = stress
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+  [./strain_xx]
+    type = RankTwoAux
+    variable = strain_xx
+    rank_two_tensor = total_strain
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+  [./creep_strain_xx]
+    type = RankTwoAux
+    variable = creep_strain_xx
+    rank_two_tensor = creep_strain
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./symmy]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./symmx]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./symmz]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0
+  [../]
+  [./axial_load]
+    type = NeumannBC
+    variable = disp_x
+    boundary = right
+    value    = 10e6
+  [../]
+[]
+
+[Materials]
+  [./burgers]
+    type = GeneralizedKelvinVoigtModel
+    creep_modulus = &#x27;10e9&#x27;
+    creep_viscosity = &#x27;1 10&#x27;
+    poisson_ratio = 0.2
+    young_modulus = 10e9
+  [../]
+  [./stress]
+    type = ComputeMultipleInelasticStress
+    inelastic_models = &#x27;creep&#x27;
+  [../]
+  [./creep]
+    type = LinearViscoelasticStressUpdate
+  [../]
+  [./strain]
+    type = ComputeIncrementalSmallStrain
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./update]
+    type = LinearViscoelasticityManager
+    viscoelastic_model = burgers
+  [../]
+[]
+
+[Postprocessors]
+  [./stress_xx]
+    type = ElementAverageValue
+    variable = stress_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+  [./strain_xx]
+    type = ElementAverageValue
+    variable = strain_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+  [./creep_strain_xx]
+    type = ElementAverageValue
+    variable = creep_strain_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  l_max_its  = 50
+  l_tol      = 1e-10
+  nl_max_its = 20
+  nl_rel_tol = 1e-10
+  nl_abs_tol = 1e-10
+
+  dtmin = 0.01
+  end_time = 100
+  [./TimeStepper]
+    type = LogConstantDT
+    first_dt = 0.1
+    log_dt = 0.1
+  [../]
+
+[]
+
+[Outputs]
+  file_base = burgers_creep_out
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="93132fce-7266-4e15-a282-ff033ce881fc"><div class="modal-content"><h4>test/tests/time_steppers/logconstant_dt/logconstant_dt.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = CoefDiffusion
+    variable = u
+    coef = 0.1
+  [../]
+  [./time]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 11
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+
+  # Pluggable TimeStepper System
+  [./TimeStepper]
+    type = LogConstantDT
+    log_dt = 0.2
+    first_dt = 0.1
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b9be2c99-7a11-4798-a55b-44dc233bbaf1"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/visco/visco_small_strain.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 3
   nx = 1
@@ -879,7 +759,7 @@
   file_base = visco_small_strain_out
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="506bd04d-9659-4e05-8023-bef9fa04308e"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/visco/gen_kv_driving.i</h4><pre class="moose-pre"><code class="language-text"># Represents a unique Maxwell module with E = 10GPa and eta = 10 days with an imposed eigenstrain alpha = 0.001.
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="25f20e50-b710-4bc3-9383-ff2a5c7e33a0"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/visco/gen_kv_driving.i</h4><pre class="moose-pre"><code class="language-text"># Represents a unique Maxwell module with E = 10GPa and eta = 10 days with an imposed eigenstrain alpha = 0.001.
 # The behavior is set up so that the creep strain is driven by both the elastic stress and the internal
 # stress induced by the eigenstrain (E * alpha).
 #
@@ -1067,64 +947,7 @@
   exodus = true
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="190caaa3-3332-4b01-a869-2e5dbf3afa24"><div class="modal-content"><h4>test/tests/time_steppers/logconstant_dt/logconstant_dt.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = CoefDiffusion
-    variable = u
-    coef = 0.1
-  [../]
-  [./time]
-    type = TimeDerivative
-    variable = u
-  [../]
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 11
-  solve_type = PJFNK
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-
-  # Pluggable TimeStepper System
-  [./TimeStepper]
-    type = LogConstantDT
-    log_dt = 0.2
-    first_dt = 0.1
-  [../]
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1ec71d6c-5862-4f35-b84f-0d48b9143603"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/visco/gen_maxwell_driving.i</h4><pre class="moose-pre"><code class="language-text"># Represents a unique Maxwell module with E = 10GPa and eta = 10 days with an imposed eigenstrain alpha = 0.001.
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="dda54f18-9cc6-4176-ba73-d01aa22bb500"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/visco/gen_maxwell_driving.i</h4><pre class="moose-pre"><code class="language-text"># Represents a unique Maxwell module with E = 10GPa and eta = 10 days with an imposed eigenstrain alpha = 0.001.
 # The behavior is set up so that the creep strain is driven by both the elastic stress and the internal
 # stress induced by the eigenstrain (E * alpha).
 #
@@ -1311,4 +1134,181 @@
   file_base = gen_maxwell_driving_out
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#eebb7507-01f4-41b8-a91d-d460f279d364" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#05114692-7e57-4f84-9481-1d65d0912e45" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="10a3a71c-45f4-40c0-8857-24f81c1689ba"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/visco/visco_finite_strain.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 1
+  ny = 1
+  nz = 1
+  elem_type = HEX8
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_z]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./creep_strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    use_displaced_mesh = true
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_xx]
+    type = RankTwoAux
+    variable = stress_xx
+    rank_two_tensor = stress
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+  [./strain_xx]
+    type = RankTwoAux
+    variable = strain_xx
+    rank_two_tensor = total_strain
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+  [./creep_strain_xx]
+    type = RankTwoAux
+    variable = creep_strain_xx
+    rank_two_tensor = creep_strain
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./symmy]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./symmx]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./symmz]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0
+  [../]
+  [./axial_load]
+    type = NeumannBC
+    variable = disp_x
+    boundary = right
+    value    = 10e6
+  [../]
+[]
+
+[Materials]
+  [./kelvin_voigt]
+    type = GeneralizedKelvinVoigtModel
+    creep_modulus = &#x27;10e9 10e9&#x27;
+    creep_viscosity = &#x27;1 10&#x27;
+    poisson_ratio = 0.2
+    young_modulus = 10e9
+  [../]
+  [./stress]
+    type = ComputeMultipleInelasticStress
+    inelastic_models = &#x27;creep&#x27;
+  [../]
+  [./creep]
+    type = LinearViscoelasticStressUpdate
+  [../]
+  [./strain]
+    type = ComputeFiniteStrain
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./update]
+    type = LinearViscoelasticityManager
+    viscoelastic_model = kelvin_voigt
+  [../]
+[]
+
+[Postprocessors]
+  [./stress_xx]
+    type = ElementAverageValue
+    variable = stress_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+  [./strain_xx]
+    type = ElementAverageValue
+    variable = strain_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+  [./creep_strain_xx]
+    type = ElementAverageValue
+    variable = creep_strain_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  l_max_its  = 100
+  l_tol      = 1e-8
+  nl_max_its = 50
+  nl_rel_tol = 1e-8
+  nl_abs_tol = 1e-8
+
+  dtmin = 0.01
+  end_time = 100
+  [./TimeStepper]
+    type = LogConstantDT
+    first_dt = 0.1
+    log_dt = 0.1
+  [../]
+
+[]
+
+[Outputs]
+  file_base = visco_finite_strain_out
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#88eb3afa-762a-4da4-9b23-592917acc228" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#cd1367b8-f9e2-4a7d-81ff-df9c8d9cb8a9" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

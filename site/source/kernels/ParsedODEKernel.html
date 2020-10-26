@@ -1,4 +1,4 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>ParsedODEKernel.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="97787642-7e85-408c-88f6-63e39ac4ff8d"><i class="material-icons">menu</i></a><ul class="sidenav" id="97787642-7e85-408c-88f6-63e39ac4ff8d"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">kernels</span><a href="#" class="breadcrumb">ParsedODEKernel</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="0094d961-c600-4504-9c37-d903d350811f" data-section-level="1" data-section-text="ParsedODEKernel"><h1 id="parsedodekernel">ParsedODEKernel</h1><p>This scalar kernel adds a source term <span tex="s(u, \mathbf{v}, \mathbf{p})" bookmark="moose-equation-b611a04a-add0-454d-bddc-b8f7d122d389" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b611a04a-add0-454d-bddc-b8f7d122d389"><script>var element = document.getElementById("moose-equation-b611a04a-add0-454d-bddc-b8f7d122d389");katex.render("s(u, \\mathbf{v}, \\mathbf{p})", element, {displayMode:false,throwOnError:false});</script></span>: <span class="moose-katex-block-equation"><span tex="\frac{d u}{d t} = s(u, \mathbf{v}, \mathbf{p}) \,," bookmark="moose-equation-50bb9245-908d-4b93-91a6-b3d17e933a7c" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-50bb9245-908d-4b93-91a6-b3d17e933a7c"></span><script>var element = document.getElementById("moose-equation-50bb9245-908d-4b93-91a6-b3d17e933a7c");katex.render("  \\frac{d u}{d t} = s(u, \\mathbf{v}, \\mathbf{p}) \\,,", element, {displayMode:true,throwOnError:false});</script></span> where <span tex="u" bookmark="moose-equation-b5a05475-da3e-4cbc-a445-930fc8471e62" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b5a05475-da3e-4cbc-a445-930fc8471e62"><script>var element = document.getElementById("moose-equation-b5a05475-da3e-4cbc-a445-930fc8471e62");katex.render("u", element, {displayMode:false,throwOnError:false});</script></span> is the variable the source acts upon, <span tex="\mathbf{v}" bookmark="moose-equation-9d6610c0-056c-451c-8068-29bb605e373b" recursive="True" class="moose-katex-inline-equation" id="moose-equation-9d6610c0-056c-451c-8068-29bb605e373b"><script>var element = document.getElementById("moose-equation-9d6610c0-056c-451c-8068-29bb605e373b");katex.render("\\mathbf{v}", element, {displayMode:false,throwOnError:false});</script></span> are other scalar variables, and <span tex="\mathbf{p}" bookmark="moose-equation-55ec0327-bbef-4952-8a7e-1a7d3726bbc9" recursive="True" class="moose-katex-inline-equation" id="moose-equation-55ec0327-bbef-4952-8a7e-1a7d3726bbc9"><script>var element = document.getElementById("moose-equation-55ec0327-bbef-4952-8a7e-1a7d3726bbc9");katex.render("\\mathbf{p}", element, {displayMode:false,throwOnError:false});</script></span> are post-processor values.</p><p>The parameter <code>function</code> is a string expression for the source term <span tex="s(u, \mathbf{v}, \mathbf{p})" bookmark="moose-equation-d44690ea-4781-4491-8ca4-43afdf235013" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d44690ea-4781-4491-8ca4-43afdf235013"><script>var element = document.getElementById("moose-equation-d44690ea-4781-4491-8ca4-43afdf235013");katex.render("s(u, \\mathbf{v}, \\mathbf{p})", element, {displayMode:false,throwOnError:false});</script></span> <strong>as it appears on the left-hand-side of the equation</strong>; thus it represents <span tex="-s(u, \mathbf{v}, \mathbf{p})" bookmark="moose-equation-11f97f75-626c-4329-aea6-6f6c295ff835" recursive="True" class="moose-katex-inline-equation" id="moose-equation-11f97f75-626c-4329-aea6-6f6c295ff835"><script>var element = document.getElementById("moose-equation-11f97f75-626c-4329-aea6-6f6c295ff835");katex.render("-s(u, \\mathbf{v}, \\mathbf{p})", element, {displayMode:false,throwOnError:false});</script></span>. The expression may use the following quantities:</p><ul class="browser-default"><li><p>the name of the scalar variable upon which the kernel acts, </p></li><li><p>the names of any scalar variables specified in the <code>args</code> parameter, </p></li><li><p>the names of any post-processors specified in the <code>postprocessors</code> parameter, and </p></li><li><p>the names supplied in the <code>constant_names</code> parameter, defined to have the values provided by the <code>constant_expressions</code> parameters.</p></li></ul><p>Currently, the function expression cannot be a function of time.</p><pre class="moose-pre"><code class="language-text">[ScalarKernels]
+<!DOCTYPE html><head><meta charset="UTF-8"><title>ParsedODEKernel.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="7d1ca4e9-3cbc-49c5-a324-b2e4a49f4368"><i class="material-icons">menu</i></a><ul class="sidenav" id="7d1ca4e9-3cbc-49c5-a324-b2e4a49f4368"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">kernels</span><a href="#" class="breadcrumb">ParsedODEKernel</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="16d2bcc7-d0e2-4d31-b045-418be665926c" data-section-level="1" data-section-text="ParsedODEKernel"><h1 id="parsedodekernel">ParsedODEKernel</h1><p>This scalar kernel adds a source term <span tex="s(u, \mathbf{v}, \mathbf{p})" bookmark="moose-equation-050c59ff-67b2-4b1c-b6ae-84784a166b13" recursive="True" class="moose-katex-inline-equation" id="moose-equation-050c59ff-67b2-4b1c-b6ae-84784a166b13"><script>var element = document.getElementById("moose-equation-050c59ff-67b2-4b1c-b6ae-84784a166b13");katex.render("s(u, \\mathbf{v}, \\mathbf{p})", element, {displayMode:false,throwOnError:false});</script></span>: <span class="moose-katex-block-equation"><span tex="\frac{d u}{d t} = s(u, \mathbf{v}, \mathbf{p}) \,," bookmark="moose-equation-411f2e5b-31f1-4165-b33d-793cc5124463" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-411f2e5b-31f1-4165-b33d-793cc5124463"></span><script>var element = document.getElementById("moose-equation-411f2e5b-31f1-4165-b33d-793cc5124463");katex.render("  \\frac{d u}{d t} = s(u, \\mathbf{v}, \\mathbf{p}) \\,,", element, {displayMode:true,throwOnError:false});</script></span> where <span tex="u" bookmark="moose-equation-d1b87fc4-6448-4f29-a537-cfd8805c3f6d" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d1b87fc4-6448-4f29-a537-cfd8805c3f6d"><script>var element = document.getElementById("moose-equation-d1b87fc4-6448-4f29-a537-cfd8805c3f6d");katex.render("u", element, {displayMode:false,throwOnError:false});</script></span> is the variable the source acts upon, <span tex="\mathbf{v}" bookmark="moose-equation-19105e63-1d7e-4e1c-9e7d-99eb071a3a41" recursive="True" class="moose-katex-inline-equation" id="moose-equation-19105e63-1d7e-4e1c-9e7d-99eb071a3a41"><script>var element = document.getElementById("moose-equation-19105e63-1d7e-4e1c-9e7d-99eb071a3a41");katex.render("\\mathbf{v}", element, {displayMode:false,throwOnError:false});</script></span> are other scalar variables, and <span tex="\mathbf{p}" bookmark="moose-equation-076908bc-b847-46b1-80eb-593e0dc3d6e7" recursive="True" class="moose-katex-inline-equation" id="moose-equation-076908bc-b847-46b1-80eb-593e0dc3d6e7"><script>var element = document.getElementById("moose-equation-076908bc-b847-46b1-80eb-593e0dc3d6e7");katex.render("\\mathbf{p}", element, {displayMode:false,throwOnError:false});</script></span> are post-processor values.</p><p>The parameter <code>function</code> is a string expression for the source term <span tex="s(u, \mathbf{v}, \mathbf{p})" bookmark="moose-equation-4eaf7046-0efa-464c-8b52-de6c27b70894" recursive="True" class="moose-katex-inline-equation" id="moose-equation-4eaf7046-0efa-464c-8b52-de6c27b70894"><script>var element = document.getElementById("moose-equation-4eaf7046-0efa-464c-8b52-de6c27b70894");katex.render("s(u, \\mathbf{v}, \\mathbf{p})", element, {displayMode:false,throwOnError:false});</script></span> <strong>as it appears on the left-hand-side of the equation</strong>; thus it represents <span tex="-s(u, \mathbf{v}, \mathbf{p})" bookmark="moose-equation-23cbe747-a6f1-4583-8e32-2a88bb708b95" recursive="True" class="moose-katex-inline-equation" id="moose-equation-23cbe747-a6f1-4583-8e32-2a88bb708b95"><script>var element = document.getElementById("moose-equation-23cbe747-a6f1-4583-8e32-2a88bb708b95");katex.render("-s(u, \\mathbf{v}, \\mathbf{p})", element, {displayMode:false,throwOnError:false});</script></span>. The expression may use the following quantities:</p><ul class="browser-default"><li><p>the name of the scalar variable upon which the kernel acts, </p></li><li><p>the names of any scalar variables specified in the <code>args</code> parameter, </p></li><li><p>the names of any post-processors specified in the <code>postprocessors</code> parameter, and </p></li><li><p>the names supplied in the <code>constant_names</code> parameter, defined to have the values provided by the <code>constant_expressions</code> parameters.</p></li></ul><p>Currently, the function expression cannot be a function of time.</p><pre class="moose-pre"><code class="language-text">[ScalarKernels]
   [./td1]
     type = ODETimeDerivative
     variable = x
@@ -35,7 +35,7 @@
     args = x
   [../]
 []
-</code></pre><a href="#af6825c3-19ed-4946-b6bf-3825b2b5a5d3" class="modal-trigger">(examples/ex18_scalar_kernel/ex18_parsed.i)</a><div class="modal moose-modal" id="af6825c3-19ed-4946-b6bf-3825b2b5a5d3"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/examples/ex18_scalar_kernel/ex18_parsed.i</h4><pre class="moose-pre"><code class="language-text">#
+</code></pre><a href="#97a2a0aa-237f-4108-bf37-2904e0c7ba85" class="modal-trigger">(examples/ex18_scalar_kernel/ex18_parsed.i)</a><div class="modal moose-modal" id="97a2a0aa-237f-4108-bf37-2904e0c7ba85"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/examples/ex18_scalar_kernel/ex18_parsed.i</h4><pre class="moose-pre"><code class="language-text">#
 # Example 18 modified to use parsed ODE kernels.
 #
 # The ParsedODEKernel takes function expressions in the input file and computes
@@ -207,320 +207,7 @@
   file_base = &#x27;ex18_out&#x27;
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><section class="scrollspy" id="620dbf31-1a40-4c41-86b1-10045feb9626" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="8485efc7-e3a3-41d0-bacc-ca0d71ea97c6" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">function</span><span class="moose-parameter-header-description">function expression</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>function expression</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this kernel operates on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this kernel operates on</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="af02f4ef-cf99-4877-a283-636db6d3470e" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">args</span><span class="moose-parameter-header-description">additional coupled variables</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>additional coupled variables</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_expressions</span><span class="moose-parameter-header-description">Vector of values for the constants in constant_names (can be an FParser expression)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of values for the constants in constant_names (can be an FParser expression)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_names</span><span class="moose-parameter-header-description">Vector of constants used in the parsed function (use this for kB etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of constants used in the parsed function (use this for kB etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">postprocessors</span><span class="moose-parameter-header-description">Vector of postprocessor names used in the function expression</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<PostprocessorName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of postprocessor names used in the function expression</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="b03e8f70-2831-4682-a517-23437d584596" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">disable_fpoptimizer</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Disable the function parser algebraic optimizer</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Disable the function parser algebraic optimizer</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable_ad_cache</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Enable cacheing of function derivatives for faster startup time</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Enable cacheing of function derivatives for faster startup time</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable_auto_optimize</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Enable automatic immediate optimization of derivatives</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Enable automatic immediate optimization of derivatives</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable_jit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Enable just-in-time compilation of function expressions for faster evaluation</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Enable just-in-time compilation of function expressions for faster evaluation</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">evalerror_behavior</span><span class="moose-parameter-header-default">nan</span><span class="moose-parameter-header-description">What to do if evaluation error occurs. Options are to pass a nan, pass a nan with a warning, throw a error, or throw an exception</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nan</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nan nan_warning error exception</p><p class="moose-parameter-description"><span>Description:</span>What to do if evaluation error occurs. Options are to pass a nan, pass a nan with a warning, throw a error, or throw an exception</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="7f777323-a1e3-4c54-8b09-02cdc64c0fac" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="94de6f13-fa6a-4744-9210-19360dd76bfb" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#f0e1c9e4-22fb-407d-acbb-596afc62085a" class="modal-trigger">test/tests/kernels/ode/parsedode_pp_test.i</a></li><li><a href="#78422c54-0627-4d0d-9811-8b3aae3c1aa2" class="modal-trigger">examples/ex18_scalar_kernel/ex18_parsed.i</a></li><li><a href="#497d4a4e-da4b-45ad-9a00-46fe23231534" class="modal-trigger">test/tests/problems/eigen_problem/eigensolvers/scalar.i</a></li><li><a href="#0f72cab8-f0ec-4de1-b2c3-a9d55d323243" class="modal-trigger">test/tests/time_integrators/scalar/scalar.i</a></li><li><a href="#213f2381-9f59-4f83-b48a-b7700dcc2f7e" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler_verification/ee-ode.i</a></li><li><a href="#2b6ca0da-ea96-49e2-b262-76a5772b3b91" class="modal-trigger">test/tests/kernels/ode/coupled_ode_td_auxvar_ic_from_mesh.i</a></li><li><a href="#ace0bfa6-5224-417d-a040-18187ed96e7c" class="modal-trigger">test/tests/ics/function_scalar_ic/function_scalar_ic.i</a></li><li><a href="#b3664a99-befc-4443-bc9a-68695d427074" class="modal-trigger">test/tests/kernels/bad_scaling_scalar_kernels/ill_conditioned_field_scalar_system.i</a></li><li><a href="#d9df214d-0e12-41e8-8389-6ea2a516ec43" class="modal-trigger">test/tests/time_integrators/explicit_ssp_runge_kutta/explicit_ssp_runge_kutta.i</a></li><li><a href="#2c558195-af69-4b5e-ac32-e51fb7b76a10" class="modal-trigger">test/tests/kernels/ode/parsedode_sys_impl_test.i</a></li><li><a href="#cbb6be25-33ad-4376-bc4c-236883778340" class="modal-trigger">test/tests/time_integrators/scalar/stiff.i</a></li><li><a href="#cfaae31c-f373-4056-a169-58a78449d47f" class="modal-trigger">test/tests/kernels/ode/coupled_ode_td_var_ic_from_mesh.i</a></li><li><a href="#cf634218-4013-4853-b688-62b2b7d7d5d5" class="modal-trigger">test/tests/tag/scalar_tag_vector.i</a></li><li><a href="#0f98cb87-0a7f-434a-88f6-ba0b3017846d" class="modal-trigger">test/tests/outputs/nemesis/nemesis_scalar.i</a></li><li><a href="#367e0cb3-05fd-4af0-9ff4-aae32ceda371" class="modal-trigger">test/tests/controls/time_periods/scalarkernels/scalarkernels.i</a></li><li><a href="#f83be0ab-5cf8-489b-9ce0-a286b1aa24b6" class="modal-trigger">test/tests/controls/conditional_functional_enable/conditional_function_enable.i</a></li><li><a href="#8c1bc99d-0f5d-4703-9494-f7504815096f" class="modal-trigger">test/tests/kernels/ode/coupled_ode_td.i</a></li></ul><div class="modal moose-modal" id="f0e1c9e4-22fb-407d-acbb-596afc62085a"><div class="modal-content"><h4>test/tests/kernels/ode/parsedode_pp_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = 0
-  xmax = 1
-  ymin = 0
-  ymax = 1
-  nx = 2
-  ny = 2
-  elem_type = QUAD4
-[]
-
-[Variables]
-  [./x]
-    family = SCALAR
-    order = FIRST
-    initial_condition = 0
-  [../]
-[]
-
-[ScalarKernels]
-  [./dt]
-    type = ODETimeDerivative
-    variable = x
-  [../]
-  [./ode1]
-    type = ParsedODEKernel
-    function = &#x27;-mytime&#x27;
-    postprocessors = mytime
-    variable = x
-  [../]
-[]
-
-[Postprocessors]
-  [./computed_x]
-    type = ScalarVariable
-    variable = x
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-
-  [./mytime]
-    type = FunctionValuePostprocessor
-    function = t
-    execute_on = &#x27;initial timestep_begin&#x27;
-  [../]
-
-  [./exact_x]
-    type = FunctionValuePostprocessor
-    function = &#x27;0.5*t^2&#x27;
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-
-  [./l2err_x]
-    type = ScalarL2Error
-    variable = x
-    function = &#x27;0.5*t^2&#x27;
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  scheme = bdf2
-  dt = 0.1
-  num_steps = 10
-
-  solve_type = &#x27;NEWTON&#x27;
-[]
-
-[Outputs]
-  file_base = ode_pp_test_out
-  hide = &#x27;x mytime&#x27;
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="78422c54-0627-4d0d-9811-8b3aae3c1aa2"><div class="modal-content"><h4>examples/ex18_scalar_kernel/ex18_parsed.i</h4><pre class="moose-pre"><code class="language-text">#
-# Example 18 modified to use parsed ODE kernels.
-#
-# The ParsedODEKernel takes function expressions in the input file and computes
-# Jacobian entries via automatic differentiation. It allows for rapid development
-# of new models without the need for code recompilation.
-#
-# This input file should produce the exact same result as ex18.i
-#
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = 0
-  xmax = 1
-  ymin = 0
-  ymax = 1
-  nx = 10
-  ny = 10
-  elem_type = QUAD4
-[]
-
-[Functions]
-  # ODEs
-  [./exact_x_fn]
-    type = ParsedFunction
-    value = (-1/3)*exp(-t)+(4/3)*exp(5*t)
-  [../]
-  [./exact_y_fn]
-    type = ParsedFunction
-    value = (2/3)*exp(-t)+(4/3)*exp(5*t)
-  [../]
-[]
-
-[Variables]
-  [./diffused]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-
-  # ODE variables
-  [./x]
-    family = SCALAR
-    order = FIRST
-    initial_condition = 1
-  [../]
-  [./y]
-    family = SCALAR
-    order = FIRST
-    initial_condition = 2
-  [../]
-
-[]
-
-[Kernels]
-  [./td]
-    type = TimeDerivative
-    variable = diffused
-  [../]
-  [./diff]
-    type = Diffusion
-    variable = diffused
-  [../]
-[]
-
-[ScalarKernels]
-  [./td1]
-    type = ODETimeDerivative
-    variable = x
-  [../]
-
-  #
-  # This parsed expression ODE Kernel behaves exactly as the ImplicitODEx kernel
-  # in the main example. Checkout ImplicitODEx::computeQpResidual() in the
-  # source code file ImplicitODEx.C to see the matching residual function.
-  #
-  # The ParsedODEKernel automaticaly generates the On- and Off-Diagonal Jacobian
-  # entries.
-  #
-  [./ode1]
-    type = ParsedODEKernel
-    function = &#x27;-3*x - 2*y&#x27;
-    variable = x
-    args = y
-  [../]
-
-  [./td2]
-    type = ODETimeDerivative
-    variable = y
-  [../]
-
-  #
-  # This parsed expression ODE Kernel behaves exactly as the ImplicitODEy Kernel
-  # in the main example.
-  #
-  [./ode2]
-    type = ParsedODEKernel
-    function = &#x27;-4*x - y&#x27;
-    variable = y
-    args = x
-  [../]
-[]
-
-
-[BCs]
-  [./right]
-    type = ScalarDirichletBC
-    variable = diffused
-    boundary = 1
-    scalar_var = x
-  [../]
-
-  [./left]
-    type = ScalarDirichletBC
-    variable = diffused
-    boundary = 3
-    scalar_var = y
-  [../]
-[]
-
-[Postprocessors]
-  # to print the values of x, y into a file so we can plot it
-  [./x]
-    type = ScalarVariable
-    variable = x
-    execute_on = timestep_end
-  [../]
-  [./y]
-    type = ScalarVariable
-    variable = y
-    execute_on = timestep_end
-  [../]
-
-  [./exact_x]
-    type = FunctionValuePostprocessor
-    function = exact_x_fn
-    execute_on = timestep_end
-  [../]
-
-  [./exact_y]
-    type = FunctionValuePostprocessor
-    function = exact_y_fn
-    execute_on = timestep_end
-    point = &#x27;0 0 0&#x27;
-  [../]
-
-  # Measure the error in ODE solution for &#x27;x&#x27;.
-  [./l2err_x]
-    type = ScalarL2Error
-    variable = x
-    function = exact_x_fn
-  [../]
-
-  # Measure the error in ODE solution for &#x27;y&#x27;.
-  [./l2err_y]
-    type = ScalarL2Error
-    variable = y
-    function = exact_y_fn
-  [../]
-[]
-
-
-[Executioner]
-  type = Transient
-  start_time = 0
-  dt = 0.01
-  num_steps = 10
-  solve_type = &#x27;PJFNK&#x27;
-[]
-
-[Outputs]
-  file_base = &#x27;ex18_out&#x27;
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="497d4a4e-da4b-45ad-9a00-46fe23231534"><div class="modal-content"><h4>test/tests/problems/eigen_problem/eigensolvers/scalar.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  xmin = 0
-  xmax = 1
-  nx = 1
-[]
-
-[Variables]
-  [./f1]
-    family = SCALAR
-    order = FIRST
-    initial_condition = 1
-  [../]
-  [./f2]
-    family = SCALAR
-    order = FIRST
-    initial_condition = 1
-  [../]
-[]
-
-[ScalarKernels]
-  [./row1]
-    type = ParsedODEKernel
-    variable = f1
-    function = &#x27;5*f1 + 2*f2&#x27;
-    args = &#x27;f2&#x27;
-  [../]
-
-  [./row2]
-    type = ParsedODEKernel
-    variable = f2
-    function = &#x27;2*f1 + 5*f2&#x27;
-    args = &#x27;f1&#x27;
-  [../]
-[]
-
-[VectorPostprocessors]
-  [./eigenvalues]
-    type = Eigenvalues
-    execute_on = &#x27;timestep_end&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  [./smp]
-    type = SMP
-    full = true
-  [../]
-[]
-
-[Executioner]
-  type = Eigenvalue
-  which_eigen_pairs = LARGEST_MAGNITUDE
-  eigen_problem_type = HERMITIAN
-  n_eigen_pairs = 2
-  n_basis_vectors = 4
-  eigen_max_its = 10
-  solve_type = KRYLOVSCHUR
-  petsc_options = &#x27;-eps_view&#x27;
-[]
-
-[Outputs]
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0f72cab8-f0ec-4de1-b2c3-a9d55d323243"><div class="modal-content"><h4>test/tests/time_integrators/scalar/scalar.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><section class="scrollspy" id="7456ef1c-caab-452a-9b95-5f2170b76186" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="26f39bcf-8698-4651-9103-e5bd17db87fb" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">function</span><span class="moose-parameter-header-description">function expression</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>function expression</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this kernel operates on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this kernel operates on</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="610f4bc0-cb23-4b41-9cb7-09abd616f6ff" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">args</span><span class="moose-parameter-header-description">additional coupled variables</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>additional coupled variables</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_expressions</span><span class="moose-parameter-header-description">Vector of values for the constants in constant_names (can be an FParser expression)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of values for the constants in constant_names (can be an FParser expression)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_names</span><span class="moose-parameter-header-description">Vector of constants used in the parsed function (use this for kB etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of constants used in the parsed function (use this for kB etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">postprocessors</span><span class="moose-parameter-header-description">Vector of postprocessor names used in the function expression</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<PostprocessorName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of postprocessor names used in the function expression</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="ac4943f6-5283-414a-909d-aa8b6ae4f0b7" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">disable_fpoptimizer</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Disable the function parser algebraic optimizer</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Disable the function parser algebraic optimizer</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable_ad_cache</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Enable cacheing of function derivatives for faster startup time</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Enable cacheing of function derivatives for faster startup time</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable_auto_optimize</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Enable automatic immediate optimization of derivatives</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Enable automatic immediate optimization of derivatives</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable_jit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Enable just-in-time compilation of function expressions for faster evaluation</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Enable just-in-time compilation of function expressions for faster evaluation</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">evalerror_behavior</span><span class="moose-parameter-header-default">nan</span><span class="moose-parameter-header-description">What to do if evaluation error occurs. Options are to pass a nan, pass a nan with a warning, throw a error, or throw an exception</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nan</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nan nan_warning error exception</p><p class="moose-parameter-description"><span>Description:</span>What to do if evaluation error occurs. Options are to pass a nan, pass a nan with a warning, throw a error, or throw an exception</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="c786eb77-e808-40f4-9f08-faa7775234d2" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="1884b681-3d2f-406a-bac1-da439c0505a1" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#38b82ccb-41da-46ed-ad8b-c063f6bfb83b" class="modal-trigger">test/tests/time_integrators/scalar/scalar.i</a></li><li><a href="#03e55eb5-6365-4974-8c88-02a5f465917a" class="modal-trigger">test/tests/ics/function_scalar_ic/function_scalar_ic.i</a></li><li><a href="#e9ca90a9-9f3f-4a58-b9e0-592cb4b61353" class="modal-trigger">test/tests/kernels/ode/parsedode_sys_impl_test.i</a></li><li><a href="#5f1fb8b0-a580-484c-9b41-07c123734c95" class="modal-trigger">test/tests/tag/scalar_tag_vector.i</a></li><li><a href="#a8cbe36a-468e-4ca0-8337-25209f1e4ace" class="modal-trigger">test/tests/time_integrators/scalar/stiff.i</a></li><li><a href="#1e66cf1c-896c-4145-941a-5bde9df20a0a" class="modal-trigger">test/tests/controls/time_periods/scalarkernels/scalarkernels.i</a></li><li><a href="#27a97872-3f17-43ff-a07d-d4068602922d" class="modal-trigger">test/tests/kernels/ode/coupled_ode_td_var_ic_from_mesh.i</a></li><li><a href="#f1787942-4246-483f-b859-6a2a2f7a3d46" class="modal-trigger">test/tests/outputs/nemesis/nemesis_scalar.i</a></li><li><a href="#f4e44fbf-5869-4624-80c4-1e6199e9c576" class="modal-trigger">test/tests/kernels/ode/coupled_ode_td_auxvar_ic_from_mesh.i</a></li><li><a href="#55763f65-a24f-4359-ac29-0d628c44e7a6" class="modal-trigger">test/tests/kernels/ode/parsedode_pp_test.i</a></li><li><a href="#3a972008-2f6f-4bb3-acba-918c84fa5ba7" class="modal-trigger">examples/ex18_scalar_kernel/ex18_parsed.i</a></li><li><a href="#cd840bc0-6f72-4c23-8ba0-4bbd584eb526" class="modal-trigger">test/tests/problems/eigen_problem/eigensolvers/scalar.i</a></li><li><a href="#1f1292a2-253c-4909-9ac8-5d0a1a109c66" class="modal-trigger">test/tests/controls/conditional_functional_enable/conditional_function_enable.i</a></li><li><a href="#08074ff1-aca3-49a5-a89a-d09db0b79486" class="modal-trigger">test/tests/kernels/ode/coupled_ode_td.i</a></li><li><a href="#582e91c7-df3f-482c-939e-924e6807f84b" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler_verification/ee-ode.i</a></li><li><a href="#db0df1e4-844f-4276-b232-74274df6ed88" class="modal-trigger">test/tests/time_integrators/explicit_ssp_runge_kutta/explicit_ssp_runge_kutta.i</a></li><li><a href="#ac710de9-2a69-416a-a5ed-99630b12647d" class="modal-trigger">test/tests/kernels/bad_scaling_scalar_kernels/ill_conditioned_field_scalar_system.i</a></li></ul><div class="modal moose-modal" id="38b82ccb-41da-46ed-ad8b-c063f6bfb83b"><div class="modal-content"><h4>test/tests/time_integrators/scalar/scalar.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   xmin = 0
@@ -604,140 +291,7 @@
 [Outputs]
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="213f2381-9f59-4f83-b48a-b7700dcc2f7e"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler_verification/ee-ode.i</h4><pre class="moose-pre"><code class="language-text"># Tests that ActuallyExplicitEuler works with scalar variables.
-#
-# The ODE and IC used are the following:
-#   du/dt = 2,       u(0) = 0
-# Thus the solution is u(t) = 2*t.
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 1
-[]
-
-[Variables]
-  [./u]
-    family = SCALAR
-    order = FIRST
-    initial_condition = 0
-  [../]
-[]
-
-[ScalarKernels]
-  [./time]
-    type = ODETimeDerivative
-    variable = u
-  [../]
-  [./source]
-    type = ParsedODEKernel
-    variable = u
-    function = -2
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-
-  [./TimeIntegrator]
-    type = ActuallyExplicitEuler
-  [../]
-  dt = 1
-  num_steps = 5
-[]
-
-[Outputs]
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2b6ca0da-ea96-49e2-b262-76a5772b3b91"><div class="modal-content"><h4>test/tests/kernels/ode/coupled_ode_td_auxvar_ic_from_mesh.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = FileMesh
-  file = &#x27;coupled_ode_td_out.e&#x27;
-[]
-
-[Variables]
-  [./f]
-    family = SCALAR
-    order = FIRST
-    initial_condition = 1
-  [../]
-  [./f_times_mult]
-    family = SCALAR
-    order = FIRST
-    initial_condition = 1
-  [../]
-[]
-
-[ScalarKernels]
-  [./dT]
-    type = CoupledODETimeDerivative
-    variable = f
-    v = f_times_mult
-  [../]
-
-  [./src]
-    type = ParsedODEKernel
-    variable = f
-    function = &#x27;-1&#x27;
-  [../]
-
-  [./f_times_mult_1]
-    type = ParsedODEKernel
-    variable = f_times_mult
-    function = &#x27;f_times_mult&#x27;
-  [../]
-
-  [./f_times_mult_2]
-    type = ParsedODEKernel
-    variable = f_times_mult
-    function = &#x27;-f * g&#x27;
-    args = &#x27;f g&#x27;
-  [../]
-[]
-
-[AuxVariables]
-  [./g]
-    family = SCALAR
-    order = FIRST
-    initial_from_file_var = g
-    initial_from_file_timestep = &#x27;LATEST&#x27;
-  [../]
-[]
-
-[Functions]
-  [./function_g]
-    type = ParsedFunction
-    value = &#x27;(1 + t)&#x27;
-  [../]
-[]
-
-[AuxScalarKernels]
-  [./set_g]
-    type = FunctionScalarAux
-    function = function_g
-    variable = g
-    execute_on = &#x27;timestep_end&#x27;
-  [../]
-[]
-
-[Postprocessors]
-  [./f]
-    type = ScalarVariable
-    variable = f
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  dt = 1
-  num_steps = 3
-  nl_abs_tol = 1e-9
-[]
-
-[Outputs]
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ace0bfa6-5224-417d-a040-18187ed96e7c"><div class="modal-content"><h4>test/tests/ics/function_scalar_ic/function_scalar_ic.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="03e55eb5-6365-4974-8c88-02a5f465917a"><div class="modal-content"><h4>test/tests/ics/function_scalar_ic/function_scalar_ic.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   # a dummy mesh
   type = GeneratedMesh
   dim = 2
@@ -797,154 +351,7 @@
 [Outputs]
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b3664a99-befc-4443-bc9a-68695d427074"><div class="modal-content"><h4>test/tests/kernels/bad_scaling_scalar_kernels/ill_conditioned_field_scalar_system.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 2
-[]
-
-[Variables]
-  [./u]
-  [../]
-  [v]
-    family = SCALAR
-    initial_condition = 1
-  []
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-  [scalar]
-    type = ScalarLagrangeMultiplier
-    variable = u
-    lambda = v
-  []
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  [../]
-[]
-
-[ScalarKernels]
-  [reaction]
-    type = ParsedODEKernel
-    function = &#x27;10^20 * v&#x27;
-    variable = v
-  []
-  [time]
-    type = ODETimeDerivative
-    variable = v
-  []
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 1
-  dtmin = 1
-  solve_type = NEWTON
-  petsc_options = &#x27;-pc_svd_monitor -ksp_view_pmat -snes_converged_reason -ksp_converged_reason&#x27;
-  petsc_options_iname = &#x27;-pc_type -snes_stol&#x27;
-  petsc_options_value = &#x27;svd      0&#x27;
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d9df214d-0e12-41e8-8389-6ea2a516ec43"><div class="modal-content"><h4>test/tests/time_integrators/explicit_ssp_runge_kutta/explicit_ssp_runge_kutta.i</h4><pre class="moose-pre"><code class="language-text"># This test solves the following IVP:
-#   du/dt = f(u(t), t),   u(0) = 1
-#   f(u(t), t) = -u(t) + t^3 + 3t^2
-# The exact solution is the following:
-#   u(t) = exp(-t) + t^3
-
-[Mesh]
-  [./mesh]
-    type = GeneratedMeshGenerator
-    dim = 1
-    nx = 1
-  [../]
-[]
-
-[Variables]
-  [./u]
-    family = SCALAR
-    order = FIRST
-    initial_condition = 1
-  [../]
-[]
-
-[ScalarKernels]
-  [./time_derivative]
-    type = ODETimeDerivative
-    variable = u
-  [../]
-  [./source_part1]
-    type = ParsedODEKernel
-    variable = u
-    function = &#x27;u&#x27;
-  [../]
-  [./source_part2]
-    type = PostprocessorSinkScalarKernel
-    variable = u
-    postprocessor = sink_pp
-  [../]
-[]
-
-[Functions]
-  [./sink_fn]
-    type = ParsedFunction
-    value = &#x27;-t^3 - 3*t^2&#x27;
-  [../]
-[]
-
-[Postprocessors]
-  [./sink_pp]
-    type = FunctionValuePostprocessor
-    function = sink_fn
-    execute_on = &#x27;LINEAR NONLINEAR&#x27;
-  [../]
-  [./l2_err]
-    type = ScalarL2Error
-    variable = u
-    function = ${fparse exp(-0.5) + 0.5^3}
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-
-  [./TimeIntegrator]
-    type = ExplicitSSPRungeKutta
-    order = 1
-  [../]
-
-  end_time = 0.5
-  dt = 0.1
-[]
-
-[Outputs]
-  file_base = &#x27;first_order&#x27;
-  exodus = true
-  [./csv]
-    type = CSV
-    show = &#x27;u&#x27;
-    execute_on = &#x27;FINAL&#x27;
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2c558195-af69-4b5e-ac32-e51fb7b76a10"><div class="modal-content"><h4>test/tests/kernels/ode/parsedode_sys_impl_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e9ca90a9-9f3f-4a58-b9e0-592cb4b61353"><div class="modal-content"><h4>test/tests/kernels/ode/parsedode_sys_impl_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   xmin = 0
@@ -1085,7 +492,137 @@
   file_base = ode_sys_impl_test_out
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="cbb6be25-33ad-4376-bc4c-236883778340"><div class="modal-content"><h4>test/tests/time_integrators/scalar/stiff.i</h4><pre class="moose-pre"><code class="language-text"># This is a linear model problem described in Frank et al, &quot;Order
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5f1fb8b0-a580-484c-9b41-07c123734c95"><div class="modal-content"><h4>test/tests/tag/scalar_tag_vector.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  nx = 1
+  ny = 1
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./n]
+    family = SCALAR
+    order = FIRST
+    initial_condition = 1
+  [../]
+[]
+
+[AuxVariables]
+  [./tag_vector_var1]
+    family = SCALAR
+    order = FIRST
+  [../]
+  [./tag_vector_var2]
+    family = SCALAR
+    order = FIRST
+  [../]
+  [./tag_matrix_var2]
+    family = SCALAR
+    order = FIRST
+  [../]
+[]
+
+[ScalarKernels]
+  [./dn]
+    type = ODETimeDerivative
+    variable = n
+    extra_matrix_tags = &#x27;mat_tag1 mat_tag2&#x27;
+    extra_vector_tags = &#x27;vec_tag1&#x27;
+  [../]
+
+  [./ode1]
+    type = ParsedODEKernel
+    function = &#x27;-n&#x27;
+    variable = n
+    extra_matrix_tags = &#x27;mat_tag1&#x27;
+    extra_vector_tags = &#x27;vec_tag1&#x27;
+  [../]
+
+  [./ode2]
+    type = ParsedODEKernel
+    function = &#x27;-n&#x27;
+    variable = n
+    vector_tags = &#x27;vec_tag2&#x27;
+    matrix_tags = &#x27;mat_tag2&#x27;
+  [../]
+[]
+
+[AuxScalarKernels]
+  [./TagVectorAux]
+    type = ScalarTagVectorAux
+    variable = tag_vector_var1
+    v = n
+    vector_tag  = vec_tag1
+    execute_on = timestep_end
+  [../]
+
+  [./TagVectorAux2]
+    type = ScalarTagVectorAux
+    variable = tag_vector_var2
+    v = n
+    vector_tag  = vec_tag2
+    execute_on = timestep_end
+  [../]
+
+  [./TagMatrixAux2]
+    type = ScalarTagMatrixAux
+    variable = tag_matrix_var2
+    v = n
+    matrix_tag  = mat_tag2
+    execute_on = timestep_end
+  [../]
+[]
+
+[Problem]
+  type = TagTestProblem
+  test_tag_vectors =  &#x27;time nontime residual vec_tag1 vec_tag2&#x27;
+  test_tag_matrices = &#x27;mat_tag1 mat_tag2&#x27;
+
+  extra_tag_matrices = &#x27;mat_tag1 mat_tag2&#x27;
+  extra_tag_vectors  = &#x27;vec_tag1 vec_tag2&#x27;
+[]
+
+[Executioner]
+  type = Transient
+  start_time = 0
+  num_steps = 10
+  dt = 0.001
+  dtmin = 0.001 # Don&#x27;t allow timestep cutting
+  solve_type = NEWTON
+  nl_max_its = 2
+  nl_abs_tol = 1.e-12 # This is an ODE, so nl_abs_tol makes sense.
+[]
+
+[Functions]
+  [./exact_solution]
+    type = ParsedFunction
+    value = exp(t)
+  [../]
+[]
+
+[Postprocessors]
+  [./error_n]
+    # Post processor that computes the difference between the computed
+    # and exact solutions.  For the exact solution used here, the
+    # error at the final time should converge at O(dt^p), where p is
+    # the order of the method.
+    type = ScalarL2Error
+    variable = n
+    function = exact_solution
+    # final is not currently supported for Postprocessor execute_on...
+    # execute_on = &#x27;final&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a8cbe36a-468e-4ca0-8337-25209f1e4ace"><div class="modal-content"><h4>test/tests/time_integrators/scalar/stiff.i</h4><pre class="moose-pre"><code class="language-text"># This is a linear model problem described in Frank et al, &quot;Order
 # results for implicit Runge-Kutta methods applied to stiff systems&quot;,
 # SIAM J. Numerical Analysis, vol. 22, no. 3, 1985, pp. 515-534.
 #
@@ -1252,315 +789,7 @@
 [Outputs]
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="cfaae31c-f373-4056-a169-58a78449d47f"><div class="modal-content"><h4>test/tests/kernels/ode/coupled_ode_td_var_ic_from_mesh.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = FileMesh
-  file = &#x27;coupled_ode_td_out.e&#x27;
-[]
-
-[Variables]
-  [./f]
-    family = SCALAR
-    order = FIRST
-    initial_from_file_var = f
-    initial_from_file_timestep = &#x27;LATEST&#x27;
-  [../]
-  [./f_times_mult]
-    family = SCALAR
-    order = FIRST
-    initial_from_file_var = f_times_mult
-    initial_from_file_timestep = &#x27;LATEST&#x27;
-  [../]
-[]
-
-[ScalarKernels]
-  [./dT]
-    type = CoupledODETimeDerivative
-    variable = f
-    v = f_times_mult
-  [../]
-
-  [./src]
-    type = ParsedODEKernel
-    variable = f
-    function = &#x27;-1&#x27;
-  [../]
-
-  [./f_times_mult_1]
-    type = ParsedODEKernel
-    variable = f_times_mult
-    function = &#x27;f_times_mult&#x27;
-  [../]
-
-  [./f_times_mult_2]
-    type = ParsedODEKernel
-    variable = f_times_mult
-    function = &#x27;-f * g&#x27;
-    args = &#x27;f g&#x27;
-  [../]
-[]
-
-[AuxVariables]
-  [./g]
-    family = SCALAR
-    order = FIRST
-  [../]
-[]
-
-[Functions]
-  [./function_g]
-    type = ParsedFunction
-    value = &#x27;(1 + t)&#x27;
-  [../]
-[]
-
-[AuxScalarKernels]
-  [./set_g]
-    type = FunctionScalarAux
-    function = function_g
-    variable = g
-    execute_on = &#x27;linear initial&#x27;
-  [../]
-[]
-
-[Postprocessors]
-  [./f]
-    type = ScalarVariable
-    variable = f
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  dt = 1
-  num_steps = 3
-  nl_abs_tol = 1e-9
-[]
-
-[Outputs]
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="cf634218-4013-4853-b688-62b2b7d7d5d5"><div class="modal-content"><h4>test/tests/tag/scalar_tag_vector.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = 0
-  xmax = 1
-  ymin = 0
-  ymax = 1
-  nx = 1
-  ny = 1
-  elem_type = QUAD4
-[]
-
-[Variables]
-  [./n]
-    family = SCALAR
-    order = FIRST
-    initial_condition = 1
-  [../]
-[]
-
-[AuxVariables]
-  [./tag_vector_var1]
-    family = SCALAR
-    order = FIRST
-  [../]
-  [./tag_vector_var2]
-    family = SCALAR
-    order = FIRST
-  [../]
-  [./tag_matrix_var2]
-    family = SCALAR
-    order = FIRST
-  [../]
-[]
-
-[ScalarKernels]
-  [./dn]
-    type = ODETimeDerivative
-    variable = n
-    extra_matrix_tags = &#x27;mat_tag1 mat_tag2&#x27;
-    extra_vector_tags = &#x27;vec_tag1&#x27;
-  [../]
-
-  [./ode1]
-    type = ParsedODEKernel
-    function = &#x27;-n&#x27;
-    variable = n
-    extra_matrix_tags = &#x27;mat_tag1&#x27;
-    extra_vector_tags = &#x27;vec_tag1&#x27;
-  [../]
-
-  [./ode2]
-    type = ParsedODEKernel
-    function = &#x27;-n&#x27;
-    variable = n
-    vector_tags = &#x27;vec_tag2&#x27;
-    matrix_tags = &#x27;mat_tag2&#x27;
-  [../]
-[]
-
-[AuxScalarKernels]
-  [./TagVectorAux]
-    type = ScalarTagVectorAux
-    variable = tag_vector_var1
-    v = n
-    vector_tag  = vec_tag1
-    execute_on = timestep_end
-  [../]
-
-  [./TagVectorAux2]
-    type = ScalarTagVectorAux
-    variable = tag_vector_var2
-    v = n
-    vector_tag  = vec_tag2
-    execute_on = timestep_end
-  [../]
-
-  [./TagMatrixAux2]
-    type = ScalarTagMatrixAux
-    variable = tag_matrix_var2
-    v = n
-    matrix_tag  = mat_tag2
-    execute_on = timestep_end
-  [../]
-[]
-
-[Problem]
-  type = TagTestProblem
-  test_tag_vectors =  &#x27;time nontime residual vec_tag1 vec_tag2&#x27;
-  test_tag_matrices = &#x27;mat_tag1 mat_tag2&#x27;
-
-  extra_tag_matrices = &#x27;mat_tag1 mat_tag2&#x27;
-  extra_tag_vectors  = &#x27;vec_tag1 vec_tag2&#x27;
-[]
-
-[Executioner]
-  type = Transient
-  start_time = 0
-  num_steps = 10
-  dt = 0.001
-  dtmin = 0.001 # Don&#x27;t allow timestep cutting
-  solve_type = NEWTON
-  nl_max_its = 2
-  nl_abs_tol = 1.e-12 # This is an ODE, so nl_abs_tol makes sense.
-[]
-
-[Functions]
-  [./exact_solution]
-    type = ParsedFunction
-    value = exp(t)
-  [../]
-[]
-
-[Postprocessors]
-  [./error_n]
-    # Post processor that computes the difference between the computed
-    # and exact solutions.  For the exact solution used here, the
-    # error at the final time should converge at O(dt^p), where p is
-    # the order of the method.
-    type = ScalarL2Error
-    variable = n
-    function = exact_solution
-    # final is not currently supported for Postprocessor execute_on...
-    # execute_on = &#x27;final&#x27;
-  [../]
-[]
-
-[Outputs]
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0f98cb87-0a7f-434a-88f6-ba0b3017846d"><div class="modal-content"><h4>test/tests/outputs/nemesis/nemesis_scalar.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  xmin = 0
-  xmax = 1
-  nx = 4
-[]
-
-
-[Variables]
-  [./f]
-    family = SCALAR
-    order = FIRST
-    initial_condition = 1
-  [../]
-  [./f_times_mult]
-    family = SCALAR
-    order = FIRST
-    initial_condition = 1
-  [../]
-[]
-
-[ScalarKernels]
-  [./dT]
-    type = CoupledODETimeDerivative
-    variable = f
-    v = f_times_mult
-  [../]
-
-  [./src]
-    type = ParsedODEKernel
-    variable = f
-    function = &#x27;-1&#x27;
-  [../]
-
-  [./f_times_mult_1]
-    type = ParsedODEKernel
-    variable = f_times_mult
-    function = &#x27;f_times_mult&#x27;
-  [../]
-
-  [./f_times_mult_2]
-    type = ParsedODEKernel
-    variable = f_times_mult
-    function = &#x27;-f * g&#x27;
-    args = &#x27;f g&#x27;
-  [../]
-[]
-
-[AuxVariables]
-  [./g]
-    family = SCALAR
-    order = FIRST
-  [../]
-[]
-
-[Functions]
-  [./function_g]
-    type = ParsedFunction
-    value = &#x27;(1 + t)&#x27;
-  [../]
-[]
-
-[AuxScalarKernels]
-  [./set_g]
-    type = FunctionScalarAux
-    function = function_g
-    variable = g
-    execute_on = &#x27;linear initial&#x27;
-  [../]
-[]
-
-[Postprocessors]
-  [./f]
-    type = ScalarVariable
-    variable = f
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  dt = 1
-  num_steps = 3
-  nl_abs_tol = 1e-9
-[]
-
-[Outputs]
-  nemesis = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="367e0cb3-05fd-4af0-9ff4-aae32ceda371"><div class="modal-content"><h4>test/tests/controls/time_periods/scalarkernels/scalarkernels.i</h4><pre class="moose-pre"><code class="language-text"># This tests controllability of the enable parameter of scalar kernels.
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1e66cf1c-896c-4145-941a-5bde9df20a0a"><div class="modal-content"><h4>test/tests/controls/time_periods/scalarkernels/scalarkernels.i</h4><pre class="moose-pre"><code class="language-text"># This tests controllability of the enable parameter of scalar kernels.
 #
 # There are 2 scalar variables, {u, v}, with the ODEs:
 #   du/dt = 1    u(0) = 0
@@ -1670,7 +899,586 @@ t_transition = 2
 [Outputs]
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f83be0ab-5cf8-489b-9ce0-a286b1aa24b6"><div class="modal-content"><h4>test/tests/controls/conditional_functional_enable/conditional_function_enable.i</h4><pre class="moose-pre"><code class="language-text"># This tests controllability of the enable parameter of a MOOSE object via a
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="27a97872-3f17-43ff-a07d-d4068602922d"><div class="modal-content"><h4>test/tests/kernels/ode/coupled_ode_td_var_ic_from_mesh.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = FileMesh
+  file = &#x27;coupled_ode_td_out.e&#x27;
+[]
+
+[Variables]
+  [./f]
+    family = SCALAR
+    order = FIRST
+    initial_from_file_var = f
+    initial_from_file_timestep = &#x27;LATEST&#x27;
+  [../]
+  [./f_times_mult]
+    family = SCALAR
+    order = FIRST
+    initial_from_file_var = f_times_mult
+    initial_from_file_timestep = &#x27;LATEST&#x27;
+  [../]
+[]
+
+[ScalarKernels]
+  [./dT]
+    type = CoupledODETimeDerivative
+    variable = f
+    v = f_times_mult
+  [../]
+
+  [./src]
+    type = ParsedODEKernel
+    variable = f
+    function = &#x27;-1&#x27;
+  [../]
+
+  [./f_times_mult_1]
+    type = ParsedODEKernel
+    variable = f_times_mult
+    function = &#x27;f_times_mult&#x27;
+  [../]
+
+  [./f_times_mult_2]
+    type = ParsedODEKernel
+    variable = f_times_mult
+    function = &#x27;-f * g&#x27;
+    args = &#x27;f g&#x27;
+  [../]
+[]
+
+[AuxVariables]
+  [./g]
+    family = SCALAR
+    order = FIRST
+  [../]
+[]
+
+[Functions]
+  [./function_g]
+    type = ParsedFunction
+    value = &#x27;(1 + t)&#x27;
+  [../]
+[]
+
+[AuxScalarKernels]
+  [./set_g]
+    type = FunctionScalarAux
+    function = function_g
+    variable = g
+    execute_on = &#x27;linear initial&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./f]
+    type = ScalarVariable
+    variable = f
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 1
+  num_steps = 3
+  nl_abs_tol = 1e-9
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f1787942-4246-483f-b859-6a2a2f7a3d46"><div class="modal-content"><h4>test/tests/outputs/nemesis/nemesis_scalar.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmin = 0
+  xmax = 1
+  nx = 4
+[]
+
+
+[Variables]
+  [./f]
+    family = SCALAR
+    order = FIRST
+    initial_condition = 1
+  [../]
+  [./f_times_mult]
+    family = SCALAR
+    order = FIRST
+    initial_condition = 1
+  [../]
+[]
+
+[ScalarKernels]
+  [./dT]
+    type = CoupledODETimeDerivative
+    variable = f
+    v = f_times_mult
+  [../]
+
+  [./src]
+    type = ParsedODEKernel
+    variable = f
+    function = &#x27;-1&#x27;
+  [../]
+
+  [./f_times_mult_1]
+    type = ParsedODEKernel
+    variable = f_times_mult
+    function = &#x27;f_times_mult&#x27;
+  [../]
+
+  [./f_times_mult_2]
+    type = ParsedODEKernel
+    variable = f_times_mult
+    function = &#x27;-f * g&#x27;
+    args = &#x27;f g&#x27;
+  [../]
+[]
+
+[AuxVariables]
+  [./g]
+    family = SCALAR
+    order = FIRST
+  [../]
+[]
+
+[Functions]
+  [./function_g]
+    type = ParsedFunction
+    value = &#x27;(1 + t)&#x27;
+  [../]
+[]
+
+[AuxScalarKernels]
+  [./set_g]
+    type = FunctionScalarAux
+    function = function_g
+    variable = g
+    execute_on = &#x27;linear initial&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./f]
+    type = ScalarVariable
+    variable = f
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 1
+  num_steps = 3
+  nl_abs_tol = 1e-9
+[]
+
+[Outputs]
+  nemesis = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f4e44fbf-5869-4624-80c4-1e6199e9c576"><div class="modal-content"><h4>test/tests/kernels/ode/coupled_ode_td_auxvar_ic_from_mesh.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = FileMesh
+  file = &#x27;coupled_ode_td_out.e&#x27;
+[]
+
+[Variables]
+  [./f]
+    family = SCALAR
+    order = FIRST
+    initial_condition = 1
+  [../]
+  [./f_times_mult]
+    family = SCALAR
+    order = FIRST
+    initial_condition = 1
+  [../]
+[]
+
+[ScalarKernels]
+  [./dT]
+    type = CoupledODETimeDerivative
+    variable = f
+    v = f_times_mult
+  [../]
+
+  [./src]
+    type = ParsedODEKernel
+    variable = f
+    function = &#x27;-1&#x27;
+  [../]
+
+  [./f_times_mult_1]
+    type = ParsedODEKernel
+    variable = f_times_mult
+    function = &#x27;f_times_mult&#x27;
+  [../]
+
+  [./f_times_mult_2]
+    type = ParsedODEKernel
+    variable = f_times_mult
+    function = &#x27;-f * g&#x27;
+    args = &#x27;f g&#x27;
+  [../]
+[]
+
+[AuxVariables]
+  [./g]
+    family = SCALAR
+    order = FIRST
+    initial_from_file_var = g
+    initial_from_file_timestep = &#x27;LATEST&#x27;
+  [../]
+[]
+
+[Functions]
+  [./function_g]
+    type = ParsedFunction
+    value = &#x27;(1 + t)&#x27;
+  [../]
+[]
+
+[AuxScalarKernels]
+  [./set_g]
+    type = FunctionScalarAux
+    function = function_g
+    variable = g
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./f]
+    type = ScalarVariable
+    variable = f
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 1
+  num_steps = 3
+  nl_abs_tol = 1e-9
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="55763f65-a24f-4359-ac29-0d628c44e7a6"><div class="modal-content"><h4>test/tests/kernels/ode/parsedode_pp_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  nx = 2
+  ny = 2
+  elem_type = QUAD4
+[]
+
+[Variables]
+  [./x]
+    family = SCALAR
+    order = FIRST
+    initial_condition = 0
+  [../]
+[]
+
+[ScalarKernels]
+  [./dt]
+    type = ODETimeDerivative
+    variable = x
+  [../]
+  [./ode1]
+    type = ParsedODEKernel
+    function = &#x27;-mytime&#x27;
+    postprocessors = mytime
+    variable = x
+  [../]
+[]
+
+[Postprocessors]
+  [./computed_x]
+    type = ScalarVariable
+    variable = x
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+
+  [./mytime]
+    type = FunctionValuePostprocessor
+    function = t
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+
+  [./exact_x]
+    type = FunctionValuePostprocessor
+    function = &#x27;0.5*t^2&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+
+  [./l2err_x]
+    type = ScalarL2Error
+    variable = x
+    function = &#x27;0.5*t^2&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  dt = 0.1
+  num_steps = 10
+
+  solve_type = &#x27;NEWTON&#x27;
+[]
+
+[Outputs]
+  file_base = ode_pp_test_out
+  hide = &#x27;x mytime&#x27;
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3a972008-2f6f-4bb3-acba-918c84fa5ba7"><div class="modal-content"><h4>examples/ex18_scalar_kernel/ex18_parsed.i</h4><pre class="moose-pre"><code class="language-text">#
+# Example 18 modified to use parsed ODE kernels.
+#
+# The ParsedODEKernel takes function expressions in the input file and computes
+# Jacobian entries via automatic differentiation. It allows for rapid development
+# of new models without the need for code recompilation.
+#
+# This input file should produce the exact same result as ex18.i
+#
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  nx = 10
+  ny = 10
+  elem_type = QUAD4
+[]
+
+[Functions]
+  # ODEs
+  [./exact_x_fn]
+    type = ParsedFunction
+    value = (-1/3)*exp(-t)+(4/3)*exp(5*t)
+  [../]
+  [./exact_y_fn]
+    type = ParsedFunction
+    value = (2/3)*exp(-t)+(4/3)*exp(5*t)
+  [../]
+[]
+
+[Variables]
+  [./diffused]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+
+  # ODE variables
+  [./x]
+    family = SCALAR
+    order = FIRST
+    initial_condition = 1
+  [../]
+  [./y]
+    family = SCALAR
+    order = FIRST
+    initial_condition = 2
+  [../]
+
+[]
+
+[Kernels]
+  [./td]
+    type = TimeDerivative
+    variable = diffused
+  [../]
+  [./diff]
+    type = Diffusion
+    variable = diffused
+  [../]
+[]
+
+[ScalarKernels]
+  [./td1]
+    type = ODETimeDerivative
+    variable = x
+  [../]
+
+  #
+  # This parsed expression ODE Kernel behaves exactly as the ImplicitODEx kernel
+  # in the main example. Checkout ImplicitODEx::computeQpResidual() in the
+  # source code file ImplicitODEx.C to see the matching residual function.
+  #
+  # The ParsedODEKernel automaticaly generates the On- and Off-Diagonal Jacobian
+  # entries.
+  #
+  [./ode1]
+    type = ParsedODEKernel
+    function = &#x27;-3*x - 2*y&#x27;
+    variable = x
+    args = y
+  [../]
+
+  [./td2]
+    type = ODETimeDerivative
+    variable = y
+  [../]
+
+  #
+  # This parsed expression ODE Kernel behaves exactly as the ImplicitODEy Kernel
+  # in the main example.
+  #
+  [./ode2]
+    type = ParsedODEKernel
+    function = &#x27;-4*x - y&#x27;
+    variable = y
+    args = x
+  [../]
+[]
+
+
+[BCs]
+  [./right]
+    type = ScalarDirichletBC
+    variable = diffused
+    boundary = 1
+    scalar_var = x
+  [../]
+
+  [./left]
+    type = ScalarDirichletBC
+    variable = diffused
+    boundary = 3
+    scalar_var = y
+  [../]
+[]
+
+[Postprocessors]
+  # to print the values of x, y into a file so we can plot it
+  [./x]
+    type = ScalarVariable
+    variable = x
+    execute_on = timestep_end
+  [../]
+  [./y]
+    type = ScalarVariable
+    variable = y
+    execute_on = timestep_end
+  [../]
+
+  [./exact_x]
+    type = FunctionValuePostprocessor
+    function = exact_x_fn
+    execute_on = timestep_end
+  [../]
+
+  [./exact_y]
+    type = FunctionValuePostprocessor
+    function = exact_y_fn
+    execute_on = timestep_end
+    point = &#x27;0 0 0&#x27;
+  [../]
+
+  # Measure the error in ODE solution for &#x27;x&#x27;.
+  [./l2err_x]
+    type = ScalarL2Error
+    variable = x
+    function = exact_x_fn
+  [../]
+
+  # Measure the error in ODE solution for &#x27;y&#x27;.
+  [./l2err_y]
+    type = ScalarL2Error
+    variable = y
+    function = exact_y_fn
+  [../]
+[]
+
+
+[Executioner]
+  type = Transient
+  start_time = 0
+  dt = 0.01
+  num_steps = 10
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Outputs]
+  file_base = &#x27;ex18_out&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="cd840bc0-6f72-4c23-8ba0-4bbd584eb526"><div class="modal-content"><h4>test/tests/problems/eigen_problem/eigensolvers/scalar.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmin = 0
+  xmax = 1
+  nx = 1
+[]
+
+[Variables]
+  [./f1]
+    family = SCALAR
+    order = FIRST
+    initial_condition = 1
+  [../]
+  [./f2]
+    family = SCALAR
+    order = FIRST
+    initial_condition = 1
+  [../]
+[]
+
+[ScalarKernels]
+  [./row1]
+    type = ParsedODEKernel
+    variable = f1
+    function = &#x27;5*f1 + 2*f2&#x27;
+    args = &#x27;f2&#x27;
+  [../]
+
+  [./row2]
+    type = ParsedODEKernel
+    variable = f2
+    function = &#x27;2*f1 + 5*f2&#x27;
+    args = &#x27;f1&#x27;
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./eigenvalues]
+    type = Eigenvalues
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Eigenvalue
+  which_eigen_pairs = LARGEST_MAGNITUDE
+  eigen_problem_type = HERMITIAN
+  n_eigen_pairs = 2
+  n_basis_vectors = 4
+  eigen_max_its = 10
+  solve_type = KRYLOVSCHUR
+  petsc_options = &#x27;-eps_view&#x27;
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1f1292a2-253c-4909-9ac8-5d0a1a109c66"><div class="modal-content"><h4>test/tests/controls/conditional_functional_enable/conditional_function_enable.i</h4><pre class="moose-pre"><code class="language-text"># This tests controllability of the enable parameter of a MOOSE object via a
 # conditional function.
 #
 # There are 2 scalar variables, {u, v}, with the ODEs:
@@ -1789,7 +1597,7 @@ v_growth = 2
 [Outputs]
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8c1bc99d-0f5d-4703-9494-f7504815096f"><div class="modal-content"><h4>test/tests/kernels/ode/coupled_ode_td.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="08074ff1-aca3-49a5-a89a-d09db0b79486"><div class="modal-content"><h4>test/tests/kernels/ode/coupled_ode_td.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 1
   xmin = 0
@@ -1879,4 +1687,196 @@ v_growth = 2
 [Outputs]
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#620dbf31-1a40-4c41-86b1-10045feb9626" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#94de6f13-fa6a-4744-9210-19360dd76bfb" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="582e91c7-df3f-482c-939e-924e6807f84b"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler_verification/ee-ode.i</h4><pre class="moose-pre"><code class="language-text"># Tests that ActuallyExplicitEuler works with scalar variables.
+#
+# The ODE and IC used are the following:
+#   du/dt = 2,       u(0) = 0
+# Thus the solution is u(t) = 2*t.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 1
+[]
+
+[Variables]
+  [./u]
+    family = SCALAR
+    order = FIRST
+    initial_condition = 0
+  [../]
+[]
+
+[ScalarKernels]
+  [./time]
+    type = ODETimeDerivative
+    variable = u
+  [../]
+  [./source]
+    type = ParsedODEKernel
+    variable = u
+    function = -2
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  [./TimeIntegrator]
+    type = ActuallyExplicitEuler
+  [../]
+  dt = 1
+  num_steps = 5
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="db0df1e4-844f-4276-b232-74274df6ed88"><div class="modal-content"><h4>test/tests/time_integrators/explicit_ssp_runge_kutta/explicit_ssp_runge_kutta.i</h4><pre class="moose-pre"><code class="language-text"># This test solves the following IVP:
+#   du/dt = f(u(t), t),   u(0) = 1
+#   f(u(t), t) = -u(t) + t^3 + 3t^2
+# The exact solution is the following:
+#   u(t) = exp(-t) + t^3
+
+[Mesh]
+  [./mesh]
+    type = GeneratedMeshGenerator
+    dim = 1
+    nx = 1
+  [../]
+[]
+
+[Variables]
+  [./u]
+    family = SCALAR
+    order = FIRST
+    initial_condition = 1
+  [../]
+[]
+
+[ScalarKernels]
+  [./time_derivative]
+    type = ODETimeDerivative
+    variable = u
+  [../]
+  [./source_part1]
+    type = ParsedODEKernel
+    variable = u
+    function = &#x27;u&#x27;
+  [../]
+  [./source_part2]
+    type = PostprocessorSinkScalarKernel
+    variable = u
+    postprocessor = sink_pp
+  [../]
+[]
+
+[Functions]
+  [./sink_fn]
+    type = ParsedFunction
+    value = &#x27;-t^3 - 3*t^2&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./sink_pp]
+    type = FunctionValuePostprocessor
+    function = sink_fn
+    execute_on = &#x27;LINEAR NONLINEAR&#x27;
+  [../]
+  [./l2_err]
+    type = ScalarL2Error
+    variable = u
+    function = ${fparse exp(-0.5) + 0.5^3}
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  [./TimeIntegrator]
+    type = ExplicitSSPRungeKutta
+    order = 1
+  [../]
+
+  end_time = 0.5
+  dt = 0.1
+[]
+
+[Outputs]
+  file_base = &#x27;first_order&#x27;
+  exodus = true
+  [./csv]
+    type = CSV
+    show = &#x27;u&#x27;
+    execute_on = &#x27;FINAL&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ac710de9-2a69-416a-a5ed-99630b12647d"><div class="modal-content"><h4>test/tests/kernels/bad_scaling_scalar_kernels/ill_conditioned_field_scalar_system.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 2
+[]
+
+[Variables]
+  [./u]
+  [../]
+  [v]
+    family = SCALAR
+    initial_condition = 1
+  []
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [scalar]
+    type = ScalarLagrangeMultiplier
+    variable = u
+    lambda = v
+  []
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[ScalarKernels]
+  [reaction]
+    type = ParsedODEKernel
+    function = &#x27;10^20 * v&#x27;
+    variable = v
+  []
+  [time]
+    type = ODETimeDerivative
+    variable = v
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+  dtmin = 1
+  solve_type = NEWTON
+  petsc_options = &#x27;-pc_svd_monitor -ksp_view_pmat -snes_converged_reason -ksp_converged_reason&#x27;
+  petsc_options_iname = &#x27;-pc_type -snes_stol&#x27;
+  petsc_options_value = &#x27;svd      0&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#7456ef1c-caab-452a-9b95-5f2170b76186" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#1884b681-3d2f-406a-bac1-da439c0505a1" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

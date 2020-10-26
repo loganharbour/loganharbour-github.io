@@ -1,4 +1,4 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>FunctionPenaltyDirichletBC.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="f65cdec1-7164-4aa4-89d8-c28ce0a7348e"><i class="material-icons">menu</i></a><ul class="sidenav" id="f65cdec1-7164-4aa4-89d8-c28ce0a7348e"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">bcs</span><a href="#" class="breadcrumb">FunctionPenaltyDirichletBC</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="39737c8e-3511-4dcc-9d6a-5684f5d86978" data-section-level="1" data-section-text="FunctionPenaltyDirichletBC"><h1 id="functionpenaltydirichletbc">FunctionPenaltyDirichletBC</h1><p>Enforces a (possibly) time and space-dependent MOOSE Function Dirichlet boundary condition in a weak sense by penalizing differences between the current solution and the Dirichlet data.</p><section class="scrollspy" id="da9ca7ed-0f8b-48a8-ab77-90693aa0765f" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>FunctionPenaltyDirichletBC</code> is a generalization of <a href="PenaltyDirichletBC.html"><code>PenaltyDirichletBC</code></a> which imposes a possibly temporally- and spatially-dependent value defined by a MOOSE <a href="../../syntax/Functions/index.html"><code>Function</code></a> object on a particular set of degrees of freedom (DOFs) defined by the <code>boundary</code> parameter. That is, for a PDE of the form</p><p><span class="moose-katex-block-equation"><span tex="\begin{aligned}   -\nabla^2 u &= f && \quad \in \Omega \\   u &= g(t,\vec{x}) && \quad \in \partial \Omega_D \\   \frac{\partial u}{\partial n} &= h(t,\vec{x}) && \quad \in \partial \Omega_N \end{aligned}" bookmark="moose-equation-e763df25-61bd-495d-a35b-117b13e6ec50" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-e763df25-61bd-495d-a35b-117b13e6ec50"></span><script>var element = document.getElementById("moose-equation-e763df25-61bd-495d-a35b-117b13e6ec50");katex.render("\\begin{aligned}   -\\nabla^2 u &= f && \\quad \\in \\Omega \\\\   u &= g(t,\\vec{x}) && \\quad \\in \\partial \\Omega_D \\\\   \\frac{\\partial u}{\\partial n} &= h(t,\\vec{x}) && \\quad \\in \\partial \\Omega_N \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span></p><p>where <span tex="\Omega \subset \mathbb{R}^n" bookmark="moose-equation-2eab3bd1-212b-451d-a313-fede9ce5143a" recursive="True" class="moose-katex-inline-equation" id="moose-equation-2eab3bd1-212b-451d-a313-fede9ce5143a"><script>var element = document.getElementById("moose-equation-2eab3bd1-212b-451d-a313-fede9ce5143a");katex.render("\\Omega \\subset \\mathbb{R}^n", element, {displayMode:false,throwOnError:false});</script></span> is the domain, and <span tex="\partial \Omega = \partial \Omega_D \cup \partial \Omega_N" bookmark="moose-equation-63835c8e-e6b7-484c-b7bd-6219ee717e95" recursive="True" class="moose-katex-inline-equation" id="moose-equation-63835c8e-e6b7-484c-b7bd-6219ee717e95"><script>var element = document.getElementById("moose-equation-63835c8e-e6b7-484c-b7bd-6219ee717e95");katex.render("\\partial \\Omega = \\partial \\Omega_D \\cup \\partial \\Omega_N", element, {displayMode:false,throwOnError:false});</script></span> is its boundary, a <code>FunctionPenaltyDirichletBC</code> object can be used to impose the condition (2) if the function is well-defined for <span tex="\vec{x} \in \partial \Omega_D" bookmark="moose-equation-db5394d7-8e65-4470-acee-990a0e175f2a" recursive="True" class="moose-katex-inline-equation" id="moose-equation-db5394d7-8e65-4470-acee-990a0e175f2a"><script>var element = document.getElementById("moose-equation-db5394d7-8e65-4470-acee-990a0e175f2a");katex.render("\\vec{x} \\in \\partial \\Omega_D", element, {displayMode:false,throwOnError:false});</script></span>. In this case, the <code>function</code> parameter corresponds to a MOOSE <code>Function</code> object which represents the mathematical function <span tex="g(t,\vec{x})" bookmark="moose-equation-dc57979b-9c2c-4e08-a838-5af35eb83473" recursive="True" class="moose-katex-inline-equation" id="moose-equation-dc57979b-9c2c-4e08-a838-5af35eb83473"><script>var element = document.getElementById("moose-equation-dc57979b-9c2c-4e08-a838-5af35eb83473");katex.render("g(t,\\vec{x})", element, {displayMode:false,throwOnError:false});</script></span>, and the user must define one or more sidesets corresponding to the boundary subset <span tex="\partial \Omega_D" bookmark="moose-equation-547dda29-7f56-4d2a-a9b4-0ed3068c73ed" recursive="True" class="moose-katex-inline-equation" id="moose-equation-547dda29-7f56-4d2a-a9b4-0ed3068c73ed"><script>var element = document.getElementById("moose-equation-547dda29-7f56-4d2a-a9b4-0ed3068c73ed");katex.render("\\partial \\Omega_D", element, {displayMode:false,throwOnError:false});</script></span> via the <code>boundary</code> parameter.</p><p>Instead of imposing the Dirichlet condition directly on the basis by replacing the equations associated with those degrees of freedom (DOFs) by the auxiliary equation <span tex="u-g(t,\vec{x})=0" bookmark="moose-equation-b9fbceb5-d254-4084-9bce-c7423fbb7ce1" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b9fbceb5-d254-4084-9bce-c7423fbb7ce1"><script>var element = document.getElementById("moose-equation-b9fbceb5-d254-4084-9bce-c7423fbb7ce1");katex.render("u-g(t,\\vec{x})=0", element, {displayMode:false,throwOnError:false});</script></span>, the <code>FunctionPenaltyDirichletBC</code> is based on the variational statement: find <span tex="u \in H^1(\Omega)" bookmark="moose-equation-66ac037d-58fc-4019-b8e7-f3b2bb1ea57a" recursive="True" class="moose-katex-inline-equation" id="moose-equation-66ac037d-58fc-4019-b8e7-f3b2bb1ea57a"><script>var element = document.getElementById("moose-equation-66ac037d-58fc-4019-b8e7-f3b2bb1ea57a");katex.render("u \\in H^1(\\Omega)", element, {displayMode:false,throwOnError:false});</script></span> such that <span class="moose-katex-block-equation"><span tex="\int_{\Omega} \left( \nabla u \cdot \nabla v - fv \right) \,\text{d}x   -\int_{\partial \Omega_N} hv \,\text{d}s   +\int_{\partial \Omega_D} \frac{1}{\epsilon} (u-g(t,\vec{x}))v \,\text{d}s = 0" label="weakform" number="1" bookmark="moose-equation-8e083e94-963c-4d5b-b434-9cef75a7decf" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-8e083e94-963c-4d5b-b434-9cef75a7decf"></span><span class="moose-katex-equation-number">(1)</span><script>var element = document.getElementById("moose-equation-8e083e94-963c-4d5b-b434-9cef75a7decf");katex.render("     \\int_{\\Omega} \\left( \\nabla u \\cdot \\nabla v - fv \\right) \\,\\text{d}x   -\\int_{\\partial \\Omega_N} hv \\,\\text{d}s   +\\int_{\\partial \\Omega_D} \\frac{1}{\\epsilon} (u-g(t,\\vec{x}))v \\,\\text{d}s = 0", element, {displayMode:true,throwOnError:false});</script></span> holds for every <span tex="v \in H^1(\Omega)" bookmark="moose-equation-207309a3-0019-467e-b96e-20157f2a3853" recursive="True" class="moose-katex-inline-equation" id="moose-equation-207309a3-0019-467e-b96e-20157f2a3853"><script>var element = document.getElementById("moose-equation-207309a3-0019-467e-b96e-20157f2a3853");katex.render("v \\in H^1(\\Omega)", element, {displayMode:false,throwOnError:false});</script></span>. In <a href="#moose-equation-3938df59-f1cc-43d0-984f-06c34fe3acc2">Eq. (1)</a>, <span tex="\epsilon \ll 1" bookmark="moose-equation-5830aa43-9602-4e9c-9b3c-4edacb068985" recursive="True" class="moose-katex-inline-equation" id="moose-equation-5830aa43-9602-4e9c-9b3c-4edacb068985"><script>var element = document.getElementById("moose-equation-5830aa43-9602-4e9c-9b3c-4edacb068985");katex.render("\\epsilon \\ll 1", element, {displayMode:false,throwOnError:false});</script></span> is a user-selected parameter which must be taken small enough to ensure that <span tex="u \approx g(t,\vec{x})" bookmark="moose-equation-f4ec4e34-df62-490a-8599-110125ab7969" recursive="True" class="moose-katex-inline-equation" id="moose-equation-f4ec4e34-df62-490a-8599-110125ab7969"><script>var element = document.getElementById("moose-equation-f4ec4e34-df62-490a-8599-110125ab7969");katex.render("u \\approx g(t,\\vec{x})", element, {displayMode:false,throwOnError:false});</script></span> on <span tex="\partial \Omega_D" bookmark="moose-equation-d3c50794-eb66-4ed6-947c-a969deb1877b" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d3c50794-eb66-4ed6-947c-a969deb1877b"><script>var element = document.getElementById("moose-equation-d3c50794-eb66-4ed6-947c-a969deb1877b");katex.render("\\partial \\Omega_D", element, {displayMode:false,throwOnError:false});</script></span>. The user-selectable class parameter <code>penalty</code> corresponds to <span tex="\frac{1}{\epsilon}" bookmark="moose-equation-68e70143-9a92-4fde-9ae9-3db1d4fd3b2a" recursive="True" class="moose-katex-inline-equation" id="moose-equation-68e70143-9a92-4fde-9ae9-3db1d4fd3b2a"><script>var element = document.getElementById("moose-equation-68e70143-9a92-4fde-9ae9-3db1d4fd3b2a");katex.render("\\frac{1}{\\epsilon}", element, {displayMode:false,throwOnError:false});</script></span>, and must be chosen large enough to ensure good agreement with the Dirichlet data, but not so large that the resulting Jacobian becomes ill-conditioned, resulting in failed solves and overall accuracy losses.</p><p>Benefits of the penalty-based approach include simplified Dirichlet boundary condition enforcement for non-Lagrange finite element bases, maintaining the symmetry (if any) of the original problem, and avoiding the need to zero out contributions from other rows in a special post-assembly step. Integrating by parts &quot;in reverse&quot; from <a href="#moose-equation-3938df59-f1cc-43d0-984f-06c34fe3acc2">Eq. (1)</a>, one obtains</p><p><span class="moose-katex-block-equation"><span tex="\int_{\Omega} \left( -\nabla^2 u  - f \right) v \,\text{d}x   +\int_{\partial \Omega_N} \left( \frac{\partial u}{\partial n} - h(t,\vec{x}) \right) v \,\text{d}s   +\int_{\partial \Omega_D} \left[ \frac{\partial u}{\partial n} + \frac{1}{\epsilon} (u-g(t,\vec{x})) \right] v \,\text{d}s = 0" label="weakform2" number="2" bookmark="moose-equation-dae2c662-8f54-4ca4-ace7-203802f92842" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-dae2c662-8f54-4ca4-ace7-203802f92842"></span><span class="moose-katex-equation-number">(2)</span><script>var element = document.getElementById("moose-equation-dae2c662-8f54-4ca4-ace7-203802f92842");katex.render("     \\int_{\\Omega} \\left( -\\nabla^2 u  - f \\right) v \\,\\text{d}x   +\\int_{\\partial \\Omega_N} \\left( \\frac{\\partial u}{\\partial n} - h(t,\\vec{x}) \\right) v \\,\\text{d}s   +\\int_{\\partial \\Omega_D} \\left[ \\frac{\\partial u}{\\partial n} + \\frac{1}{\\epsilon} (u-g(t,\\vec{x})) \\right] v \\,\\text{d}s = 0", element, {displayMode:true,throwOnError:false});</script></span></p><p>We therefore recover a &quot;perturbed&quot; version of the original problem with the flux boundary condition</p><p><span class="moose-katex-block-equation"><span tex="\frac{\partial u}{\partial n} = -\frac{1}{\epsilon} (u-g(t,\vec{x})) \, \in \partial \Omega_D" bookmark="moose-equation-24721f60-cd13-454a-8375-dcaa87b3cb5e" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-24721f60-cd13-454a-8375-dcaa87b3cb5e"></span><script>var element = document.getElementById("moose-equation-24721f60-cd13-454a-8375-dcaa87b3cb5e");katex.render("  \\frac{\\partial u}{\\partial n} = -\\frac{1}{\\epsilon} (u-g(t,\\vec{x})) \\, \\in \\partial \\Omega_D", element, {displayMode:true,throwOnError:false});</script></span></p><p>replacing the original Dirichlet boundary condition. It has been shown <a href="#juntunen2009nitsche">Juntunen and Stenberg (2009)</a> that in order for the solution to this perturbed problem to converge to the solution of the original problem in the limit as <span tex="\epsilon \rightarrow 0" bookmark="moose-equation-5b022586-6d9d-4a30-8157-f94be1e6618d" recursive="True" class="moose-katex-inline-equation" id="moose-equation-5b022586-6d9d-4a30-8157-f94be1e6618d"><script>var element = document.getElementById("moose-equation-5b022586-6d9d-4a30-8157-f94be1e6618d");katex.render("\\epsilon \\rightarrow 0", element, {displayMode:false,throwOnError:false});</script></span>, the penalty parameter must depend on the mesh size, and that as we refine the mesh, the problem becomes increasingly ill-conditioned.  A related method for imposing Dirichlet boundary conditions, known as Nitsche&#x27;s method <a href="#juntunen2009nitsche">Juntunen and Stenberg (2009)</a>, does not suffer from the same ill-conditioning issues, and is slated for inclusion in MOOSE some time in the future.</p></section><section class="scrollspy" id="f39fb650-36b9-49b0-8d1c-8c5133a5a61c" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">[BCs]
+<!DOCTYPE html><head><meta charset="UTF-8"><title>FunctionPenaltyDirichletBC.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="9adad186-4e25-46dd-b9f4-d286b31c854c"><i class="material-icons">menu</i></a><ul class="sidenav" id="9adad186-4e25-46dd-b9f4-d286b31c854c"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">bcs</span><a href="#" class="breadcrumb">FunctionPenaltyDirichletBC</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="909fba32-6e85-46a5-80fd-11261c477d94" data-section-level="1" data-section-text="FunctionPenaltyDirichletBC"><h1 id="functionpenaltydirichletbc">FunctionPenaltyDirichletBC</h1><p>Enforces a (possibly) time and space-dependent MOOSE Function Dirichlet boundary condition in a weak sense by penalizing differences between the current solution and the Dirichlet data.</p><section class="scrollspy" id="b4a3bced-940b-403b-9f65-6936d327e60d" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>FunctionPenaltyDirichletBC</code> is a generalization of <a href="PenaltyDirichletBC.html"><code>PenaltyDirichletBC</code></a> which imposes a possibly temporally- and spatially-dependent value defined by a MOOSE <a href="../../syntax/Functions/index.html"><code>Function</code></a> object on a particular set of degrees of freedom (DOFs) defined by the <code>boundary</code> parameter. That is, for a PDE of the form</p><p><span class="moose-katex-block-equation"><span tex="\begin{aligned}   -\nabla^2 u &= f && \quad \in \Omega \\   u &= g(t,\vec{x}) && \quad \in \partial \Omega_D \\   \frac{\partial u}{\partial n} &= h(t,\vec{x}) && \quad \in \partial \Omega_N \end{aligned}" bookmark="moose-equation-5afa2853-7112-49be-8f7d-2a61cab0cd3f" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-5afa2853-7112-49be-8f7d-2a61cab0cd3f"></span><script>var element = document.getElementById("moose-equation-5afa2853-7112-49be-8f7d-2a61cab0cd3f");katex.render("\\begin{aligned}   -\\nabla^2 u &= f && \\quad \\in \\Omega \\\\   u &= g(t,\\vec{x}) && \\quad \\in \\partial \\Omega_D \\\\   \\frac{\\partial u}{\\partial n} &= h(t,\\vec{x}) && \\quad \\in \\partial \\Omega_N \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span></p><p>where <span tex="\Omega \subset \mathbb{R}^n" bookmark="moose-equation-bf37a427-6684-45ac-81d5-daa815d94e96" recursive="True" class="moose-katex-inline-equation" id="moose-equation-bf37a427-6684-45ac-81d5-daa815d94e96"><script>var element = document.getElementById("moose-equation-bf37a427-6684-45ac-81d5-daa815d94e96");katex.render("\\Omega \\subset \\mathbb{R}^n", element, {displayMode:false,throwOnError:false});</script></span> is the domain, and <span tex="\partial \Omega = \partial \Omega_D \cup \partial \Omega_N" bookmark="moose-equation-9fa66aba-e8cc-4b34-a849-c6f678f086ea" recursive="True" class="moose-katex-inline-equation" id="moose-equation-9fa66aba-e8cc-4b34-a849-c6f678f086ea"><script>var element = document.getElementById("moose-equation-9fa66aba-e8cc-4b34-a849-c6f678f086ea");katex.render("\\partial \\Omega = \\partial \\Omega_D \\cup \\partial \\Omega_N", element, {displayMode:false,throwOnError:false});</script></span> is its boundary, a <code>FunctionPenaltyDirichletBC</code> object can be used to impose the condition (2) if the function is well-defined for <span tex="\vec{x} \in \partial \Omega_D" bookmark="moose-equation-01b391a0-5da6-4d1f-95cf-ae809c333319" recursive="True" class="moose-katex-inline-equation" id="moose-equation-01b391a0-5da6-4d1f-95cf-ae809c333319"><script>var element = document.getElementById("moose-equation-01b391a0-5da6-4d1f-95cf-ae809c333319");katex.render("\\vec{x} \\in \\partial \\Omega_D", element, {displayMode:false,throwOnError:false});</script></span>. In this case, the <code>function</code> parameter corresponds to a MOOSE <code>Function</code> object which represents the mathematical function <span tex="g(t,\vec{x})" bookmark="moose-equation-6179ff0b-4c56-4012-bdfa-1979b456ecac" recursive="True" class="moose-katex-inline-equation" id="moose-equation-6179ff0b-4c56-4012-bdfa-1979b456ecac"><script>var element = document.getElementById("moose-equation-6179ff0b-4c56-4012-bdfa-1979b456ecac");katex.render("g(t,\\vec{x})", element, {displayMode:false,throwOnError:false});</script></span>, and the user must define one or more sidesets corresponding to the boundary subset <span tex="\partial \Omega_D" bookmark="moose-equation-0b46c839-0222-4325-beef-e759c8170ef4" recursive="True" class="moose-katex-inline-equation" id="moose-equation-0b46c839-0222-4325-beef-e759c8170ef4"><script>var element = document.getElementById("moose-equation-0b46c839-0222-4325-beef-e759c8170ef4");katex.render("\\partial \\Omega_D", element, {displayMode:false,throwOnError:false});</script></span> via the <code>boundary</code> parameter.</p><p>Instead of imposing the Dirichlet condition directly on the basis by replacing the equations associated with those degrees of freedom (DOFs) by the auxiliary equation <span tex="u-g(t,\vec{x})=0" bookmark="moose-equation-58878f6f-eea0-4219-9fa5-3b2e455ee244" recursive="True" class="moose-katex-inline-equation" id="moose-equation-58878f6f-eea0-4219-9fa5-3b2e455ee244"><script>var element = document.getElementById("moose-equation-58878f6f-eea0-4219-9fa5-3b2e455ee244");katex.render("u-g(t,\\vec{x})=0", element, {displayMode:false,throwOnError:false});</script></span>, the <code>FunctionPenaltyDirichletBC</code> is based on the variational statement: find <span tex="u \in H^1(\Omega)" bookmark="moose-equation-d392dfa5-7b1e-4678-92a6-5f48d18bc506" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d392dfa5-7b1e-4678-92a6-5f48d18bc506"><script>var element = document.getElementById("moose-equation-d392dfa5-7b1e-4678-92a6-5f48d18bc506");katex.render("u \\in H^1(\\Omega)", element, {displayMode:false,throwOnError:false});</script></span> such that <span class="moose-katex-block-equation"><span tex="\int_{\Omega} \left( \nabla u \cdot \nabla v - fv \right) \,\text{d}x   -\int_{\partial \Omega_N} hv \,\text{d}s   +\int_{\partial \Omega_D} \frac{1}{\epsilon} (u-g(t,\vec{x}))v \,\text{d}s = 0" label="weakform" number="1" bookmark="moose-equation-a7dd2d80-7a08-4f5f-b889-966c2350688b" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-a7dd2d80-7a08-4f5f-b889-966c2350688b"></span><span class="moose-katex-equation-number">(1)</span><script>var element = document.getElementById("moose-equation-a7dd2d80-7a08-4f5f-b889-966c2350688b");katex.render("     \\int_{\\Omega} \\left( \\nabla u \\cdot \\nabla v - fv \\right) \\,\\text{d}x   -\\int_{\\partial \\Omega_N} hv \\,\\text{d}s   +\\int_{\\partial \\Omega_D} \\frac{1}{\\epsilon} (u-g(t,\\vec{x}))v \\,\\text{d}s = 0", element, {displayMode:true,throwOnError:false});</script></span> holds for every <span tex="v \in H^1(\Omega)" bookmark="moose-equation-c1a046b5-8212-498a-a88d-99ec5a8b18e1" recursive="True" class="moose-katex-inline-equation" id="moose-equation-c1a046b5-8212-498a-a88d-99ec5a8b18e1"><script>var element = document.getElementById("moose-equation-c1a046b5-8212-498a-a88d-99ec5a8b18e1");katex.render("v \\in H^1(\\Omega)", element, {displayMode:false,throwOnError:false});</script></span>. In <a href="#moose-equation-a7dd2d80-7a08-4f5f-b889-966c2350688b">Eq. (1)</a>, <span tex="\epsilon \ll 1" bookmark="moose-equation-f08de271-d36b-43c1-8948-698d5c567f82" recursive="True" class="moose-katex-inline-equation" id="moose-equation-f08de271-d36b-43c1-8948-698d5c567f82"><script>var element = document.getElementById("moose-equation-f08de271-d36b-43c1-8948-698d5c567f82");katex.render("\\epsilon \\ll 1", element, {displayMode:false,throwOnError:false});</script></span> is a user-selected parameter which must be taken small enough to ensure that <span tex="u \approx g(t,\vec{x})" bookmark="moose-equation-fd267047-87b0-4b9b-b643-856d87bc9423" recursive="True" class="moose-katex-inline-equation" id="moose-equation-fd267047-87b0-4b9b-b643-856d87bc9423"><script>var element = document.getElementById("moose-equation-fd267047-87b0-4b9b-b643-856d87bc9423");katex.render("u \\approx g(t,\\vec{x})", element, {displayMode:false,throwOnError:false});</script></span> on <span tex="\partial \Omega_D" bookmark="moose-equation-01548c8f-1352-4d39-af4e-080634e0445a" recursive="True" class="moose-katex-inline-equation" id="moose-equation-01548c8f-1352-4d39-af4e-080634e0445a"><script>var element = document.getElementById("moose-equation-01548c8f-1352-4d39-af4e-080634e0445a");katex.render("\\partial \\Omega_D", element, {displayMode:false,throwOnError:false});</script></span>. The user-selectable class parameter <code>penalty</code> corresponds to <span tex="\frac{1}{\epsilon}" bookmark="moose-equation-d5d567a8-0687-4df7-bc5f-48be224b2d81" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d5d567a8-0687-4df7-bc5f-48be224b2d81"><script>var element = document.getElementById("moose-equation-d5d567a8-0687-4df7-bc5f-48be224b2d81");katex.render("\\frac{1}{\\epsilon}", element, {displayMode:false,throwOnError:false});</script></span>, and must be chosen large enough to ensure good agreement with the Dirichlet data, but not so large that the resulting Jacobian becomes ill-conditioned, resulting in failed solves and overall accuracy losses.</p><p>Benefits of the penalty-based approach include simplified Dirichlet boundary condition enforcement for non-Lagrange finite element bases, maintaining the symmetry (if any) of the original problem, and avoiding the need to zero out contributions from other rows in a special post-assembly step. Integrating by parts &quot;in reverse&quot; from <a href="#moose-equation-a7dd2d80-7a08-4f5f-b889-966c2350688b">Eq. (1)</a>, one obtains</p><p><span class="moose-katex-block-equation"><span tex="\int_{\Omega} \left( -\nabla^2 u  - f \right) v \,\text{d}x   +\int_{\partial \Omega_N} \left( \frac{\partial u}{\partial n} - h(t,\vec{x}) \right) v \,\text{d}s   +\int_{\partial \Omega_D} \left[ \frac{\partial u}{\partial n} + \frac{1}{\epsilon} (u-g(t,\vec{x})) \right] v \,\text{d}s = 0" label="weakform2" number="2" bookmark="moose-equation-14789bbe-7377-498a-963b-d321f43318a0" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-14789bbe-7377-498a-963b-d321f43318a0"></span><span class="moose-katex-equation-number">(2)</span><script>var element = document.getElementById("moose-equation-14789bbe-7377-498a-963b-d321f43318a0");katex.render("     \\int_{\\Omega} \\left( -\\nabla^2 u  - f \\right) v \\,\\text{d}x   +\\int_{\\partial \\Omega_N} \\left( \\frac{\\partial u}{\\partial n} - h(t,\\vec{x}) \\right) v \\,\\text{d}s   +\\int_{\\partial \\Omega_D} \\left[ \\frac{\\partial u}{\\partial n} + \\frac{1}{\\epsilon} (u-g(t,\\vec{x})) \\right] v \\,\\text{d}s = 0", element, {displayMode:true,throwOnError:false});</script></span></p><p>We therefore recover a &quot;perturbed&quot; version of the original problem with the flux boundary condition</p><p><span class="moose-katex-block-equation"><span tex="\frac{\partial u}{\partial n} = -\frac{1}{\epsilon} (u-g(t,\vec{x})) \, \in \partial \Omega_D" bookmark="moose-equation-a2545a53-e2a5-4599-8778-931c72ba8e24" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-a2545a53-e2a5-4599-8778-931c72ba8e24"></span><script>var element = document.getElementById("moose-equation-a2545a53-e2a5-4599-8778-931c72ba8e24");katex.render("  \\frac{\\partial u}{\\partial n} = -\\frac{1}{\\epsilon} (u-g(t,\\vec{x})) \\, \\in \\partial \\Omega_D", element, {displayMode:true,throwOnError:false});</script></span></p><p>replacing the original Dirichlet boundary condition. It has been shown <a href="#juntunen2009nitsche">Juntunen and Stenberg (2009)</a> that in order for the solution to this perturbed problem to converge to the solution of the original problem in the limit as <span tex="\epsilon \rightarrow 0" bookmark="moose-equation-43f474cb-37f1-4fa9-9617-884b94ca004b" recursive="True" class="moose-katex-inline-equation" id="moose-equation-43f474cb-37f1-4fa9-9617-884b94ca004b"><script>var element = document.getElementById("moose-equation-43f474cb-37f1-4fa9-9617-884b94ca004b");katex.render("\\epsilon \\rightarrow 0", element, {displayMode:false,throwOnError:false});</script></span>, the penalty parameter must depend on the mesh size, and that as we refine the mesh, the problem becomes increasingly ill-conditioned.  A related method for imposing Dirichlet boundary conditions, known as Nitsche&#x27;s method <a href="#juntunen2009nitsche">Juntunen and Stenberg (2009)</a>, does not suffer from the same ill-conditioning issues, and is slated for inclusion in MOOSE some time in the future.</p></section><section class="scrollspy" id="b682bd5f-d2a9-4d45-b13c-3748c86f99b9" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">[BCs]
   active = &#x27;bc_all&#x27;
   [./bc_all]
     type = FunctionPenaltyDirichletBC
@@ -8,7 +8,7 @@
     penalty = 1e6
   [../]
 []
-</code></pre><a href="#676d8c86-c42b-4c19-87ef-150bf99d6b90" class="modal-trigger">(test/tests/bcs/penalty_dirichlet_bc/function_penalty_dirichlet_bc_test.i)</a><div class="modal moose-modal" id="676d8c86-c42b-4c19-87ef-150bf99d6b90"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/bcs/penalty_dirichlet_bc/function_penalty_dirichlet_bc_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre><a href="#1ece87f5-fb83-4ead-a1f1-12e40f2e251d" class="modal-trigger">(test/tests/bcs/penalty_dirichlet_bc/function_penalty_dirichlet_bc_test.i)</a><div class="modal moose-modal" id="1ece87f5-fb83-4ead-a1f1-12e40f2e251d"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/bcs/penalty_dirichlet_bc/function_penalty_dirichlet_bc_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   xmin = -1
@@ -109,7 +109,243 @@
   exodus = true
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="1dc4efea-5a19-4e42-9c24-b3660bdcdfc7" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="4ad8d173-bdcf-4ecc-b184-5928e3138680" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function</span><span class="moose-parameter-header-description">Forcing function</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forcing function</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">penalty</span><span class="moose-parameter-header-description">Penalty scalar</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Penalty scalar</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this boundary condition applies to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this boundary condition applies to</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="b49c7335-1354-401c-b3ae-9e789779dccc" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="f6664097-dc80-40f8-81e5-7d669b14f0c2" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="1a4f9d27-3a2c-4fca-8c1c-7233743b62dc" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="86cf6bf0-093c-4a0a-81cf-136de70cc552" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#2683fcf8-bae0-47b4-98bf-40495c7cc534" class="modal-trigger">test/tests/outputs/debug/show_var_residual_norms.i</a></li><li><a href="#3cb983b1-346c-44d1-99e5-1359d262f7aa" class="modal-trigger">test/tests/indicators/laplacian_jump_indicator/biharmonic.i</a></li><li><a href="#dc450c82-8464-434a-aa46-7367ef282570" class="modal-trigger">test/tests/outputs/debug/show_var_residual_norms_debug.i</a></li><li><a href="#b0889d1b-54b2-4439-a34b-f88969e334c3" class="modal-trigger">test/tests/misc/check_error/coupled_grad_without_declare.i</a></li><li><a href="#fb941282-3049-40a2-a62f-e5342d38215e" class="modal-trigger">test/tests/variables/fe_hermite_convergence/hermite_converge_dirichlet.i</a></li><li><a href="#fc0b5db2-ac58-40d9-9cab-d617ed0febb6" class="modal-trigger">test/tests/indicators/laplacian_jump_indicator/biharmonic_transient.i</a></li><li><a href="#6b32b2eb-5736-478f-a380-cc5f47947136" class="modal-trigger">test/tests/bcs/penalty_dirichlet_bc/function_penalty_dirichlet_bc_test.i</a></li></ul><div class="modal moose-modal" id="2683fcf8-bae0-47b4-98bf-40495c7cc534"><div class="modal-content"><h4>test/tests/outputs/debug/show_var_residual_norms.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="bd8608c3-2678-4732-a905-069a973276f5" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="3622a285-0eee-4e8a-bbca-f4fdcfe82f92" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function</span><span class="moose-parameter-header-description">Forcing function</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forcing function</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">penalty</span><span class="moose-parameter-header-description">Penalty scalar</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Penalty scalar</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this boundary condition applies to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this boundary condition applies to</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="e5689eea-1f7f-42b4-89bc-886d649117fa" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="40405755-99ec-4820-a1c7-9389b148b283" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="0d172624-3578-4a98-8562-209a95d015ce" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="e52f52f3-e437-4b2a-b637-bc4b85aa00bd" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#7194cf88-e9f3-45ee-825a-f284140a69dc" class="modal-trigger">test/tests/variables/fe_hermite_convergence/hermite_converge_dirichlet.i</a></li><li><a href="#692be9e6-c4dd-4823-8139-53f4bf44adc2" class="modal-trigger">test/tests/indicators/laplacian_jump_indicator/biharmonic_transient.i</a></li><li><a href="#c36310fc-cac8-491a-ba18-c9b36cda0b2d" class="modal-trigger">test/tests/outputs/debug/show_var_residual_norms.i</a></li><li><a href="#cc521111-4878-407c-bd0f-be72bebfa836" class="modal-trigger">test/tests/misc/check_error/coupled_grad_without_declare.i</a></li><li><a href="#25e2ddd6-63ea-44b6-84c7-81760f692048" class="modal-trigger">test/tests/bcs/penalty_dirichlet_bc/function_penalty_dirichlet_bc_test.i</a></li><li><a href="#4e3b83a5-4d7e-4caa-b402-2cc9b517c62f" class="modal-trigger">test/tests/indicators/laplacian_jump_indicator/biharmonic.i</a></li><li><a href="#bfb89946-9556-4a39-bb48-870eddc5bdb5" class="modal-trigger">test/tests/outputs/debug/show_var_residual_norms_debug.i</a></li></ul><div class="modal moose-modal" id="7194cf88-e9f3-45ee-825a-f284140a69dc"><div class="modal-content"><h4>test/tests/variables/fe_hermite_convergence/hermite_converge_dirichlet.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -1
+  xmax = 1
+  ymin = -1
+  ymax = 1
+  nx = 4
+  ny = 4
+  elem_type = QUAD4
+  # This test will not work in parallel with DistributedMesh enabled
+  # due to a bug in PeriodicBCs.
+  parallel_type = replicated
+[]
+
+[Functions]
+  [./bc_fn]
+    type = ParsedGradFunction
+    value = -sin(pi*x)*sin(pi*y)
+    grad_x = -pi*cos(pi*x)*sin(pi*y)
+    grad_y = -pi*sin(pi*x)*cos(pi*y)
+  [../]
+  [./forcing_fn]
+    type = ParsedFunction
+    value = -2*pi*pi*sin(pi*x)*sin(pi*y)-sin(pi*x)*sin(pi*y)
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = THIRD
+    family = HERMITE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./reaction]
+    type = Reaction
+    variable = u
+  [../]
+  [./forcing]
+    type = BodyForce
+    variable = u
+    function = forcing_fn
+  [../]
+[]
+
+[BCs]
+  [./all]
+    type = FunctionPenaltyDirichletBC
+    variable = u
+    boundary = &#x27;bottom right top left&#x27;
+    function = bc_fn
+    penalty = 1e10
+  [../]
+[]
+
+[Postprocessors]
+  [./dofs]
+    type = NumDOFs
+  [../]
+  [./h]
+    type = AverageElementSize
+  [../]
+  [./L2error]
+    type = ElementL2Error
+    variable = u
+    function = bc_fn
+  [../]
+  [./H1error]
+    type = ElementH1Error
+    variable = u
+    function = bc_fn
+  [../]
+  [./H1Semierror]
+    type = ElementH1SemiError
+    variable = u
+    function = bc_fn
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+
+  # We use higher-order quadrature to ensure that the forcing function
+  # is integrated accurately.
+  [./Quadrature]
+    order=ELEVENTH
+  [../]
+[]
+
+[Adaptivity]
+  steps = 2
+  marker = uniform
+  [./Markers]
+    [./uniform]
+      type = UniformMarker
+      mark = refine
+    [../]
+  [../]
+[]
+
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+  csv = true
+  print_mesh_changed_info = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="692be9e6-c4dd-4823-8139-53f4bf44adc2"><div class="modal-content"><h4>test/tests/indicators/laplacian_jump_indicator/biharmonic_transient.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  # Parameters used by Functions.
+  vars   = &#x27;c&#x27;
+  vals   = &#x27;50&#x27;
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -.5
+  xmax = .5
+  ymin = -.5
+  ymax = .5
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+    order = THIRD
+    family = HERMITE
+  [../]
+[]
+
+[Kernels]
+  [./biharmonic]
+    type = Biharmonic
+    variable = u
+  [../]
+  [./body_force]
+    type = BodyForce
+    variable = u
+    function = forcing_func
+  [../]
+[]
+
+[BCs]
+  [./all_value]
+    type = FunctionPenaltyDirichletBC
+    variable = u
+    boundary = &#x27;left right top bottom&#x27;
+    function = u_func
+    penalty = 1e10
+  [../]
+  [./all_flux]
+    type = FunctionPenaltyFluxBC
+    variable = u
+    boundary = &#x27;left right top bottom&#x27;
+    function = u_func
+    penalty = 1e10
+  [../]
+[]
+
+[Adaptivity]
+  [./Indicators]
+    [./error]
+      type = LaplacianJumpIndicator
+      variable = u
+      scale_by_flux_faces = true
+    [../]
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 4
+  dt = 0.1
+
+  # Note: the unusually tight tolerances here are due to the penalty
+  # BCs (currently the only way of accurately Dirichlet boundary
+  # conditions on Hermite elements in MOOSE).
+  nl_rel_tol = 1.e-15
+  l_tol = 1.e-15
+
+  # We have exact Jacobians
+  solve_type = &#x27;NEWTON&#x27;
+
+  # Use 6x6 quadrature to ensure the forcing function is integrated
+  # accurately.
+  [./Quadrature]
+    type = GAUSS
+    order = ELEVENTH
+  [../]
+[]
+
+[Functions]
+  [./u_func]
+    type   = ParsedGradFunction
+    value  = &#x27;exp(-c*(x^2+y^2))*exp(-t)&#x27;
+    grad_x = &#x27;-2*c*exp(-c*(x^2+y^2))*x*exp(-t)&#x27;
+    grad_y = &#x27;-2*c*exp(-c*(x^2+y^2))*y*exp(-t)&#x27;
+  [../]
+  [./forcing_func]
+    type   = ParsedFunction
+    value  = &#x27;16*c^2*(c^2*(x^2+y^2)^2 - 4*c*(x^2+y^2) + 2)*exp(-c*(x^2+y^2))*exp(-t)&#x27;
+  [../]
+[]
+
+[ICs]
+  [./u_ic]
+    type = FunctionIC
+    function = u_func
+    variable = u
+  [../]
+[]
+
+[Postprocessors]
+  [./l2_error]
+    type = ElementL2Error
+    variable = u
+    function = u_func
+  [../]
+  [./h1_error]
+    type = ElementH1Error
+    variable = u
+    function = u_func
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c36310fc-cac8-491a-ba18-c9b36cda0b2d"><div class="modal-content"><h4>test/tests/outputs/debug/show_var_residual_norms.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   xmin = -1
@@ -319,341 +555,7 @@
     type = VariableResidualNormsDebugOutput
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3cb983b1-346c-44d1-99e5-1359d262f7aa"><div class="modal-content"><h4>test/tests/indicators/laplacian_jump_indicator/biharmonic.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
-  # Parameters used by Functions.
-  vars   = &#x27;c&#x27;
-  vals   = &#x27;50&#x27;
-[]
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = -.5
-  xmax = .5
-  ymin = -.5
-  ymax = .5
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  [./u]
-    order = THIRD
-    family = HERMITE
-  [../]
-[]
-
-[Kernels]
-  [./biharmonic]
-    type = Biharmonic
-    variable = u
-  [../]
-  [./body_force]
-    type = BodyForce
-    variable = u
-    function = forcing_func
-  [../]
-[]
-
-[BCs]
-  active = &#x27;all_value all_flux&#x27;
-  [./all_value]
-    type = FunctionPenaltyDirichletBC
-    variable = u
-    boundary = &#x27;left right top bottom&#x27;
-    function = u_func
-    penalty = 1e10
-  [../]
-  [./all_flux]
-    type = FunctionPenaltyFluxBC
-    variable = u
-    boundary = &#x27;left right top bottom&#x27;
-    function = u_func
-    penalty = 1e10
-  [../]
-  [./all_laplacian]
-    type = BiharmonicLapBC
-    variable = u
-    boundary = &#x27;left right top bottom&#x27;
-    laplacian_function = lapu_func
-  [../]
-[]
-
-[Adaptivity]
-  [Indicators]
-    [error]
-      type = LaplacianJumpIndicator
-      variable = u
-      scale_by_flux_faces = true
-    []
-  []
-[]
-
-[Executioner]
-  type = Steady
-
-  # Note: the unusually tight tolerances here are due to the penalty
-  # BCs (currently the only way of accurately Dirichlet boundary
-  # conditions on Hermite elements in MOOSE).
-  nl_rel_tol = 1.e-15
-  l_tol = 1.e-15
-
-  # We have exact Jacobians
-  solve_type = &#x27;NEWTON&#x27;
-
-  # Use 6x6 quadrature to ensure the forcing function is integrated
-  # accurately.
-  [./Quadrature]
-    type = GAUSS
-    order = ELEVENTH
-  [../]
-[]
-
-[Functions]
-  [./u_func]
-    type   = ParsedGradFunction
-    value  = &#x27;exp(-c*(x^2+y^2))&#x27;
-    grad_x = &#x27;-2*c*exp(-c*(x^2+y^2))*x&#x27;
-    grad_y = &#x27;-2*c*exp(-c*(x^2+y^2))*y&#x27;
-  [../]
-  [./lapu_func]
-    type   = ParsedFunction
-    value  = &#x27;4*c*(c*(x^2+y^2) - 1)*exp(-c*(x^2+y^2))&#x27;
-  [../]
-  [./forcing_func]
-    type   = ParsedFunction
-    value  = &#x27;16*c^2*(c^2*(x^2+y^2)^2 - 4*c*(x^2+y^2) + 2)*exp(-c*(x^2+y^2))&#x27;
-  [../]
-[]
-
-[Postprocessors]
-  [./l2_error]
-    type = ElementL2Error
-    variable = u
-    function = u_func
-  [../]
-  [./h1_error]
-    type = ElementH1Error
-    variable = u
-    function = u_func
-  [../]
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="dc450c82-8464-434a-aa46-7367ef282570"><div class="modal-content"><h4>test/tests/outputs/debug/show_var_residual_norms_debug.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = -1
-  xmax = 1
-  ymin = -1
-  ymax = 1
-  nx = 10
-  ny = 10
-  elem_type = QUAD9
-[]
-
-[Functions]
-  [./forcing_fnu]
-    type = ParsedFunction
-    value = -5.8*(x+y)+x*x*x-x+y*y*y-y
-  [../]
-  [./forcing_fnv]
-    type = ParsedFunction
-    value = -4
-  [../]
-
-  [./slnu]
-    type = ParsedGradFunction
-    value = x*x*x-x+y*y*y-y
-    grad_x = 3*x*x-1
-    grad_y = 3*y*y-1
-  [../]
-  [./slnv]
-    type = ParsedGradFunction
-    value = x*x+y*y
-    grad_x = 2*x
-    grad_y = 2*y
-  [../]
-
-  #NeumannBC functions
-  [./bc_fnut]
-    type = ParsedFunction
-    value = 3*y*y-1
-  [../]
-  [./bc_fnub]
-    type = ParsedFunction
-    value = -3*y*y+1
-  [../]
-  [./bc_fnul]
-    type = ParsedFunction
-    value = -3*x*x+1
-  [../]
-  [./bc_fnur]
-    type = ParsedFunction
-    value = 3*x*x-1
-  [../]
-[]
-
-[Variables]
-  [./u]
-    order = THIRD
-    family = HIERARCHIC
-  [../]
-  [./v]
-    order = SECOND
-    family = LAGRANGE
-  [../]
-[]
-
-[Kernels]
-  active = &#x27;diff1 diff2 test1 forceu forcev react&#x27;
-  [./diff1]
-    type = Diffusion
-    variable = u
-  [../]
-  [./test1]
-    type = CoupledConvection
-    variable = u
-    velocity_vector = v
-  [../]
-  [./diff2]
-    type = Diffusion
-    variable = v
-  [../]
-  [./react]
-    type = Reaction
-    variable = u
-  [../]
-
-  [./forceu]
-    type = BodyForce
-    variable = u
-    function = forcing_fnu
-  [../]
-  [./forcev]
-    type = BodyForce
-    variable = v
-    function = forcing_fnv
-  [../]
-
-[]
-
-[BCs]
-  active = &#x27;bc_u_tb bc_v bc_ul bc_ur bc_ut bc_ub&#x27;
-  [./bc_u]
-    type = FunctionPenaltyDirichletBC
-    variable = u
-    function = slnu
-    boundary = &#x27;left right top bottom&#x27;
-    penalty = 1e6
-  [../]
-  [./bc_v]
-    type = FunctionDirichletBC
-    variable = v
-    function = slnv
-    boundary = &#x27;left right top bottom&#x27;
-  [../]
-
-  [./bc_u_lr]
-    type = FunctionPenaltyDirichletBC
-    variable = u
-    function = slnu
-    boundary = &#x27;left right top bottom&#x27;
-    penalty = 1e6
-  [../]
-  [./bc_u_tb]
-    type = CoupledKernelGradBC
-    variable = u
-    var2 = v
-    vel = &#x27;0.1 0.1&#x27;
-    boundary = &#x27;top bottom left right&#x27;
-  [../]
-
-  [./bc_ul]
-    type = FunctionNeumannBC
-    variable = u
-    function = bc_fnul
-    boundary = &#x27;left&#x27;
-  [../]
-  [./bc_ur]
-    type = FunctionNeumannBC
-    variable = u
-    function = bc_fnur
-    boundary = &#x27;right&#x27;
-  [../]
-  [./bc_ut]
-    type = FunctionNeumannBC
-    variable = u
-    function = bc_fnut
-    boundary = &#x27;top&#x27;
-  [../]
-  [./bc_ub]
-    type = FunctionNeumannBC
-    variable = u
-    function = bc_fnub
-    boundary = &#x27;bottom&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  active = &#x27; &#x27;
-  [./prec]
-    type = SMP
-    full = true
-  [../]
-[]
-
-[Postprocessors]
-  active=&#x27;L2u L2v&#x27;
-  [./dofs]
-    type = NumDOFs
-  [../]
-
-  [./h]
-    type = AverageElementSize
-  [../]
-
-  [./L2u]
-    type = ElementL2Error
-    variable = u
-    function = slnu
-  [../]
-  [./L2v]
-    type = ElementL2Error
-    variable = v
-    function = slnv
-  [../]
-  [./H1error]
-    type = ElementH1Error
-    variable = u
-    function = solution
-  [../]
-  [./H1Semierror]
-    type = ElementH1SemiError
-    variable = u
-    function = solution
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-
-  solve_type = &#x27;PJFNK&#x27;
-#  petsc_options = &#x27;-snes&#x27;
-  nl_rel_tol = 1e-15
-  nl_abs_tol = 1e-13
-[]
-
-[Outputs]
-  execute_on = &#x27;timestep_end&#x27;
-[]
-
-[Debug]
-  show_var_residual_norms = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b0889d1b-54b2-4439-a34b-f88969e334c3"><div class="modal-content"><h4>test/tests/misc/check_error/coupled_grad_without_declare.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="cc521111-4878-407c-bd0f-be72bebfa836"><div class="modal-content"><h4>test/tests/misc/check_error/coupled_grad_without_declare.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   xmin = -1
@@ -867,243 +769,7 @@
 [Debug]
   show_var_residual_norms = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fb941282-3049-40a2-a62f-e5342d38215e"><div class="modal-content"><h4>test/tests/variables/fe_hermite_convergence/hermite_converge_dirichlet.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = -1
-  xmax = 1
-  ymin = -1
-  ymax = 1
-  nx = 4
-  ny = 4
-  elem_type = QUAD4
-  # This test will not work in parallel with DistributedMesh enabled
-  # due to a bug in PeriodicBCs.
-  parallel_type = replicated
-[]
-
-[Functions]
-  [./bc_fn]
-    type = ParsedGradFunction
-    value = -sin(pi*x)*sin(pi*y)
-    grad_x = -pi*cos(pi*x)*sin(pi*y)
-    grad_y = -pi*sin(pi*x)*cos(pi*y)
-  [../]
-  [./forcing_fn]
-    type = ParsedFunction
-    value = -2*pi*pi*sin(pi*x)*sin(pi*y)-sin(pi*x)*sin(pi*y)
-  [../]
-[]
-
-[Variables]
-  [./u]
-    order = THIRD
-    family = HERMITE
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-  [./reaction]
-    type = Reaction
-    variable = u
-  [../]
-  [./forcing]
-    type = BodyForce
-    variable = u
-    function = forcing_fn
-  [../]
-[]
-
-[BCs]
-  [./all]
-    type = FunctionPenaltyDirichletBC
-    variable = u
-    boundary = &#x27;bottom right top left&#x27;
-    function = bc_fn
-    penalty = 1e10
-  [../]
-[]
-
-[Postprocessors]
-  [./dofs]
-    type = NumDOFs
-  [../]
-  [./h]
-    type = AverageElementSize
-  [../]
-  [./L2error]
-    type = ElementL2Error
-    variable = u
-    function = bc_fn
-  [../]
-  [./H1error]
-    type = ElementH1Error
-    variable = u
-    function = bc_fn
-  [../]
-  [./H1Semierror]
-    type = ElementH1SemiError
-    variable = u
-    function = bc_fn
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = &#x27;NEWTON&#x27;
-
-  # We use higher-order quadrature to ensure that the forcing function
-  # is integrated accurately.
-  [./Quadrature]
-    order=ELEVENTH
-  [../]
-[]
-
-[Adaptivity]
-  steps = 2
-  marker = uniform
-  [./Markers]
-    [./uniform]
-      type = UniformMarker
-      mark = refine
-    [../]
-  [../]
-[]
-
-
-[Outputs]
-  execute_on = &#x27;timestep_end&#x27;
-  exodus = true
-  csv = true
-  print_mesh_changed_info = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fc0b5db2-ac58-40d9-9cab-d617ed0febb6"><div class="modal-content"><h4>test/tests/indicators/laplacian_jump_indicator/biharmonic_transient.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
-  # Parameters used by Functions.
-  vars   = &#x27;c&#x27;
-  vals   = &#x27;50&#x27;
-[]
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = -.5
-  xmax = .5
-  ymin = -.5
-  ymax = .5
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  [./u]
-    order = THIRD
-    family = HERMITE
-  [../]
-[]
-
-[Kernels]
-  [./biharmonic]
-    type = Biharmonic
-    variable = u
-  [../]
-  [./body_force]
-    type = BodyForce
-    variable = u
-    function = forcing_func
-  [../]
-[]
-
-[BCs]
-  [./all_value]
-    type = FunctionPenaltyDirichletBC
-    variable = u
-    boundary = &#x27;left right top bottom&#x27;
-    function = u_func
-    penalty = 1e10
-  [../]
-  [./all_flux]
-    type = FunctionPenaltyFluxBC
-    variable = u
-    boundary = &#x27;left right top bottom&#x27;
-    function = u_func
-    penalty = 1e10
-  [../]
-[]
-
-[Adaptivity]
-  [./Indicators]
-    [./error]
-      type = LaplacianJumpIndicator
-      variable = u
-      scale_by_flux_faces = true
-    [../]
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 4
-  dt = 0.1
-
-  # Note: the unusually tight tolerances here are due to the penalty
-  # BCs (currently the only way of accurately Dirichlet boundary
-  # conditions on Hermite elements in MOOSE).
-  nl_rel_tol = 1.e-15
-  l_tol = 1.e-15
-
-  # We have exact Jacobians
-  solve_type = &#x27;NEWTON&#x27;
-
-  # Use 6x6 quadrature to ensure the forcing function is integrated
-  # accurately.
-  [./Quadrature]
-    type = GAUSS
-    order = ELEVENTH
-  [../]
-[]
-
-[Functions]
-  [./u_func]
-    type   = ParsedGradFunction
-    value  = &#x27;exp(-c*(x^2+y^2))*exp(-t)&#x27;
-    grad_x = &#x27;-2*c*exp(-c*(x^2+y^2))*x*exp(-t)&#x27;
-    grad_y = &#x27;-2*c*exp(-c*(x^2+y^2))*y*exp(-t)&#x27;
-  [../]
-  [./forcing_func]
-    type   = ParsedFunction
-    value  = &#x27;16*c^2*(c^2*(x^2+y^2)^2 - 4*c*(x^2+y^2) + 2)*exp(-c*(x^2+y^2))*exp(-t)&#x27;
-  [../]
-[]
-
-[ICs]
-  [./u_ic]
-    type = FunctionIC
-    function = u_func
-    variable = u
-  [../]
-[]
-
-[Postprocessors]
-  [./l2_error]
-    type = ElementL2Error
-    variable = u
-    function = u_func
-  [../]
-  [./h1_error]
-    type = ElementH1Error
-    variable = u
-    function = u_func
-  [../]
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6b32b2eb-5736-478f-a380-cc5f47947136"><div class="modal-content"><h4>test/tests/bcs/penalty_dirichlet_bc/function_penalty_dirichlet_bc_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="25e2ddd6-63ea-44b6-84c7-81760f692048"><div class="modal-content"><h4>test/tests/bcs/penalty_dirichlet_bc/function_penalty_dirichlet_bc_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   xmin = -1
@@ -1204,10 +870,344 @@
   exodus = true
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="76cbd7eb-9b8e-48cb-a1a2-18ceb0e9b2ca" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol><li id="juntunen2009nitsche">M.&nbsp;Juntunen and R.&nbsp;Stenberg.
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4e3b83a5-4d7e-4caa-b402-2cc9b517c62f"><div class="modal-content"><h4>test/tests/indicators/laplacian_jump_indicator/biharmonic.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  # Parameters used by Functions.
+  vars   = &#x27;c&#x27;
+  vals   = &#x27;50&#x27;
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -.5
+  xmax = .5
+  ymin = -.5
+  ymax = .5
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+    order = THIRD
+    family = HERMITE
+  [../]
+[]
+
+[Kernels]
+  [./biharmonic]
+    type = Biharmonic
+    variable = u
+  [../]
+  [./body_force]
+    type = BodyForce
+    variable = u
+    function = forcing_func
+  [../]
+[]
+
+[BCs]
+  active = &#x27;all_value all_flux&#x27;
+  [./all_value]
+    type = FunctionPenaltyDirichletBC
+    variable = u
+    boundary = &#x27;left right top bottom&#x27;
+    function = u_func
+    penalty = 1e10
+  [../]
+  [./all_flux]
+    type = FunctionPenaltyFluxBC
+    variable = u
+    boundary = &#x27;left right top bottom&#x27;
+    function = u_func
+    penalty = 1e10
+  [../]
+  [./all_laplacian]
+    type = BiharmonicLapBC
+    variable = u
+    boundary = &#x27;left right top bottom&#x27;
+    laplacian_function = lapu_func
+  [../]
+[]
+
+[Adaptivity]
+  [Indicators]
+    [error]
+      type = LaplacianJumpIndicator
+      variable = u
+      scale_by_flux_faces = true
+    []
+  []
+[]
+
+[Executioner]
+  type = Steady
+
+  # Note: the unusually tight tolerances here are due to the penalty
+  # BCs (currently the only way of accurately Dirichlet boundary
+  # conditions on Hermite elements in MOOSE).
+  nl_rel_tol = 1.e-15
+  l_tol = 1.e-15
+
+  # We have exact Jacobians
+  solve_type = &#x27;NEWTON&#x27;
+
+  # Use 6x6 quadrature to ensure the forcing function is integrated
+  # accurately.
+  [./Quadrature]
+    type = GAUSS
+    order = ELEVENTH
+  [../]
+[]
+
+[Functions]
+  [./u_func]
+    type   = ParsedGradFunction
+    value  = &#x27;exp(-c*(x^2+y^2))&#x27;
+    grad_x = &#x27;-2*c*exp(-c*(x^2+y^2))*x&#x27;
+    grad_y = &#x27;-2*c*exp(-c*(x^2+y^2))*y&#x27;
+  [../]
+  [./lapu_func]
+    type   = ParsedFunction
+    value  = &#x27;4*c*(c*(x^2+y^2) - 1)*exp(-c*(x^2+y^2))&#x27;
+  [../]
+  [./forcing_func]
+    type   = ParsedFunction
+    value  = &#x27;16*c^2*(c^2*(x^2+y^2)^2 - 4*c*(x^2+y^2) + 2)*exp(-c*(x^2+y^2))&#x27;
+  [../]
+[]
+
+[Postprocessors]
+  [./l2_error]
+    type = ElementL2Error
+    variable = u
+    function = u_func
+  [../]
+  [./h1_error]
+    type = ElementH1Error
+    variable = u
+    function = u_func
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="bfb89946-9556-4a39-bb48-870eddc5bdb5"><div class="modal-content"><h4>test/tests/outputs/debug/show_var_residual_norms_debug.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -1
+  xmax = 1
+  ymin = -1
+  ymax = 1
+  nx = 10
+  ny = 10
+  elem_type = QUAD9
+[]
+
+[Functions]
+  [./forcing_fnu]
+    type = ParsedFunction
+    value = -5.8*(x+y)+x*x*x-x+y*y*y-y
+  [../]
+  [./forcing_fnv]
+    type = ParsedFunction
+    value = -4
+  [../]
+
+  [./slnu]
+    type = ParsedGradFunction
+    value = x*x*x-x+y*y*y-y
+    grad_x = 3*x*x-1
+    grad_y = 3*y*y-1
+  [../]
+  [./slnv]
+    type = ParsedGradFunction
+    value = x*x+y*y
+    grad_x = 2*x
+    grad_y = 2*y
+  [../]
+
+  #NeumannBC functions
+  [./bc_fnut]
+    type = ParsedFunction
+    value = 3*y*y-1
+  [../]
+  [./bc_fnub]
+    type = ParsedFunction
+    value = -3*y*y+1
+  [../]
+  [./bc_fnul]
+    type = ParsedFunction
+    value = -3*x*x+1
+  [../]
+  [./bc_fnur]
+    type = ParsedFunction
+    value = 3*x*x-1
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = THIRD
+    family = HIERARCHIC
+  [../]
+  [./v]
+    order = SECOND
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  active = &#x27;diff1 diff2 test1 forceu forcev react&#x27;
+  [./diff1]
+    type = Diffusion
+    variable = u
+  [../]
+  [./test1]
+    type = CoupledConvection
+    variable = u
+    velocity_vector = v
+  [../]
+  [./diff2]
+    type = Diffusion
+    variable = v
+  [../]
+  [./react]
+    type = Reaction
+    variable = u
+  [../]
+
+  [./forceu]
+    type = BodyForce
+    variable = u
+    function = forcing_fnu
+  [../]
+  [./forcev]
+    type = BodyForce
+    variable = v
+    function = forcing_fnv
+  [../]
+
+[]
+
+[BCs]
+  active = &#x27;bc_u_tb bc_v bc_ul bc_ur bc_ut bc_ub&#x27;
+  [./bc_u]
+    type = FunctionPenaltyDirichletBC
+    variable = u
+    function = slnu
+    boundary = &#x27;left right top bottom&#x27;
+    penalty = 1e6
+  [../]
+  [./bc_v]
+    type = FunctionDirichletBC
+    variable = v
+    function = slnv
+    boundary = &#x27;left right top bottom&#x27;
+  [../]
+
+  [./bc_u_lr]
+    type = FunctionPenaltyDirichletBC
+    variable = u
+    function = slnu
+    boundary = &#x27;left right top bottom&#x27;
+    penalty = 1e6
+  [../]
+  [./bc_u_tb]
+    type = CoupledKernelGradBC
+    variable = u
+    var2 = v
+    vel = &#x27;0.1 0.1&#x27;
+    boundary = &#x27;top bottom left right&#x27;
+  [../]
+
+  [./bc_ul]
+    type = FunctionNeumannBC
+    variable = u
+    function = bc_fnul
+    boundary = &#x27;left&#x27;
+  [../]
+  [./bc_ur]
+    type = FunctionNeumannBC
+    variable = u
+    function = bc_fnur
+    boundary = &#x27;right&#x27;
+  [../]
+  [./bc_ut]
+    type = FunctionNeumannBC
+    variable = u
+    function = bc_fnut
+    boundary = &#x27;top&#x27;
+  [../]
+  [./bc_ub]
+    type = FunctionNeumannBC
+    variable = u
+    function = bc_fnub
+    boundary = &#x27;bottom&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  active = &#x27; &#x27;
+  [./prec]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Postprocessors]
+  active=&#x27;L2u L2v&#x27;
+  [./dofs]
+    type = NumDOFs
+  [../]
+
+  [./h]
+    type = AverageElementSize
+  [../]
+
+  [./L2u]
+    type = ElementL2Error
+    variable = u
+    function = slnu
+  [../]
+  [./L2v]
+    type = ElementL2Error
+    variable = v
+    function = slnv
+  [../]
+  [./H1error]
+    type = ElementH1Error
+    variable = u
+    function = solution
+  [../]
+  [./H1Semierror]
+    type = ElementH1SemiError
+    variable = u
+    function = solution
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+#  petsc_options = &#x27;-snes&#x27;
+  nl_rel_tol = 1e-15
+  nl_abs_tol = 1e-13
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="c9653b05-34dd-40e0-82ca-002a8015ee72" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol><li id="juntunen2009nitsche">M.&nbsp;Juntunen and R.&nbsp;Stenberg.
 <span class="bibtex-protected">Nitsche's method for general boundary conditions</span>.
 <em>Mathematics of Computation</em>, 78(267):1353–1374, July 2009.
-URL: <a href="http://dx.doi.org/10.1090/S0025-5718-08-02183-2">http://dx.doi.org/10.1090/S0025-5718-08-02183-2</a>.<a href="#890b3d04-d1aa-4265-8fcc-933aaff4a65b" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="890b3d04-d1aa-4265-8fcc-933aaff4a65b"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{juntunen2009nitsche,
+URL: <a href="http://dx.doi.org/10.1090/S0025-5718-08-02183-2">http://dx.doi.org/10.1090/S0025-5718-08-02183-2</a>.<a href="#6acb668d-54a1-4731-ba6e-b7ce1a4105d5" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="6acb668d-54a1-4731-ba6e-b7ce1a4105d5"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{juntunen2009nitsche,
     author = "Juntunen, M. and Stenberg, R.",
     title = "{Nitsche's method for general boundary conditions}",
     journal = "Mathematics of Computation",
@@ -1218,4 +1218,4 @@ URL: <a href="http://dx.doi.org/10.1090/S0025-5718-08-02183-2">http://dx.doi.org
     pages = "1353--1374",
     url = "http://dx.doi.org/10.1090/S0025-5718-08-02183-2"
 }
-</code></pre></div></div></li></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#da9ca7ed-0f8b-48a8-ab77-90693aa0765f" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#f39fb650-36b9-49b0-8d1c-8c5133a5a61c" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#1dc4efea-5a19-4e42-9c24-b3660bdcdfc7" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#86cf6bf0-093c-4a0a-81cf-136de70cc552" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li><li><a href="#76cbd7eb-9b8e-48cb-a1a2-18ceb0e9b2ca" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div></div></li></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#b4a3bced-940b-403b-9f65-6936d327e60d" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#b682bd5f-d2a9-4d45-b13c-3748c86f99b9" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#bd8608c3-2678-4732-a905-069a973276f5" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#e52f52f3-e437-4b2a-b637-bc4b85aa00bd" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li><li><a href="#c9653b05-34dd-40e0-82ca-002a8015ee72" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

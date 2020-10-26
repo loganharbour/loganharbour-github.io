@@ -1,317 +1,237 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>AreaPostprocessor.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="fad74158-5f93-40c5-ac2f-74734af82acf"><i class="material-icons">menu</i></a><ul class="sidenav" id="fad74158-5f93-40c5-ac2f-74734af82acf"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">postprocessors</span><a href="#" class="breadcrumb">AreaPostprocessor</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="4a6ef791-7527-4d50-af9e-caaf5a9bdbf7" data-section-level="1" data-section-text="AreaPostprocessor"><h1 id="areapostprocessor">AreaPostprocessor</h1><p>The AreaPostprocesor is a SidePostprocessor that computes the area or dimension - 1 &quot;volume&quot; of a given side of the mesh. This postprocessor may be applied to one or more boundaries simulatenously, the latter case produces a total area is output.</p></section><section id="6bf98fa5-b294-4021-8fcc-c92ffb98e1ef" data-section-level="1" data-section-text="Description and Syntax"><h1 id="description-and-syntax">Description and Syntax</h1><p>Computes the &quot;area&quot; or dimension - 1 &quot;volume&quot; of a given boundary or boundaries in your mesh.</p><section class="scrollspy" id="5d4b62d3-d83a-48dd-b08b-d8ae238e4b73" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="340ac703-f17c-42d1-bd49-7de8e72531ee" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="03b89020-fbfd-42b3-be98-be13be84e6a2" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM TRANSFER</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="c77100d3-d7ea-4709-b491-66331f99048b" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">allow_duplicate_execution_on_initial</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="4034dd25-112c-4117-a45c-b3779180fb8b" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#f8e9fc5f-f7f9-4972-92a7-9016d33d664c" class="modal-trigger">modules/richards/test/tests/sinks/s04.i</a></li><li><a href="#d64a269e-33ee-490c-b768-bea20df2060d" class="modal-trigger">modules/richards/test/tests/sinks/s_fu_04.i</a></li><li><a href="#23d03122-924d-478a-8643-2fdc8f044695" class="modal-trigger">test/tests/postprocessors/geometry/2d_geometry.i</a></li><li><a href="#6722515f-4df8-4005-9554-f3f322d4b368" class="modal-trigger">test/tests/postprocessors/geometry/3d_geometry.i</a></li><li><a href="#17f6b5fa-c4a1-40c4-99e4-caebb9261ed8" class="modal-trigger">modules/porous_flow/examples/restart/gas_injection_new_mesh.i</a></li><li><a href="#797d0efa-c032-42ef-b627-32096fee6b33" class="modal-trigger">modules/porous_flow/examples/restart/gas_injection.i</a></li><li><a href="#f81cee64-4c20-499c-9b46-310587f45d62" class="modal-trigger">test/tests/postprocessors/area_pp/area_pp.i</a></li><li><a href="#8dd255c1-0084-4ec2-b8f2-62e447ba6a47" class="modal-trigger">modules/porous_flow/test/tests/fluidstate/coldwater_injection_radial.i</a></li></ul><div class="modal moose-modal" id="f8e9fc5f-f7f9-4972-92a7-9016d33d664c"><div class="modal-content"><h4>modules/richards/test/tests/sinks/s04.i</h4><pre class="moose-pre"><code class="language-text"># apply a total flux (in kg/s) to two boundaries
-# and check that it removes the correct amount of fluid
+<!DOCTYPE html><head><meta charset="UTF-8"><title>AreaPostprocessor.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="63b82681-f434-401d-9d9c-826065e5acad"><i class="material-icons">menu</i></a><ul class="sidenav" id="63b82681-f434-401d-9d9c-826065e5acad"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">postprocessors</span><a href="#" class="breadcrumb">AreaPostprocessor</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="f4cc9c42-92af-4cfe-b01e-c6f3e2c0d910" data-section-level="1" data-section-text="AreaPostprocessor"><h1 id="areapostprocessor">AreaPostprocessor</h1><p>The AreaPostprocesor is a SidePostprocessor that computes the area or dimension - 1 &quot;volume&quot; of a given side of the mesh. This postprocessor may be applied to one or more boundaries simulatenously, the latter case produces a total area is output.</p></section><section id="cfd7c1fe-cdec-440c-ad24-9d4c32105db5" data-section-level="1" data-section-text="Description and Syntax"><h1 id="description-and-syntax">Description and Syntax</h1><p>Computes the &quot;area&quot; or dimension - 1 &quot;volume&quot; of a given boundary or boundaries in your mesh.</p><section class="scrollspy" id="e25d9204-9774-469d-99bc-1c454e2368cd" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="9b082781-09ed-422c-a87a-7fbb7271104d" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="ac8f8fb4-bba4-4727-852f-ccd265b3d3f8" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM TRANSFER</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="927184a9-c813-4575-8662-223580b1e914" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">allow_duplicate_execution_on_initial</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="d447106a-100b-4848-b96b-75c46e5bb0c4" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#ae33d4b7-8c2b-4173-8fa0-ad2c90519963" class="modal-trigger">modules/porous_flow/test/tests/fluidstate/coldwater_injection_radial.i</a></li><li><a href="#5382a67d-aec4-4c5c-81bd-e4fd44ae1dd5" class="modal-trigger">test/tests/postprocessors/geometry/2d_geometry.i</a></li><li><a href="#73280de5-07dd-4f04-88f8-986cec3186d7" class="modal-trigger">test/tests/postprocessors/geometry/3d_geometry.i</a></li><li><a href="#c055fed8-e934-4a9f-84ed-1c1acf6d3ad6" class="modal-trigger">test/tests/postprocessors/area_pp/area_pp.i</a></li><li><a href="#00f5744d-bac7-4196-8c6f-8150c0936a41" class="modal-trigger">modules/richards/test/tests/sinks/s04.i</a></li><li><a href="#dc2da3da-c477-4ab1-a5d8-1f76ccb18543" class="modal-trigger">modules/richards/test/tests/sinks/s_fu_04.i</a></li><li><a href="#b4a14b2d-d3e5-4dc5-989f-02bc936d0eb9" class="modal-trigger">modules/porous_flow/examples/restart/gas_injection_new_mesh.i</a></li><li><a href="#719dffcb-8c52-42c0-a632-cc4e6dfadfcd" class="modal-trigger">modules/porous_flow/examples/restart/gas_injection.i</a></li></ul><div class="modal moose-modal" id="ae33d4b7-8c2b-4173-8fa0-ad2c90519963"><div class="modal-content"><h4>modules/porous_flow/test/tests/fluidstate/coldwater_injection_radial.i</h4><pre class="moose-pre"><code class="language-text"># Cold water injection into 1D radial hot reservoir (Avdonin, 1964)
+#
+# To generate results presented in documentation for this problem,
+# set xmax = 1000 and nx = 200 in the Mesh block, and dtmax = 1e4
+# and end_time = 1e6 in the Executioner block.
+
 [Mesh]
   type = GeneratedMesh
-  dim = 2
-  nx = 1
-  ny = 3
-  xmin = 0
-  xmax = 1
-  ymin = 0
-  ymax = 4
+  dim = 1
+  nx = 50
+  xmin = 0.1
+  xmax = 5
+  bias_x = 1.05
 []
 
+[Problem]
+  rz_coord_axis = Y
+  coord_type = RZ
+[]
 
 [GlobalParams]
-  richardsVarNames_UO = PPNames
-  density_UO = DensityConstBulk
-  relperm_UO = RelPermPower
-  SUPG_UO = SUPGstandard
-  sat_UO = Saturation
-  seff_UO = SeffVG
-  viscosity = 1E-3
-  gravity = &#x27;-1 0 0&#x27;
+  PorousFlowDictator = dictator
+  gravity = &#x27;0 0 0&#x27;
 []
 
-[UserObjects]
-  [./PPNames]
-    type = RichardsVarNames
-    richards_vars = pressure
+[AuxVariables]
+  [./temperature]
+    order = CONSTANT
+    family = MONOMIAL
   [../]
-  [./DensityConstBulk]
-    type = RichardsDensityConstBulk
-    dens0 = 1
-    bulk_mod = 1
-  [../]
-  [./SeffVG]
-    type = RichardsSeff1VG
-    m = 0.5
-    al = 1
-  [../]
-  [./RelPermPower]
-    type = RichardsRelPermPower
-    simm = 0.0
-    n = 2
-  [../]
-  [./Saturation]
-    type = RichardsSat
-    s_res = 0.1
-    sum_s_res = 0.2
-  [../]
-  [./SUPGstandard]
-    type = RichardsSUPGstandard
-    p_SUPG = 0.1
+[]
+
+[AuxKernels]
+  [./temperature]
+    type = PorousFlowPropertyAux
+    variable = temperature
+    property = temperature
+    execute_on = &#x27;initial timestep_end&#x27;
   [../]
 []
 
 [Variables]
-  [./pressure]
+  [./pliquid]
+    initial_condition = 5e6
+  [../]
+  [./h]
+    scaling = 1e-6
   [../]
 []
 
 [ICs]
-  [./pressure]
-    type = ConstantIC
-    variable = pressure
-    value = 2
+  [./hic]
+    type = PorousFlowFluidPropertyIC
+    variable = h
+    porepressure = pliquid
+    property = enthalpy
+    temperature = 170
+    temperature_unit = Celsius
+    fp = water
   [../]
 []
 
-[Postprocessors]
-  [./area_left]
-    type = AreaPostprocessor
-    boundary = left
-    execute_on = initial
-  [../]
-  [./area_right]
-    type = AreaPostprocessor
-    boundary = right
-    execute_on = initial
-  [../]
-  [./mass_fin]
-    type = RichardsMass
-    variable = pressure
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./p0]
-    type = PointValue
-    point = &#x27;0 0 0&#x27;
-    variable = pressure
-    execute_on = &#x27;initial timestep_end&#x27;
+[Functions]
+  [./injection_rate]
+    type = ParsedFunction
+    vals = injection_area
+    vars = area
+    value = &#x27;-0.1/area&#x27;
   [../]
 []
 
 [BCs]
-  [./left_flux]
-    type = RichardsPiecewiseLinearSink
+  [./source]
+    type = PorousFlowSink
+    variable = pliquid
+    flux_function = injection_rate
     boundary = left
-    pressures = &#x27;0&#x27;
-    bare_fluxes = &#x27;0.1&#x27;
-    variable = pressure
-    use_mobility = false
-    use_relperm = false
-    area_pp = area_left
   [../]
-  [./right_flux]
-    type = RichardsPiecewiseLinearSink
+  [./pright]
+    type = DirichletBC
+    variable = pliquid
+    value = 5e6
     boundary = right
-    pressures = &#x27;0&#x27;
-    bare_fluxes = &#x27;0.1&#x27;
-    variable = pressure
-    use_mobility = false
-    use_relperm = false
-    area_pp = area_right
+  [../]
+  [./hleft]
+    type = DirichletBC
+    variable = h
+    value = 678.52e3
+    boundary = left
+  [../]
+  [./hright]
+    type = DirichletBC
+    variable = h
+    value = 721.4e3
+    boundary = right
   [../]
 []
 
 [Kernels]
-  active = &#x27;richardst&#x27;
-  [./richardst]
-    type = RichardsMassChange
-    variable = pressure
+  [./mass]
+    type = PorousFlowMassTimeDerivative
+    variable = pliquid
+  [../]
+  [./massflux]
+    type = PorousFlowAdvectiveFlux
+    variable = pliquid
+  [../]
+  [./heat]
+    type = PorousFlowEnergyTimeDerivative
+    variable = h
+  [../]
+  [./heatflux]
+    type = PorousFlowHeatAdvection
+    variable = h
+  [../]
+  [./heatcond]
+    type = PorousFlowHeatConduction
+    variable = h
+  [../]
+[]
+
+[UserObjects]
+  [./dictator]
+    type = PorousFlowDictator
+    porous_flow_vars = &#x27;pliquid h&#x27;
+    number_fluid_phases = 2
+    number_fluid_components = 1
+  [../]
+  [./pc]
+    type = PorousFlowCapillaryPressureVG
+    pc_max = 1e6
+    sat_lr = 0.1
+    m = 0.5
+    alpha = 1e-5
+  [../]
+  [./fs]
+    type = PorousFlowWaterVapor
+    water_fp = water
+    capillary_pressure = pc
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./water]
+      type = Water97FluidProperties
+    [../]
   [../]
 []
 
 [Materials]
-  [./rock]
-    type = RichardsMaterial
-    block = 0
-    mat_porosity = 0.1
-    mat_permeability = &#x27;1E-5 0 0  0 1E-5 0  0 0 1E-5&#x27;
-    linear_shape_fcns = true
+  [./watervapor]
+    type = PorousFlowFluidStateSingleComponent
+    porepressure = pliquid
+    enthalpy = h
+    temperature_unit = Celsius
+    capillary_pressure = pc
+    fluid_state = fs
+  [../]
+  [./porosity]
+    type = PorousFlowPorosityConst
+    porosity = 0.2
+  [../]
+  [./permeability]
+    type = PorousFlowPermeabilityConst
+    permeability = &#x27;1.8e-11 0 0 0 1.8e-11 0 0 0 1.8e-11&#x27;
+  [../]
+  [./relperm_water]
+    type = PorousFlowRelativePermeabilityCorey
+    n = 2
+    phase = 0
+    s_res = 0.1
+    sum_s_res = 0.1
+  [../]
+  [./relperm_gas]
+    type = PorousFlowRelativePermeabilityCorey
+    n = 2
+    phase = 1
+    sum_s_res = 0.1
+  [../]
+  [./internal_energy]
+    type = PorousFlowMatrixInternalEnergy
+    density = 2900
+    specific_heat_capacity = 740
+  [../]
+  [./rock_thermal_conductivity]
+    type = PorousFlowThermalConductivityIdeal
+    dry_thermal_conductivity = &#x27;20 0 0  0 20 0  0 0 20&#x27;
   [../]
 []
 
-
 [Preconditioning]
-  [./andy]
+  [./smp]
     type = SMP
     full = true
-    petsc_options_iname = &#x27;-ksp_type -pc_type -snes_atol -snes_rtol -snes_max_it&#x27;
-    petsc_options_value = &#x27;bcgs bjacobi 1E-12 1E-10 10000&#x27;
   [../]
 []
 
 [Executioner]
   type = Transient
-  solve_type = Newton
-  dt = 1
-  end_time = 13
-[]
-
-[Outputs]
-  file_base = s04
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d64a269e-33ee-490c-b768-bea20df2060d"><div class="modal-content"><h4>modules/richards/test/tests/sinks/s_fu_04.i</h4><pre class="moose-pre"><code class="language-text"># apply a total flux (in kg/s) to two boundaries
-# and check that it removes the correct amount of fluid
-# fully-upwind sink
-[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 1
-  ny = 3
-  xmin = 0
-  xmax = 1
-  ymin = 0
-  ymax = 4
-[]
-
-
-[GlobalParams]
-  richardsVarNames_UO = PPNames
-  density_UO = DensityConstBulk
-  relperm_UO = RelPermPower
-  SUPG_UO = SUPGstandard
-  sat_UO = Saturation
-  seff_UO = SeffVG
-  viscosity = 1E-3
-  gravity = &#x27;-1 0 0&#x27;
-[]
-
-[UserObjects]
-  [./PPNames]
-    type = RichardsVarNames
-    richards_vars = pressure
-  [../]
-  [./DensityConstBulk]
-    type = RichardsDensityConstBulk
-    dens0 = 1
-    bulk_mod = 1
-  [../]
-  [./SeffVG]
-    type = RichardsSeff1VG
-    m = 0.5
-    al = 1 # same deal with PETSc constant state
-  [../]
-  [./RelPermPower]
-    type = RichardsRelPermPower
-    simm = 0.0
-    n = 2
-  [../]
-  [./Saturation]
-    type = RichardsSat
-    s_res = 0.1
-    sum_s_res = 0.2
-  [../]
-  [./SUPGstandard]
-    type = RichardsSUPGstandard
-    p_SUPG = 0.1
-  [../]
-[]
-
-[Variables]
-  [./pressure]
-  [../]
-[]
-
-[ICs]
-  [./pressure]
-    type = ConstantIC
-    variable = pressure
-    value = 2
+  solve_type = NEWTON
+  end_time = 1e3
+  nl_abs_tol = 1e-8
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 100
   [../]
 []
 
 [Postprocessors]
-  [./area_left]
+  [./injection_area]
     type = AreaPostprocessor
     boundary = left
     execute_on = initial
   [../]
-  [./area_right]
-    type = AreaPostprocessor
-    boundary = right
-    execute_on = initial
-  [../]
-  [./mass_fin]
-    type = RichardsMass
-    variable = pressure
+[]
+
+[VectorPostprocessors]
+  [./line]
+    type = ElementValueSampler
+    sort_by = x
+    variable = temperature
     execute_on = &#x27;initial timestep_end&#x27;
   [../]
-  [./p0]
-    type = PointValue
-    point = &#x27;0 0 0&#x27;
-    variable = pressure
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-[]
-
-[BCs]
-  [./left_flux]
-    type = RichardsPiecewiseLinearSink
-    boundary = left
-    pressures = &#x27;0&#x27;
-    bare_fluxes = &#x27;0.1&#x27;
-    variable = pressure
-    use_mobility = false
-    use_relperm = false
-    area_pp = area_left
-    fully_upwind = true
-  [../]
-  [./right_flux]
-    type = RichardsPiecewiseLinearSink
-    boundary = right
-    pressures = &#x27;0&#x27;
-    bare_fluxes = &#x27;0.1&#x27;
-    variable = pressure
-    use_mobility = false
-    use_relperm = false
-    area_pp = area_right
-    fully_upwind = true
-  [../]
-[]
-
-[Kernels]
-  active = &#x27;richardst&#x27;
-  [./richardst]
-    type = RichardsMassChange
-    variable = pressure
-  [../]
-[]
-
-[Materials]
-  [./rock]
-    type = RichardsMaterial
-    block = 0
-    mat_porosity = 0.1
-    mat_permeability = &#x27;1E-5 0 0  0 1E-5 0  0 0 1E-5&#x27;
-    linear_shape_fcns = true
-  [../]
-[]
-
-
-[Preconditioning]
-  [./andy]
-    type = SMP
-    full = true
-    petsc_options_iname = &#x27;-ksp_type -pc_type -snes_atol -snes_rtol -snes_max_it&#x27;
-    petsc_options_value = &#x27;bcgs bjacobi 1E-12 1E-10 10000&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Newton
-  dt = 1
-  end_time = 13
 []
 
 [Outputs]
-  file_base = s_fu_04
-  csv = true
+  perf_graph = true
+  [./csv]
+    type = CSV
+    execute_on = final
+  [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="23d03122-924d-478a-8643-2fdc8f044695"><div class="modal-content"><h4>test/tests/postprocessors/geometry/2d_geometry.i</h4><pre class="moose-pre"><code class="language-text">radius = 0.5
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5382a67d-aec4-4c5c-81bd-e4fd44ae1dd5"><div class="modal-content"><h4>test/tests/postprocessors/geometry/2d_geometry.i</h4><pre class="moose-pre"><code class="language-text">radius = 0.5
 inner_box_length = 2.2
 outer_box_length = 3
 sides = 16
@@ -485,7 +405,7 @@ area_correction = ${fparse alpha / sin(alpha)}
 [Outputs]
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6722515f-4df8-4005-9554-f3f322d4b368"><div class="modal-content"><h4>test/tests/postprocessors/geometry/3d_geometry.i</h4><pre class="moose-pre"><code class="language-text">radius = 0.5
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="73280de5-07dd-4f04-88f8-986cec3186d7"><div class="modal-content"><h4>test/tests/postprocessors/geometry/3d_geometry.i</h4><pre class="moose-pre"><code class="language-text">radius = 0.5
 inner_box_length = 2.2
 outer_box_length = 3
 depth = 0.4
@@ -602,7 +522,389 @@ area_correction = ${fparse alpha / sin(alpha)}
 [Outputs]
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="17f6b5fa-c4a1-40c4-99e4-caebb9261ed8"><div class="modal-content"><h4>modules/porous_flow/examples/restart/gas_injection_new_mesh.i</h4><pre class="moose-pre"><code class="language-text"># Using the results from the equilibrium run to provide the initial condition for
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c055fed8-e934-4a9f-84ed-1c1acf6d3ad6"><div class="modal-content"><h4>test/tests/postprocessors/area_pp/area_pp.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 4
+  ny = 4
+
+  xmax = 1.2
+  ymax = 2.3
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Postprocessors]
+  [./right]
+    type = AreaPostprocessor
+    boundary = &#x27;right&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+
+  [./bottom]
+    type = AreaPostprocessor
+    boundary = &#x27;bottom&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+
+  [./all]
+    type = AreaPostprocessor
+    boundary = &#x27;left right bottom top&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="00f5744d-bac7-4196-8c6f-8150c0936a41"><div class="modal-content"><h4>modules/richards/test/tests/sinks/s04.i</h4><pre class="moose-pre"><code class="language-text"># apply a total flux (in kg/s) to two boundaries
+# and check that it removes the correct amount of fluid
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 1
+  ny = 3
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 4
+[]
+
+
+[GlobalParams]
+  richardsVarNames_UO = PPNames
+  density_UO = DensityConstBulk
+  relperm_UO = RelPermPower
+  SUPG_UO = SUPGstandard
+  sat_UO = Saturation
+  seff_UO = SeffVG
+  viscosity = 1E-3
+  gravity = &#x27;-1 0 0&#x27;
+[]
+
+[UserObjects]
+  [./PPNames]
+    type = RichardsVarNames
+    richards_vars = pressure
+  [../]
+  [./DensityConstBulk]
+    type = RichardsDensityConstBulk
+    dens0 = 1
+    bulk_mod = 1
+  [../]
+  [./SeffVG]
+    type = RichardsSeff1VG
+    m = 0.5
+    al = 1
+  [../]
+  [./RelPermPower]
+    type = RichardsRelPermPower
+    simm = 0.0
+    n = 2
+  [../]
+  [./Saturation]
+    type = RichardsSat
+    s_res = 0.1
+    sum_s_res = 0.2
+  [../]
+  [./SUPGstandard]
+    type = RichardsSUPGstandard
+    p_SUPG = 0.1
+  [../]
+[]
+
+[Variables]
+  [./pressure]
+  [../]
+[]
+
+[ICs]
+  [./pressure]
+    type = ConstantIC
+    variable = pressure
+    value = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./area_left]
+    type = AreaPostprocessor
+    boundary = left
+    execute_on = initial
+  [../]
+  [./area_right]
+    type = AreaPostprocessor
+    boundary = right
+    execute_on = initial
+  [../]
+  [./mass_fin]
+    type = RichardsMass
+    variable = pressure
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./p0]
+    type = PointValue
+    point = &#x27;0 0 0&#x27;
+    variable = pressure
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[BCs]
+  [./left_flux]
+    type = RichardsPiecewiseLinearSink
+    boundary = left
+    pressures = &#x27;0&#x27;
+    bare_fluxes = &#x27;0.1&#x27;
+    variable = pressure
+    use_mobility = false
+    use_relperm = false
+    area_pp = area_left
+  [../]
+  [./right_flux]
+    type = RichardsPiecewiseLinearSink
+    boundary = right
+    pressures = &#x27;0&#x27;
+    bare_fluxes = &#x27;0.1&#x27;
+    variable = pressure
+    use_mobility = false
+    use_relperm = false
+    area_pp = area_right
+  [../]
+[]
+
+[Kernels]
+  active = &#x27;richardst&#x27;
+  [./richardst]
+    type = RichardsMassChange
+    variable = pressure
+  [../]
+[]
+
+[Materials]
+  [./rock]
+    type = RichardsMaterial
+    block = 0
+    mat_porosity = 0.1
+    mat_permeability = &#x27;1E-5 0 0  0 1E-5 0  0 0 1E-5&#x27;
+    linear_shape_fcns = true
+  [../]
+[]
+
+
+[Preconditioning]
+  [./andy]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-ksp_type -pc_type -snes_atol -snes_rtol -snes_max_it&#x27;
+    petsc_options_value = &#x27;bcgs bjacobi 1E-12 1E-10 10000&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  dt = 1
+  end_time = 13
+[]
+
+[Outputs]
+  file_base = s04
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="dc2da3da-c477-4ab1-a5d8-1f76ccb18543"><div class="modal-content"><h4>modules/richards/test/tests/sinks/s_fu_04.i</h4><pre class="moose-pre"><code class="language-text"># apply a total flux (in kg/s) to two boundaries
+# and check that it removes the correct amount of fluid
+# fully-upwind sink
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 1
+  ny = 3
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 4
+[]
+
+
+[GlobalParams]
+  richardsVarNames_UO = PPNames
+  density_UO = DensityConstBulk
+  relperm_UO = RelPermPower
+  SUPG_UO = SUPGstandard
+  sat_UO = Saturation
+  seff_UO = SeffVG
+  viscosity = 1E-3
+  gravity = &#x27;-1 0 0&#x27;
+[]
+
+[UserObjects]
+  [./PPNames]
+    type = RichardsVarNames
+    richards_vars = pressure
+  [../]
+  [./DensityConstBulk]
+    type = RichardsDensityConstBulk
+    dens0 = 1
+    bulk_mod = 1
+  [../]
+  [./SeffVG]
+    type = RichardsSeff1VG
+    m = 0.5
+    al = 1 # same deal with PETSc constant state
+  [../]
+  [./RelPermPower]
+    type = RichardsRelPermPower
+    simm = 0.0
+    n = 2
+  [../]
+  [./Saturation]
+    type = RichardsSat
+    s_res = 0.1
+    sum_s_res = 0.2
+  [../]
+  [./SUPGstandard]
+    type = RichardsSUPGstandard
+    p_SUPG = 0.1
+  [../]
+[]
+
+[Variables]
+  [./pressure]
+  [../]
+[]
+
+[ICs]
+  [./pressure]
+    type = ConstantIC
+    variable = pressure
+    value = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./area_left]
+    type = AreaPostprocessor
+    boundary = left
+    execute_on = initial
+  [../]
+  [./area_right]
+    type = AreaPostprocessor
+    boundary = right
+    execute_on = initial
+  [../]
+  [./mass_fin]
+    type = RichardsMass
+    variable = pressure
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./p0]
+    type = PointValue
+    point = &#x27;0 0 0&#x27;
+    variable = pressure
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[BCs]
+  [./left_flux]
+    type = RichardsPiecewiseLinearSink
+    boundary = left
+    pressures = &#x27;0&#x27;
+    bare_fluxes = &#x27;0.1&#x27;
+    variable = pressure
+    use_mobility = false
+    use_relperm = false
+    area_pp = area_left
+    fully_upwind = true
+  [../]
+  [./right_flux]
+    type = RichardsPiecewiseLinearSink
+    boundary = right
+    pressures = &#x27;0&#x27;
+    bare_fluxes = &#x27;0.1&#x27;
+    variable = pressure
+    use_mobility = false
+    use_relperm = false
+    area_pp = area_right
+    fully_upwind = true
+  [../]
+[]
+
+[Kernels]
+  active = &#x27;richardst&#x27;
+  [./richardst]
+    type = RichardsMassChange
+    variable = pressure
+  [../]
+[]
+
+[Materials]
+  [./rock]
+    type = RichardsMaterial
+    block = 0
+    mat_porosity = 0.1
+    mat_permeability = &#x27;1E-5 0 0  0 1E-5 0  0 0 1E-5&#x27;
+    linear_shape_fcns = true
+  [../]
+[]
+
+
+[Preconditioning]
+  [./andy]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-ksp_type -pc_type -snes_atol -snes_rtol -snes_max_it&#x27;
+    petsc_options_value = &#x27;bcgs bjacobi 1E-12 1E-10 10000&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  dt = 1
+  end_time = 13
+[]
+
+[Outputs]
+  file_base = s_fu_04
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b4a14b2d-d3e5-4dc5-989f-02bc936d0eb9"><div class="modal-content"><h4>modules/porous_flow/examples/restart/gas_injection_new_mesh.i</h4><pre class="moose-pre"><code class="language-text"># Using the results from the equilibrium run to provide the initial condition for
 # porepressure, we now inject a gas phase into the brine-saturated reservoir. In this
 # example, the mesh is not identical to the mesh used in gravityeq.i. Rather, it is
 # generated so that it is more refined near the injection boundary and at the top of
@@ -917,7 +1219,7 @@ area_correction = ${fparse alpha / sin(alpha)}
   exodus = true
   perf_graph = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="797d0efa-c032-42ef-b627-32096fee6b33"><div class="modal-content"><h4>modules/porous_flow/examples/restart/gas_injection.i</h4><pre class="moose-pre"><code class="language-text"># Using the results from the equilibrium run to provide the initial condition for
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="719dffcb-8c52-42c0-a632-cc4e6dfadfcd"><div class="modal-content"><h4>modules/porous_flow/examples/restart/gas_injection.i</h4><pre class="moose-pre"><code class="language-text"># Using the results from the equilibrium run to provide the initial condition for
 # porepressure, we now inject a gas phase into the brine-saturated reservoir. In this
 # example, where the mesh used is identical to the mesh used in gravityeq.i, we can use
 # the basic restart capability by simply setting the initial condition for porepressure
@@ -1212,306 +1514,4 @@ area_correction = ${fparse alpha / sin(alpha)}
   perf_graph = true
   checkpoint = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f81cee64-4c20-499c-9b46-310587f45d62"><div class="modal-content"><h4>test/tests/postprocessors/area_pp/area_pp.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 4
-  ny = 4
-
-  xmax = 1.2
-  ymax = 2.3
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  [../]
-[]
-
-[Postprocessors]
-  [./right]
-    type = AreaPostprocessor
-    boundary = &#x27;right&#x27;
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-
-  [./bottom]
-    type = AreaPostprocessor
-    boundary = &#x27;bottom&#x27;
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-
-  [./all]
-    type = AreaPostprocessor
-    boundary = &#x27;left right bottom top&#x27;
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-
-  solve_type = &#x27;PJFNK&#x27;
-
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[Outputs]
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8dd255c1-0084-4ec2-b8f2-62e447ba6a47"><div class="modal-content"><h4>modules/porous_flow/test/tests/fluidstate/coldwater_injection_radial.i</h4><pre class="moose-pre"><code class="language-text"># Cold water injection into 1D radial hot reservoir (Avdonin, 1964)
-#
-# To generate results presented in documentation for this problem,
-# set xmax = 1000 and nx = 200 in the Mesh block, and dtmax = 1e4
-# and end_time = 1e6 in the Executioner block.
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 50
-  xmin = 0.1
-  xmax = 5
-  bias_x = 1.05
-[]
-
-[Problem]
-  rz_coord_axis = Y
-  coord_type = RZ
-[]
-
-[GlobalParams]
-  PorousFlowDictator = dictator
-  gravity = &#x27;0 0 0&#x27;
-[]
-
-[AuxVariables]
-  [./temperature]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-[]
-
-[AuxKernels]
-  [./temperature]
-    type = PorousFlowPropertyAux
-    variable = temperature
-    property = temperature
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-[]
-
-[Variables]
-  [./pliquid]
-    initial_condition = 5e6
-  [../]
-  [./h]
-    scaling = 1e-6
-  [../]
-[]
-
-[ICs]
-  [./hic]
-    type = PorousFlowFluidPropertyIC
-    variable = h
-    porepressure = pliquid
-    property = enthalpy
-    temperature = 170
-    temperature_unit = Celsius
-    fp = water
-  [../]
-[]
-
-[Functions]
-  [./injection_rate]
-    type = ParsedFunction
-    vals = injection_area
-    vars = area
-    value = &#x27;-0.1/area&#x27;
-  [../]
-[]
-
-[BCs]
-  [./source]
-    type = PorousFlowSink
-    variable = pliquid
-    flux_function = injection_rate
-    boundary = left
-  [../]
-  [./pright]
-    type = DirichletBC
-    variable = pliquid
-    value = 5e6
-    boundary = right
-  [../]
-  [./hleft]
-    type = DirichletBC
-    variable = h
-    value = 678.52e3
-    boundary = left
-  [../]
-  [./hright]
-    type = DirichletBC
-    variable = h
-    value = 721.4e3
-    boundary = right
-  [../]
-[]
-
-[Kernels]
-  [./mass]
-    type = PorousFlowMassTimeDerivative
-    variable = pliquid
-  [../]
-  [./massflux]
-    type = PorousFlowAdvectiveFlux
-    variable = pliquid
-  [../]
-  [./heat]
-    type = PorousFlowEnergyTimeDerivative
-    variable = h
-  [../]
-  [./heatflux]
-    type = PorousFlowHeatAdvection
-    variable = h
-  [../]
-  [./heatcond]
-    type = PorousFlowHeatConduction
-    variable = h
-  [../]
-[]
-
-[UserObjects]
-  [./dictator]
-    type = PorousFlowDictator
-    porous_flow_vars = &#x27;pliquid h&#x27;
-    number_fluid_phases = 2
-    number_fluid_components = 1
-  [../]
-  [./pc]
-    type = PorousFlowCapillaryPressureVG
-    pc_max = 1e6
-    sat_lr = 0.1
-    m = 0.5
-    alpha = 1e-5
-  [../]
-  [./fs]
-    type = PorousFlowWaterVapor
-    water_fp = water
-    capillary_pressure = pc
-  [../]
-[]
-
-[Modules]
-  [./FluidProperties]
-    [./water]
-      type = Water97FluidProperties
-    [../]
-  [../]
-[]
-
-[Materials]
-  [./watervapor]
-    type = PorousFlowFluidStateSingleComponent
-    porepressure = pliquid
-    enthalpy = h
-    temperature_unit = Celsius
-    capillary_pressure = pc
-    fluid_state = fs
-  [../]
-  [./porosity]
-    type = PorousFlowPorosityConst
-    porosity = 0.2
-  [../]
-  [./permeability]
-    type = PorousFlowPermeabilityConst
-    permeability = &#x27;1.8e-11 0 0 0 1.8e-11 0 0 0 1.8e-11&#x27;
-  [../]
-  [./relperm_water]
-    type = PorousFlowRelativePermeabilityCorey
-    n = 2
-    phase = 0
-    s_res = 0.1
-    sum_s_res = 0.1
-  [../]
-  [./relperm_gas]
-    type = PorousFlowRelativePermeabilityCorey
-    n = 2
-    phase = 1
-    sum_s_res = 0.1
-  [../]
-  [./internal_energy]
-    type = PorousFlowMatrixInternalEnergy
-    density = 2900
-    specific_heat_capacity = 740
-  [../]
-  [./rock_thermal_conductivity]
-    type = PorousFlowThermalConductivityIdeal
-    dry_thermal_conductivity = &#x27;20 0 0  0 20 0  0 0 20&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  [./smp]
-    type = SMP
-    full = true
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = NEWTON
-  end_time = 1e3
-  nl_abs_tol = 1e-8
-  [./TimeStepper]
-    type = IterationAdaptiveDT
-    dt = 100
-  [../]
-[]
-
-[Postprocessors]
-  [./injection_area]
-    type = AreaPostprocessor
-    boundary = left
-    execute_on = initial
-  [../]
-[]
-
-[VectorPostprocessors]
-  [./line]
-    type = ElementValueSampler
-    sort_by = x
-    variable = temperature
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-[]
-
-[Outputs]
-  perf_graph = true
-  [./csv]
-    type = CSV
-    execute_on = final
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="eb492d37-f70c-41e9-b6a4-fbdfb9dde3ec" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#5d4b62d3-d83a-48dd-b08b-d8ae238e4b73" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#4034dd25-112c-4117-a45c-b3779180fb8b" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li><li><a href="#eb492d37-f70c-41e9-b6a4-fbdfb9dde3ec" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="e4de6803-b6ee-46cf-8069-69cd295b2f97" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#e25d9204-9774-469d-99bc-1c454e2368cd" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#d447106a-100b-4848-b96b-75c46e5bb0c4" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li><li><a href="#e4de6803-b6ee-46cf-8069-69cd295b2f97" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

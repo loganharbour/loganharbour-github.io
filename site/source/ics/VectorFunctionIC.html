@@ -1,4 +1,4 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>VectorFunctionIC.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="38483646-1122-4238-8263-ccacebf391da"><i class="material-icons">menu</i></a><ul class="sidenav" id="38483646-1122-4238-8263-ccacebf391da"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">ics</span><a href="#" class="breadcrumb">VectorFunctionIC</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="6212a072-002d-4a66-87a9-bcf93e3b0b01" data-section-level="1" data-section-text="VectorFunctionIC"><h1 id="vectorfunctionic">VectorFunctionIC</h1><p>The VectorFunctionIC allows the components of a vector variable to be defined using a <a href="../../syntax/Functions/index.html">Function</a> object. This function supplied requires that the <code>vectorValue</code> method of the supplied function be defined, since this is used to populate the vector variable.</p><p>Sets component values for a vector field variable based on a vector function.</p><section class="scrollspy" id="8bcdeff7-cfb9-4692-8b57-98a828a45935" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="c1277e93-f4c3-4dee-aa11-4ee08a679552" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The variable this initial condition is supposed to provide values for.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>VariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The variable this initial condition is supposed to provide values for.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="b2d5e4c5-d67b-4161-8795-6fdbd432d850" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function</span><span class="moose-parameter-header-description">The initial condition vector function. This cannot be supplied with the component parameters.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The initial condition vector function. This cannot be supplied with the component parameters.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function_x</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">A function that describes the x-component of the initial condition</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A function that describes the x-component of the initial condition</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function_y</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">A function that describes the y-component of the initial condition</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A function that describes the y-component of the initial condition</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function_z</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">A function that describes the z-component of the initial condition</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A function that describes the z-component of the initial condition</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="b14c687a-de05-4777-b2b1-b9fd8c357297" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">ignore_uo_dependency</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">When set to true, a UserObject retrieved by this IC will not be executed before the this IC</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When set to true, a UserObject retrieved by this IC will not be executed before the this IC</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="9bc7c9b5-b85d-48c6-bd50-52b0ac0eff7c" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#9af23099-ab33-43c9-8fbd-634f704d3d55" class="modal-trigger">test/tests/ics/vector_function_ic/vector_function_ic.i</a></li><li><a href="#55551722-0029-47cc-b753-2d52af5082de" class="modal-trigger">modules/level_set/examples/rotating_circle/circle_rotate.i</a></li><li><a href="#67ba4a61-2a08-4b94-84ea-1dc3cd2e6625" class="modal-trigger">modules/level_set/test/tests/verification/1d_level_set_supg_mms/1d_level_set_supg_mms.i</a></li><li><a href="#9bc189ec-f8d4-4802-adea-848e8a62b0ce" class="modal-trigger">test/tests/ics/vector_function_ic/vector_function_ic_comp.i</a></li><li><a href="#7b5168e4-3907-4fd5-8593-47fea5525ca1" class="modal-trigger">modules/level_set/test/tests/kernels/advection/advection_mms.i</a></li><li><a href="#4438891c-ad04-48d8-878c-c13b6e2fc547" class="modal-trigger">modules/level_set/examples/rotating_circle/circle_rotate_master.i</a></li><li><a href="#9e952e83-ef47-43aa-bb27-82774aed1605" class="modal-trigger">modules/level_set/examples/circle/circle_16.i</a></li><li><a href="#abb2625e-5639-42d1-aac6-56f4e02e2861" class="modal-trigger">modules/level_set/test/tests/verification/1d_level_set_mms/level_set_mms.i</a></li><li><a href="#4a153d56-35ff-457f-882a-abb0291e9e7e" class="modal-trigger">modules/level_set/examples/rotating_circle/circle_rotate_supg.i</a></li><li><a href="#c54a01ae-f4d3-466e-b58c-60949c55e38c" class="modal-trigger">modules/level_set/test/tests/reinitialization/master.i</a></li></ul><div class="modal moose-modal" id="9af23099-ab33-43c9-8fbd-634f704d3d55"><div class="modal-content"><h4>test/tests/ics/vector_function_ic/vector_function_ic.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+<!DOCTYPE html><head><meta charset="UTF-8"><title>VectorFunctionIC.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="496f1de0-e541-40da-8f9e-1dea1f49e7f7"><i class="material-icons">menu</i></a><ul class="sidenav" id="496f1de0-e541-40da-8f9e-1dea1f49e7f7"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">ics</span><a href="#" class="breadcrumb">VectorFunctionIC</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="3738141a-3c12-4890-9e59-3993c73b2ef8" data-section-level="1" data-section-text="VectorFunctionIC"><h1 id="vectorfunctionic">VectorFunctionIC</h1><p>The VectorFunctionIC allows the components of a vector variable to be defined using a <a href="../../syntax/Functions/index.html">Function</a> object. This function supplied requires that the <code>vectorValue</code> method of the supplied function be defined, since this is used to populate the vector variable.</p><p>Sets component values for a vector field variable based on a vector function.</p><section class="scrollspy" id="fe092242-2bd4-4afb-bbd0-a182556a4906" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="2980ea83-8258-4529-9891-40397e6db7de" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The variable this initial condition is supposed to provide values for.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>VariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The variable this initial condition is supposed to provide values for.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="c94db39b-f834-4394-92fc-9ac0d5a54770" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function</span><span class="moose-parameter-header-description">The initial condition vector function. This cannot be supplied with the component parameters.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The initial condition vector function. This cannot be supplied with the component parameters.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function_x</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">A function that describes the x-component of the initial condition</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A function that describes the x-component of the initial condition</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function_y</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">A function that describes the y-component of the initial condition</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A function that describes the y-component of the initial condition</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function_z</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">A function that describes the z-component of the initial condition</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A function that describes the z-component of the initial condition</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="5cc2a5c0-ad1c-478f-a15a-80381cc4bf68" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">ignore_uo_dependency</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">When set to true, a UserObject retrieved by this IC will not be executed before the this IC</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When set to true, a UserObject retrieved by this IC will not be executed before the this IC</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="3d2eeb3e-5afa-41c4-b232-9fcf1990d034" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#b75012fd-6925-4877-ade1-65fb37f8d39d" class="modal-trigger">test/tests/ics/vector_function_ic/vector_function_ic.i</a></li><li><a href="#d0a358ac-2edf-4637-b99b-57f1fcb7a550" class="modal-trigger">modules/level_set/examples/rotating_circle/circle_rotate_master.i</a></li><li><a href="#26f2a5c4-bd7e-4baf-9b2b-939484e0d320" class="modal-trigger">modules/level_set/test/tests/reinitialization/master.i</a></li><li><a href="#3b7dfe48-2e3f-4f63-9c01-2c9172e1c14b" class="modal-trigger">modules/level_set/examples/rotating_circle/circle_rotate_supg.i</a></li><li><a href="#03d8b3ee-a56c-4127-99b8-cd89035c9e81" class="modal-trigger">modules/level_set/test/tests/kernels/advection/advection_mms.i</a></li><li><a href="#41b0a126-97f6-4f1e-800d-209d418ef1c0" class="modal-trigger">modules/level_set/test/tests/verification/1d_level_set_mms/level_set_mms.i</a></li><li><a href="#bf7aa660-3c3a-4387-a6a5-8d646d251c3b" class="modal-trigger">modules/level_set/examples/circle/circle_16.i</a></li><li><a href="#5e9bf4c2-5674-4886-ae12-8bef8159388a" class="modal-trigger">test/tests/ics/vector_function_ic/vector_function_ic_comp.i</a></li><li><a href="#49d93e26-9ec5-409d-9888-6b282779a6b6" class="modal-trigger">modules/level_set/test/tests/verification/1d_level_set_supg_mms/1d_level_set_supg_mms.i</a></li><li><a href="#b13bf4d2-8d14-44ca-a76b-dac5323f5f0f" class="modal-trigger">modules/level_set/examples/rotating_circle/circle_rotate.i</a></li></ul><div class="modal moose-modal" id="b75012fd-6925-4877-ade1-65fb37f8d39d"><div class="modal-content"><h4>test/tests/ics/vector_function_ic/vector_function_ic.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 3
   nx = 2
@@ -35,375 +35,7 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="55551722-0029-47cc-b753-2d52af5082de"><div class="modal-content"><h4>modules/level_set/examples/rotating_circle/circle_rotate.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = -1
-  xmax = 1
-  ymin = -1
-  ymax = 1
-  nx = 32
-  ny = 32
-  uniform_refine = 2
-[]
-
-[AuxVariables]
-  [./velocity]
-    family = LAGRANGE_VEC
-  [../]
-[]
-
-[Variables]
-  [./phi]
-  [../]
-[]
-
-[Functions]
-  [./phi_exact]
-    type = LevelSetOlssonBubble
-    epsilon = 0.03
-    center = &#x27;0 0.5 0&#x27;
-    radius = 0.15
-  [../]
-  [./velocity_func]
-    type = ParsedVectorFunction
-    value_x = &#x27;4*y&#x27;
-    value_y = &#x27;-4*x&#x27;
-  [../]
-[]
-
-[ICs]
-  [./phi_ic]
-    type = FunctionIC
-    function = phi_exact
-    variable = phi
-  [../]
-  [./vel_ic]
-    type = VectorFunctionIC
-    variable = velocity
-    function = velocity_func
-  []
-[]
-
-[Kernels]
-  [./time]
-    type = TimeDerivative
-    variable = phi
-  [../]
-
-  [./advection]
-    type = LevelSetAdvection
-    velocity = velocity
-    variable = phi
-  [../]
-[]
-
-[Postprocessors]
-  [./area]
-    type = LevelSetVolume
-    threshold = 0.5
-    variable = phi
-    location = outside
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./cfl]
-    type = LevelSetCFLCondition
-    velocity = velocity
-    execute_on = &#x27;initial&#x27; #timestep_end&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = PJFNK
-  start_time = 0
-  end_time = 1.570796
-  scheme = crank-nicolson
-  petsc_options_iname = &#x27;-pc_type -pc_sub_type&#x27;
-  petsc_options_value = &#x27;asm      ilu&#x27;
-  [./TimeStepper]
-    type = PostprocessorDT
-    postprocessor = cfl
-    scale = 0.8
-  [../]
-[]
-
-[Outputs]
-  csv = true
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="67ba4a61-2a08-4b94-84ea-1dc3cd2e6625"><div class="modal-content"><h4>modules/level_set/test/tests/verification/1d_level_set_supg_mms/1d_level_set_supg_mms.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  xmin = 0
-  xmax = 32
-  nx = 64
-[]
-
-[Variables]
-  [./phi]
-  [../]
-[]
-
-[AuxVariables]
-  [./velocity]
-    family = LAGRANGE_VEC
-  [../]
-[]
-
-[ICs]
-  [./phi_ic]
-    function = phi_exact
-    variable = phi
-    type = FunctionIC
-  [../]
-  [./vel_ic]
-    type = VectorFunctionIC
-    variable = velocity
-    function = velocity_func
-  []
-[]
-
-[Functions]
-  [./phi_exact]
-    type = ParsedFunction
-    value = &#x27;a*exp(1/(10*t))*sin(2*pi*x/b) + 1&#x27;
-    vars = &#x27;a b&#x27;
-    vals = &#x27;1 8&#x27;
-  [../]
-  [./phi_mms]
-    type = ParsedFunction
-    value = &#x27;-a*exp(1/(10*t))*sin(2*pi*x/b)/(10*t^2) + 2*pi*a*exp(1/(10*t))*cos(2*pi*x/b)/b&#x27;
-    vars = &#x27;a b&#x27;
-    vals = &#x27;1 8&#x27;
-  [../]
-  [./velocity_func]
-    type = ParsedVectorFunction
-    value_x = &#x27;1&#x27;
-    value_y = &#x27;1&#x27;
-  [../]
-[]
-
-[Kernels]
-  [./time]
-    type = TimeDerivative
-    variable = phi
-  [../]
-  [./time_supg]
-    type = LevelSetTimeDerivativeSUPG
-    variable = phi
-    velocity = velocity
-  [../]
-  [./phi_advection]
-    type = LevelSetAdvection
-    variable = phi
-    velocity = velocity
-  [../]
-  [./phi_forcing]
-    type = BodyForce
-    variable = phi
-    function = phi_mms
-  [../]
-  [./phi_advection_supg]
-    type = LevelSetAdvectionSUPG
-    variable = phi
-    velocity = velocity
-  [../]
-  [./phi_forcing_supg]
-    type = LevelSetForcingFunctionSUPG
-    velocity = velocity
-    variable = phi
-    function = phi_mms
-  [../]
-[]
-
-[Postprocessors]
-  [./error]
-    type = ElementL2Error
-    function = phi_exact
-    variable = phi
-  [../]
-  [./h]
-    type = AverageElementSize
-  [../]
-  [./point]
-    type = PointValue
-    point = &#x27;0.1 0 0&#x27;
-    variable = phi
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  start_time = 1
-  dt = 0.01
-  end_time = 1.25
-  solve_type = PJFNK
-  petsc_options_iname = &#x27;-pc_type -pc_sub_type&#x27;
-  petsc_options_value = &#x27;asm      ilu&#x27;
-  scheme = bdf2
-  nl_rel_tol = 1e-12
-[]
-
-[Outputs]
-  interval = 10
-  execute_on = &#x27;timestep_end&#x27;
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9bc189ec-f8d4-4802-adea-848e8a62b0ce"><div class="modal-content"><h4>test/tests/ics/vector_function_ic/vector_function_ic_comp.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 3
-  nx = 2
-  ny = 2
-  nz = 2
-[]
-
-[Problem]
-  solve = false
-  kernel_coverage_check = false
-[]
-
-[Variables/A]
-  family = LAGRANGE_VEC
-[]
-
-[ICs/A]
-    type = VectorFunctionIC
-    variable = A
-    function_x = func
-[]
-
-[Functions/func]
-  type = ParsedFunction
-  value = &#x27;2*x&#x27;
-[]
-
-[Executioner]
-  type = Steady
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="7b5168e4-3907-4fd5-8593-47fea5525ca1"><div class="modal-content"><h4>modules/level_set/test/tests/kernels/advection/advection_mms.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  xmin = 0
-  xmax = 12
-  nx = 48
-[]
-
-[Adaptivity]
-  steps = 5
-  marker = marker
-  [./Markers]
-    [./marker]
-      type = UniformMarker
-      mark = REFINE
-    [../]
-  [../]
-[]
-
-[Variables]
-  [./phi]
-  [../]
-[]
-
-[AuxVariables]
-  [./velocity]
-    family = LAGRANGE_VEC
-  [../]
-[]
-
-[ICs]
-  [./vel_ic]
-    type = VectorFunctionIC
-    variable = velocity
-    function = velocity_func
-  []
-[]
-
-[BCs]
-  [./left]
-    type = FunctionDirichletBC
-    boundary = &#x27;left&#x27;
-    function = phi_exact
-    variable = phi
-  [../]
-[]
-
-[Functions]
-  [./phi_exact]
-    type = ParsedFunction
-    value = &#x27;a*sin(pi*x/b)*cos(pi*x)&#x27;
-    vars = &#x27;a b&#x27;
-    vals = &#x27;2 12&#x27;
-  [../]
-  [./phi_mms]
-    type = ParsedFunction
-    value = &#x27;-2*pi*a*sin(pi*x)*sin(pi*x/b) + 2*pi*a*cos(pi*x)*cos(pi*x/b)/b&#x27;
-    vars = &#x27;a b&#x27;
-    vals = &#x27;2 12&#x27;
-  [../]
-  [./velocity_func]
-    type = ParsedVectorFunction
-    value_x = &#x27;2&#x27;
-    value_y = &#x27;2&#x27;
-  [../]
-[]
-
-[Kernels]
-  [./phi_advection]
-    type = LevelSetAdvection
-    variable = phi
-    velocity = velocity
-  [../]
-  [./phi_forcing]
-    type = BodyForce
-    variable = phi
-    function = phi_mms
-  [../]
-[]
-
-[Postprocessors]
-  [./error]
-    type = ElementL2Error
-    function = phi_exact
-    variable = phi
-  [../]
-  [./h]
-    type = AverageElementSize
-  [../]
-[]
-
-[VectorPostprocessors]
-  active = &#x27;&#x27;
-  [./results]
-    type = LineValueSampler
-    variable = phi
-    start_point = &#x27;0 0 0&#x27;
-    end_point = &#x27;12 0 0&#x27;
-    num_points = 500
-    sort_by = x
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-  nl_rel_tol = 1e-10
-  solve_type = NEWTON
-  # A steady-state pure advection problem is numerically challenging,
-  # it has a zero diagonal in the Jabocian matrix. The following solver
-  # settings seem to reliably solve this problem.
-  petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
-  petsc_options_value = &#x27;lu       superlu_dist&#x27;
-[]
-
-[Outputs]
-  execute_on = &#x27;TIMESTEP_END&#x27;
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4438891c-ad04-48d8-878c-c13b6e2fc547"><div class="modal-content"><h4>modules/level_set/examples/rotating_circle/circle_rotate_master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d0a358ac-2edf-4637-b99b-57f1fcb7a550"><div class="modal-content"><h4>modules/level_set/examples/rotating_circle/circle_rotate_master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   xmin = -1
@@ -544,314 +176,7 @@
   csv = true
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9e952e83-ef47-43aa-bb27-82774aed1605"><div class="modal-content"><h4>modules/level_set/examples/circle/circle_16.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = 0
-  xmax = 1
-  ymin = 0
-  ymax = 1
-  nx = 16
-  ny = 16
-[]
-
-[Variables]
-  [./phi]
-  [../]
-[]
-
-[AuxVariables]
-  [./velocity]
-    family = LAGRANGE_VEC
-  [../]
-[]
-
-[ICs]
-  [./phi_ic]
-    type = FunctionIC
-    function = phi_exact
-    variable = phi
-  [../]
-  [./vel_ic]
-    type = VectorFunctionIC
-    variable = velocity
-    function = velocity_func
-  []
-[]
-
-[Functions]
-  [./phi_exact]
-    type = LevelSetOlssonBubble
-    epsilon = 0.05
-    center = &#x27;0.5 0.5 0&#x27;
-    radius = 0.15
-  [../]
-  [./velocity_func]
-    type = ParsedVectorFunction
-    value_x = &#x27;3&#x27;
-    value_y = &#x27;3&#x27;
-  [../]
-[]
-
-[BCs]
-  [./Periodic]
-    [./all]
-      variable = phi
-      auto_direction = &#x27;x y&#x27;
-    [../]
-  [../]
-[]
-
-[Kernels]
-  [./time]
-    type = TimeDerivative
-    variable = phi
-  [../]
-
-  [./advection]
-    type = LevelSetAdvection
-    velocity = velocity
-    variable = phi
-  [../]
-[]
-
-[Postprocessors]
-  [./cfl]
-    type = LevelSetCFLCondition
-    velocity = velocity
-    execute_on = &#x27;initial&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = PJFNK
-  start_time = 0
-  end_time = 1
-  scheme = crank-nicolson
-  petsc_options_iname = &#x27;-pc_type -pc_sub_type&#x27;
-  petsc_options_value = &#x27;asm      ilu&#x27;
-  [./TimeStepper]
-    type = PostprocessorDT
-    postprocessor = cfl
-    scale = 0.8
-  [../]
-[]
-
-[Outputs]
-  csv = true
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="abb2625e-5639-42d1-aac6-56f4e02e2861"><div class="modal-content"><h4>modules/level_set/test/tests/verification/1d_level_set_mms/level_set_mms.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  xmin = 0
-  xmax = 32
-  nx = 64
-  uniform_refine = 0
-[]
-
-[Variables]
-  [./phi]
-  [../]
-[]
-
-[AuxVariables]
-  [./velocity]
-    family = LAGRANGE_VEC
-  [../]
-[]
-
-[ICs]
-  [./phi_ic]
-    function = phi_exact
-    variable = phi
-    type = FunctionIC
-  [../]
-  [./vel_ic]
-    type = VectorFunctionIC
-    variable = velocity
-    function = velocity_func
-  []
-[]
-
-[Functions]
-  [./phi_exact]
-    type = ParsedFunction
-    value = &#x27;a*exp(1/(10*t))*sin(2*pi*x/b) + 1&#x27;
-    vars = &#x27;a b&#x27;
-    vals = &#x27;1 8&#x27;
-  [../]
-  [./phi_mms]
-    type = ParsedFunction
-    value = &#x27;-a*exp(1/(10*t))*sin(2*pi*x/b)/(10*t^2) + 2*pi*a*exp(1/(10*t))*cos(2*pi*x/b)/b&#x27;
-    vars = &#x27;a b&#x27;
-    vals = &#x27;1 8&#x27;
-  [../]
-  [./velocity_func]
-    type = ParsedVectorFunction
-    value_x = &#x27;1&#x27;
-    value_y = &#x27;1&#x27;
-  [../]
-[]
-
-[Kernels]
-  [./phi_advection]
-    type = LevelSetAdvection
-    variable = phi
-    velocity = velocity
-  [../]
-  [./phi_time]
-    type = TimeDerivative
-    variable = phi
-  [../]
-  [./phi_forcing]
-    type = BodyForce
-    variable = phi
-    function = phi_mms
-  [../]
-[]
-
-[Postprocessors]
-  [./error]
-    type = ElementL2Error
-    function = phi_exact
-    variable = phi
-  [../]
-  [./h]
-    type = AverageElementSize
-  [../]
-  [./point]
-    type = PointValue
-    point = &#x27;0.1 0 0&#x27;
-    variable = phi
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  start_time = 1
-  dt = 0.01
-  end_time = 1.25
-  solve_type = PJFNK
-  petsc_options_iname = &#x27;-pc_type -pc_sub_type&#x27;
-  petsc_options_value = &#x27;asm      ilu&#x27;
-  scheme = bdf2
-  nl_rel_tol = 1e-12
-[]
-
-[Outputs]
-  interval = 10
-  execute_on = &#x27;timestep_end&#x27;
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4a153d56-35ff-457f-882a-abb0291e9e7e"><div class="modal-content"><h4>modules/level_set/examples/rotating_circle/circle_rotate_supg.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = -1
-  xmax = 1
-  ymin = -1
-  ymax = 1
-  nx = 32
-  ny = 32
-  uniform_refine = 2
-[]
-
-[AuxVariables]
-  [./velocity]
-    family = LAGRANGE_VEC
-  [../]
-[]
-
-[Variables]
-  [./phi]
-  [../]
-[]
-
-[Functions]
-  [./phi_exact]
-    type = LevelSetOlssonBubble
-    epsilon = 0.03
-    center = &#x27;0 0.5 0&#x27;
-    radius = 0.15
-  [../]
-  [./velocity_func]
-    type = ParsedVectorFunction
-    value_x = &#x27;4*y&#x27;
-    value_y = &#x27;-4*x&#x27;
-  [../]
-[]
-
-[ICs]
-  [./phi_ic]
-    type = FunctionIC
-    function = phi_exact
-    variable = phi
-  [../]
-  [./vel_ic]
-    type = VectorFunctionIC
-    variable = velocity
-    function = velocity_func
-  []
-[]
-
-[Kernels]
-  [./time]
-    type = TimeDerivative
-    variable = phi
-  [../]
-  [./advection]
-    type = LevelSetAdvection
-    velocity = velocity
-    variable = phi
-  [../]
-  [./advection_supg]
-    type = LevelSetAdvectionSUPG
-    velocity = velocity
-    variable = phi
-  [../]
-  [./time_supg]
-    type = LevelSetTimeDerivativeSUPG
-    velocity = velocity
-    variable = phi
-  [../]
-[]
-
-[Postprocessors]
-  [./area]
-    type = LevelSetVolume
-    threshold = 0.5
-    variable = phi
-    location = outside
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./cfl]
-    type = LevelSetCFLCondition
-    velocity = velocity
-    execute_on = &#x27;initial&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = PJFNK
-  start_time = 0
-  end_time = 1.570796
-  scheme = crank-nicolson
-  petsc_options_iname = &#x27;-pc_type -pc_sub_type&#x27;
-  petsc_options_value = &#x27;asm      ilu&#x27;
-  [./TimeStepper]
-    type = PostprocessorDT
-    postprocessor = cfl
-    scale = 0.8
-  [../]
-[]
-
-[Outputs]
-  csv = true
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c54a01ae-f4d3-466e-b58c-60949c55e38c"><div class="modal-content"><h4>modules/level_set/test/tests/reinitialization/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="26f2a5c4-bd7e-4baf-9b2b-939484e0d320"><div class="modal-content"><h4>modules/level_set/test/tests/reinitialization/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   xmin = 0
@@ -999,4 +324,679 @@
   exodus = true
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="0fdf2015-7680-47bc-ab08-b4e2d413f8b4" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#8bcdeff7-cfb9-4692-8b57-98a828a45935" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#9bc7c9b5-b85d-48c6-bd50-52b0ac0eff7c" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li><li><a href="#0fdf2015-7680-47bc-ab08-b4e2d413f8b4" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3b7dfe48-2e3f-4f63-9c01-2c9172e1c14b"><div class="modal-content"><h4>modules/level_set/examples/rotating_circle/circle_rotate_supg.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -1
+  xmax = 1
+  ymin = -1
+  ymax = 1
+  nx = 32
+  ny = 32
+  uniform_refine = 2
+[]
+
+[AuxVariables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+[]
+
+[Variables]
+  [./phi]
+  [../]
+[]
+
+[Functions]
+  [./phi_exact]
+    type = LevelSetOlssonBubble
+    epsilon = 0.03
+    center = &#x27;0 0.5 0&#x27;
+    radius = 0.15
+  [../]
+  [./velocity_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;4*y&#x27;
+    value_y = &#x27;-4*x&#x27;
+  [../]
+[]
+
+[ICs]
+  [./phi_ic]
+    type = FunctionIC
+    function = phi_exact
+    variable = phi
+  [../]
+  [./vel_ic]
+    type = VectorFunctionIC
+    variable = velocity
+    function = velocity_func
+  []
+[]
+
+[Kernels]
+  [./time]
+    type = TimeDerivative
+    variable = phi
+  [../]
+  [./advection]
+    type = LevelSetAdvection
+    velocity = velocity
+    variable = phi
+  [../]
+  [./advection_supg]
+    type = LevelSetAdvectionSUPG
+    velocity = velocity
+    variable = phi
+  [../]
+  [./time_supg]
+    type = LevelSetTimeDerivativeSUPG
+    velocity = velocity
+    variable = phi
+  [../]
+[]
+
+[Postprocessors]
+  [./area]
+    type = LevelSetVolume
+    threshold = 0.5
+    variable = phi
+    location = outside
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./cfl]
+    type = LevelSetCFLCondition
+    velocity = velocity
+    execute_on = &#x27;initial&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  start_time = 0
+  end_time = 1.570796
+  scheme = crank-nicolson
+  petsc_options_iname = &#x27;-pc_type -pc_sub_type&#x27;
+  petsc_options_value = &#x27;asm      ilu&#x27;
+  [./TimeStepper]
+    type = PostprocessorDT
+    postprocessor = cfl
+    scale = 0.8
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="03d8b3ee-a56c-4127-99b8-cd89035c9e81"><div class="modal-content"><h4>modules/level_set/test/tests/kernels/advection/advection_mms.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmin = 0
+  xmax = 12
+  nx = 48
+[]
+
+[Adaptivity]
+  steps = 5
+  marker = marker
+  [./Markers]
+    [./marker]
+      type = UniformMarker
+      mark = REFINE
+    [../]
+  [../]
+[]
+
+[Variables]
+  [./phi]
+  [../]
+[]
+
+[AuxVariables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+[]
+
+[ICs]
+  [./vel_ic]
+    type = VectorFunctionIC
+    variable = velocity
+    function = velocity_func
+  []
+[]
+
+[BCs]
+  [./left]
+    type = FunctionDirichletBC
+    boundary = &#x27;left&#x27;
+    function = phi_exact
+    variable = phi
+  [../]
+[]
+
+[Functions]
+  [./phi_exact]
+    type = ParsedFunction
+    value = &#x27;a*sin(pi*x/b)*cos(pi*x)&#x27;
+    vars = &#x27;a b&#x27;
+    vals = &#x27;2 12&#x27;
+  [../]
+  [./phi_mms]
+    type = ParsedFunction
+    value = &#x27;-2*pi*a*sin(pi*x)*sin(pi*x/b) + 2*pi*a*cos(pi*x)*cos(pi*x/b)/b&#x27;
+    vars = &#x27;a b&#x27;
+    vals = &#x27;2 12&#x27;
+  [../]
+  [./velocity_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;2&#x27;
+    value_y = &#x27;2&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./phi_advection]
+    type = LevelSetAdvection
+    variable = phi
+    velocity = velocity
+  [../]
+  [./phi_forcing]
+    type = BodyForce
+    variable = phi
+    function = phi_mms
+  [../]
+[]
+
+[Postprocessors]
+  [./error]
+    type = ElementL2Error
+    function = phi_exact
+    variable = phi
+  [../]
+  [./h]
+    type = AverageElementSize
+  [../]
+[]
+
+[VectorPostprocessors]
+  active = &#x27;&#x27;
+  [./results]
+    type = LineValueSampler
+    variable = phi
+    start_point = &#x27;0 0 0&#x27;
+    end_point = &#x27;12 0 0&#x27;
+    num_points = 500
+    sort_by = x
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  nl_rel_tol = 1e-10
+  solve_type = NEWTON
+  # A steady-state pure advection problem is numerically challenging,
+  # it has a zero diagonal in the Jabocian matrix. The following solver
+  # settings seem to reliably solve this problem.
+  petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+  petsc_options_value = &#x27;lu       superlu_dist&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;TIMESTEP_END&#x27;
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="41b0a126-97f6-4f1e-800d-209d418ef1c0"><div class="modal-content"><h4>modules/level_set/test/tests/verification/1d_level_set_mms/level_set_mms.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmin = 0
+  xmax = 32
+  nx = 64
+  uniform_refine = 0
+[]
+
+[Variables]
+  [./phi]
+  [../]
+[]
+
+[AuxVariables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+[]
+
+[ICs]
+  [./phi_ic]
+    function = phi_exact
+    variable = phi
+    type = FunctionIC
+  [../]
+  [./vel_ic]
+    type = VectorFunctionIC
+    variable = velocity
+    function = velocity_func
+  []
+[]
+
+[Functions]
+  [./phi_exact]
+    type = ParsedFunction
+    value = &#x27;a*exp(1/(10*t))*sin(2*pi*x/b) + 1&#x27;
+    vars = &#x27;a b&#x27;
+    vals = &#x27;1 8&#x27;
+  [../]
+  [./phi_mms]
+    type = ParsedFunction
+    value = &#x27;-a*exp(1/(10*t))*sin(2*pi*x/b)/(10*t^2) + 2*pi*a*exp(1/(10*t))*cos(2*pi*x/b)/b&#x27;
+    vars = &#x27;a b&#x27;
+    vals = &#x27;1 8&#x27;
+  [../]
+  [./velocity_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;1&#x27;
+    value_y = &#x27;1&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./phi_advection]
+    type = LevelSetAdvection
+    variable = phi
+    velocity = velocity
+  [../]
+  [./phi_time]
+    type = TimeDerivative
+    variable = phi
+  [../]
+  [./phi_forcing]
+    type = BodyForce
+    variable = phi
+    function = phi_mms
+  [../]
+[]
+
+[Postprocessors]
+  [./error]
+    type = ElementL2Error
+    function = phi_exact
+    variable = phi
+  [../]
+  [./h]
+    type = AverageElementSize
+  [../]
+  [./point]
+    type = PointValue
+    point = &#x27;0.1 0 0&#x27;
+    variable = phi
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  start_time = 1
+  dt = 0.01
+  end_time = 1.25
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_sub_type&#x27;
+  petsc_options_value = &#x27;asm      ilu&#x27;
+  scheme = bdf2
+  nl_rel_tol = 1e-12
+[]
+
+[Outputs]
+  interval = 10
+  execute_on = &#x27;timestep_end&#x27;
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="bf7aa660-3c3a-4387-a6a5-8d646d251c3b"><div class="modal-content"><h4>modules/level_set/examples/circle/circle_16.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  nx = 16
+  ny = 16
+[]
+
+[Variables]
+  [./phi]
+  [../]
+[]
+
+[AuxVariables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+[]
+
+[ICs]
+  [./phi_ic]
+    type = FunctionIC
+    function = phi_exact
+    variable = phi
+  [../]
+  [./vel_ic]
+    type = VectorFunctionIC
+    variable = velocity
+    function = velocity_func
+  []
+[]
+
+[Functions]
+  [./phi_exact]
+    type = LevelSetOlssonBubble
+    epsilon = 0.05
+    center = &#x27;0.5 0.5 0&#x27;
+    radius = 0.15
+  [../]
+  [./velocity_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;3&#x27;
+    value_y = &#x27;3&#x27;
+  [../]
+[]
+
+[BCs]
+  [./Periodic]
+    [./all]
+      variable = phi
+      auto_direction = &#x27;x y&#x27;
+    [../]
+  [../]
+[]
+
+[Kernels]
+  [./time]
+    type = TimeDerivative
+    variable = phi
+  [../]
+
+  [./advection]
+    type = LevelSetAdvection
+    velocity = velocity
+    variable = phi
+  [../]
+[]
+
+[Postprocessors]
+  [./cfl]
+    type = LevelSetCFLCondition
+    velocity = velocity
+    execute_on = &#x27;initial&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  start_time = 0
+  end_time = 1
+  scheme = crank-nicolson
+  petsc_options_iname = &#x27;-pc_type -pc_sub_type&#x27;
+  petsc_options_value = &#x27;asm      ilu&#x27;
+  [./TimeStepper]
+    type = PostprocessorDT
+    postprocessor = cfl
+    scale = 0.8
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5e9bf4c2-5674-4886-ae12-8bef8159388a"><div class="modal-content"><h4>test/tests/ics/vector_function_ic/vector_function_ic_comp.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 2
+  ny = 2
+  nz = 2
+[]
+
+[Problem]
+  solve = false
+  kernel_coverage_check = false
+[]
+
+[Variables/A]
+  family = LAGRANGE_VEC
+[]
+
+[ICs/A]
+    type = VectorFunctionIC
+    variable = A
+    function_x = func
+[]
+
+[Functions/func]
+  type = ParsedFunction
+  value = &#x27;2*x&#x27;
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="49d93e26-9ec5-409d-9888-6b282779a6b6"><div class="modal-content"><h4>modules/level_set/test/tests/verification/1d_level_set_supg_mms/1d_level_set_supg_mms.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmin = 0
+  xmax = 32
+  nx = 64
+[]
+
+[Variables]
+  [./phi]
+  [../]
+[]
+
+[AuxVariables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+[]
+
+[ICs]
+  [./phi_ic]
+    function = phi_exact
+    variable = phi
+    type = FunctionIC
+  [../]
+  [./vel_ic]
+    type = VectorFunctionIC
+    variable = velocity
+    function = velocity_func
+  []
+[]
+
+[Functions]
+  [./phi_exact]
+    type = ParsedFunction
+    value = &#x27;a*exp(1/(10*t))*sin(2*pi*x/b) + 1&#x27;
+    vars = &#x27;a b&#x27;
+    vals = &#x27;1 8&#x27;
+  [../]
+  [./phi_mms]
+    type = ParsedFunction
+    value = &#x27;-a*exp(1/(10*t))*sin(2*pi*x/b)/(10*t^2) + 2*pi*a*exp(1/(10*t))*cos(2*pi*x/b)/b&#x27;
+    vars = &#x27;a b&#x27;
+    vals = &#x27;1 8&#x27;
+  [../]
+  [./velocity_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;1&#x27;
+    value_y = &#x27;1&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./time]
+    type = TimeDerivative
+    variable = phi
+  [../]
+  [./time_supg]
+    type = LevelSetTimeDerivativeSUPG
+    variable = phi
+    velocity = velocity
+  [../]
+  [./phi_advection]
+    type = LevelSetAdvection
+    variable = phi
+    velocity = velocity
+  [../]
+  [./phi_forcing]
+    type = BodyForce
+    variable = phi
+    function = phi_mms
+  [../]
+  [./phi_advection_supg]
+    type = LevelSetAdvectionSUPG
+    variable = phi
+    velocity = velocity
+  [../]
+  [./phi_forcing_supg]
+    type = LevelSetForcingFunctionSUPG
+    velocity = velocity
+    variable = phi
+    function = phi_mms
+  [../]
+[]
+
+[Postprocessors]
+  [./error]
+    type = ElementL2Error
+    function = phi_exact
+    variable = phi
+  [../]
+  [./h]
+    type = AverageElementSize
+  [../]
+  [./point]
+    type = PointValue
+    point = &#x27;0.1 0 0&#x27;
+    variable = phi
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  start_time = 1
+  dt = 0.01
+  end_time = 1.25
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_sub_type&#x27;
+  petsc_options_value = &#x27;asm      ilu&#x27;
+  scheme = bdf2
+  nl_rel_tol = 1e-12
+[]
+
+[Outputs]
+  interval = 10
+  execute_on = &#x27;timestep_end&#x27;
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b13bf4d2-8d14-44ca-a76b-dac5323f5f0f"><div class="modal-content"><h4>modules/level_set/examples/rotating_circle/circle_rotate.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -1
+  xmax = 1
+  ymin = -1
+  ymax = 1
+  nx = 32
+  ny = 32
+  uniform_refine = 2
+[]
+
+[AuxVariables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+[]
+
+[Variables]
+  [./phi]
+  [../]
+[]
+
+[Functions]
+  [./phi_exact]
+    type = LevelSetOlssonBubble
+    epsilon = 0.03
+    center = &#x27;0 0.5 0&#x27;
+    radius = 0.15
+  [../]
+  [./velocity_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;4*y&#x27;
+    value_y = &#x27;-4*x&#x27;
+  [../]
+[]
+
+[ICs]
+  [./phi_ic]
+    type = FunctionIC
+    function = phi_exact
+    variable = phi
+  [../]
+  [./vel_ic]
+    type = VectorFunctionIC
+    variable = velocity
+    function = velocity_func
+  []
+[]
+
+[Kernels]
+  [./time]
+    type = TimeDerivative
+    variable = phi
+  [../]
+
+  [./advection]
+    type = LevelSetAdvection
+    velocity = velocity
+    variable = phi
+  [../]
+[]
+
+[Postprocessors]
+  [./area]
+    type = LevelSetVolume
+    threshold = 0.5
+    variable = phi
+    location = outside
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./cfl]
+    type = LevelSetCFLCondition
+    velocity = velocity
+    execute_on = &#x27;initial&#x27; #timestep_end&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  start_time = 0
+  end_time = 1.570796
+  scheme = crank-nicolson
+  petsc_options_iname = &#x27;-pc_type -pc_sub_type&#x27;
+  petsc_options_value = &#x27;asm      ilu&#x27;
+  [./TimeStepper]
+    type = PostprocessorDT
+    postprocessor = cfl
+    scale = 0.8
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="6541c7ce-65a3-4d88-87f4-e370b76381b4" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#fe092242-2bd4-4afb-bbd0-a182556a4906" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#3d2eeb3e-5afa-41c4-b232-9fcf1990d034" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li><li><a href="#6541c7ce-65a3-4d88-87f4-e370b76381b4" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>ConstantBoundsAux.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="e962538d-6d98-4a72-a2f9-ddf52f8d0120"><i class="material-icons">menu</i></a><ul class="sidenav" id="e962538d-6d98-4a72-a2f9-ddf52f8d0120"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">auxkernels</span><a href="#" class="breadcrumb">ConstantBoundsAux</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="d10c0285-5c8a-429d-8d8a-7557c3388375" data-section-level="1" data-section-text="ConstantBoundsAux"><h1 id="constantboundsaux">ConstantBoundsAux</h1><p>Provides constant bound of a variable for the PETSc&#x27;s variational inequalities solver</p><section class="scrollspy" id="9dfbfb14-4f53-4df2-b94c-98ce12e4f643" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>ConstantBoundsAux</code> is used for setting bounds on a non-linear variable specified through the parameter <code>bounded_variable</code>. The bound type of <code>upper</code> or <code>lower</code> is set with <code>bound_type</code> parameter. The <code>bound_value</code> is used to specify the value of a bound. <code>ConstantBoundsAux</code> expects a <code>variable</code> parameter to be set (as do all <code>AuxKernels</code>). This can be a dummy <code>AuxVariable</code>; the <code>ConstantBoundsAux</code> actually operates on <code>NumericVectors</code> held by the nonlinear system and does nothing but return 0 for the value of the specified <code>variable</code>.</p><p>Note that in order for these bounds to have an effect, the user has to specify the PETSc options <code>-snes_type vinewtonssls</code> or <code>-snes_type vinewtonrsls</code>. A warning will be generated if neither options are specified. The PETSc manual pages for the <code>vinewtonssls</code> algorithm can be found <a href="https://www.mcs.anl.gov/petsc/petsc-current/docs/manualpages/SNES/SNESVINEWTONSSLS.html">here</a> while the manual page for <code>vinewtonrsls</code> can be found <a href="https://www.mcs.anl.gov/petsc/petsc-current/docs/manualpages/SNES/SNESVINEWTONRSLS.html#SNESVINEWTONRSLS">here</a>.</p><p>MOOSE users can also enforce constraints through MOOSE using <a href="../nodalkernels/UpperBoundNodalKernel.html"><code>UpperBoundNodalKernel</code></a> and <a href="../nodalkernels/LowerBoundNodalKernel.html"><code>LowerBoundNodalKernel</code></a>. However, using these objects requires introduction of Lagrange multiplier variables that increase the size of the non-linear system as well as render some preconditioning methods like algebraic multi-grid ineffective. The number of non-linear iterations required to solve a constrained PDE defined by <a href="#f41f8a65-4288-4f06-b18c-379f924c1cf5" class="modal-trigger">this input file</a> with the various constraint algorithms is summarized below:</p><div class="modal moose-modal" id="f41f8a65-4288-4f06-b18c-379f924c1cf5"><div class="modal-content"><h4>/test/tests/nodalkernels/constraint_enforcement/upper-and-lower-bound.i</h4><pre class="moose-pre"><code class="language-text">l=10
+<!DOCTYPE html><head><meta charset="UTF-8"><title>ConstantBoundsAux.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="a3811814-fee7-4135-8f35-2483376aebda"><i class="material-icons">menu</i></a><ul class="sidenav" id="a3811814-fee7-4135-8f35-2483376aebda"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">auxkernels</span><a href="#" class="breadcrumb">ConstantBoundsAux</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="f5c6f9da-373a-45a4-9e37-511625858551" data-section-level="1" data-section-text="ConstantBoundsAux"><h1 id="constantboundsaux">ConstantBoundsAux</h1><p>Provides constant bound of a variable for the PETSc&#x27;s variational inequalities solver</p><section class="scrollspy" id="3852841c-4358-4fea-8698-345caa3b5537" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>ConstantBoundsAux</code> is used for setting bounds on a non-linear variable specified through the parameter <code>bounded_variable</code>. The bound type of <code>upper</code> or <code>lower</code> is set with <code>bound_type</code> parameter. The <code>bound_value</code> is used to specify the value of a bound. <code>ConstantBoundsAux</code> expects a <code>variable</code> parameter to be set (as do all <code>AuxKernels</code>). This can be a dummy <code>AuxVariable</code>; the <code>ConstantBoundsAux</code> actually operates on <code>NumericVectors</code> held by the nonlinear system and does nothing but return 0 for the value of the specified <code>variable</code>.</p><p>Note that in order for these bounds to have an effect, the user has to specify the PETSc options <code>-snes_type vinewtonssls</code> or <code>-snes_type vinewtonrsls</code>. A warning will be generated if neither options are specified. The PETSc manual pages for the <code>vinewtonssls</code> algorithm can be found <a href="https://www.mcs.anl.gov/petsc/petsc-current/docs/manualpages/SNES/SNESVINEWTONSSLS.html">here</a> while the manual page for <code>vinewtonrsls</code> can be found <a href="https://www.mcs.anl.gov/petsc/petsc-current/docs/manualpages/SNES/SNESVINEWTONRSLS.html#SNESVINEWTONRSLS">here</a>.</p><p>MOOSE users can also enforce constraints through MOOSE using <a href="../nodalkernels/UpperBoundNodalKernel.html"><code>UpperBoundNodalKernel</code></a> and <a href="../nodalkernels/LowerBoundNodalKernel.html"><code>LowerBoundNodalKernel</code></a>. However, using these objects requires introduction of Lagrange multiplier variables that increase the size of the non-linear system as well as render some preconditioning methods like algebraic multi-grid ineffective. The number of non-linear iterations required to solve a constrained PDE defined by <a href="#93d67f10-1e6d-4551-a706-ce3d92703233" class="modal-trigger">this input file</a> with the various constraint algorithms is summarized below:</p><div class="modal moose-modal" id="93d67f10-1e6d-4551-a706-ce3d92703233"><div class="modal-content"><h4>/test/tests/nodalkernels/constraint_enforcement/upper-and-lower-bound.i</h4><pre class="moose-pre"><code class="language-text">l=10
 nx=100
 num_steps=10
 
@@ -156,7 +156,7 @@ num_steps=10
     postprocessor = nls
   []
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><ul class="browser-default"><li><p><code>viewntonrsls</code> and <code>ConstantBoundsAux</code>:                      22 </p></li><li><p><code>vinewtonssls</code> and <code>ConstantBoundsAux</code>:                      53 </p></li><li><p><code>UpperBoundNodalKernel</code> and <code>LowerBoundNodalKernel</code>: 25</p></li></ul></section><section class="scrollspy" id="ad57c171-fa7a-4420-80a5-babcfab83657" data-section-level="2" data-section-text="Example Syntax"><h2 id="example-syntax">Example Syntax</h2><pre class="moose-pre"><code class="language-text">[Bounds]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><ul class="browser-default"><li><p><code>viewntonrsls</code> and <code>ConstantBoundsAux</code>:                      22 </p></li><li><p><code>vinewtonssls</code> and <code>ConstantBoundsAux</code>:                      53 </p></li><li><p><code>UpperBoundNodalKernel</code> and <code>LowerBoundNodalKernel</code>: 25</p></li></ul></section><section class="scrollspy" id="33d60405-c79b-4ac2-b12e-17606e89d1bc" data-section-level="2" data-section-text="Example Syntax"><h2 id="example-syntax">Example Syntax</h2><pre class="moose-pre"><code class="language-text">[Bounds]
   [./u_upper_bound]
     type = ConstantBoundsAux
     variable = bounds_dummy
@@ -187,7 +187,7 @@ num_steps=10
     bound_value = -1
   [../]
 []
-</code></pre><a href="#031a23ab-7065-49d7-87fb-5242fbd8d2d3" class="modal-trigger">(test/tests/auxkernels/bounds/constant_bounds.i)</a><div class="modal moose-modal" id="031a23ab-7065-49d7-87fb-5242fbd8d2d3"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/auxkernels/bounds/constant_bounds.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre><a href="#50c21318-5767-4fde-a5fc-dbdfba4e6b27" class="modal-trigger">(test/tests/auxkernels/bounds/constant_bounds.i)</a><div class="modal moose-modal" id="50c21318-5767-4fde-a5fc-dbdfba4e6b27"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/auxkernels/bounds/constant_bounds.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
 
   dim = 2
@@ -304,7 +304,285 @@ num_steps=10
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="5c85d0be-5526-4ec7-b05b-56288ba7f871" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="a2287dc9-87f4-469a-9709-ea7e49dc81ea" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">bound_value</span><span class="moose-parameter-header-description">The value of bound for the variable</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The value of bound for the variable</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">bounded_variable</span><span class="moose-parameter-header-description">The variable to be bounded</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The variable to be bounded</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this object applies to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>AuxVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this object applies to</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="2449d8a8-d957-478b-b140-4ac14ef05cf4" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">bound_type</span><span class="moose-parameter-header-default">upper</span><span class="moose-parameter-header-description">Type of bound. 'upper' refers to the upper bound. 'lower' refers to the lower value.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>upper</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>upper lower</p><p class="moose-parameter-description"><span>Description:</span>Type of bound. 'upper' refers to the upper bound. 'lower' refers to the lower value.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">LINEAR TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM, PRE_DISPLACE.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>LINEAR TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM PRE_DISPLACE</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM, PRE_DISPLACE.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="1493e256-a652-4e50-a107-7d2a36e903ae" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="17386a8e-a8b4-4b82-9654-d283be4fd4d5" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#0f5f1b0e-b450-4fa3-a6a6-95a8836c66e0" class="modal-trigger">test/tests/multiapps/grid-sequencing/vi-coarser.i</a></li><li><a href="#4eecb96c-5af1-4b40-89e2-ca686241e4a6" class="modal-trigger">modules/combined/test/tests/phase_field_fracture/crack2d_vi_solver.i</a></li><li><a href="#84b32899-5cb3-4bf1-bb47-aa2bb8fc5213" class="modal-trigger">modules/richards/test/tests/buckley_leverett/bl20.i</a></li><li><a href="#8c8b8ee4-fb1a-4f14-88ad-357be22aca26" class="modal-trigger">test/tests/multiapps/grid-sequencing/vi-fine-alone.i</a></li><li><a href="#25800af6-4c89-4136-a093-87e4294939df" class="modal-trigger">test/tests/auxkernels/bounds/constant_bounds.i</a></li><li><a href="#0e26bd44-5822-413f-8ae3-e992e935d04c" class="modal-trigger">test/tests/auxkernels/bounds/old_value_bounds.i</a></li><li><a href="#d7bf93a5-15f2-4072-ba74-59a2aa18ff4b" class="modal-trigger">modules/richards/test/tests/buckley_leverett/bl21.i</a></li><li><a href="#4b63414c-4bba-4b2f-8166-22a9e605defd" class="modal-trigger">test/tests/multiapps/grid-sequencing/vi-fine.i</a></li><li><a href="#e6307497-23d1-49ff-9515-d0d1fa177057" class="modal-trigger">test/tests/nodalkernels/constraint_enforcement/vi-bounding.i</a></li><li><a href="#6dcbc1e1-6460-4456-a684-6d222d7d5708" class="modal-trigger">test/tests/multiapps/grid-sequencing/vi-coarse.i</a></li></ul><div class="modal moose-modal" id="0f5f1b0e-b450-4fa3-a6a6-95a8836c66e0"><div class="modal-content"><h4>test/tests/multiapps/grid-sequencing/vi-coarser.i</h4><pre class="moose-pre"><code class="language-text">l=10
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="b9be7590-02b5-45f0-8bea-80839dd1e644" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="839c178f-24d0-4f9f-82f8-3ac7cf6075c7" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">bound_value</span><span class="moose-parameter-header-description">The value of bound for the variable</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The value of bound for the variable</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">bounded_variable</span><span class="moose-parameter-header-description">The variable to be bounded</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The variable to be bounded</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this object applies to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>AuxVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this object applies to</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="389501fe-ef91-4861-a597-8fdf6d24d59c" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">bound_type</span><span class="moose-parameter-header-default">upper</span><span class="moose-parameter-header-description">Type of bound. 'upper' refers to the upper bound. 'lower' refers to the lower value.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>upper</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>upper lower</p><p class="moose-parameter-description"><span>Description:</span>Type of bound. 'upper' refers to the upper bound. 'lower' refers to the lower value.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">LINEAR TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM, PRE_DISPLACE.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>LINEAR TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM PRE_DISPLACE</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM, PRE_DISPLACE.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="c047dfc8-7656-4ffb-bdfa-0178c82eccc6" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="ec78b3d6-e4ca-4f5f-b4af-6620d15931e1" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#fdf91b99-eac4-4e31-a8ea-721e6a22e33a" class="modal-trigger">test/tests/auxkernels/bounds/old_value_bounds.i</a></li><li><a href="#c3594c96-4021-4c7f-81f1-80c0e4fbd97a" class="modal-trigger">test/tests/multiapps/grid-sequencing/vi-fine.i</a></li><li><a href="#2e9dc100-973b-4336-b0a3-f59e675a29ad" class="modal-trigger">test/tests/multiapps/grid-sequencing/vi-coarser.i</a></li><li><a href="#8e269cdb-cc1c-4d5b-b8f4-229980d30e3b" class="modal-trigger">modules/combined/test/tests/phase_field_fracture/crack2d_vi_solver.i</a></li><li><a href="#83d03a8c-3ec5-47bd-a943-4634feea8a80" class="modal-trigger">test/tests/auxkernels/bounds/constant_bounds.i</a></li><li><a href="#8e82eafd-c039-49cb-9411-cd56ea321176" class="modal-trigger">modules/richards/test/tests/buckley_leverett/bl20.i</a></li><li><a href="#20324917-e00e-4b54-a5b0-c5b2ad9f77a5" class="modal-trigger">modules/richards/test/tests/buckley_leverett/bl21.i</a></li><li><a href="#4dc5fb59-744e-4943-8261-b7daed111747" class="modal-trigger">test/tests/multiapps/grid-sequencing/vi-coarse.i</a></li><li><a href="#f482f8a4-2cbf-4000-be81-5151efeea7a4" class="modal-trigger">test/tests/nodalkernels/constraint_enforcement/vi-bounding.i</a></li><li><a href="#a56875d8-bfd4-4153-8a68-b104c5222e1b" class="modal-trigger">test/tests/multiapps/grid-sequencing/vi-fine-alone.i</a></li></ul><div class="modal moose-modal" id="fdf91b99-eac4-4e31-a8ea-721e6a22e33a"><div class="modal-content"><h4>test/tests/auxkernels/bounds/old_value_bounds.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+
+  dim = 2
+
+  xmin = 0
+  xmax = 1
+
+  ymin = 0
+  ymax = 1
+
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+
+  [./v]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./bounds_dummy]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./time_u]
+    type = TimeDerivative
+    variable = u
+  [../]
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./time_v]
+    type = TimeDerivative
+    variable = v
+  [../]
+  [./diff_v]
+    type = Diffusion
+    variable = v
+  [../]
+[]
+
+[BCs]
+  [./left_u]
+    type = DirichletBC
+    variable = u
+    boundary = 3
+    value = 0
+  [../]
+
+  [./right_u]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 1
+  [../]
+
+  [./left_v]
+    type = DirichletBC
+    variable = v
+    boundary = 3
+    value = 0
+  [../]
+
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = 1
+    value = 1
+  [../]
+[]
+
+[Bounds]
+  [./u_upper_bound]
+    type = ConstantBoundsAux
+    variable = bounds_dummy
+    bounded_variable = u
+    bound_type = upper
+    bound_value = 1
+  [../]
+  [./u_lower_bound]
+    type = VariableOldValueBoundsAux
+    variable = bounds_dummy
+    bounded_variable = u
+    bound_type = lower
+  [../]
+
+  [./v_upper_bound]
+    type = ConstantBoundsAux
+    variable = bounds_dummy
+    bounded_variable = v
+    bound_type = upper
+    bound_value = 3
+  [../]
+  [./v_lower_bound]
+    type = VariableOldValueBoundsAux
+    variable = bounds_dummy
+    bounded_variable = v
+    bound_type = lower
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 2
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c3594c96-4021-4c7f-81f1-80c0e4fbd97a"><div class="modal-content"><h4>test/tests/multiapps/grid-sequencing/vi-fine.i</h4><pre class="moose-pre"><code class="language-text">l=10
+nx=80
+num_steps=2
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmax = ${l}
+  nx = ${nx}
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[AuxVariables]
+  [bounds][]
+[]
+
+[Bounds]
+  [./u_upper_bounds]
+    type = ConstantBoundsAux
+    variable = bounds
+    bounded_variable = u
+    bound_type = upper
+    bound_value = ${l}
+  [../]
+  [./u_lower_bounds]
+    type = ConstantBoundsAux
+    variable = bounds
+    bounded_variable = u
+    bound_type = lower
+    bound_value = 0
+  [../]
+[]
+
+[ICs]
+  [u]
+    type = FunctionIC
+    variable = u
+    function = &#x27;x&#x27;
+  []
+[]
+
+[Kernels]
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [ffn]
+    type = BodyForce
+    variable = u
+    function = &#x27;if(x&lt;5,-1,1)&#x27;
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    boundary = left
+    value = 0
+    variable = u
+  []
+  [right]
+    type = DirichletBC
+    boundary = right
+    value = ${l}
+    variable = u
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = ${num_steps}
+  solve_type = NEWTON
+  dtmin = 1
+  petsc_options = &#x27;-snes_vi_monitor&#x27;
+  petsc_options_iname = &#x27;-snes_max_linear_solve_fail -ksp_max_it -pc_type -sub_pc_factor_levels -snes_linesearch_type -snes_type&#x27;
+  petsc_options_value = &#x27;0                           30          asm      16                    basic                 vinewtonrsls&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [csv]
+    type = CSV
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+  [dof]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Postprocessors]
+  active = &#x27;upper_violations lower_violations&#x27;
+  [upper_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = ${fparse 10+1e-8}
+    comparator = &#x27;greater&#x27;
+  []
+  [lower_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = -1e-8
+    comparator = &#x27;less&#x27;
+  []
+  [nls]
+    type = NumNonlinearIterations
+  []
+  [cum_nls]
+    type = CumulativeValuePostprocessor
+    postprocessor = nls
+  []
+[]
+
+[MultiApps]
+  [./coarse]
+    type = TransientMultiApp
+    app_type = MooseTestApp
+    execute_on = timestep_begin
+    positions = &#x27;0 0 0&#x27;
+    input_files = vi-coarse.i
+  [../]
+[]
+
+[Transfers]
+  [./mesh_function_begin]
+    type = MultiAppMeshFunctionTransfer
+    direction = from_multiapp
+    multi_app = coarse
+    source_variable = u
+    variable = u
+    execute_on = timestep_begin
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2e9dc100-973b-4336-b0a3-f59e675a29ad"><div class="modal-content"><h4>test/tests/multiapps/grid-sequencing/vi-coarser.i</h4><pre class="moose-pre"><code class="language-text">l=10
 nx=20
 num_steps=2
 
@@ -437,7 +715,7 @@ num_steps=2
     postprocessor = nls
   []
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4eecb96c-5af1-4b40-89e2-ca686241e4a6"><div class="modal-content"><h4>modules/combined/test/tests/phase_field_fracture/crack2d_vi_solver.i</h4><pre class="moose-pre"><code class="language-text">#This input uses PhaseField-Nonconserved Action to add phase field fracture bulk rate kernels
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8e269cdb-cc1c-4d5b-b8f4-229980d30e3b"><div class="modal-content"><h4>modules/combined/test/tests/phase_field_fracture/crack2d_vi_solver.i</h4><pre class="moose-pre"><code class="language-text">#This input uses PhaseField-Nonconserved Action to add phase field fracture bulk rate kernels
 [Mesh]
   [gen]
     type = GeneratedMeshGenerator
@@ -650,7 +928,124 @@ num_steps=2
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="84b32899-5cb3-4bf1-bb47-aa2bb8fc5213"><div class="modal-content"><h4>modules/richards/test/tests/buckley_leverett/bl20.i</h4><pre class="moose-pre"><code class="language-text"># two-phase version
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="83d03a8c-3ec5-47bd-a943-4634feea8a80"><div class="modal-content"><h4>test/tests/auxkernels/bounds/constant_bounds.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+
+  dim = 2
+
+  xmin = 0
+  xmax = 1
+
+  ymin = 0
+  ymax = 1
+
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+
+  [./v]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./bounds_dummy]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./diff_v]
+    type = Diffusion
+    variable = v
+  [../]
+[]
+
+[BCs]
+  [./left_u]
+    type = DirichletBC
+    variable = u
+    boundary = 3
+    value = 0
+  [../]
+
+  [./right_u]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 1
+  [../]
+
+  [./left_v]
+    type = DirichletBC
+    variable = v
+    boundary = 3
+    value = 0
+  [../]
+
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = 1
+    value = 1
+  [../]
+[]
+
+[Bounds]
+  [./u_upper_bound]
+    type = ConstantBoundsAux
+    variable = bounds_dummy
+    bounded_variable = u
+    bound_type = upper
+    bound_value = 1
+  [../]
+  [./u_lower_bound]
+    type = ConstantBoundsAux
+    variable = bounds_dummy
+    bounded_variable = u
+    bound_type = lower
+    bound_value = 0
+  [../]
+
+  [./v_upper_bound]
+    type = ConstantBoundsAux
+    variable = bounds_dummy
+    bounded_variable = v
+    bound_type = upper
+    bound_value = 3
+  [../]
+  [./v_lower_bound]
+    type = ConstantBoundsAux
+    variable = bounds_dummy
+    bounded_variable = v
+    bound_type = lower
+    bound_value = -1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8e82eafd-c039-49cb-9411-cd56ea321176"><div class="modal-content"><h4>modules/richards/test/tests/buckley_leverett/bl20.i</h4><pre class="moose-pre"><code class="language-text"># two-phase version
 [Mesh]
   type = GeneratedMesh
   dim = 1
@@ -910,381 +1305,7 @@ num_steps=2
   exodus = true
   hide = pgas
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8c8b8ee4-fb1a-4f14-88ad-357be22aca26"><div class="modal-content"><h4>test/tests/multiapps/grid-sequencing/vi-fine-alone.i</h4><pre class="moose-pre"><code class="language-text">l=10
-nx=80
-num_steps=2
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  xmax = ${l}
-  nx = ${nx}
-[]
-
-[Variables]
-  [u]
-  []
-[]
-
-[AuxVariables]
-  [bounds][]
-[]
-
-[Bounds]
-  [./u_upper_bounds]
-    type = ConstantBoundsAux
-    variable = bounds
-    bounded_variable = u
-    bound_type = upper
-    bound_value = ${l}
-  [../]
-  [./u_lower_bounds]
-    type = ConstantBoundsAux
-    variable = bounds
-    bounded_variable = u
-    bound_type = lower
-    bound_value = 0
-  [../]
-[]
-
-[ICs]
-  [u]
-    type = FunctionIC
-    variable = u
-    function = &#x27;x&#x27;
-  []
-[]
-
-[Kernels]
-  [time]
-    type = TimeDerivative
-    variable = u
-  []
-  [diff]
-    type = Diffusion
-    variable = u
-  []
-  [ffn]
-    type = BodyForce
-    variable = u
-    function = &#x27;if(x&lt;5,-1,1)&#x27;
-  []
-[]
-
-[BCs]
-  [left]
-    type = DirichletBC
-    boundary = left
-    value = 0
-    variable = u
-  []
-  [right]
-    type = DirichletBC
-    boundary = right
-    value = ${l}
-    variable = u
-  []
-[]
-
-[Preconditioning]
-  [smp]
-    type = SMP
-    full = true
-  []
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = ${num_steps}
-  solve_type = NEWTON
-  dtmin = 1
-  petsc_options = &#x27;-snes_vi_monitor&#x27;
-  petsc_options_iname = &#x27;-snes_max_linear_solve_fail -ksp_max_it -pc_type -sub_pc_factor_levels -snes_linesearch_type -snes_type&#x27;
-  petsc_options_value = &#x27;0                           30          asm      16                    basic                 vinewtonrsls&#x27;
-[]
-
-[Outputs]
-  exodus = true
-  [csv]
-    type = CSV
-    execute_on = &#x27;nonlinear timestep_end&#x27;
-  []
-  [dof]
-    type = DOFMap
-    execute_on = &#x27;initial&#x27;
-  []
-[]
-
-[Debug]
-  show_var_residual_norms = true
-[]
-
-[Postprocessors]
-  active = &#x27;upper_violations lower_violations&#x27;
-  [upper_violations]
-    type = GreaterThanLessThanPostprocessor
-    variable = u
-    execute_on = &#x27;nonlinear timestep_end&#x27;
-    value = ${fparse 10+1e-8}
-    comparator = &#x27;greater&#x27;
-  []
-  [lower_violations]
-    type = GreaterThanLessThanPostprocessor
-    variable = u
-    execute_on = &#x27;nonlinear timestep_end&#x27;
-    value = -1e-8
-    comparator = &#x27;less&#x27;
-  []
-  [nls]
-    type = NumNonlinearIterations
-  []
-  [cum_nls]
-    type = CumulativeValuePostprocessor
-    postprocessor = nls
-  []
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="25800af6-4c89-4136-a093-87e4294939df"><div class="modal-content"><h4>test/tests/auxkernels/bounds/constant_bounds.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-
-  dim = 2
-
-  xmin = 0
-  xmax = 1
-
-  ymin = 0
-  ymax = 1
-
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  [./u]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-
-  [./v]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[AuxVariables]
-  [./bounds_dummy]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[Kernels]
-  [./diff_u]
-    type = Diffusion
-    variable = u
-  [../]
-
-  [./diff_v]
-    type = Diffusion
-    variable = v
-  [../]
-[]
-
-[BCs]
-  [./left_u]
-    type = DirichletBC
-    variable = u
-    boundary = 3
-    value = 0
-  [../]
-
-  [./right_u]
-    type = DirichletBC
-    variable = u
-    boundary = 1
-    value = 1
-  [../]
-
-  [./left_v]
-    type = DirichletBC
-    variable = v
-    boundary = 3
-    value = 0
-  [../]
-
-  [./right_v]
-    type = DirichletBC
-    variable = v
-    boundary = 1
-    value = 1
-  [../]
-[]
-
-[Bounds]
-  [./u_upper_bound]
-    type = ConstantBoundsAux
-    variable = bounds_dummy
-    bounded_variable = u
-    bound_type = upper
-    bound_value = 1
-  [../]
-  [./u_lower_bound]
-    type = ConstantBoundsAux
-    variable = bounds_dummy
-    bounded_variable = u
-    bound_type = lower
-    bound_value = 0
-  [../]
-
-  [./v_upper_bound]
-    type = ConstantBoundsAux
-    variable = bounds_dummy
-    bounded_variable = v
-    bound_type = upper
-    bound_value = 3
-  [../]
-  [./v_lower_bound]
-    type = ConstantBoundsAux
-    variable = bounds_dummy
-    bounded_variable = v
-    bound_type = lower
-    bound_value = -1
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-
-  solve_type = &#x27;PJFNK&#x27;
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0e26bd44-5822-413f-8ae3-e992e935d04c"><div class="modal-content"><h4>test/tests/auxkernels/bounds/old_value_bounds.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-
-  dim = 2
-
-  xmin = 0
-  xmax = 1
-
-  ymin = 0
-  ymax = 1
-
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  [./u]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-
-  [./v]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[AuxVariables]
-  [./bounds_dummy]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[Kernels]
-  [./time_u]
-    type = TimeDerivative
-    variable = u
-  [../]
-  [./diff_u]
-    type = Diffusion
-    variable = u
-  [../]
-
-  [./time_v]
-    type = TimeDerivative
-    variable = v
-  [../]
-  [./diff_v]
-    type = Diffusion
-    variable = v
-  [../]
-[]
-
-[BCs]
-  [./left_u]
-    type = DirichletBC
-    variable = u
-    boundary = 3
-    value = 0
-  [../]
-
-  [./right_u]
-    type = DirichletBC
-    variable = u
-    boundary = 1
-    value = 1
-  [../]
-
-  [./left_v]
-    type = DirichletBC
-    variable = v
-    boundary = 3
-    value = 0
-  [../]
-
-  [./right_v]
-    type = DirichletBC
-    variable = v
-    boundary = 1
-    value = 1
-  [../]
-[]
-
-[Bounds]
-  [./u_upper_bound]
-    type = ConstantBoundsAux
-    variable = bounds_dummy
-    bounded_variable = u
-    bound_type = upper
-    bound_value = 1
-  [../]
-  [./u_lower_bound]
-    type = VariableOldValueBoundsAux
-    variable = bounds_dummy
-    bounded_variable = u
-    bound_type = lower
-  [../]
-
-  [./v_upper_bound]
-    type = ConstantBoundsAux
-    variable = bounds_dummy
-    bounded_variable = v
-    bound_type = upper
-    bound_value = 3
-  [../]
-  [./v_lower_bound]
-    type = VariableOldValueBoundsAux
-    variable = bounds_dummy
-    bounded_variable = v
-    bound_type = lower
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 2
-
-  solve_type = &#x27;PJFNK&#x27;
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d7bf93a5-15f2-4072-ba74-59a2aa18ff4b"><div class="modal-content"><h4>modules/richards/test/tests/buckley_leverett/bl21.i</h4><pre class="moose-pre"><code class="language-text"># two-phase version
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="20324917-e00e-4b54-a5b0-c5b2ad9f77a5"><div class="modal-content"><h4>modules/richards/test/tests/buckley_leverett/bl21.i</h4><pre class="moose-pre"><code class="language-text"># two-phase version
 # sharp front version
 [Mesh]
   type = GeneratedMesh
@@ -1543,292 +1564,7 @@ num_steps=2
   interval = 10000
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4b63414c-4bba-4b2f-8166-22a9e605defd"><div class="modal-content"><h4>test/tests/multiapps/grid-sequencing/vi-fine.i</h4><pre class="moose-pre"><code class="language-text">l=10
-nx=80
-num_steps=2
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  xmax = ${l}
-  nx = ${nx}
-[]
-
-[Variables]
-  [u]
-  []
-[]
-
-[AuxVariables]
-  [bounds][]
-[]
-
-[Bounds]
-  [./u_upper_bounds]
-    type = ConstantBoundsAux
-    variable = bounds
-    bounded_variable = u
-    bound_type = upper
-    bound_value = ${l}
-  [../]
-  [./u_lower_bounds]
-    type = ConstantBoundsAux
-    variable = bounds
-    bounded_variable = u
-    bound_type = lower
-    bound_value = 0
-  [../]
-[]
-
-[ICs]
-  [u]
-    type = FunctionIC
-    variable = u
-    function = &#x27;x&#x27;
-  []
-[]
-
-[Kernels]
-  [time]
-    type = TimeDerivative
-    variable = u
-  []
-  [diff]
-    type = Diffusion
-    variable = u
-  []
-  [ffn]
-    type = BodyForce
-    variable = u
-    function = &#x27;if(x&lt;5,-1,1)&#x27;
-  []
-[]
-
-[BCs]
-  [left]
-    type = DirichletBC
-    boundary = left
-    value = 0
-    variable = u
-  []
-  [right]
-    type = DirichletBC
-    boundary = right
-    value = ${l}
-    variable = u
-  []
-[]
-
-[Preconditioning]
-  [smp]
-    type = SMP
-    full = true
-  []
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = ${num_steps}
-  solve_type = NEWTON
-  dtmin = 1
-  petsc_options = &#x27;-snes_vi_monitor&#x27;
-  petsc_options_iname = &#x27;-snes_max_linear_solve_fail -ksp_max_it -pc_type -sub_pc_factor_levels -snes_linesearch_type -snes_type&#x27;
-  petsc_options_value = &#x27;0                           30          asm      16                    basic                 vinewtonrsls&#x27;
-[]
-
-[Outputs]
-  exodus = true
-  [csv]
-    type = CSV
-    execute_on = &#x27;nonlinear timestep_end&#x27;
-  []
-  [dof]
-    type = DOFMap
-    execute_on = &#x27;initial&#x27;
-  []
-[]
-
-[Debug]
-  show_var_residual_norms = true
-[]
-
-[Postprocessors]
-  active = &#x27;upper_violations lower_violations&#x27;
-  [upper_violations]
-    type = GreaterThanLessThanPostprocessor
-    variable = u
-    execute_on = &#x27;nonlinear timestep_end&#x27;
-    value = ${fparse 10+1e-8}
-    comparator = &#x27;greater&#x27;
-  []
-  [lower_violations]
-    type = GreaterThanLessThanPostprocessor
-    variable = u
-    execute_on = &#x27;nonlinear timestep_end&#x27;
-    value = -1e-8
-    comparator = &#x27;less&#x27;
-  []
-  [nls]
-    type = NumNonlinearIterations
-  []
-  [cum_nls]
-    type = CumulativeValuePostprocessor
-    postprocessor = nls
-  []
-[]
-
-[MultiApps]
-  [./coarse]
-    type = TransientMultiApp
-    app_type = MooseTestApp
-    execute_on = timestep_begin
-    positions = &#x27;0 0 0&#x27;
-    input_files = vi-coarse.i
-  [../]
-[]
-
-[Transfers]
-  [./mesh_function_begin]
-    type = MultiAppMeshFunctionTransfer
-    direction = from_multiapp
-    multi_app = coarse
-    source_variable = u
-    variable = u
-    execute_on = timestep_begin
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e6307497-23d1-49ff-9515-d0d1fa177057"><div class="modal-content"><h4>test/tests/nodalkernels/constraint_enforcement/vi-bounding.i</h4><pre class="moose-pre"><code class="language-text">l=10
-nx=100
-num_steps=10
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  xmax = ${l}
-  nx = ${nx}
-[]
-
-[Variables]
-  [u]
-  []
-[]
-
-[AuxVariables]
-  [bounds][]
-[]
-
-[Bounds]
-  [./u_upper_bounds]
-    type = ConstantBoundsAux
-    variable = bounds
-    bounded_variable = u
-    bound_type = upper
-    bound_value = ${l}
-  [../]
-  [./u_lower_bounds]
-    type = ConstantBoundsAux
-    variable = bounds
-    bounded_variable = u
-    bound_type = lower
-    bound_value = 0
-  [../]
-[]
-
-[ICs]
-  [u]
-    type = FunctionIC
-    variable = u
-    function = &#x27;x&#x27;
-  []
-[]
-
-[Kernels]
-  [time]
-    type = TimeDerivative
-    variable = u
-  []
-  [diff]
-    type = Diffusion
-    variable = u
-  []
-  [ffn]
-    type = BodyForce
-    variable = u
-    function = &#x27;if(x&lt;5,-1,1)&#x27;
-  []
-[]
-
-[BCs]
-  [left]
-    type = DirichletBC
-    boundary = left
-    value = 0
-    variable = u
-  []
-  [right]
-    type = DirichletBC
-    boundary = right
-    value = ${l}
-    variable = u
-  []
-[]
-
-[Preconditioning]
-  [smp]
-    type = SMP
-    full = true
-  []
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = ${num_steps}
-  solve_type = NEWTON
-  dtmin = 1
-  petsc_options_iname = &#x27;-snes_max_linear_solve_fail -ksp_max_it -pc_type -sub_pc_factor_levels -snes_linesearch_type -snes_type&#x27;
-  petsc_options_value = &#x27;0                           30          asm      16                    basic                 vinewtonrsls&#x27;
-[]
-
-[Outputs]
-  exodus = true
-  [csv]
-    type = CSV
-    execute_on = &#x27;nonlinear timestep_end&#x27;
-  []
-  [dof]
-    type = DOFMap
-    execute_on = &#x27;initial&#x27;
-  []
-[]
-
-[Debug]
-  show_var_residual_norms = true
-[]
-
-[Postprocessors]
-  [upper_violations]
-    type = GreaterThanLessThanPostprocessor
-    variable = u
-    execute_on = &#x27;nonlinear timestep_end&#x27;
-    value = ${fparse 10+1e-8}
-    comparator = &#x27;greater&#x27;
-  []
-  [lower_violations]
-    type = GreaterThanLessThanPostprocessor
-    variable = u
-    execute_on = &#x27;nonlinear timestep_end&#x27;
-    value = -1e-8
-    comparator = &#x27;less&#x27;
-  []
-  [nls]
-    type = NumNonlinearIterations
-  []
-  [cum_nls]
-    type = CumulativeValuePostprocessor
-    postprocessor = nls
-  []
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6dcbc1e1-6460-4456-a684-6d222d7d5708"><div class="modal-content"><h4>test/tests/multiapps/grid-sequencing/vi-coarse.i</h4><pre class="moose-pre"><code class="language-text">l=10
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4dc5fb59-744e-4943-8261-b7daed111747"><div class="modal-content"><h4>test/tests/multiapps/grid-sequencing/vi-coarse.i</h4><pre class="moose-pre"><code class="language-text">l=10
 nx=40
 num_steps=2
 
@@ -1982,4 +1718,268 @@ num_steps=2
     execute_on = timestep_begin
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#9dfbfb14-4f53-4df2-b94c-98ce12e4f643" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#ad57c171-fa7a-4420-80a5-babcfab83657" class="tooltipped" data-position="left" data-tooltip="Example Syntax">Example Syntax</a></li><li><a href="#5c85d0be-5526-4ec7-b05b-56288ba7f871" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#17386a8e-a8b4-4b82-9654-d283be4fd4d5" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f482f8a4-2cbf-4000-be81-5151efeea7a4"><div class="modal-content"><h4>test/tests/nodalkernels/constraint_enforcement/vi-bounding.i</h4><pre class="moose-pre"><code class="language-text">l=10
+nx=100
+num_steps=10
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmax = ${l}
+  nx = ${nx}
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[AuxVariables]
+  [bounds][]
+[]
+
+[Bounds]
+  [./u_upper_bounds]
+    type = ConstantBoundsAux
+    variable = bounds
+    bounded_variable = u
+    bound_type = upper
+    bound_value = ${l}
+  [../]
+  [./u_lower_bounds]
+    type = ConstantBoundsAux
+    variable = bounds
+    bounded_variable = u
+    bound_type = lower
+    bound_value = 0
+  [../]
+[]
+
+[ICs]
+  [u]
+    type = FunctionIC
+    variable = u
+    function = &#x27;x&#x27;
+  []
+[]
+
+[Kernels]
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [ffn]
+    type = BodyForce
+    variable = u
+    function = &#x27;if(x&lt;5,-1,1)&#x27;
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    boundary = left
+    value = 0
+    variable = u
+  []
+  [right]
+    type = DirichletBC
+    boundary = right
+    value = ${l}
+    variable = u
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = ${num_steps}
+  solve_type = NEWTON
+  dtmin = 1
+  petsc_options_iname = &#x27;-snes_max_linear_solve_fail -ksp_max_it -pc_type -sub_pc_factor_levels -snes_linesearch_type -snes_type&#x27;
+  petsc_options_value = &#x27;0                           30          asm      16                    basic                 vinewtonrsls&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [csv]
+    type = CSV
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+  [dof]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Postprocessors]
+  [upper_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = ${fparse 10+1e-8}
+    comparator = &#x27;greater&#x27;
+  []
+  [lower_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = -1e-8
+    comparator = &#x27;less&#x27;
+  []
+  [nls]
+    type = NumNonlinearIterations
+  []
+  [cum_nls]
+    type = CumulativeValuePostprocessor
+    postprocessor = nls
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a56875d8-bfd4-4153-8a68-b104c5222e1b"><div class="modal-content"><h4>test/tests/multiapps/grid-sequencing/vi-fine-alone.i</h4><pre class="moose-pre"><code class="language-text">l=10
+nx=80
+num_steps=2
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmax = ${l}
+  nx = ${nx}
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[AuxVariables]
+  [bounds][]
+[]
+
+[Bounds]
+  [./u_upper_bounds]
+    type = ConstantBoundsAux
+    variable = bounds
+    bounded_variable = u
+    bound_type = upper
+    bound_value = ${l}
+  [../]
+  [./u_lower_bounds]
+    type = ConstantBoundsAux
+    variable = bounds
+    bounded_variable = u
+    bound_type = lower
+    bound_value = 0
+  [../]
+[]
+
+[ICs]
+  [u]
+    type = FunctionIC
+    variable = u
+    function = &#x27;x&#x27;
+  []
+[]
+
+[Kernels]
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [ffn]
+    type = BodyForce
+    variable = u
+    function = &#x27;if(x&lt;5,-1,1)&#x27;
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    boundary = left
+    value = 0
+    variable = u
+  []
+  [right]
+    type = DirichletBC
+    boundary = right
+    value = ${l}
+    variable = u
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = ${num_steps}
+  solve_type = NEWTON
+  dtmin = 1
+  petsc_options = &#x27;-snes_vi_monitor&#x27;
+  petsc_options_iname = &#x27;-snes_max_linear_solve_fail -ksp_max_it -pc_type -sub_pc_factor_levels -snes_linesearch_type -snes_type&#x27;
+  petsc_options_value = &#x27;0                           30          asm      16                    basic                 vinewtonrsls&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  [csv]
+    type = CSV
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+  [dof]
+    type = DOFMap
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Postprocessors]
+  active = &#x27;upper_violations lower_violations&#x27;
+  [upper_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = ${fparse 10+1e-8}
+    comparator = &#x27;greater&#x27;
+  []
+  [lower_violations]
+    type = GreaterThanLessThanPostprocessor
+    variable = u
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+    value = -1e-8
+    comparator = &#x27;less&#x27;
+  []
+  [nls]
+    type = NumNonlinearIterations
+  []
+  [cum_nls]
+    type = CumulativeValuePostprocessor
+    postprocessor = nls
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#3852841c-4358-4fea-8698-345caa3b5537" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#33d60405-c79b-4ac2-b12e-17606e89d1bc" class="tooltipped" data-position="left" data-tooltip="Example Syntax">Example Syntax</a></li><li><a href="#b9be7590-02b5-45f0-8bea-80839dd1e644" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#ec78b3d6-e4ca-4f5f-b4af-6620d15931e1" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

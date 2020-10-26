@@ -1,4 +1,4 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>MultiAppCopyTransfer.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="e160538a-ec40-4275-8dd8-2d5ad65c092b"><i class="material-icons">menu</i></a><ul class="sidenav" id="e160538a-ec40-4275-8dd8-2d5ad65c092b"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">transfers</span><a href="#" class="breadcrumb">MultiAppCopyTransfer</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="c3fab8f3-90a4-43ce-b147-f6494ea2b5d1" data-section-level="1" data-section-text="MultiAppCopyTransfer"><h1 id="multiappcopytransfer">MultiAppCopyTransfer</h1><p>The MultiAppCopyTransfer allows for copying variables (both <a href="../../syntax/Variables/index.html">nonlinear</a> and <a href="../../syntax/AuxVariables/index.html">auxiliary</a>) between <a href="../../syntax/MultiApps/index.html">MultiApps</a>. All types of variables, including higher order, elemental, and nodal are supported. The only limitation is that the meshes in the master and sub application must be identical.</p><section class="scrollspy" id="973aa521-8f08-40a9-9a6b-4fe1ba6aca9b" data-section-level="2" data-section-text="Example Syntax"><h2 id="example-syntax">Example Syntax</h2><pre class="moose-pre"><code class="language-text">[Transfers]
+<!DOCTYPE html><head><meta charset="UTF-8"><title>MultiAppCopyTransfer.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="3409ee94-4333-4188-bd20-37eecfff18e5"><i class="material-icons">menu</i></a><ul class="sidenav" id="3409ee94-4333-4188-bd20-37eecfff18e5"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">transfers</span><a href="#" class="breadcrumb">MultiAppCopyTransfer</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="0b416341-54ff-46ff-8c7d-afc2de780df0" data-section-level="1" data-section-text="MultiAppCopyTransfer"><h1 id="multiappcopytransfer">MultiAppCopyTransfer</h1><p>The MultiAppCopyTransfer allows for copying variables (both <a href="../../syntax/Variables/index.html">nonlinear</a> and <a href="../../syntax/AuxVariables/index.html">auxiliary</a>) between <a href="../../syntax/MultiApps/index.html">MultiApps</a>. All types of variables, including higher order, elemental, and nodal are supported. The only limitation is that the meshes in the master and sub application must be identical.</p><section class="scrollspy" id="c3672189-9f78-4f93-9c96-aa2c67a43fd5" data-section-level="2" data-section-text="Example Syntax"><h2 id="example-syntax">Example Syntax</h2><pre class="moose-pre"><code class="language-text">[Transfers]
   [./to_sub]
     type = MultiAppCopyTransfer
     direction = to_multiapp
@@ -7,7 +7,7 @@
     multi_app = sub
   [../]
 []
-</code></pre><a href="#e9e10292-4807-48e8-b7f4-8a5808c3d0da" class="modal-trigger">(test/tests/transfers/multiapp_copy_transfer/linear_lagrange_to_sub/master.i)</a><div class="modal moose-modal" id="e9e10292-4807-48e8-b7f4-8a5808c3d0da"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/transfers/multiapp_copy_transfer/linear_lagrange_to_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre><a href="#30abb690-4bb5-4ed9-ae94-7d1e7abffa15" class="modal-trigger">(test/tests/transfers/multiapp_copy_transfer/linear_lagrange_to_sub/master.i)</a><div class="modal moose-modal" id="30abb690-4bb5-4ed9-ae94-7d1e7abffa15"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/transfers/multiapp_copy_transfer/linear_lagrange_to_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
@@ -70,394 +70,362 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="907ac396-d18b-4fc0-a47e-4327e5b15371" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="4b9ec61b-a939-45f7-a9ab-5469d68b240a" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">direction</span><span class="moose-parameter-header-description">Whether this Transfer will be 'to' or 'from' a MultiApp, or bidirectional, by providing both FROM_MULTIAPP and TO_MULTIAPP.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>to_multiapp from_multiapp</p><p class="moose-parameter-description"><span>Description:</span>Whether this Transfer will be 'to' or 'from' a MultiApp, or bidirectional, by providing both FROM_MULTIAPP and TO_MULTIAPP.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">multi_app</span><span class="moose-parameter-header-description">The name of the MultiApp to use.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiAppName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the MultiApp to use.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">source_variable</span><span class="moose-parameter-header-description">The variable to transfer from.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The variable to transfer from.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The auxiliary variable to store the transferred values in.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The auxiliary variable to store the transferred values in.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="06c6e482-5eb3-41cc-a99b-0900d7ab30d8" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">check_multiapp_execute_on</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">When false the check between the multiapp and transfer execute on flags is not preformed.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When false the check between the multiapp and transfer execute on flags is not preformed.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displaced_source_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not to use the displaced mesh for the source mesh.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not to use the displaced mesh for the source mesh.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displaced_target_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not to use the displaced mesh for the target mesh.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not to use the displaced mesh for the target mesh.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">SAME_AS_MULTIAPP</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM, SAME_AS_MULTIAPP.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>SAME_AS_MULTIAPP</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM SAME_AS_MULTIAPP</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM, SAME_AS_MULTIAPP.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="f27e5710-23c6-42e4-9349-f578ca4dc51a" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="b91f7f9b-3a7e-4d8b-8917-9b4749f07151" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#e1ce78c7-d3e9-4c34-a725-3ed513b0de45" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/second_lagrange_from_sub/master.i</a></li><li><a href="#247713aa-bf3c-41b5-ad86-ae124962e239" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/errors/master.i</a></li><li><a href="#91dd55db-a3fa-44a3-893e-4c3c21fa7770" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/linear_lagrange_to_sub/master.i</a></li><li><a href="#3d3847ec-f864-4a0b-8f3c-a4fa50b340fe" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/aux_to_aux/from_sub.i</a></li><li><a href="#3877d951-58a6-4a2e-8fe6-af8c52912487" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/multivariable_copy/master.i</a></li><li><a href="#52b7562b-59e9-4598-8616-22af692dbf36" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/constant_monomial_from_sub/master.i</a></li><li><a href="#d7223aac-8ab9-4de2-85b7-197156e29364" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/third_monomial_to_sub/master.i</a></li><li><a href="#06df566b-860a-4f64-99db-61eb2a7fc6e4" class="modal-trigger">modules/level_set/examples/vortex/vortex_reinit.i</a></li><li><a href="#2537d3d1-ae09-4cab-80c5-2feb643c600f" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/constant_monomial_to_sub/master.i</a></li><li><a href="#4b2a93c6-18b5-4aac-859e-ce9a6cda75c0" class="modal-trigger">test/tests/transfers/transfer_on_final/master.i</a></li><li><a href="#bc4f8541-1cd7-41b0-b747-e9df87de6f45" class="modal-trigger">modules/level_set/examples/rotating_circle/circle_rotate_master.i</a></li><li><a href="#2f8cab43-1fc5-4f20-9cec-03bdf7a2b6a4" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/aux_to_aux/to_sub.i</a></li><li><a href="#637f352e-48ac-4066-8b84-3ef9d2f4e01a" class="modal-trigger">modules/level_set/test/tests/transfers/copy_solution/master.i</a></li><li><a href="#d143f5ec-4783-4015-bb03-9fab13ba1701" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/third_monomial_from_sub/master.i</a></li><li><a href="#5c25e416-7363-4c70-bb93-6dc72ae4efa7" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/second_lagrange_to_sub/master.i</a></li><li><a href="#0015d47e-7d36-4efb-968a-cd0bb8a331cc" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/array_variable_transfer/master.i</a></li><li><a href="#74f96ac9-34cc-4bb1-b3ce-b0f7dc3d3f38" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/linear_lagrange_from_sub/master.i</a></li><li><a href="#c1926824-fb58-4ac4-8fae-1c66993011c9" class="modal-trigger">modules/level_set/test/tests/reinitialization/master.i</a></li></ul><div class="modal moose-modal" id="e1ce78c7-d3e9-4c34-a725-3ed513b0de45"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/second_lagrange_from_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="b3b4fdf0-7ca7-4764-a89c-b99c94bc952e" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="4551e115-077d-4531-9b1d-bd47261fd4e0" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">direction</span><span class="moose-parameter-header-description">Whether this Transfer will be 'to' or 'from' a MultiApp, or bidirectional, by providing both FROM_MULTIAPP and TO_MULTIAPP.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>to_multiapp from_multiapp</p><p class="moose-parameter-description"><span>Description:</span>Whether this Transfer will be 'to' or 'from' a MultiApp, or bidirectional, by providing both FROM_MULTIAPP and TO_MULTIAPP.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">multi_app</span><span class="moose-parameter-header-description">The name of the MultiApp to use.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiAppName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the MultiApp to use.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">source_variable</span><span class="moose-parameter-header-description">The variable to transfer from.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The variable to transfer from.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The auxiliary variable to store the transferred values in.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The auxiliary variable to store the transferred values in.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="c6004c20-1b47-43fd-a99e-9f6fee6de16f" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">check_multiapp_execute_on</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">When false the check between the multiapp and transfer execute on flags is not preformed.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When false the check between the multiapp and transfer execute on flags is not preformed.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displaced_source_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not to use the displaced mesh for the source mesh.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not to use the displaced mesh for the source mesh.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displaced_target_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not to use the displaced mesh for the target mesh.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not to use the displaced mesh for the target mesh.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">SAME_AS_MULTIAPP</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM, SAME_AS_MULTIAPP.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>SAME_AS_MULTIAPP</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM SAME_AS_MULTIAPP</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM, SAME_AS_MULTIAPP.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="837137b5-a6b3-4f95-a1d2-344e7ff87b2b" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="5e2520d5-e756-4b4d-aff4-58a49469ac0a" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#5c673f18-1c43-4116-ae37-9c59ad340602" class="modal-trigger">modules/level_set/examples/rotating_circle/circle_rotate_master.i</a></li><li><a href="#b0b3f862-3717-4fd8-a846-073e596cf38b" class="modal-trigger">modules/level_set/test/tests/reinitialization/master.i</a></li><li><a href="#c54ffb49-9f31-455c-8270-e7f5586310d6" class="modal-trigger">test/tests/transfers/transfer_on_final/master.i</a></li><li><a href="#d20c9dd4-5633-4466-a7cb-354d5ea3a04a" class="modal-trigger">modules/level_set/examples/vortex/vortex_reinit.i</a></li><li><a href="#012edde7-0009-49a4-bdb4-b5f70f6e1eea" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/second_lagrange_from_sub/master.i</a></li><li><a href="#6ce573de-6641-42a7-87fc-713ce8e415d4" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/second_lagrange_to_sub/master.i</a></li><li><a href="#de43c626-01fa-4531-8b2d-c7dba0934271" class="modal-trigger">modules/level_set/test/tests/transfers/copy_solution/master.i</a></li><li><a href="#794cf7b1-61e1-484b-afb6-a4f4afdec241" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/aux_to_aux/to_sub.i</a></li><li><a href="#36553a1e-a478-4d58-8ce9-0ae764a252e0" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/array_variable_transfer/master.i</a></li><li><a href="#694d7c19-5009-47f5-9fa7-125d8cbc5a38" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/constant_monomial_from_sub/master.i</a></li><li><a href="#5c1e6355-6861-41e3-a970-fd3452d36a0b" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/aux_to_aux/from_sub.i</a></li><li><a href="#d31527c4-0a30-454e-a0e7-c668480886a1" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/constant_monomial_to_sub/master.i</a></li><li><a href="#4ade8454-b69e-4bd8-a802-27221b81c100" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/third_monomial_to_sub/master.i</a></li><li><a href="#3668650e-9526-4907-85dc-c9658d2031d3" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/linear_lagrange_from_sub/master.i</a></li><li><a href="#f926b910-0f68-4a74-9488-4c4e3e3a21c2" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/multivariable_copy/master.i</a></li><li><a href="#5fdc8e03-5d3b-4218-bb09-c8e34a3c8a41" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/third_monomial_from_sub/master.i</a></li><li><a href="#2d01b75f-7698-47f0-a959-09ea30690815" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/linear_lagrange_to_sub/master.i</a></li><li><a href="#f18fb7e1-f8b7-4094-a696-d4337872bfc1" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/errors/master.i</a></li></ul><div class="modal moose-modal" id="5c673f18-1c43-4116-ae37-9c59ad340602"><div class="modal-content"><h4>modules/level_set/examples/rotating_circle/circle_rotate_master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
-  nx = 10
-  ny = 10
-  elem_type = QUAD8
-[]
-
-[Variables]
-  [./u]
-    family = LAGRANGE
-    order = SECOND
-  [../]
-[]
-
-[Problem]
-  type = FEProblem
-  solve = false
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 1
-  solve_type = &#x27;PJFNK&#x27;
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[MultiApps]
-  [./sub]
-    type = FullSolveMultiApp
-    input_files = sub.i
-    execute_on = initial
-  [../]
-[]
-
-[Transfers]
-  [./from_sub]
-    type = MultiAppCopyTransfer
-    direction = from_multiapp
-    source_variable = u
-    variable = u
-    multi_app = sub
-  [../]
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="247713aa-bf3c-41b5-ad86-ae124962e239"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/errors/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 1
-  solve_type = &#x27;PJFNK&#x27;
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[MultiApps]
-  [./sub]
-    type = FullSolveMultiApp
-    input_files = sub.i
-    execute_on = timestep_end
-  [../]
-[]
-
-[Transfers]
-  [./to_sub]
-    type = MultiAppCopyTransfer
-    direction = to_multiapp
-    source_variable = u
-    variable = u
-    multi_app = sub
-  [../]
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="91dd55db-a3fa-44a3-893e-4c3c21fa7770"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/linear_lagrange_to_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 1
-  solve_type = &#x27;PJFNK&#x27;
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[MultiApps]
-  [./sub]
-    type = FullSolveMultiApp
-    input_files = sub.i
-    execute_on = timestep_end
-  [../]
-[]
-
-[Transfers]
-  [./to_sub]
-    type = MultiAppCopyTransfer
-    direction = to_multiapp
-    source_variable = u
-    variable = u
-    multi_app = sub
-  [../]
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3d3847ec-f864-4a0b-8f3c-a4fa50b340fe"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/aux_to_aux/from_sub.i</h4><pre class="moose-pre"><code class="language-text">[Problem]
-  solve = false
-[]
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 2
-[]
-
-[MultiApps/sub]
-  type = TransientMultiApp
-  input_files = sub.i
-[]
-
-[Transfers/from_sub]
-  type = MultiAppCopyTransfer
-  direction = from_multiapp
-  multi_app = sub
-  source_variable = aux
-  variable = x
-[]
-
-[AuxVariables/x]
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 1
-[]
-
-[Outputs]
-  execute_on = &#x27;FINAL&#x27;
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3877d951-58a6-4a2e-8fe6-af8c52912487"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/multivariable_copy/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  # Create two variables
-  [./u]
-  [../]
-  [./v]
-  [../]
-[]
-
-[Problem]
-  type = FEProblem
-  solve = false
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 1
-  solve_type = &#x27;PJFNK&#x27;
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[MultiApps]
-  [./sub]
-    type = FullSolveMultiApp
-    input_files = sub.i
-    execute_on = initial
-  [../]
-[]
-
-[Transfers]
-  # Transfer both variables by inputting a vector of their names
-  [./from_sub]
-    type = MultiAppCopyTransfer
-    direction = from_multiapp
-    source_variable = &#x27;u v&#x27;
-    variable = &#x27;u v&#x27;
-    multi_app = sub
-  [../]
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="52b7562b-59e9-4598-8616-22af692dbf36"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/constant_monomial_from_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  [./u]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-[]
-
-[Problem]
-  type = FEProblem
-  solve = false
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 1
-  solve_type = &#x27;PJFNK&#x27;
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[MultiApps]
-  [./sub]
-    type = FullSolveMultiApp
-    input_files = sub.i
-    execute_on = initial
-  [../]
-[]
-
-[Transfers]
-  [./from_sub]
-    type = MultiAppCopyTransfer
-    direction = from_multiapp
-    source_variable = aux
-    variable = u
-    multi_app = sub
-  [../]
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d7223aac-8ab9-4de2-85b7-197156e29364"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/third_monomial_to_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
+  xmin = -1
+  xmax = 1
+  ymin = -1
+  ymax = 1
+  nx = 32
+  ny = 32
+  uniform_refine = 2
 []
 
 [AuxVariables]
-  [./aux]
-    family = MONOMIAL
-    order = THIRD
-  [../]
-[]
-
-[AuxKernels]
-  [./aux]
-    type = FunctionAux
-    function = x*y
-    variable = aux
-    execute_on = initial
+  [./velocity]
+    family = LAGRANGE_VEC
   [../]
 []
 
 [Variables]
-  [./u]
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
+  [./phi]
   [../]
 []
 
 [BCs]
-  [./left]
+  [./all]
     type = DirichletBC
-    variable = u
-    boundary = left
+    variable = phi
+    boundary = &#x27;top bottom left right&#x27;
     value = 0
   [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
+[]
+
+[Functions]
+  [./phi_exact]
+    type = LevelSetOlssonBubble
+    epsilon = 0.03
+    center = &#x27;0 0.5 0&#x27;
+    radius = 0.15
+  [../]
+  [./velocity_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;4*y&#x27;
+    value_y = &#x27;-4*x&#x27;
+  [../]
+[]
+
+[ICs]
+  [./phi_ic]
+    type = FunctionIC
+    function = phi_exact
+    variable = phi
+  [../]
+  [./vel_ic]
+    type = VectorFunctionIC
+    variable = velocity
+    function = velocity_func
+  []
+[]
+
+[Kernels]
+  [./time]
+    type = TimeDerivative
+    variable = phi
+  [../]
+
+  [./advection]
+    type = LevelSetAdvection
+    velocity = velocity
+    variable = phi
+  [../]
+[]
+
+[Postprocessors]
+  [./area]
+    type = LevelSetVolume
+    threshold = 0.5
+    variable = phi
+    location = outside
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./cfl]
+    type = LevelSetCFLCondition
+    velocity = velocity
+    execute_on = &#x27;initial timestep_end&#x27;
   [../]
 []
 
 [Executioner]
   type = Transient
-  num_steps = 1
-  solve_type = &#x27;PJFNK&#x27;
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  solve_type = PJFNK
+  start_time = 0
+  end_time = 1.570796
+  scheme = crank-nicolson
+  petsc_options_iname = &#x27;-pc_type -pc_sub_type&#x27;
+  petsc_options_value = &#x27;asm      ilu&#x27;
+  [./TimeStepper]
+    type = PostprocessorDT
+    postprocessor = cfl
+    scale = 0.8
+  [../]
 []
 
 [MultiApps]
-  [./sub]
-    type = FullSolveMultiApp
-    input_files = sub.i
-    execute_on = timestep_end
+  [./reinit]
+    type = LevelSetReinitializationMultiApp
+    input_files = &#x27;circle_rotate_sub.i&#x27;
+    execute_on = &#x27;timestep_end&#x27;
   [../]
 []
 
 [Transfers]
   [./to_sub]
     type = MultiAppCopyTransfer
+    source_variable = phi
+    variable = phi
     direction = to_multiapp
-    source_variable = aux
-    variable = u
-    multi_app = sub
+    multi_app = reinit
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./to_sub_init]
+    type = MultiAppCopyTransfer
+    source_variable = phi
+    variable = phi_0
+    direction = to_multiapp
+    multi_app = reinit
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+  [./from_sub]
+    type = MultiAppCopyTransfer
+    source_variable = phi
+    variable = phi
+    direction = from_multiapp
+    multi_app = reinit
+    execute_on = &#x27;timestep_end&#x27;
   [../]
 []
 
 [Outputs]
-  hide = &#x27;u&#x27;
+  csv = true
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="06df566b-860a-4f64-99db-61eb2a7fc6e4"><div class="modal-content"><h4>modules/level_set/examples/vortex/vortex_reinit.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b0b3f862-3717-4fd8-a846-073e596cf38b"><div class="modal-content"><h4>modules/level_set/test/tests/reinitialization/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  nx = 8
+  ny = 8
+  uniform_refine = 3 #1/64
+[]
+
+[AuxVariables]
+  [./velocity]
+    family = LAGRANGE_VEC
+  [../]
+[]
+
+[Variables]
+  [./phi]
+  [../]
+[]
+
+[Functions]
+  [./phi_exact]
+    type = LevelSetOlssonBubble
+    epsilon = 0.05
+    center = &#x27;0.5 0.5 0&#x27;
+    radius = 0.15
+  [../]
+  [./velocity_func]
+    type = ParsedVectorFunction
+    value_x = &#x27;1&#x27;
+    value_y = &#x27;1&#x27;
+  [../]
+[]
+
+[BCs]
+  [./Periodic]
+    [./all]
+      variable = phi
+      auto_direction = &#x27;x y&#x27;
+    [../]
+  [../]
+[]
+
+[ICs]
+  [./phi_ic]
+    type = FunctionIC
+    function = phi_exact
+    variable = phi
+  [../]
+  [./vel_ic]
+    type = VectorFunctionIC
+    variable = velocity
+    function = velocity_func
+  []
+[]
+
+[Kernels]
+  [./time]
+    type = TimeDerivative
+    variable = phi
+  [../]
+
+  [./advection]
+    type = LevelSetAdvection
+    velocity = velocity
+    variable = phi
+  [../]
+[]
+
+[Postprocessors]
+
+  [./area]
+    type = LevelSetVolume
+    threshold = 0.5
+    variable = phi
+    location = outside
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+
+  [./cfl]
+    type = LevelSetCFLCondition
+    velocity = velocity
+    execute_on = &#x27;initial&#x27;
+  [../]
+
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+  start_time = 0
+  end_time = 1
+  nl_rel_tol = 1e-12
+  scheme = crank-nicolson
+  petsc_options_iname = &#x27;-pc_type -pc_sub_type&#x27;
+  petsc_options_value = &#x27;asm      ilu&#x27;
+  [./TimeStepper]
+    type = PostprocessorDT
+    postprocessor = cfl
+    scale = 1
+  [../]
+
+[]
+
+[MultiApps]
+  [./reinit]
+    type = LevelSetReinitializationMultiApp
+    input_files = &#x27;reinit.i&#x27;
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Transfers]
+  [./to_sub]
+    type = MultiAppCopyTransfer
+    variable = phi
+    source_variable = phi
+    direction = to_multiapp
+    multi_app = reinit
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+
+  [./to_sub_init]
+    type = MultiAppCopyTransfer
+    variable = phi_0
+    source_variable = phi
+    direction = to_multiapp
+    multi_app = reinit
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+
+  [./from_sub]
+    type = MultiAppCopyTransfer
+    variable = phi
+    source_variable = phi
+    direction = from_multiapp
+    multi_app = reinit
+    execute_on = timestep_end
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c54ffb49-9f31-455c-8270-e7f5586310d6"><div class="modal-content"><h4>test/tests/transfers/transfer_on_final/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [u]
+    initial_condition = 1234
+  []
+  [v]
+    initial_condition = 2458
+  []
+[]
+
+[Problem]
+  type = FEProblem
+  solve = false
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 4
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[MultiApps]
+  [sub]
+    type = TransientMultiApp
+    input_files = sub.i
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+[]
+
+[Transfers]
+  [from_sub]
+    type = MultiAppCopyTransfer
+    direction = from_multiapp
+    source_variable = u
+    variable = u
+    multi_app = sub
+    check_multiapp_execute_on = false
+    execute_on = &#x27;FINAL&#x27;
+  []
+  [to_sub]
+    type = MultiAppCopyTransfer
+    direction = to_multiapp
+    source_variable = v
+    variable = v
+    multi_app = sub
+    check_multiapp_execute_on = false
+    execute_on = &#x27;FINAL&#x27;
+  []
+[]
+
+[Outputs]
+  exodus = true
+  [final]
+    type = Exodus
+    execute_on = &#x27;FINAL&#x27;
+    execute_input_on = &#x27;NONE&#x27; # This is needed to avoid problems with creating a file w/o data during --recover testing
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d20c9dd4-5633-4466-a7cb-354d5ea3a04a"><div class="modal-content"><h4>modules/level_set/examples/vortex/vortex_reinit.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   xmax = 1
@@ -611,7 +579,342 @@
   csv = true
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2537d3d1-ae09-4cab-80c5-2feb643c600f"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/constant_monomial_to_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="012edde7-0009-49a4-bdb4-b5f70f6e1eea"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/second_lagrange_from_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  elem_type = QUAD8
+[]
+
+[Variables]
+  [./u]
+    family = LAGRANGE
+    order = SECOND
+  [../]
+[]
+
+[Problem]
+  type = FEProblem
+  solve = false
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[MultiApps]
+  [./sub]
+    type = FullSolveMultiApp
+    input_files = sub.i
+    execute_on = initial
+  [../]
+[]
+
+[Transfers]
+  [./from_sub]
+    type = MultiAppCopyTransfer
+    direction = from_multiapp
+    source_variable = u
+    variable = u
+    multi_app = sub
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6ce573de-6641-42a7-87fc-713ce8e415d4"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/second_lagrange_to_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  elem_type = QUAD9
+[]
+
+[Variables]
+  [./u]
+    family = LAGRANGE
+    order = SECOND
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[MultiApps]
+  [./sub]
+    type = FullSolveMultiApp
+    input_files = sub.i
+    execute_on = timestep_end
+  [../]
+[]
+
+[Transfers]
+  [./to_sub]
+    type = MultiAppCopyTransfer
+    direction = to_multiapp
+    source_variable = u
+    variable = u
+    multi_app = sub
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="de43c626-01fa-4531-8b2d-c7dba0934271"><div class="modal-content"><h4>modules/level_set/test/tests/transfers/copy_solution/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[ICs]
+  [./u_ic]
+    type = FunctionIC
+    function = &#x27;x*x*y&#x27;
+    variable = u
+  [../]
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+[]
+
+[MultiApps]
+  [./sub]
+    type = FullSolveMultiApp
+    input_files = &#x27;sub.i&#x27;
+    execute_on = timestep_end
+  [../]
+[]
+
+[Transfers]
+  [./to_sub]
+    type = MultiAppCopyTransfer
+    variable = u
+    source_variable = u
+    direction = to_multiapp
+    multi_app = sub
+    execute_on = timestep_end
+    check_multiapp_execute_on = false
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="794cf7b1-61e1-484b-afb6-a4f4afdec241"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/aux_to_aux/to_sub.i</h4><pre class="moose-pre"><code class="language-text">[Problem]
+  solve = false
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+[]
+
+[MultiApps/sub]
+  type = TransientMultiApp
+  input_files = sub.i
+[]
+
+[Transfers/from_sub]
+  type = MultiAppCopyTransfer
+  direction = to_multiapp
+  multi_app = sub
+  source_variable = x
+  variable = aux
+[]
+
+[AuxVariables/x]
+  initial_condition = 1949
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+[]
+
+[Outputs]
+  execute_on = &#x27;FINAL&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="36553a1e-a478-4d58-8ce9-0ae764a252e0"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/array_variable_transfer/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  # Array variable with two components
+  [v]
+    order = FIRST
+    family = LAGRANGE
+    components = 2
+  []
+[]
+
+[Problem]
+  type = FEProblem
+  solve = false
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[MultiApps]
+  [./sub]
+    type = FullSolveMultiApp
+    input_files = sub.i
+    execute_on = initial
+  [../]
+[]
+
+[Transfers]
+  # Transfers all components together on the same mesh.
+  [./from_sub]
+    type = MultiAppCopyTransfer
+    direction = from_multiapp
+    source_variable = u
+    variable = v
+    multi_app = sub
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="694d7c19-5009-47f5-9fa7-125d8cbc5a38"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/constant_monomial_from_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+[]
+
+[Problem]
+  type = FEProblem
+  solve = false
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[MultiApps]
+  [./sub]
+    type = FullSolveMultiApp
+    input_files = sub.i
+    execute_on = initial
+  [../]
+[]
+
+[Transfers]
+  [./from_sub]
+    type = MultiAppCopyTransfer
+    direction = from_multiapp
+    source_variable = aux
+    variable = u
+    multi_app = sub
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5c1e6355-6861-41e3-a970-fd3452d36a0b"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/aux_to_aux/from_sub.i</h4><pre class="moose-pre"><code class="language-text">[Problem]
+  solve = false
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+[]
+
+[MultiApps/sub]
+  type = TransientMultiApp
+  input_files = sub.i
+[]
+
+[Transfers/from_sub]
+  type = MultiAppCopyTransfer
+  direction = from_multiapp
+  multi_app = sub
+  source_variable = aux
+  variable = x
+[]
+
+[AuxVariables/x]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+[]
+
+[Outputs]
+  execute_on = &#x27;FINAL&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d31527c4-0a30-454e-a0e7-c668480886a1"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/constant_monomial_to_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
@@ -690,249 +993,87 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4b2a93c6-18b5-4aac-859e-ce9a6cda75c0"><div class="modal-content"><h4>test/tests/transfers/transfer_on_final/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4ade8454-b69e-4bd8-a802-27221b81c100"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/third_monomial_to_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
   ny = 10
 []
 
-[Variables]
-  [u]
-    initial_condition = 1234
-  []
-  [v]
-    initial_condition = 2458
-  []
+[AuxVariables]
+  [./aux]
+    family = MONOMIAL
+    order = THIRD
+  [../]
 []
 
-[Problem]
-  type = FEProblem
-  solve = false
+[AuxKernels]
+  [./aux]
+    type = FunctionAux
+    function = x*y
+    variable = aux
+    execute_on = initial
+  [../]
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
 []
 
 [Executioner]
   type = Transient
-  num_steps = 4
+  num_steps = 1
   solve_type = &#x27;PJFNK&#x27;
   petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
   petsc_options_value = &#x27;hypre boomeramg&#x27;
 []
 
 [MultiApps]
-  [sub]
-    type = TransientMultiApp
+  [./sub]
+    type = FullSolveMultiApp
     input_files = sub.i
-    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
-  []
-[]
-
-[Transfers]
-  [from_sub]
-    type = MultiAppCopyTransfer
-    direction = from_multiapp
-    source_variable = u
-    variable = u
-    multi_app = sub
-    check_multiapp_execute_on = false
-    execute_on = &#x27;FINAL&#x27;
-  []
-  [to_sub]
-    type = MultiAppCopyTransfer
-    direction = to_multiapp
-    source_variable = v
-    variable = v
-    multi_app = sub
-    check_multiapp_execute_on = false
-    execute_on = &#x27;FINAL&#x27;
-  []
-[]
-
-[Outputs]
-  exodus = true
-  [final]
-    type = Exodus
-    execute_on = &#x27;FINAL&#x27;
-    execute_input_on = &#x27;NONE&#x27; # This is needed to avoid problems with creating a file w/o data during --recover testing
-  []
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="bc4f8541-1cd7-41b0-b747-e9df87de6f45"><div class="modal-content"><h4>modules/level_set/examples/rotating_circle/circle_rotate_master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = -1
-  xmax = 1
-  ymin = -1
-  ymax = 1
-  nx = 32
-  ny = 32
-  uniform_refine = 2
-[]
-
-[AuxVariables]
-  [./velocity]
-    family = LAGRANGE_VEC
-  [../]
-[]
-
-[Variables]
-  [./phi]
-  [../]
-[]
-
-[BCs]
-  [./all]
-    type = DirichletBC
-    variable = phi
-    boundary = &#x27;top bottom left right&#x27;
-    value = 0
-  [../]
-[]
-
-[Functions]
-  [./phi_exact]
-    type = LevelSetOlssonBubble
-    epsilon = 0.03
-    center = &#x27;0 0.5 0&#x27;
-    radius = 0.15
-  [../]
-  [./velocity_func]
-    type = ParsedVectorFunction
-    value_x = &#x27;4*y&#x27;
-    value_y = &#x27;-4*x&#x27;
-  [../]
-[]
-
-[ICs]
-  [./phi_ic]
-    type = FunctionIC
-    function = phi_exact
-    variable = phi
-  [../]
-  [./vel_ic]
-    type = VectorFunctionIC
-    variable = velocity
-    function = velocity_func
-  []
-[]
-
-[Kernels]
-  [./time]
-    type = TimeDerivative
-    variable = phi
-  [../]
-
-  [./advection]
-    type = LevelSetAdvection
-    velocity = velocity
-    variable = phi
-  [../]
-[]
-
-[Postprocessors]
-  [./area]
-    type = LevelSetVolume
-    threshold = 0.5
-    variable = phi
-    location = outside
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./cfl]
-    type = LevelSetCFLCondition
-    velocity = velocity
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = PJFNK
-  start_time = 0
-  end_time = 1.570796
-  scheme = crank-nicolson
-  petsc_options_iname = &#x27;-pc_type -pc_sub_type&#x27;
-  petsc_options_value = &#x27;asm      ilu&#x27;
-  [./TimeStepper]
-    type = PostprocessorDT
-    postprocessor = cfl
-    scale = 0.8
-  [../]
-[]
-
-[MultiApps]
-  [./reinit]
-    type = LevelSetReinitializationMultiApp
-    input_files = &#x27;circle_rotate_sub.i&#x27;
-    execute_on = &#x27;timestep_end&#x27;
+    execute_on = timestep_end
   [../]
 []
 
 [Transfers]
   [./to_sub]
     type = MultiAppCopyTransfer
-    source_variable = phi
-    variable = phi
     direction = to_multiapp
-    multi_app = reinit
-    execute_on = &#x27;timestep_end&#x27;
-  [../]
-  [./to_sub_init]
-    type = MultiAppCopyTransfer
-    source_variable = phi
-    variable = phi_0
-    direction = to_multiapp
-    multi_app = reinit
-    execute_on = &#x27;timestep_end&#x27;
-  [../]
-  [./from_sub]
-    type = MultiAppCopyTransfer
-    source_variable = phi
-    variable = phi
-    direction = from_multiapp
-    multi_app = reinit
-    execute_on = &#x27;timestep_end&#x27;
+    source_variable = aux
+    variable = u
+    multi_app = sub
   [../]
 []
 
 [Outputs]
-  csv = true
+  hide = &#x27;u&#x27;
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2f8cab43-1fc5-4f20-9cec-03bdf7a2b6a4"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/aux_to_aux/to_sub.i</h4><pre class="moose-pre"><code class="language-text">[Problem]
-  solve = false
-[]
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 2
-[]
-
-[MultiApps/sub]
-  type = TransientMultiApp
-  input_files = sub.i
-[]
-
-[Transfers/from_sub]
-  type = MultiAppCopyTransfer
-  direction = to_multiapp
-  multi_app = sub
-  source_variable = x
-  variable = aux
-[]
-
-[AuxVariables/x]
-  initial_condition = 1949
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 1
-[]
-
-[Outputs]
-  execute_on = &#x27;FINAL&#x27;
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="637f352e-48ac-4066-8b84-3ef9d2f4e01a"><div class="modal-content"><h4>modules/level_set/test/tests/transfers/copy_solution/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3668650e-9526-4907-85dc-c9658d2031d3"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/linear_lagrange_from_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
@@ -944,47 +1085,91 @@
   [../]
 []
 
-[ICs]
-  [./u_ic]
-    type = FunctionIC
-    function = &#x27;x*x*y&#x27;
-    variable = u
-  [../]
-[]
-
 [Problem]
+  type = FEProblem
   solve = false
 []
 
 [Executioner]
   type = Transient
   num_steps = 1
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
 []
 
 [MultiApps]
   [./sub]
     type = FullSolveMultiApp
-    input_files = &#x27;sub.i&#x27;
-    execute_on = timestep_end
+    input_files = sub.i
+    execute_on = initial
   [../]
 []
 
 [Transfers]
-  [./to_sub]
+  [./from_sub]
     type = MultiAppCopyTransfer
-    variable = u
+    direction = from_multiapp
     source_variable = u
-    direction = to_multiapp
+    variable = u
     multi_app = sub
-    execute_on = timestep_end
-    check_multiapp_execute_on = false
   [../]
 []
 
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d143f5ec-4783-4015-bb03-9fab13ba1701"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/third_monomial_from_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f926b910-0f68-4a74-9488-4c4e3e3a21c2"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/multivariable_copy/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  # Create two variables
+  [./u]
+  [../]
+  [./v]
+  [../]
+[]
+
+[Problem]
+  type = FEProblem
+  solve = false
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[MultiApps]
+  [./sub]
+    type = FullSolveMultiApp
+    input_files = sub.i
+    execute_on = initial
+  [../]
+[]
+
+[Transfers]
+  # Transfer both variables by inputting a vector of their names
+  [./from_sub]
+    type = MultiAppCopyTransfer
+    direction = from_multiapp
+    source_variable = &#x27;u v&#x27;
+    variable = &#x27;u v&#x27;
+    multi_app = sub
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5fdc8e03-5d3b-4218-bb09-c8e34a3c8a41"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/third_monomial_from_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
@@ -1032,18 +1217,15 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5c25e416-7363-4c70-bb93-6dc72ae4efa7"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/second_lagrange_to_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2d01b75f-7698-47f0-a959-09ea30690815"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/linear_lagrange_to_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
   ny = 10
-  elem_type = QUAD9
 []
 
 [Variables]
   [./u]
-    family = LAGRANGE
-    order = SECOND
   [../]
 []
 
@@ -1098,58 +1280,7 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0015d47e-7d36-4efb-968a-cd0bb8a331cc"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/array_variable_transfer/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  # Array variable with two components
-  [v]
-    order = FIRST
-    family = LAGRANGE
-    components = 2
-  []
-[]
-
-[Problem]
-  type = FEProblem
-  solve = false
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 1
-  solve_type = &#x27;PJFNK&#x27;
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[MultiApps]
-  [./sub]
-    type = FullSolveMultiApp
-    input_files = sub.i
-    execute_on = initial
-  [../]
-[]
-
-[Transfers]
-  # Transfers all components together on the same mesh.
-  [./from_sub]
-    type = MultiAppCopyTransfer
-    direction = from_multiapp
-    source_variable = u
-    variable = v
-    multi_app = sub
-  [../]
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="74f96ac9-34cc-4bb1-b3ce-b0f7dc3d3f38"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/linear_lagrange_from_sub/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f18fb7e1-f8b7-4094-a696-d4337872bfc1"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/errors/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
@@ -1161,9 +1292,26 @@
   [../]
 []
 
-[Problem]
-  type = FEProblem
-  solve = false
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
 []
 
 [Executioner]
@@ -1178,14 +1326,14 @@
   [./sub]
     type = FullSolveMultiApp
     input_files = sub.i
-    execute_on = initial
+    execute_on = timestep_end
   [../]
 []
 
 [Transfers]
-  [./from_sub]
+  [./to_sub]
     type = MultiAppCopyTransfer
-    direction = from_multiapp
+    direction = to_multiapp
     source_variable = u
     variable = u
     multi_app = sub
@@ -1195,152 +1343,4 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c1926824-fb58-4ac4-8fae-1c66993011c9"><div class="modal-content"><h4>modules/level_set/test/tests/reinitialization/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = 0
-  xmax = 1
-  ymin = 0
-  ymax = 1
-  nx = 8
-  ny = 8
-  uniform_refine = 3 #1/64
-[]
-
-[AuxVariables]
-  [./velocity]
-    family = LAGRANGE_VEC
-  [../]
-[]
-
-[Variables]
-  [./phi]
-  [../]
-[]
-
-[Functions]
-  [./phi_exact]
-    type = LevelSetOlssonBubble
-    epsilon = 0.05
-    center = &#x27;0.5 0.5 0&#x27;
-    radius = 0.15
-  [../]
-  [./velocity_func]
-    type = ParsedVectorFunction
-    value_x = &#x27;1&#x27;
-    value_y = &#x27;1&#x27;
-  [../]
-[]
-
-[BCs]
-  [./Periodic]
-    [./all]
-      variable = phi
-      auto_direction = &#x27;x y&#x27;
-    [../]
-  [../]
-[]
-
-[ICs]
-  [./phi_ic]
-    type = FunctionIC
-    function = phi_exact
-    variable = phi
-  [../]
-  [./vel_ic]
-    type = VectorFunctionIC
-    variable = velocity
-    function = velocity_func
-  []
-[]
-
-[Kernels]
-  [./time]
-    type = TimeDerivative
-    variable = phi
-  [../]
-
-  [./advection]
-    type = LevelSetAdvection
-    velocity = velocity
-    variable = phi
-  [../]
-[]
-
-[Postprocessors]
-
-  [./area]
-    type = LevelSetVolume
-    threshold = 0.5
-    variable = phi
-    location = outside
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-
-  [./cfl]
-    type = LevelSetCFLCondition
-    velocity = velocity
-    execute_on = &#x27;initial&#x27;
-  [../]
-
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = PJFNK
-  start_time = 0
-  end_time = 1
-  nl_rel_tol = 1e-12
-  scheme = crank-nicolson
-  petsc_options_iname = &#x27;-pc_type -pc_sub_type&#x27;
-  petsc_options_value = &#x27;asm      ilu&#x27;
-  [./TimeStepper]
-    type = PostprocessorDT
-    postprocessor = cfl
-    scale = 1
-  [../]
-
-[]
-
-[MultiApps]
-  [./reinit]
-    type = LevelSetReinitializationMultiApp
-    input_files = &#x27;reinit.i&#x27;
-    execute_on = &#x27;timestep_end&#x27;
-  [../]
-[]
-
-[Transfers]
-  [./to_sub]
-    type = MultiAppCopyTransfer
-    variable = phi
-    source_variable = phi
-    direction = to_multiapp
-    multi_app = reinit
-    execute_on = &#x27;timestep_end&#x27;
-  [../]
-
-  [./to_sub_init]
-    type = MultiAppCopyTransfer
-    variable = phi_0
-    source_variable = phi
-    direction = to_multiapp
-    multi_app = reinit
-    execute_on = &#x27;timestep_end&#x27;
-  [../]
-
-  [./from_sub]
-    type = MultiAppCopyTransfer
-    variable = phi
-    source_variable = phi
-    direction = from_multiapp
-    multi_app = reinit
-    execute_on = timestep_end
-  [../]
-[]
-
-[Outputs]
-  exodus = true
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#973aa521-8f08-40a9-9a6b-4fe1ba6aca9b" class="tooltipped" data-position="left" data-tooltip="Example Syntax">Example Syntax</a></li><li><a href="#907ac396-d18b-4fc0-a47e-4327e5b15371" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#b91f7f9b-3a7e-4d8b-8917-9b4749f07151" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#c3672189-9f78-4f93-9c96-aa2c67a43fd5" class="tooltipped" data-position="left" data-tooltip="Example Syntax">Example Syntax</a></li><li><a href="#b3b4fdf0-7ca7-4764-a89c-b99c94bc952e" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#5e2520d5-e756-4b4d-aff4-58a49469ac0a" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

@@ -1,10 +1,10 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>ADNeumannBC.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="b9c47a91-6ae3-4b02-8514-b17d4c9370aa"><i class="material-icons">menu</i></a><ul class="sidenav" id="b9c47a91-6ae3-4b02-8514-b17d4c9370aa"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">bcs</span><a href="#" class="breadcrumb">ADNeumannBC</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="a389b6aa-4a79-4dbb-b792-2106da332615" data-section-level="1" data-section-text="ADNeumannBC"><h1 id="adneumannbc">ADNeumannBC</h1><p>Imposes the integrated boundary condition <span tex="\frac{\partial u}{\partial n}=h" bookmark="moose-equation-e61490fb-919f-4b28-b8f4-5c463c9f45ee" recursive="True" class="moose-katex-inline-equation" id="moose-equation-e61490fb-919f-4b28-b8f4-5c463c9f45ee"><script>var element = document.getElementById("moose-equation-e61490fb-919f-4b28-b8f4-5c463c9f45ee");katex.render("\\frac{\\partial u}{\\partial n}=h", element, {displayMode:false,throwOnError:false});</script></span>, where <span tex="h" bookmark="moose-equation-500d77b9-2ae6-4eb9-bd7a-b44f38eb2512" recursive="True" class="moose-katex-inline-equation" id="moose-equation-500d77b9-2ae6-4eb9-bd7a-b44f38eb2512"><script>var element = document.getElementById("moose-equation-500d77b9-2ae6-4eb9-bd7a-b44f38eb2512");katex.render("h", element, {displayMode:false,throwOnError:false});</script></span> is a constant, controllable value.</p><section class="scrollspy" id="c53f9cb7-7476-4cd9-addf-e13e159b1b66" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>ADNeumannBC</code> is the simplest type of <code>ADIntegratedBC</code>, and is used for imposing flux boundary conditions on systems of partial differential equations (PDEs). This class is appropriate to use for PDEs of the form <span class="moose-katex-block-equation"><span tex="\begin{aligned}   -\nabla^2 u &= f && \quad \in \Omega \\   u &= g && \quad \in \partial \Omega_D \\   \frac{\partial u}{\partial n} &= h && \quad \in \partial \Omega_N, \end{aligned}" bookmark="moose-equation-7dcc3ecf-5ac1-4598-bde1-08d2b75fc13a" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-7dcc3ecf-5ac1-4598-bde1-08d2b75fc13a"></span><script>var element = document.getElementById("moose-equation-7dcc3ecf-5ac1-4598-bde1-08d2b75fc13a");katex.render("\\begin{aligned}   -\\nabla^2 u &= f && \\quad \\in \\Omega \\\\   u &= g && \\quad \\in \\partial \\Omega_D \\\\   \\frac{\\partial u}{\\partial n} &= h && \\quad \\in \\partial \\Omega_N, \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span> where <span tex="\Omega \subset \mathbb{R}^n" bookmark="moose-equation-303cb11c-013c-4371-a018-fdc982043d2e" recursive="True" class="moose-katex-inline-equation" id="moose-equation-303cb11c-013c-4371-a018-fdc982043d2e"><script>var element = document.getElementById("moose-equation-303cb11c-013c-4371-a018-fdc982043d2e");katex.render("\\Omega \\subset \\mathbb{R}^n", element, {displayMode:false,throwOnError:false});</script></span> is the domain, and <span tex="\partial \Omega = \partial \Omega_D \cup \partial \Omega_N" bookmark="moose-equation-9cbe87c6-a5de-49d6-b6e5-fb89aa4e801a" recursive="True" class="moose-katex-inline-equation" id="moose-equation-9cbe87c6-a5de-49d6-b6e5-fb89aa4e801a"><script>var element = document.getElementById("moose-equation-9cbe87c6-a5de-49d6-b6e5-fb89aa4e801a");katex.render("\\partial \\Omega = \\partial \\Omega_D \\cup \\partial \\Omega_N", element, {displayMode:false,throwOnError:false});</script></span> is its boundary. In this case, a <code>ADNeumannBC</code> object is used to impose the condition (3) on the subset of the boundary denoted by <span tex="\partial \Omega_N" bookmark="moose-equation-041d0e7e-47dd-41ee-836d-f3707257ffb2" recursive="True" class="moose-katex-inline-equation" id="moose-equation-041d0e7e-47dd-41ee-836d-f3707257ffb2"><script>var element = document.getElementById("moose-equation-041d0e7e-47dd-41ee-836d-f3707257ffb2");katex.render("\\partial \\Omega_N", element, {displayMode:false,throwOnError:false});</script></span>. The <code>value</code> parameter corresponds to the constant <span tex="h" bookmark="moose-equation-7004699d-d5d3-4ec3-8982-78b2f204bb5f" recursive="True" class="moose-katex-inline-equation" id="moose-equation-7004699d-d5d3-4ec3-8982-78b2f204bb5f"><script>var element = document.getElementById("moose-equation-7004699d-d5d3-4ec3-8982-78b2f204bb5f");katex.render("h", element, {displayMode:false,throwOnError:false});</script></span>, and the user must define one or more sidesets corresponding to the boundary subset <span tex="\partial \Omega_N" bookmark="moose-equation-fdfad3d2-bf28-438f-8ad1-1b7a4b7298cf" recursive="True" class="moose-katex-inline-equation" id="moose-equation-fdfad3d2-bf28-438f-8ad1-1b7a4b7298cf"><script>var element = document.getElementById("moose-equation-fdfad3d2-bf28-438f-8ad1-1b7a4b7298cf");katex.render("\\partial \\Omega_N", element, {displayMode:false,throwOnError:false});</script></span>.  The normal derivative notation is <span tex="\frac{\partial u}{\partial n} \equiv \nabla u \cdot \hat{n}" bookmark="moose-equation-c9588c8d-91c5-40ce-859d-022b5e8b6a31" recursive="True" class="moose-katex-inline-equation" id="moose-equation-c9588c8d-91c5-40ce-859d-022b5e8b6a31"><script>var element = document.getElementById("moose-equation-c9588c8d-91c5-40ce-859d-022b5e8b6a31");katex.render("\\frac{\\partial u}{\\partial n} \\equiv \\nabla u \\cdot \\hat{n}", element, {displayMode:false,throwOnError:false});</script></span>, where <span tex="\hat{n}" bookmark="moose-equation-542286fd-bd10-4352-a91e-5a4f119a2918" recursive="True" class="moose-katex-inline-equation" id="moose-equation-542286fd-bd10-4352-a91e-5a4f119a2918"><script>var element = document.getElementById("moose-equation-542286fd-bd10-4352-a91e-5a4f119a2918");katex.render("\\hat{n}", element, {displayMode:false,throwOnError:false});</script></span> is the outward unit normal to <span tex="\partial \Omega_N" bookmark="moose-equation-51f0210a-8963-481d-bc92-8f63ff2e8d27" recursive="True" class="moose-katex-inline-equation" id="moose-equation-51f0210a-8963-481d-bc92-8f63ff2e8d27"><script>var element = document.getElementById("moose-equation-51f0210a-8963-481d-bc92-8f63ff2e8d27");katex.render("\\partial \\Omega_N", element, {displayMode:false,throwOnError:false});</script></span>.</p></section><section class="scrollspy" id="17d13291-b481-4c20-95b1-ae73d81fa7fc" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">  [./right]
+<!DOCTYPE html><head><meta charset="UTF-8"><title>ADNeumannBC.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="0d268b67-57f7-4c2c-b732-90f6f93c4a33"><i class="material-icons">menu</i></a><ul class="sidenav" id="0d268b67-57f7-4c2c-b732-90f6f93c4a33"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">bcs</span><a href="#" class="breadcrumb">ADNeumannBC</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="43b0b351-1f1b-4830-a1c2-c49b25fb6d5c" data-section-level="1" data-section-text="ADNeumannBC"><h1 id="adneumannbc">ADNeumannBC</h1><p>Imposes the integrated boundary condition <span tex="\frac{\partial u}{\partial n}=h" bookmark="moose-equation-7bcac368-8a9f-45b8-8e95-c23efbdf7e50" recursive="True" class="moose-katex-inline-equation" id="moose-equation-7bcac368-8a9f-45b8-8e95-c23efbdf7e50"><script>var element = document.getElementById("moose-equation-7bcac368-8a9f-45b8-8e95-c23efbdf7e50");katex.render("\\frac{\\partial u}{\\partial n}=h", element, {displayMode:false,throwOnError:false});</script></span>, where <span tex="h" bookmark="moose-equation-cfc939be-a10e-47e8-94f1-098f35bb1fec" recursive="True" class="moose-katex-inline-equation" id="moose-equation-cfc939be-a10e-47e8-94f1-098f35bb1fec"><script>var element = document.getElementById("moose-equation-cfc939be-a10e-47e8-94f1-098f35bb1fec");katex.render("h", element, {displayMode:false,throwOnError:false});</script></span> is a constant, controllable value.</p><section class="scrollspy" id="6e0da760-15ea-43e8-91bf-0103d813838a" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>ADNeumannBC</code> is the simplest type of <code>ADIntegratedBC</code>, and is used for imposing flux boundary conditions on systems of partial differential equations (PDEs). This class is appropriate to use for PDEs of the form <span class="moose-katex-block-equation"><span tex="\begin{aligned}   -\nabla^2 u &= f && \quad \in \Omega \\   u &= g && \quad \in \partial \Omega_D \\   \frac{\partial u}{\partial n} &= h && \quad \in \partial \Omega_N, \end{aligned}" bookmark="moose-equation-08e8f08b-6bc9-4057-92ce-b9a444f95750" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-08e8f08b-6bc9-4057-92ce-b9a444f95750"></span><script>var element = document.getElementById("moose-equation-08e8f08b-6bc9-4057-92ce-b9a444f95750");katex.render("\\begin{aligned}   -\\nabla^2 u &= f && \\quad \\in \\Omega \\\\   u &= g && \\quad \\in \\partial \\Omega_D \\\\   \\frac{\\partial u}{\\partial n} &= h && \\quad \\in \\partial \\Omega_N, \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span> where <span tex="\Omega \subset \mathbb{R}^n" bookmark="moose-equation-8bdb1f52-5783-4fc5-822c-3555532da0e8" recursive="True" class="moose-katex-inline-equation" id="moose-equation-8bdb1f52-5783-4fc5-822c-3555532da0e8"><script>var element = document.getElementById("moose-equation-8bdb1f52-5783-4fc5-822c-3555532da0e8");katex.render("\\Omega \\subset \\mathbb{R}^n", element, {displayMode:false,throwOnError:false});</script></span> is the domain, and <span tex="\partial \Omega = \partial \Omega_D \cup \partial \Omega_N" bookmark="moose-equation-4e573a49-facb-4cff-bda1-358ed31e3869" recursive="True" class="moose-katex-inline-equation" id="moose-equation-4e573a49-facb-4cff-bda1-358ed31e3869"><script>var element = document.getElementById("moose-equation-4e573a49-facb-4cff-bda1-358ed31e3869");katex.render("\\partial \\Omega = \\partial \\Omega_D \\cup \\partial \\Omega_N", element, {displayMode:false,throwOnError:false});</script></span> is its boundary. In this case, a <code>ADNeumannBC</code> object is used to impose the condition (3) on the subset of the boundary denoted by <span tex="\partial \Omega_N" bookmark="moose-equation-f57ef2bb-e5eb-401e-ae69-12b4e4d63a40" recursive="True" class="moose-katex-inline-equation" id="moose-equation-f57ef2bb-e5eb-401e-ae69-12b4e4d63a40"><script>var element = document.getElementById("moose-equation-f57ef2bb-e5eb-401e-ae69-12b4e4d63a40");katex.render("\\partial \\Omega_N", element, {displayMode:false,throwOnError:false});</script></span>. The <code>value</code> parameter corresponds to the constant <span tex="h" bookmark="moose-equation-2d82eadd-0f99-4357-8a6b-ae696ec201ca" recursive="True" class="moose-katex-inline-equation" id="moose-equation-2d82eadd-0f99-4357-8a6b-ae696ec201ca"><script>var element = document.getElementById("moose-equation-2d82eadd-0f99-4357-8a6b-ae696ec201ca");katex.render("h", element, {displayMode:false,throwOnError:false});</script></span>, and the user must define one or more sidesets corresponding to the boundary subset <span tex="\partial \Omega_N" bookmark="moose-equation-e9bd09bf-6923-4e5b-86e1-4c31e271adf4" recursive="True" class="moose-katex-inline-equation" id="moose-equation-e9bd09bf-6923-4e5b-86e1-4c31e271adf4"><script>var element = document.getElementById("moose-equation-e9bd09bf-6923-4e5b-86e1-4c31e271adf4");katex.render("\\partial \\Omega_N", element, {displayMode:false,throwOnError:false});</script></span>.  The normal derivative notation is <span tex="\frac{\partial u}{\partial n} \equiv \nabla u \cdot \hat{n}" bookmark="moose-equation-5383504b-0673-43e3-8526-e89945d30926" recursive="True" class="moose-katex-inline-equation" id="moose-equation-5383504b-0673-43e3-8526-e89945d30926"><script>var element = document.getElementById("moose-equation-5383504b-0673-43e3-8526-e89945d30926");katex.render("\\frac{\\partial u}{\\partial n} \\equiv \\nabla u \\cdot \\hat{n}", element, {displayMode:false,throwOnError:false});</script></span>, where <span tex="\hat{n}" bookmark="moose-equation-234e1083-83a9-4b84-b9fa-8872b9cdb35a" recursive="True" class="moose-katex-inline-equation" id="moose-equation-234e1083-83a9-4b84-b9fa-8872b9cdb35a"><script>var element = document.getElementById("moose-equation-234e1083-83a9-4b84-b9fa-8872b9cdb35a");katex.render("\\hat{n}", element, {displayMode:false,throwOnError:false});</script></span> is the outward unit normal to <span tex="\partial \Omega_N" bookmark="moose-equation-2f0b27ef-5d1a-42a0-9f8d-787e1a8bd058" recursive="True" class="moose-katex-inline-equation" id="moose-equation-2f0b27ef-5d1a-42a0-9f8d-787e1a8bd058"><script>var element = document.getElementById("moose-equation-2f0b27ef-5d1a-42a0-9f8d-787e1a8bd058");katex.render("\\partial \\Omega_N", element, {displayMode:false,throwOnError:false});</script></span>.</p></section><section class="scrollspy" id="bb41f9b3-a1aa-4274-89f7-b5e6e1a94197" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">  [./right]
     type = ADNeumannBC
     variable = u
     boundary = right
     value = 2
   [../]
-</code></pre><a href="#439ed93d-356e-4a1c-8dbe-3100c5da4ebf" class="modal-trigger">(test/tests/bcs/ad_1d_neumann/1d_neumann.i)</a><div class="modal moose-modal" id="439ed93d-356e-4a1c-8dbe-3100c5da4ebf"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/bcs/ad_1d_neumann/1d_neumann.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre><a href="#f5809710-7f89-4d5a-89bc-59f6c74161bf" class="modal-trigger">(test/tests/bcs/ad_1d_neumann/1d_neumann.i)</a><div class="modal moose-modal" id="f5809710-7f89-4d5a-89bc-59f6c74161bf"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/bcs/ad_1d_neumann/1d_neumann.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 1
   nx = 10
@@ -50,7 +50,7 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="22ba3ebc-5b0d-44d2-9591-37ec97b3f2e8" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="b501ef40-ae35-4c32-8b2d-76672112f833" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">value</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The value of the gradient on the boundary.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The value of the gradient on the boundary.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this boundary condition applies to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this boundary condition applies to</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="98cf2088-cfa6-4171-a32b-228261479a75" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="59bf9c46-0cd3-43a2-a82b-2c014f21092d" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="29969651-7061-43f1-8d13-0db3cbdef48f" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="93c788f7-69bf-435c-8a56-424b030edb2e" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#a60c9660-1224-44c2-822c-b5e1701f0061" class="modal-trigger">test/tests/misc/displaced_mesh_coupling/ad.i</a></li><li><a href="#ebafef39-4f7e-41cf-ac02-e0845d0e197c" class="modal-trigger">modules/xfem/test/tests/moving_interface/ad_phase_transition.i</a></li><li><a href="#dc0765a5-6029-42ba-bded-ca3b4a314839" class="modal-trigger">modules/stochastic_tools/examples/parameter_study/diffusion.i</a></li><li><a href="#cbd7229b-bc26-4f1b-9c3d-5c71fe180717" class="modal-trigger">test/tests/kernels/ad_2d_diffusion/2d_diffusion_neumannbc_test.i</a></li><li><a href="#655fb40d-8d57-40d5-9f78-196e18e456e3" class="modal-trigger">test/tests/bcs/ad_1d_neumann/1d_neumann.i</a></li><li><a href="#9eab8926-f29f-43a5-8813-2e201c272e97" class="modal-trigger">modules/stochastic_tools/examples/sobol/diffusion.i</a></li><li><a href="#0e6f1121-411f-48b9-b9e2-b97e6454329d" class="modal-trigger">test/tests/bcs/ad_1d_neumann/from_cubit.i</a></li></ul><div class="modal moose-modal" id="a60c9660-1224-44c2-822c-b5e1701f0061"><div class="modal-content"><h4>test/tests/misc/displaced_mesh_coupling/ad.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="a588ab6e-3cee-48bd-9adf-dd1b001b95f4" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="0c387297-e300-44aa-a0ed-486f9bc1f094" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">value</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The value of the gradient on the boundary.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The value of the gradient on the boundary.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this boundary condition applies to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this boundary condition applies to</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="0a83afa4-0829-4343-8e54-3acf9a5d621e" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="b1cc4592-9604-403b-a194-1e892ed08117" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="603c663e-626e-47ba-afb1-58363eef56dc" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="c7d5dc14-2082-44bc-986c-eb4978deabe7" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#bf9e42b8-507b-4285-b3f9-111bfca0b919" class="modal-trigger">test/tests/misc/displaced_mesh_coupling/ad.i</a></li><li><a href="#0000de86-3293-4565-a576-632b0e98eeb8" class="modal-trigger">test/tests/bcs/ad_1d_neumann/from_cubit.i</a></li><li><a href="#59d084bc-74ed-4a8c-9bc8-bff69aac978b" class="modal-trigger">modules/stochastic_tools/examples/parameter_study/diffusion.i</a></li><li><a href="#5970ca03-d1a3-425f-b8d5-2d338e611209" class="modal-trigger">modules/xfem/test/tests/moving_interface/ad_phase_transition.i</a></li><li><a href="#9b9f730e-b5c8-4876-8fca-716f6e917cc2" class="modal-trigger">test/tests/bcs/ad_1d_neumann/1d_neumann.i</a></li><li><a href="#22fed467-9058-464e-aa0e-0f15b8fa1c81" class="modal-trigger">test/tests/kernels/ad_2d_diffusion/2d_diffusion_neumannbc_test.i</a></li><li><a href="#63f960f7-2c51-4b23-8b46-9763a7db50b6" class="modal-trigger">modules/stochastic_tools/examples/sobol/diffusion.i</a></li></ul><div class="modal moose-modal" id="bf9e42b8-507b-4285-b3f9-111bfca0b919"><div class="modal-content"><h4>test/tests/misc/displaced_mesh_coupling/ad.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
   displacements = &#x27;u&#x27;
 []
 
@@ -116,7 +116,126 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ebafef39-4f7e-41cf-ac02-e0845d0e197c"><div class="modal-content"><h4>modules/xfem/test/tests/moving_interface/ad_phase_transition.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0000de86-3293-4565-a576-632b0e98eeb8"><div class="modal-content"><h4>test/tests/bcs/ad_1d_neumann/from_cubit.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  file = 1d_line.e
+  construct_side_list_from_node_list = true
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 0
+  [../]
+  [./right]
+    type = ADNeumannBC
+    variable = u
+    boundary = 2
+    value = 2
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="59d084bc-74ed-4a8c-9bc8-bff69aac978b"><div class="modal-content"><h4>modules/stochastic_tools/examples/parameter_study/diffusion.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables/T]
+[]
+
+[Kernels]
+  [time]
+    type = ADTimeDerivative
+    variable = T
+  []
+  [diff]
+    type = ADMatDiffusion
+    variable = T
+    diffusivity = diffusivity
+  []
+  [source]
+    type = ADBodyForce
+    variable = T
+    value = 1
+    function = 1
+  []
+[]
+
+[BCs]
+  [left]
+    type = ADDirichletBC
+    variable = T
+    boundary = left
+    value = -10
+  []
+  [right]
+    type = ADNeumannBC
+    variable = T
+    boundary = right
+    value = -100
+  []
+[]
+
+[Materials/constant]
+  type = ADGenericConstantMaterial
+  prop_names = &#x27;diffusivity&#x27;
+  prop_values = 1
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  num_steps = 4
+  dt = 0.25
+[]
+
+[Postprocessors]
+  [T_avg]
+    type = AverageNodalVariableValue
+    variable = T
+  []
+  [q_left]
+    type = ADSideFluxAverage
+    variable = T
+    boundary = left
+    diffusivity = diffusivity
+  []
+[]
+
+[Controls/stochastic]
+  type = SamplerReceiver
+[]
+
+[Outputs]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5970ca03-d1a3-425f-b8d5-2d338e611209"><div class="modal-content"><h4>modules/xfem/test/tests/moving_interface/ad_phase_transition.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
   order = FIRST
   family = LAGRANGE
 []
@@ -278,82 +397,53 @@
   [../]
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="dc0765a5-6029-42ba-bded-ca3b4a314839"><div class="modal-content"><h4>modules/stochastic_tools/examples/parameter_study/diffusion.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9b9f730e-b5c8-4876-8fca-716f6e917cc2"><div class="modal-content"><h4>test/tests/bcs/ad_1d_neumann/1d_neumann.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
-  dim = 2
+  dim = 1
   nx = 10
-  ny = 10
+  construct_side_list_from_node_list = true
 []
 
-[Variables/T]
+[Variables]
+  [./u]
+  [../]
 []
 
 [Kernels]
-  [time]
-    type = ADTimeDerivative
-    variable = T
-  []
-  [diff]
-    type = ADMatDiffusion
-    variable = T
-    diffusivity = diffusivity
-  []
-  [source]
-    type = ADBodyForce
-    variable = T
-    value = 1
-    function = 1
-  []
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
 []
 
 [BCs]
-  [left]
-    type = ADDirichletBC
-    variable = T
+  [./left]
+    type = DirichletBC
+    variable = u
     boundary = left
-    value = -10
-  []
-  [right]
+    value = 0
+  [../]
+  [./right]
     type = ADNeumannBC
-    variable = T
+    variable = u
     boundary = right
-    value = -100
-  []
-[]
-
-[Materials/constant]
-  type = ADGenericConstantMaterial
-  prop_names = &#x27;diffusivity&#x27;
-  prop_values = 1
+    value = 2
+  [../]
 []
 
 [Executioner]
-  type = Transient
-  solve_type = NEWTON
-  num_steps = 4
-  dt = 0.25
-[]
+  type = Steady
 
-[Postprocessors]
-  [T_avg]
-    type = AverageNodalVariableValue
-    variable = T
-  []
-  [q_left]
-    type = ADSideFluxAverage
-    variable = T
-    boundary = left
-    diffusivity = diffusivity
-  []
-[]
+  solve_type = &#x27;NEWTON&#x27;
 
-[Controls/stochastic]
-  type = SamplerReceiver
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
 []
 
 [Outputs]
+  exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="cbd7229b-bc26-4f1b-9c3d-5c71fe180717"><div class="modal-content"><h4>test/tests/kernels/ad_2d_diffusion/2d_diffusion_neumannbc_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="22fed467-9058-464e-aa0e-0f15b8fa1c81"><div class="modal-content"><h4>test/tests/kernels/ad_2d_diffusion/2d_diffusion_neumannbc_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   [./square]
     type = GeneratedMeshGenerator
     nx = 2
@@ -400,53 +490,7 @@
   file_base = neumannbc_out
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="655fb40d-8d57-40d5-9f78-196e18e456e3"><div class="modal-content"><h4>test/tests/bcs/ad_1d_neumann/1d_neumann.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 10
-  construct_side_list_from_node_list = true
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  [../]
-  [./right]
-    type = ADNeumannBC
-    variable = u
-    boundary = right
-    value = 2
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-
-  solve_type = &#x27;NEWTON&#x27;
-
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9eab8926-f29f-43a5-8813-2e201c272e97"><div class="modal-content"><h4>modules/stochastic_tools/examples/sobol/diffusion.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="63f960f7-2c51-4b23-8b46-9763a7db50b6"><div class="modal-content"><h4>modules/stochastic_tools/examples/sobol/diffusion.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
@@ -521,48 +565,4 @@
 
 [Outputs]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0e6f1121-411f-48b9-b9e2-b97e6454329d"><div class="modal-content"><h4>test/tests/bcs/ad_1d_neumann/from_cubit.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  file = 1d_line.e
-  construct_side_list_from_node_list = true
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = 1
-    value = 0
-  [../]
-  [./right]
-    type = ADNeumannBC
-    variable = u
-    boundary = 2
-    value = 2
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-
-  solve_type = &#x27;PJFNK&#x27;
-
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#c53f9cb7-7476-4cd9-addf-e13e159b1b66" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#17d13291-b481-4c20-95b1-ae73d81fa7fc" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#22ba3ebc-5b0d-44d2-9591-37ec97b3f2e8" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#93c788f7-69bf-435c-8a56-424b030edb2e" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#6e0da760-15ea-43e8-91bf-0103d813838a" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#bb41f9b3-a1aa-4274-89f7-b5e6e1a94197" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#a588ab6e-3cee-48bd-9adf-dd1b001b95f4" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#c7d5dc14-2082-44bc-986c-eb4978deabe7" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

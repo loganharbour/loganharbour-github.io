@@ -1,0 +1,766 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>RepeatableRayStudyBase.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="91052bff-0941-44ef-b3ae-df9f072f7005"><i class="material-icons">menu</i></a><ul class="sidenav" id="91052bff-0941-44ef-b3ae-df9f072f7005"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">userobjects</span><a href="#" class="breadcrumb">RepeatableRayStudyBase</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="9e71e994-a3b7-4e0f-8bd8-68eab3b4bbb3" data-section-level="1" data-section-text="RepeatableRayStudyBase"><h1 id="repeatableraystudybase">RepeatableRayStudyBase</h1><section class="scrollspy" id="e93a70f2-b8ca-4559-b7ee-d8b4d331f456" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The <code>RepeatableRayStudyBase</code> is a specialized <a href="RayTracingStudy.html">RayTracingStudy</a> that simplifies the <a href="../ray_tracing/Ray.html">Ray</a> generation process. To describe how exactly it simplifies this process, we will describe the difficulties of <a href="../ray_tracing/Ray.html">Ray</a> generation and how this study overcomes many of those issues.</p><section id="e06cd908-a04f-4b9a-bd8e-819277c6afd1" data-section-level="3" data-section-text="Finding a Ray ' s Starting Element"><h3 id="finding-a-ray-s-starting-element">Finding a Ray&#x27;s Starting Element</h3><p>The <a href="../../modules/ray_tracing/index.html">Ray Tracing Module</a> requires that a <a href="../ray_tracing/Ray.html">Ray</a> be on the processor that contains the element that it starts in when it is moved into the buffer to be traced. If one wants to only specify a set of starting points for rays, it becomes necessary to determine which elements said points are contained in and then to communicate ahead of time the <a href="../ray_tracing/Ray.html">Ray</a> to the processor that owns each element.</p><p>The <code>RepeatableRayStudyBase</code> has a option that only requires the defined rays to have their starting points set. Internally, the rays will be &quot;claimed&quot; and communicated to the processor that owns their starting element based on the user-set starting points. In addition, the incoming side on said starting elements will be set (if any).</p><p>The &quot;claiming&quot; of rays after they are defined is controlled by the <code>_claim_after_define_rays</code> private parameter. An example of a study that uses this claiming is the <a href="RepeatableRayStudy.html">RepeatableRayStudy</a>.</p></section><section id="66591368-b340-4f35-9521-e2a5304185b2" data-section-level="3" data-section-text="Tracing After Mesh Changes"><h3 id="tracing-after-mesh-changes">Tracing After Mesh Changes</h3><p>In the case of mesh changes (for example, mesh adaptivity steps), the element that a <a href="../ray_tracing/Ray.html">Ray</a> starts in may change, which may also result in a change of a processor that a <a href="../ray_tracing/Ray.html">Ray</a> starts on.</p><p>The <code>RepeatableRayStudyBase</code> keeps a copy of the user-generated rays such that at any time the mesh changes, the information is available to trace rays with the same information (start point, direction, data, etc). Internally, when the mesh changes the <code>RepeatableRayStudyBase</code> will re-claim the users rays to ensure that they are again on the correct processor with the correct starting elements.</p></section></section><section class="scrollspy" id="bb90ca9a-bad1-4542-9f15-0cc648469b28" data-section-level="2" data-section-text="Process"><h2 id="process">Process</h2><p>The process by which the <code>RepeatableRayStudyBase</code> generates rays follows:</p><ol class="browser-default" start="1"><li><p><a href="RepeatableRayStudyBase.html#define-rays">Define Rays</a> - Only done on the first execution of the study. </p></li><li><p><a href="RepeatableRayStudyBase.html#claim-rays">Claim Rays</a> - Done on the first exuection of the study and after all mesh changes. </p></li><li><p><a href="RepeatableRayStudyBase.html#copy-rays">Copy Rays</a> - Done on every execution of the study.</p></li></ol><section id="c0def6d0-755d-42cd-82e6-937aeabf4292" data-section-level="3" data-section-text="Define Rays"><h3 id="define-rays">Define Rays</h3><p>The user-derived object will overload the <code>defineRays()</code> method. Upon first execution of the study, this method will be called. Within <code>defineRays()</code>, you are to create rays (see <a href="../ray_tracing/Ray.html#defining-a-ray-trajectory">Defining a Ray Trajectory</a>) and move them into the <code>_rays</code> member variable. This action by default is only performed once, when <code>generateRays()</code> is first called.</p><p>If you are defining rays that need to be &quot;claimed&quot;, that is they are being defined with only their start points (and not starting elements or starting incoming sides), ensure that the <code>_claim_after_define_rays</code> parameter is set to <code>true</code>. When this parameter is <code>true</code>, it is assumed that the starting elements and starting incoming sides have not been set and that the rays need to be &quot;claimed&quot;. After claiming, internally they will be placed on the correct processors with a starting element that contains their starting points.</p><p>If you are defining rays that:</p><ul class="browser-default"><li><p>have their starting point set, </p></li><li><p>have their starting element set (which contains the starting point), </p></li><li><p>have their starting incoming sides set (if any - the rays can also start within an element), </p></li><li><p>are filled into <code>_rays</code> on the processor that contains their respective starting elements,</p></li></ul><p>then it is not necessary to utilize claiming. You would set the <code>_claim_after_define_rays</code> parameter to false.</p><p>Any <a href="../ray_tracing/Ray.html">Ray</a> data or auxiliary data that is set at this point will also be used in any further executions of this study.</p><p>The other important parameter that can be changed is the <code>_define_rays_replicated</code> private parameter. If this parameter is true, the rays that are filled into <code>_rays</code> during <code>defineRays()</code> are replicated. That is, the same rays were filled into <code>_rays</code> across all processors. If <code>_claim_after_define_rays == false</code>, the <code>_define_rays_replicated</code> parameter is set to false regardless of the user&#x27;s setting because it is not possible for rays that are on their correct processors with their correct starting elements to be replicated.</p><section id="5a4b16cb-d4d2-40be-8f19-775112335e76" data-section-level="4" data-section-text="Example"><h4 id="example">Example</h4><p>For an example of the define process, see <a href="RepeatableRayStudy.html">RepeatableRayStudy</a>:</p><pre class="moose-pre"><code class="language-cpp">void
+RepeatableRayStudy::defineRays()
+{
+  for (std::size_t i = 0; i &lt; _ids.size(); ++i)
+  {
+    std::shared_ptr&lt;Ray&gt; ray = acquireRay(/* tid = */ 0);
+
+    if (_end_points) // user set end point
+      ray-&gt;setStartEnd(_start_points[i], (*_end_points)[i]);
+    else // user set direction
+      ray-&gt;setStartDirection(_start_points[i], (*_directions)[i]);
+
+    // We already generated the IDs
+    ray-&gt;setID(_ids[i]);
+
+    // Set the data
+    ray-&gt;data().resize(rayDataSize(), 0);
+    if (_initial_ray_data)
+      for (std::size_t i = 0; i &lt; _ray_data_indices.size(); ++i)
+        ray-&gt;data(_ray_data_indices[i]) = (*_initial_ray_data)[i];
+
+    // Set the aux data
+    ray-&gt;auxData().resize(rayAuxDataSize(), 0);
+    if (_initial_ray_aux_data)
+      for (std::size_t i = 0; i &lt; _ray_aux_data_indices.size(); ++i)
+        ray-&gt;auxData(_ray_aux_data_indices[i]) = (*_initial_ray_aux_data)[i];
+
+    // User set max-distances
+    if (_max_distances)
+      ray-&gt;setMaxDistance((*_max_distances)[i]);
+
+    _rays.emplace_back(std::move(ray));
+  }
+}
+</code></pre><a href="#7c8b519f-4fe5-4471-be75-5f4176c34cf8" class="modal-trigger">(modules/ray_tracing/src/userobjects/RepeatableRayStudy.C)</a><div class="modal moose-modal" id="7c8b519f-4fe5-4471-be75-5f4176c34cf8"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/modules/ray_tracing/src/userobjects/RepeatableRayStudy.C</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#include &quot;RepeatableRayStudy.h&quot;
+
+registerMooseObject(&quot;RayTracingApp&quot;, RepeatableRayStudy);
+
+InputParameters
+RepeatableRayStudy::validParams()
+{
+  auto params = RepeatableRayStudyBase::validParams();
+
+  params.addRequiredParam&lt;std::vector&lt;std::string&gt;&gt;(&quot;names&quot;, &quot;Unique names for the Rays&quot;);
+
+  params.addRequiredParam&lt;std::vector&lt;Point&gt;&gt;(&quot;start_points&quot;, &quot;The points to start Rays from&quot;);
+  params.addParam&lt;std::vector&lt;Point&gt;&gt;(&quot;directions&quot;,
+                                      &quot;The directions to spawn Rays in (they do not need to be &quot;
+                                      &quot;normalized to 1). Use either this parameter &quot;
+                                      &quot;or the end_points parameter, but not both!&quot;);
+  params.addParam&lt;std::vector&lt;Point&gt;&gt;(&quot;end_points&quot;,
+                                      &quot;The points where Rays should end. Use either this parameter &quot;
+                                      &quot;or the directions parameter, but not both!&quot;);
+  params.addParam&lt;std::vector&lt;Real&gt;&gt;(
+      &quot;max_distances&quot;,
+      &quot;The maximum distances that each Ray can travel before it is killed internally after &quot;
+      &quot;RayKernel execution. This can ONLY be used when the &#x27;directions&#x27; parameter is used. &quot;
+      &quot;When this not set, the Rays must be killed by RayKernels, RayBCs, or the global &quot;
+      &quot; max distance parameter, &#x27;ray_max_distance&#x27; (applies to all Rays)&quot;);
+
+  params.addParamNamesToGroup(&quot;start_points directions end_points max_distances&quot;, &quot;Trajectory&quot;);
+
+  params.addParam&lt;std::vector&lt;std::string&gt;&gt;(
+      &quot;ray_data_names&quot;,
+      &quot;The Ray data names to register. If &#x27;initial_ray_data&#x27; is set, these data names will be &quot;
+      &quot;associated with said initial values. Otherwise, they will be set to zero.&quot;);
+  params.addParam&lt;std::vector&lt;Real&gt;&gt;(
+      &quot;initial_ray_data&quot;,
+      &quot;The initial Ray data to set. This must be paired with &#x27;ray_data_names&#x27; to know what data &quot;
+      &quot;names to assign the data to&quot;);
+  params.addParam&lt;std::vector&lt;std::string&gt;&gt;(
+      &quot;ray_aux_data_names&quot;,
+      &quot;The Ray aux data names to register. If &#x27;initial_ray_aux_data&#x27; is set, these aux data names &quot;
+      &quot;will be associated with said initial values. Otherwise, they will be set to zero.&quot;);
+  params.addParam&lt;std::vector&lt;Real&gt;&gt;(
+      &quot;initial_ray_aux_data&quot;,
+      &quot;The initial Ray aux data to set. This must be paired with &#x27;ray_aux_data_names&#x27; to know what &quot;
+      &quot;aux data names to assign the data to&quot;);
+
+  params.addParamNamesToGroup(
+      &quot;ray_data_names initial_ray_data ray_aux_data_names initial_ray_aux_data&quot;, &quot;Data&quot;);
+
+  return params;
+}
+
+RepeatableRayStudy::RepeatableRayStudy(const InputParameters &amp; parameters)
+  : RepeatableRayStudyBase(parameters),
+    _ids(registerRays(getParam&lt;std::vector&lt;std::string&gt;&gt;(&quot;names&quot;), /* graceful = */ true)),
+    _start_points(getParam&lt;std::vector&lt;Point&gt;&gt;(&quot;start_points&quot;)),
+    _end_points(parameters.isParamSetByUser(&quot;end_points&quot;)
+                    ? &amp;getParam&lt;std::vector&lt;Point&gt;&gt;(&quot;end_points&quot;)
+                    : nullptr),
+    _directions(parameters.isParamSetByUser(&quot;directions&quot;)
+                    ? &amp;getParam&lt;std::vector&lt;Point&gt;&gt;(&quot;directions&quot;)
+                    : nullptr),
+    _max_distances(parameters.isParamSetByUser(&quot;max_distances&quot;)
+                       ? &amp;getParam&lt;std::vector&lt;Real&gt;&gt;(&quot;max_distances&quot;)
+                       : nullptr),
+    _ray_data_indices(parameters.isParamSetByUser(&quot;ray_data_names&quot;)
+                          ? registerRayData(getParam&lt;std::vector&lt;std::string&gt;&gt;(&quot;ray_data_names&quot;))
+                          : std::vector&lt;RayDataIndex&gt;()),
+    _initial_ray_data(parameters.isParamSetByUser(&quot;initial_ray_data&quot;)
+                          ? &amp;getParam&lt;std::vector&lt;Real&gt;&gt;(&quot;initial_ray_data&quot;)
+                          : nullptr),
+    _ray_aux_data_indices(
+        parameters.isParamSetByUser(&quot;ray_aux_data_names&quot;)
+            ? registerRayAuxData(getParam&lt;std::vector&lt;std::string&gt;&gt;(&quot;ray_aux_data_names&quot;))
+            : std::vector&lt;RayDataIndex&gt;()),
+    _initial_ray_aux_data(parameters.isParamSetByUser(&quot;initial_ray_aux_data&quot;)
+                              ? &amp;getParam&lt;std::vector&lt;Real&gt;&gt;(&quot;initial_ray_aux_data&quot;)
+                              : nullptr)
+{
+  for (std::size_t i = 0; i &lt; _ids.size(); ++i)
+    if (_ids[i] == Ray::INVALID_RAY_ID)
+      paramError(&quot;names&quot;,
+                 &quot;Ray name &#x27;&quot;,
+                 getParam&lt;std::string&gt;(&quot;names&quot;)[i],
+                 &quot;&#x27; could not be registered. It may have been provided multiple times.&quot;);
+  if (_end_points &amp;&amp; _directions)
+    paramError(&quot;directions&quot;, &quot;Can only use &#x27;directions&#x27; or &#x27;end_points&#x27;, but not both&quot;);
+  if (_start_points.size() != _ids.size())
+    paramError(&quot;start_points&quot;, &quot;Not the same size as names&quot;);
+  if (_directions &amp;&amp; _ids.size() != _directions-&gt;size())
+    paramError(&quot;directions&quot;, &quot;Not the same size as names&quot;);
+  if (_max_distances)
+  {
+    if (!_directions)
+      paramError(&quot;max_distances&quot;,
+                 &quot;Can only be used when trajectories are set with the &#x27;directions&#x27; parameter&quot;);
+    if (_max_distances-&gt;size() != _start_points.size())
+      paramError(&quot;max_distances&quot;, &quot;Must be the same size as &#x27;start_points&#x27;&quot;);
+    for (const auto val : *_max_distances)
+      if (val &lt;= 0)
+        paramError(&quot;max_distances&quot;, &quot;Values must be positive&quot;);
+  }
+  if (_end_points &amp;&amp; _ids.size() != _end_points-&gt;size())
+    paramError(&quot;end_points&quot;, &quot;Not the same size as names&quot;);
+  if (!_ray_data_indices.empty() &amp;&amp; _initial_ray_data &amp;&amp;
+      _initial_ray_data-&gt;size() != _ray_data_indices.size())
+    paramError(&quot;initial_ray_data&quot;, &quot;Not the same size as ray_data_names&quot;);
+  if (_initial_ray_data &amp;&amp; _ray_data_indices.empty())
+    paramError(&quot;initial_ray_data&quot;, &quot;Can only be used if ray_data_names is set&quot;);
+  if (!_ray_aux_data_indices.empty() &amp;&amp; _initial_ray_aux_data &amp;&amp;
+      _initial_ray_aux_data-&gt;size() != _ray_aux_data_indices.size())
+    paramError(&quot;initial_ray_aux_data&quot;, &quot;Not the same size as ray_aux_data_names&quot;);
+  if (_initial_ray_aux_data &amp;&amp; _ray_aux_data_indices.empty())
+    paramError(&quot;initial_ray_aux_data&quot;, &quot;Can only be used if ray_aux_data_names is set&quot;);
+}
+
+void
+RepeatableRayStudy::defineRays()
+{
+  for (std::size_t i = 0; i &lt; _ids.size(); ++i)
+  {
+    std::shared_ptr&lt;Ray&gt; ray = acquireRay(/* tid = */ 0);
+
+    if (_end_points) // user set end point
+      ray-&gt;setStartEnd(_start_points[i], (*_end_points)[i]);
+    else // user set direction
+      ray-&gt;setStartDirection(_start_points[i], (*_directions)[i]);
+
+    // We already generated the IDs
+    ray-&gt;setID(_ids[i]);
+
+    // Set the data
+    ray-&gt;data().resize(rayDataSize(), 0);
+    if (_initial_ray_data)
+      for (std::size_t i = 0; i &lt; _ray_data_indices.size(); ++i)
+        ray-&gt;data(_ray_data_indices[i]) = (*_initial_ray_data)[i];
+
+    // Set the aux data
+    ray-&gt;auxData().resize(rayAuxDataSize(), 0);
+    if (_initial_ray_aux_data)
+      for (std::size_t i = 0; i &lt; _ray_aux_data_indices.size(); ++i)
+        ray-&gt;auxData(_ray_aux_data_indices[i]) = (*_initial_ray_aux_data)[i];
+
+    // User set max-distances
+    if (_max_distances)
+      ray-&gt;setMaxDistance((*_max_distances)[i]);
+
+    _rays.emplace_back(std::move(ray));
+  }
+}
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>In this case, the rays defined during <code>defineRays()</code> are replicated across all processors. Their start points are set but the starting elements and starting incoming sides are not set, therefore claiming is required.</p></section></section><section id="42e1f6f0-e1dd-4126-9569-38088b16cd1f" data-section-level="3" data-section-text="Claim Rays"><h3 id="claim-rays">Claim Rays</h3><p>Note that the actions that follow in this section are performed on the first execution of the study and thereafter only after each mesh change, because claiming afterwards is only needed when the mesh changes.</p><p>If the private parameter <code>_claim_after_define_rays == true</code>, the rays within <code>_rays</code> do not have their starting elements set and are not necessarily on the correct starting processor. The <code>_rays</code> are passed to the <a href="../ray_tracing/ClaimRays.html">ClaimRays</a> object and the result is <code>_local_rays</code> being filled with the rays that can be started in the local processor. This claiming is only performed in the first call of <code>generateRays()</code> and thereafter is only called after each mesh change to re-determine the starting elements and starting processors.</p><p>If the private parameter <code>_claim_after_define_rays == false</code>, the rays within <code>_rays</code> are already on their starting processor with the starting elements set. The <code>_rays</code> are then simply copied into <code>_local_rays</code>. Because all of the <a href="../ray_tracing/Ray.html">Ray</a> objects are actually shared pointers (<code>std::shared_ptr&lt;Ray&gt;</code>), this copying process does not actually &quot;copy&quot; the rays, it just points to the same objects that are in <code>_rays</code>. This &quot;copying&quot; is seen as:</p><pre class="moose-pre"><code class="language-cpp">  // The Rays in _rays are ready to go as is: they have their starting element
+  // set, their incoming set (if any), and are on the processor that owns said
+  // starting element. Therefore, we move them right into _local_rays and
+  // set that we don&#x27;t need to claim.
+  if (!_claim_after_define_rays)
+  {
+    _local_rays.reserve(_rays.size());
+    for (const std::shared_ptr&lt;Ray&gt; &amp; ray : _rays)
+      _local_rays.emplace_back(ray);
+
+    _should_claim_rays = false;
+  }
+</code></pre><a href="#42fffeaf-ad1a-4da6-b906-c32ac1c48ce2" class="modal-trigger">(modules/ray_tracing/src/userobjects/RepeatableRayStudyBase.C)</a><div class="modal moose-modal" id="42fffeaf-ad1a-4da6-b906-c32ac1c48ce2"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/modules/ray_tracing/src/userobjects/RepeatableRayStudyBase.C</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#include &quot;RepeatableRayStudyBase.h&quot;
+
+// MOOSE includes
+#include &quot;TimedPrint.h&quot;
+
+// libMesh includes
+#include &quot;libmesh/parallel_sync.h&quot;
+
+InputParameters
+RepeatableRayStudyBase::validParams()
+{
+  auto params = RayTracingStudy::validParams();
+
+  // Whether or not the _rays filled by defineRays() are replicated
+  // (the same across all processors)
+  params.addPrivateParam&lt;bool&gt;(&quot;_define_rays_replicated&quot;, true);
+  // Whether or not Rays need to be claimed after calling defineRays()
+  params.addPrivateParam&lt;bool&gt;(&quot;_claim_after_define_rays&quot;, true);
+
+  return params;
+}
+
+RepeatableRayStudyBase::RepeatableRayStudyBase(const InputParameters &amp; parameters)
+  : RayTracingStudy(parameters),
+    _define_rays_replicated(getParam&lt;bool&gt;(&quot;_claim_after_define_rays&quot;)
+                                ? getParam&lt;bool&gt;(&quot;_define_rays_replicated&quot;)
+                                : false),
+    _claim_after_define_rays(getParam&lt;bool&gt;(&quot;_claim_after_define_rays&quot;)),
+    _should_define_rays(true),
+    _claim_rays(_mesh, *this, _rays, _local_rays, /* do_exchange = */ !_define_rays_replicated),
+    _should_claim_rays(_claim_after_define_rays),
+    _claim_rays_timer(registerTimedSection(&quot;claimRays&quot;, 1)),
+    _define_rays_timer(registerTimedSection(&quot;defineRays&quot;, 1))
+{
+  if (!_claim_after_define_rays &amp;&amp; getParam&lt;bool&gt;(&quot;_define_rays_replicated&quot;))
+    mooseWarning(_error_prefix,
+                 &quot;: The combination of private parameters:&quot;,
+                 &quot;\n  &#x27;_define_rays_replicated&#x27; == true&quot;,
+                 &quot;\n  &#x27;_claim_after_define_rays&#x27; == false&quot;,
+                 &quot;\nis not a valid combination.&quot;,
+                 &quot;\n\n_define_rays_replicated is being set to false.&quot;);
+}
+
+void
+RepeatableRayStudyBase::generateRays()
+{
+  // Initially, the user is to define the Rays that they want to trace by overriding
+  // defineRays() and filling into _rays within this method. These Rays are not
+  // the Rays that will actually be traced, they just serve as a template for
+  // Rays that will be put into the tracer to be traced.
+  //
+  // If the priviate parameter &#x27;_claim_after_define_rays&#x27; == true, it is assumed
+  // that the Rays that were filled into _rays from the overridden defineRays()
+  // do not have their starting element and incoming sides set. The Rays in _rays
+  // will be &quot;claimed&quot; later and communicated to the processors that will start them
+  // with their starting element set and incoming side set (if any). An example of this
+  // is in RepeatableRayStudy.
+  //
+  // If the priviate parameter &#x27;_claim_after_define_rays&#x27; == false, it is assumed
+  // that the Rays that were filled into _rays from the overridden defineRays():
+  // - Have their starting element and incoming side (if applicable) set and it is
+  //   correct
+  // - Are on the processor that will start them (the processor that contains
+  //   the starting element)
+  // At this point, the Rays in _rays will be also inserted into _local_rays
+  // because they are on the right processor with starting information set.
+  // An example of this is in LotsOfRaysRayStudy.
+  if (_should_define_rays)
+  {
+    _should_define_rays = false;
+
+    defineRaysInternal();
+  }
+
+  if (_should_claim_rays)
+  {
+    _should_claim_rays = false;
+
+    claimRaysInternal();
+  }
+
+  // Reserve ahead of time how many Rays we are adding to the buffer
+  reserveRayBuffer(_local_rays.size());
+
+  // To make this study &quot;repeatable&quot;, we will not trace the Rays that
+  // are ready to go in _local_rays. We will instead create new Rays
+  // that are duplicates of the ones in _local_rays, and trace those.
+  // This ensures that on multiple executions of this study, we always
+  // have the information to create the same Rays.
+  for (const auto &amp; ray : _local_rays)
+  {
+    // This acquires a new ray that is copied from a Ray that has already
+    // been claimed to begin on this processor with the user-defined trajectory
+    std::shared_ptr&lt;Ray&gt; copied_ray = acquireRay(/* tid = */ 0, *ray);
+
+    // Size data on the ray per the size needed per the study in case it wasn&#x27;t
+    // set in defineRays()
+    copied_ray-&gt;data().resize(rayDataSize(), 0);
+    copied_ray-&gt;auxData().resize(rayAuxDataSize(), 0);
+
+    // This calls std::move() on the ray, which means that copied_ray in this context
+    // is no longer valid. We use the move method because copied_ray is a shared_ptr
+    // and otherwise we would increase the count as we add it to the buffer and also
+    // decrease the count once this goes out of scope.
+    moveRayToBuffer(copied_ray);
+  }
+}
+
+void
+RepeatableRayStudyBase::meshChanged()
+{
+  RayTracingStudy::meshChanged();
+
+  _should_claim_rays = true;
+
+  // Invalidate all of the old starting info because we can&#x27;t be sure those elements still exist
+  for (const auto &amp; ray : _rays)
+    ray-&gt;invalidateStartingElem();
+  for (const auto &amp; ray : _local_rays)
+    ray-&gt;invalidateStartingElem();
+}
+
+void
+RepeatableRayStudyBase::claimRaysInternal()
+{
+  TIME_SECTION(_claim_rays_timer);
+
+  {
+    CONSOLE_TIMED_PRINT(&quot;Initializing ray claiming object&quot;);
+    _claim_rays.init();
+  }
+
+  {
+    CONSOLE_TIMED_PRINT(&quot;Claiming rays&quot;);
+    _claim_rays.claim();
+  }
+}
+
+void
+RepeatableRayStudyBase::defineRaysInternal()
+{
+  {
+    TIME_SECTION(_define_rays_timer);
+    CONSOLE_TIMED_PRINT(&quot;Defining rays&quot;);
+
+    _rays.clear();
+    _local_rays.clear();
+
+    defineRays();
+  }
+
+  // Do we actually have Rays
+  for (const auto &amp; ray : _rays)
+    if (!ray)
+      mooseError(_error_prefix, &quot;: A nullptr Ray was found in _rays after defineRays().&quot;);
+
+  // The Rays in _rays are ready to go as is: they have their starting element
+  // set, their incoming set (if any), and are on the processor that owns said
+  // starting element. Therefore, we move them right into _local_rays and
+  // set that we don&#x27;t need to claim.
+  if (!_claim_after_define_rays)
+  {
+    _local_rays.reserve(_rays.size());
+    for (const std::shared_ptr&lt;Ray&gt; &amp; ray : _rays)
+      _local_rays.emplace_back(ray);
+
+    _should_claim_rays = false;
+  }
+  // Claiming is required after defining. The Rays in _rays should not
+  // have their starting elems or incoming sides set - verify that.
+  else
+  {
+    for (const std::shared_ptr&lt;Ray&gt; &amp; ray : _rays)
+      if (ray-&gt;startingElem() || !ray-&gt;invalidStartingIncomingSide())
+        mooseError(
+            _error_prefix,
+            &quot;: A Ray was found in _rays after defineRays() that has a starting element or &quot;
+            &quot;incoming side set.\n\n&quot;,
+            &quot;With the mode in which the private param &#x27;_claim_after_define_rays&#x27; == true,&quot;,
+            &quot;\nthe defined Rays at this point should not have their starting elem/side set.\n&quot;,
+            &quot;\nTheir starting information will be set internally using a claiming process.\n\n&quot;,
+            ray-&gt;getInfo(this));
+  }
+
+  // Sanity checks on if the Rays are actually replicated
+  if (_define_rays_replicated)
+    verifyReplicatedRays();
+}
+
+void
+RepeatableRayStudyBase::verifyReplicatedRays()
+{
+  // First, verify that our _rays have unique IDs beacuse we will do mapping based on Ray ID
+  verifyUniqueRayIDs(
+      _rays.begin(), _rays.end(), /* global = */ false, &quot;in _rays after calling defineRays().&quot;);
+
+  const std::string error_suffix =
+      &quot;\n\nThe Rays added in defineRays() must be replicated across all processors\nwith the &quot;
+      &quot;private param &#x27;_define_rays_replicated&#x27; == true.&quot;;
+
+#ifndef NDEBUG
+  // The Rays that non-root procs will send to root
+  std::unordered_map&lt;processor_id_type, std::vector&lt;std::shared_ptr&lt;Ray&gt;&gt;&gt; send_to_root;
+  // The map of RayID -&gt; Ray on the root proc for comparison with other procs
+  std::unordered_map&lt;RayID, const Ray *&gt; root_ray_map;
+  // Ship our Rays to send to root
+  if (_pid != 0)
+  {
+    auto &amp; entry = send_to_root[0];
+    entry.reserve(_rays.size());
+    for (const auto &amp; ray : _rays)
+      entry.emplace_back(ray);
+  }
+  // Root will create a map of its Rays for comparison with others
+  else
+    for (const auto &amp; ray : _rays)
+      root_ray_map.emplace(ray-&gt;id(), ray.get());
+
+  auto compare_functor = [&amp;](processor_id_type pid,
+                             const std::vector&lt;std::shared_ptr&lt;Ray&gt;&gt; &amp; rays) {
+    for (const auto &amp; ray : rays)
+    {
+      const auto find = root_ray_map.find(ray-&gt;id());
+      if (find == root_ray_map.end())
+        mooseError(_error_prefix,
+                   &quot;: A non-replicated Ray was found on pid &quot;,
+                   pid,
+                   error_suffix,
+                   &quot;\n\n&quot;,
+                   ray-&gt;getInfo(this));
+
+      const Ray * root_ray = find-&gt;second;
+      if (*root_ray != *ray)
+      {
+        mooseError(_error_prefix,
+                   &quot;: A non-replicated Ray was found on pid &quot;,
+                   pid,
+                   error_suffix,
+                   &quot;\n\nOffending Ray information:\n\n&quot;,
+                   ray-&gt;getInfo(this),
+                   &quot;\n&quot;,
+                   root_ray-&gt;getInfo(this));
+      }
+    }
+  };
+  Parallel::push_parallel_packed_range(
+      _comm, send_to_root, (RayTracingStudy *)this, compare_functor);
+#endif
+
+  std::vector&lt;std::size_t&gt; proc_sizes;
+  comm().gather(0, _rays.size(), proc_sizes);
+  if (_pid == 0)
+    for (processor_id_type pid = 0; pid &lt; n_processors(); ++pid)
+      if (proc_sizes[pid] != _rays.size())
+        mooseError(_error_prefix,
+                   &quot;: The size of _rays after defineRays() are not the same on processor &quot;,
+                   pid,
+                   error_suffix);
+}
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section id="7392fb6f-80cf-44d0-b4fd-56029fbf20bd" data-section-level="3" data-section-text="Copy Rays"><h3 id="copy-rays">Copy Rays</h3><p>In every execution of the study, all of the rays in <code>_local_rays</code> are copied and inserted into the buffer to be traced. An actual copy takes place here - we want the rays within <code>_local_rays</code> to always be valid so that on later executions of the study, we can produce repeatable behavior in terms of the rays that are being traced.</p><pre class="moose-pre"><code class="language-cpp">  // Reserve ahead of time how many Rays we are adding to the buffer
+  reserveRayBuffer(_local_rays.size());
+
+  // To make this study &quot;repeatable&quot;, we will not trace the Rays that
+  // are ready to go in _local_rays. We will instead create new Rays
+  // that are duplicates of the ones in _local_rays, and trace those.
+  // This ensures that on multiple executions of this study, we always
+  // have the information to create the same Rays.
+  for (const auto &amp; ray : _local_rays)
+  {
+    // This acquires a new ray that is copied from a Ray that has already
+    // been claimed to begin on this processor with the user-defined trajectory
+    std::shared_ptr&lt;Ray&gt; copied_ray = acquireRay(/* tid = */ 0, *ray);
+
+    // Size data on the ray per the size needed per the study in case it wasn&#x27;t
+    // set in defineRays()
+    copied_ray-&gt;data().resize(rayDataSize(), 0);
+    copied_ray-&gt;auxData().resize(rayAuxDataSize(), 0);
+
+    // This calls std::move() on the ray, which means that copied_ray in this context
+    // is no longer valid. We use the move method because copied_ray is a shared_ptr
+    // and otherwise we would increase the count as we add it to the buffer and also
+    // decrease the count once this goes out of scope.
+    moveRayToBuffer(copied_ray);
+  }
+</code></pre><a href="#3301283f-5183-4a51-b923-10b1bfef55c3" class="modal-trigger">(modules/ray_tracing/src/userobjects/RepeatableRayStudyBase.C)</a><div class="modal moose-modal" id="3301283f-5183-4a51-b923-10b1bfef55c3"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/modules/ray_tracing/src/userobjects/RepeatableRayStudyBase.C</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#include &quot;RepeatableRayStudyBase.h&quot;
+
+// MOOSE includes
+#include &quot;TimedPrint.h&quot;
+
+// libMesh includes
+#include &quot;libmesh/parallel_sync.h&quot;
+
+InputParameters
+RepeatableRayStudyBase::validParams()
+{
+  auto params = RayTracingStudy::validParams();
+
+  // Whether or not the _rays filled by defineRays() are replicated
+  // (the same across all processors)
+  params.addPrivateParam&lt;bool&gt;(&quot;_define_rays_replicated&quot;, true);
+  // Whether or not Rays need to be claimed after calling defineRays()
+  params.addPrivateParam&lt;bool&gt;(&quot;_claim_after_define_rays&quot;, true);
+
+  return params;
+}
+
+RepeatableRayStudyBase::RepeatableRayStudyBase(const InputParameters &amp; parameters)
+  : RayTracingStudy(parameters),
+    _define_rays_replicated(getParam&lt;bool&gt;(&quot;_claim_after_define_rays&quot;)
+                                ? getParam&lt;bool&gt;(&quot;_define_rays_replicated&quot;)
+                                : false),
+    _claim_after_define_rays(getParam&lt;bool&gt;(&quot;_claim_after_define_rays&quot;)),
+    _should_define_rays(true),
+    _claim_rays(_mesh, *this, _rays, _local_rays, /* do_exchange = */ !_define_rays_replicated),
+    _should_claim_rays(_claim_after_define_rays),
+    _claim_rays_timer(registerTimedSection(&quot;claimRays&quot;, 1)),
+    _define_rays_timer(registerTimedSection(&quot;defineRays&quot;, 1))
+{
+  if (!_claim_after_define_rays &amp;&amp; getParam&lt;bool&gt;(&quot;_define_rays_replicated&quot;))
+    mooseWarning(_error_prefix,
+                 &quot;: The combination of private parameters:&quot;,
+                 &quot;\n  &#x27;_define_rays_replicated&#x27; == true&quot;,
+                 &quot;\n  &#x27;_claim_after_define_rays&#x27; == false&quot;,
+                 &quot;\nis not a valid combination.&quot;,
+                 &quot;\n\n_define_rays_replicated is being set to false.&quot;);
+}
+
+void
+RepeatableRayStudyBase::generateRays()
+{
+  // Initially, the user is to define the Rays that they want to trace by overriding
+  // defineRays() and filling into _rays within this method. These Rays are not
+  // the Rays that will actually be traced, they just serve as a template for
+  // Rays that will be put into the tracer to be traced.
+  //
+  // If the priviate parameter &#x27;_claim_after_define_rays&#x27; == true, it is assumed
+  // that the Rays that were filled into _rays from the overridden defineRays()
+  // do not have their starting element and incoming sides set. The Rays in _rays
+  // will be &quot;claimed&quot; later and communicated to the processors that will start them
+  // with their starting element set and incoming side set (if any). An example of this
+  // is in RepeatableRayStudy.
+  //
+  // If the priviate parameter &#x27;_claim_after_define_rays&#x27; == false, it is assumed
+  // that the Rays that were filled into _rays from the overridden defineRays():
+  // - Have their starting element and incoming side (if applicable) set and it is
+  //   correct
+  // - Are on the processor that will start them (the processor that contains
+  //   the starting element)
+  // At this point, the Rays in _rays will be also inserted into _local_rays
+  // because they are on the right processor with starting information set.
+  // An example of this is in LotsOfRaysRayStudy.
+  if (_should_define_rays)
+  {
+    _should_define_rays = false;
+
+    defineRaysInternal();
+  }
+
+  if (_should_claim_rays)
+  {
+    _should_claim_rays = false;
+
+    claimRaysInternal();
+  }
+
+  // Reserve ahead of time how many Rays we are adding to the buffer
+  reserveRayBuffer(_local_rays.size());
+
+  // To make this study &quot;repeatable&quot;, we will not trace the Rays that
+  // are ready to go in _local_rays. We will instead create new Rays
+  // that are duplicates of the ones in _local_rays, and trace those.
+  // This ensures that on multiple executions of this study, we always
+  // have the information to create the same Rays.
+  for (const auto &amp; ray : _local_rays)
+  {
+    // This acquires a new ray that is copied from a Ray that has already
+    // been claimed to begin on this processor with the user-defined trajectory
+    std::shared_ptr&lt;Ray&gt; copied_ray = acquireRay(/* tid = */ 0, *ray);
+
+    // Size data on the ray per the size needed per the study in case it wasn&#x27;t
+    // set in defineRays()
+    copied_ray-&gt;data().resize(rayDataSize(), 0);
+    copied_ray-&gt;auxData().resize(rayAuxDataSize(), 0);
+
+    // This calls std::move() on the ray, which means that copied_ray in this context
+    // is no longer valid. We use the move method because copied_ray is a shared_ptr
+    // and otherwise we would increase the count as we add it to the buffer and also
+    // decrease the count once this goes out of scope.
+    moveRayToBuffer(copied_ray);
+  }
+}
+
+void
+RepeatableRayStudyBase::meshChanged()
+{
+  RayTracingStudy::meshChanged();
+
+  _should_claim_rays = true;
+
+  // Invalidate all of the old starting info because we can&#x27;t be sure those elements still exist
+  for (const auto &amp; ray : _rays)
+    ray-&gt;invalidateStartingElem();
+  for (const auto &amp; ray : _local_rays)
+    ray-&gt;invalidateStartingElem();
+}
+
+void
+RepeatableRayStudyBase::claimRaysInternal()
+{
+  TIME_SECTION(_claim_rays_timer);
+
+  {
+    CONSOLE_TIMED_PRINT(&quot;Initializing ray claiming object&quot;);
+    _claim_rays.init();
+  }
+
+  {
+    CONSOLE_TIMED_PRINT(&quot;Claiming rays&quot;);
+    _claim_rays.claim();
+  }
+}
+
+void
+RepeatableRayStudyBase::defineRaysInternal()
+{
+  {
+    TIME_SECTION(_define_rays_timer);
+    CONSOLE_TIMED_PRINT(&quot;Defining rays&quot;);
+
+    _rays.clear();
+    _local_rays.clear();
+
+    defineRays();
+  }
+
+  // Do we actually have Rays
+  for (const auto &amp; ray : _rays)
+    if (!ray)
+      mooseError(_error_prefix, &quot;: A nullptr Ray was found in _rays after defineRays().&quot;);
+
+  // The Rays in _rays are ready to go as is: they have their starting element
+  // set, their incoming set (if any), and are on the processor that owns said
+  // starting element. Therefore, we move them right into _local_rays and
+  // set that we don&#x27;t need to claim.
+  if (!_claim_after_define_rays)
+  {
+    _local_rays.reserve(_rays.size());
+    for (const std::shared_ptr&lt;Ray&gt; &amp; ray : _rays)
+      _local_rays.emplace_back(ray);
+
+    _should_claim_rays = false;
+  }
+  // Claiming is required after defining. The Rays in _rays should not
+  // have their starting elems or incoming sides set - verify that.
+  else
+  {
+    for (const std::shared_ptr&lt;Ray&gt; &amp; ray : _rays)
+      if (ray-&gt;startingElem() || !ray-&gt;invalidStartingIncomingSide())
+        mooseError(
+            _error_prefix,
+            &quot;: A Ray was found in _rays after defineRays() that has a starting element or &quot;
+            &quot;incoming side set.\n\n&quot;,
+            &quot;With the mode in which the private param &#x27;_claim_after_define_rays&#x27; == true,&quot;,
+            &quot;\nthe defined Rays at this point should not have their starting elem/side set.\n&quot;,
+            &quot;\nTheir starting information will be set internally using a claiming process.\n\n&quot;,
+            ray-&gt;getInfo(this));
+  }
+
+  // Sanity checks on if the Rays are actually replicated
+  if (_define_rays_replicated)
+    verifyReplicatedRays();
+}
+
+void
+RepeatableRayStudyBase::verifyReplicatedRays()
+{
+  // First, verify that our _rays have unique IDs beacuse we will do mapping based on Ray ID
+  verifyUniqueRayIDs(
+      _rays.begin(), _rays.end(), /* global = */ false, &quot;in _rays after calling defineRays().&quot;);
+
+  const std::string error_suffix =
+      &quot;\n\nThe Rays added in defineRays() must be replicated across all processors\nwith the &quot;
+      &quot;private param &#x27;_define_rays_replicated&#x27; == true.&quot;;
+
+#ifndef NDEBUG
+  // The Rays that non-root procs will send to root
+  std::unordered_map&lt;processor_id_type, std::vector&lt;std::shared_ptr&lt;Ray&gt;&gt;&gt; send_to_root;
+  // The map of RayID -&gt; Ray on the root proc for comparison with other procs
+  std::unordered_map&lt;RayID, const Ray *&gt; root_ray_map;
+  // Ship our Rays to send to root
+  if (_pid != 0)
+  {
+    auto &amp; entry = send_to_root[0];
+    entry.reserve(_rays.size());
+    for (const auto &amp; ray : _rays)
+      entry.emplace_back(ray);
+  }
+  // Root will create a map of its Rays for comparison with others
+  else
+    for (const auto &amp; ray : _rays)
+      root_ray_map.emplace(ray-&gt;id(), ray.get());
+
+  auto compare_functor = [&amp;](processor_id_type pid,
+                             const std::vector&lt;std::shared_ptr&lt;Ray&gt;&gt; &amp; rays) {
+    for (const auto &amp; ray : rays)
+    {
+      const auto find = root_ray_map.find(ray-&gt;id());
+      if (find == root_ray_map.end())
+        mooseError(_error_prefix,
+                   &quot;: A non-replicated Ray was found on pid &quot;,
+                   pid,
+                   error_suffix,
+                   &quot;\n\n&quot;,
+                   ray-&gt;getInfo(this));
+
+      const Ray * root_ray = find-&gt;second;
+      if (*root_ray != *ray)
+      {
+        mooseError(_error_prefix,
+                   &quot;: A non-replicated Ray was found on pid &quot;,
+                   pid,
+                   error_suffix,
+                   &quot;\n\nOffending Ray information:\n\n&quot;,
+                   ray-&gt;getInfo(this),
+                   &quot;\n&quot;,
+                   root_ray-&gt;getInfo(this));
+      }
+    }
+  };
+  Parallel::push_parallel_packed_range(
+      _comm, send_to_root, (RayTracingStudy *)this, compare_functor);
+#endif
+
+  std::vector&lt;std::size_t&gt; proc_sizes;
+  comm().gather(0, _rays.size(), proc_sizes);
+  if (_pid == 0)
+    for (processor_id_type pid = 0; pid &lt; n_processors(); ++pid)
+      if (proc_sizes[pid] != _rays.size())
+        mooseError(_error_prefix,
+                   &quot;: The size of _rays after defineRays() are not the same on processor &quot;,
+                   pid,
+                   error_suffix);
+}
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#e93a70f2-b8ca-4559-b7ee-d8b4d331f456" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#bb90ca9a-bad1-4542-9f15-0cc648469b28" class="tooltipped" data-position="left" data-tooltip="Process">Process</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

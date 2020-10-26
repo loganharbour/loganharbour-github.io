@@ -1,4 +1,4 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>ActuallyExplicitEuler.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="8a6f5029-0172-493e-b77d-7063e766950b"><i class="material-icons">menu</i></a><ul class="sidenav" id="8a6f5029-0172-493e-b77d-7063e766950b"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">timeintegrators</span><a href="#" class="breadcrumb">ActuallyExplicitEuler</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="30f774ed-503f-4439-8d53-01ee83b2bb2c" data-section-level="1" data-section-text="ActuallyExplicitEuler"><h1 id="actuallyexpliciteuler">ActuallyExplicitEuler</h1><p>This time integrator is an implementation of forward/explicit Euler based on <a href="ExplicitTimeIntegrator.html">ExplicitTimeIntegrator</a>, which avoids a nonlinear solve.</p><section class="scrollspy" id="846be756-222b-401f-b253-51303d4f1396" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="97299003-0ea7-413a-89f0-90283926fa30" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">solve_type</span><span class="moose-parameter-header-default">consistent</span><span class="moose-parameter-header-description">The way to solve the system.  A 'consistent' solve uses the full mass matrix and actually needs to use a linear solver to solve the problem.  'lumped' uses a lumped mass matrix with a simple inversion - incredibly fast but may be less accurate.  'lump_preconditioned' uses the lumped mass matrix as a preconditioner for the 'consistent' solve</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>consistent</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>consistent lumped lump_preconditioned</p><p class="moose-parameter-description"><span>Description:</span>The way to solve the system.  A 'consistent' solve uses the full mass matrix and actually needs to use a linear solver to solve the problem.  'lumped' uses a lumped mass matrix with a simple inversion - incredibly fast but may be less accurate.  'lump_preconditioned' uses the lumped mass matrix as a preconditioner for the 'consistent' solve</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="27e8b489-1787-4935-81a5-11f45c6bf389" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="0f5f37f8-371b-4e9b-b869-3d53530ee42d" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#7921183d-e4ea-45df-9a25-9bcc7cd70258" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler/actually_explicit_euler_lumped.i</a></li><li><a href="#a048bc56-8ea0-4de6-bdc7-b48715370838" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler_verification/ee-ode.i</a></li><li><a href="#8938977c-16a0-4f8e-ac1d-9551de103bec" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler_verification/ee-1d-quadratic.i</a></li><li><a href="#c566142a-f227-493d-be7e-2ae913b361b6" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler_verification/ee-1d-quadratic-neumann.i</a></li><li><a href="#fdd1bd9b-53dd-495f-8b6d-96b1b1e8dce4" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler/actually_explicit_euler_lump_preconditioned.i</a></li><li><a href="#b4d965be-ab9e-466c-9fcc-873628f1e0f8" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler_verification/ee-2d-quadratic.i</a></li><li><a href="#5b836ba8-1c79-49cd-8d01-63bf5f1544e3" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler_verification/ee-2d-linear.i</a></li><li><a href="#45079295-5f9c-40a6-9c20-b3fbad9629c7" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler_verification/ee-1d-linear.i</a></li><li><a href="#5d10cedc-a217-43a7-9431-059ffc613ef8" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler/actually_explicit_euler.i</a></li><li><a href="#a6964c44-60d6-4767-b2f9-9237c57175a6" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler_verification/ee-2d-linear-adapt.i</a></li><li><a href="#bb82232c-4038-4fcb-84c3-97badcbdd6c6" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler/diverged.i</a></li></ul><div class="modal moose-modal" id="7921183d-e4ea-45df-9a25-9bcc7cd70258"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler/actually_explicit_euler_lumped.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+<!DOCTYPE html><head><meta charset="UTF-8"><title>ActuallyExplicitEuler.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="cd3196f5-4e0f-4a1a-ac64-7d60e73fc17e"><i class="material-icons">menu</i></a><ul class="sidenav" id="cd3196f5-4e0f-4a1a-ac64-7d60e73fc17e"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">timeintegrators</span><a href="#" class="breadcrumb">ActuallyExplicitEuler</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="aa1596b1-69d1-4fc8-bc0f-9474bdf95a30" data-section-level="1" data-section-text="ActuallyExplicitEuler"><h1 id="actuallyexpliciteuler">ActuallyExplicitEuler</h1><p>This time integrator is an implementation of forward/explicit Euler based on <a href="ExplicitTimeIntegrator.html">ExplicitTimeIntegrator</a>, which avoids a nonlinear solve.</p><section class="scrollspy" id="9ec9126d-580a-47bd-afde-2cd82e8fece1" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="8c44a945-cd6d-46eb-a4c4-6ca342557aa7" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">solve_type</span><span class="moose-parameter-header-default">consistent</span><span class="moose-parameter-header-description">The way to solve the system.  A 'consistent' solve uses the full mass matrix and actually needs to use a linear solver to solve the problem.  'lumped' uses a lumped mass matrix with a simple inversion - incredibly fast but may be less accurate.  'lump_preconditioned' uses the lumped mass matrix as a preconditioner for the 'consistent' solve</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>consistent</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>consistent lumped lump_preconditioned</p><p class="moose-parameter-description"><span>Description:</span>The way to solve the system.  A 'consistent' solve uses the full mass matrix and actually needs to use a linear solver to solve the problem.  'lumped' uses a lumped mass matrix with a simple inversion - incredibly fast but may be less accurate.  'lump_preconditioned' uses the lumped mass matrix as a preconditioner for the 'consistent' solve</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="13bf53f1-987c-4c53-87c1-20e90115d148" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="e93c6d41-c437-4e4a-bb91-204fbed30976" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#c90d9e40-6faf-4842-8778-deb2ea7f247c" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler/actually_explicit_euler_lump_preconditioned.i</a></li><li><a href="#8e678920-29dd-45d1-bdc3-a9b19a1cede9" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler_verification/ee-1d-quadratic.i</a></li><li><a href="#5a7b0df8-37be-413f-ae8a-47056df72b35" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler/actually_explicit_euler_lumped.i</a></li><li><a href="#af721767-3a43-497a-8006-07905b708b88" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler_verification/ee-1d-quadratic-neumann.i</a></li><li><a href="#d8674f86-c1aa-453f-b685-8733a955356d" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler_verification/ee-2d-quadratic.i</a></li><li><a href="#c65abf2f-d619-479f-8cec-e01996a4118e" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler_verification/ee-ode.i</a></li><li><a href="#c9d84853-5623-472d-91de-d6eec53f5abf" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler_verification/ee-2d-linear-adapt.i</a></li><li><a href="#4cca6ed8-6823-41a9-8993-e118b1374c84" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler/diverged.i</a></li><li><a href="#23e4f80e-1e73-4dc6-b54f-8acc1b3bfec2" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler_verification/ee-1d-linear.i</a></li><li><a href="#a3d08c8c-f02c-43e3-9d19-d62e61eec1ce" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler/actually_explicit_euler.i</a></li><li><a href="#dfadf731-b2d6-4a24-a738-d01151045e89" class="modal-trigger">test/tests/time_integrators/actually_explicit_euler_verification/ee-2d-linear.i</a></li></ul><div class="modal moose-modal" id="c90d9e40-6faf-4842-8778-deb2ea7f247c"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler/actually_explicit_euler_lump_preconditioned.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
@@ -42,64 +42,19 @@
 [Executioner]
   type = Transient
   num_steps = 10
-  dt = 0.001
-
+  dt = 0.0001
+  l_tol = 1e-12
 
   [./TimeIntegrator]
     type = ActuallyExplicitEuler
-    solve_type = lumped
+    solve_type = lump_preconditioned
   [../]
 []
 
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a048bc56-8ea0-4de6-bdc7-b48715370838"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler_verification/ee-ode.i</h4><pre class="moose-pre"><code class="language-text"># Tests that ActuallyExplicitEuler works with scalar variables.
-#
-# The ODE and IC used are the following:
-#   du/dt = 2,       u(0) = 0
-# Thus the solution is u(t) = 2*t.
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 1
-[]
-
-[Variables]
-  [./u]
-    family = SCALAR
-    order = FIRST
-    initial_condition = 0
-  [../]
-[]
-
-[ScalarKernels]
-  [./time]
-    type = ODETimeDerivative
-    variable = u
-  [../]
-  [./source]
-    type = ParsedODEKernel
-    variable = u
-    function = -2
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-
-  [./TimeIntegrator]
-    type = ActuallyExplicitEuler
-  [../]
-  dt = 1
-  num_steps = 5
-[]
-
-[Outputs]
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8938977c-16a0-4f8e-ac1d-9551de103bec"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler_verification/ee-1d-quadratic.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8e678920-29dd-45d1-bdc3-a9b19a1cede9"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler_verification/ee-1d-quadratic.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 1
   xmin = -1
@@ -193,7 +148,63 @@
     max_rows = 10
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c566142a-f227-493d-be7e-2ae913b361b6"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler_verification/ee-1d-quadratic-neumann.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5a7b0df8-37be-413f-ae8a-47056df72b35"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler/actually_explicit_euler_lumped.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = CoefDiffusion
+    variable = u
+    coef = 0.1
+  [../]
+  [./time]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    preset = false
+    boundary = &#x27;left&#x27;
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    preset = false
+    boundary = &#x27;right&#x27;
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 10
+  dt = 0.001
+
+
+  [./TimeIntegrator]
+    type = ActuallyExplicitEuler
+    solve_type = lumped
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="af721767-3a43-497a-8006-07905b708b88"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler_verification/ee-1d-quadratic-neumann.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 1
   xmin = -1
@@ -307,63 +318,7 @@
     max_rows = 10
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fdd1bd9b-53dd-495f-8b6d-96b1b1e8dce4"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler/actually_explicit_euler_lump_preconditioned.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = CoefDiffusion
-    variable = u
-    coef = 0.1
-  [../]
-  [./time]
-    type = TimeDerivative
-    variable = u
-  [../]
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    preset = false
-    boundary = &#x27;left&#x27;
-    value = 0
-  [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    preset = false
-    boundary = &#x27;right&#x27;
-    value = 1
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 10
-  dt = 0.0001
-  l_tol = 1e-12
-
-  [./TimeIntegrator]
-    type = ActuallyExplicitEuler
-    solve_type = lump_preconditioned
-  [../]
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b4d965be-ab9e-466c-9fcc-873628f1e0f8"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler_verification/ee-2d-quadratic.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d8674f86-c1aa-453f-b685-8733a955356d"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler_verification/ee-2d-quadratic.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   xmin = -1
@@ -460,253 +415,52 @@
     max_rows = 10
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5b836ba8-1c79-49cd-8d01-63bf5f1544e3"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler_verification/ee-2d-linear.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = -1
-  xmax = 1
-  ymin = -1
-  ymax = 1
-  nx = 10
-  ny = 10
-  elem_type = QUAD4
-[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c65abf2f-d619-479f-8cec-e01996a4118e"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler_verification/ee-ode.i</h4><pre class="moose-pre"><code class="language-text"># Tests that ActuallyExplicitEuler works with scalar variables.
+#
+# The ODE and IC used are the following:
+#   du/dt = 2,       u(0) = 0
+# Thus the solution is u(t) = 2*t.
 
-[Functions]
-  [./ic]
-    type = ParsedFunction
-    value = 0
-  [../]
-
-  [./forcing_fn]
-    type = ParsedFunction
-    value = (x+y)
-  [../]
-
-  [./exact_fn]
-    type = ParsedFunction
-    value = t*(x+y)
-  [../]
-[]
-
-[Variables]
-  [./u]
-    order = FIRST
-    family = LAGRANGE
-
-    [./InitialCondition]
-      type = FunctionIC
-      function = ic
-    [../]
-  [../]
-[]
-
-[Kernels]
-  [./ie]
-    type = TimeDerivative
-    variable = u
-  [../]
-
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-
-  [./ffn]
-    type = BodyForce
-    variable = u
-    function = forcing_fn
-  [../]
-[]
-
-[BCs]
-  [./all]
-    type = FunctionDirichletBC
-    variable = u
-    preset = false
-    boundary = &#x27;0 1 2 3&#x27;
-    function = exact_fn
-  [../]
-[]
-
-[Postprocessors]
-  [./l2_err]
-    type = ElementL2Error
-    variable = u
-    function = exact_fn
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-
-  start_time = 0.0
-  num_steps = 20
-  dt = 0.00005
-  l_tol = 1e-12
-
-  [./TimeIntegrator]
-    type = ActuallyExplicitEuler
-  [../]
-[]
-
-[Outputs]
-  exodus = true
-  [./console]
-    type = Console
-    max_rows = 10
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="45079295-5f9c-40a6-9c20-b3fbad9629c7"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler_verification/ee-1d-linear.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+[Mesh]
   type = GeneratedMesh
   dim = 1
-  xmin = -1
-  xmax = 1
-  nx = 200
-  elem_type = EDGE2
-[]
-
-[Functions]
-  [./ic]
-    type = ParsedFunction
-    value = 0
-  [../]
-
-  [./forcing_fn]
-    type = ParsedFunction
-    value = x
-  [../]
-
-  [./exact_fn]
-    type = ParsedFunction
-    value = t*x
-  [../]
+  nx = 1
 []
 
 [Variables]
   [./u]
+    family = SCALAR
     order = FIRST
-    family = LAGRANGE
-
-    [./InitialCondition]
-      type = FunctionIC
-      function = ic
-    [../]
+    initial_condition = 0
   [../]
 []
 
-[Kernels]
-  [./ie]
-    type = TimeDerivative
-    variable = u
-    lumping = true
-  [../]
-
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-
-  [./ffn]
-    type = BodyForce
-    variable = u
-    function = forcing_fn
-  [../]
-[]
-
-[BCs]
-  [./all]
-    type = FunctionDirichletBC
-    variable = u
-    preset = false
-    boundary = &#x27;0 1&#x27;
-    function = exact_fn
-  [../]
-[]
-
-[Postprocessors]
-  [./l2_err]
-    type = ElementL2Error
-    variable = u
-    function = exact_fn
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-
-  start_time = 0.0
-  num_steps = 20
-  dt = 0.00005
-
-  [./TimeIntegrator]
-    type = ActuallyExplicitEuler
-  [../]
-[]
-
-[Outputs]
-  exodus = true
-  [./console]
-    type = Console
-    max_rows = 10
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5d10cedc-a217-43a7-9431-059ffc613ef8"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler/actually_explicit_euler.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = CoefDiffusion
-    variable = u
-    coef = 0.1
-  [../]
+[ScalarKernels]
   [./time]
-    type = TimeDerivative
+    type = ODETimeDerivative
     variable = u
   [../]
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
+  [./source]
+    type = ParsedODEKernel
     variable = u
-    preset = false
-    boundary = &#x27;left&#x27;
-    value = 0
-  [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    preset = false
-    boundary = &#x27;right&#x27;
-    value = 1
+    function = -2
   [../]
 []
 
 [Executioner]
   type = Transient
-  num_steps = 10
-  dt = 0.001
-  l_tol = 1e-12
 
   [./TimeIntegrator]
     type = ActuallyExplicitEuler
   [../]
+  dt = 1
+  num_steps = 5
 []
 
 [Outputs]
-  exodus = true
+  csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a6964c44-60d6-4767-b2f9-9237c57175a6"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler_verification/ee-2d-linear-adapt.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c9d84853-5623-472d-91de-d6eec53f5abf"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler_verification/ee-2d-linear-adapt.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   xmin = -1
@@ -818,7 +572,7 @@
     max_rows = 10
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="bb82232c-4038-4fcb-84c3-97badcbdd6c6"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler/diverged.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4cca6ed8-6823-41a9-8993-e118b1374c84"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler/diverged.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
@@ -878,7 +632,253 @@
 [Outputs]
   exodus = false
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="c1eadc14-fc0f-4127-9cd0-c1baf891910f" data-section-level="2" data-section-text="Child Objects"><h2 id="child-objects">Child Objects</h2><ul class="moose-list-children browser-default"><li><a href="#6c00911e-fe5d-4314-b9c5-828fed78f90d" class="modal-trigger">framework/include/timeintegrators/CentralDifference.h</a></li></ul><div class="modal moose-modal" id="6c00911e-fe5d-4314-b9c5-828fed78f90d"><div class="modal-content"><h4>framework/include/timeintegrators/CentralDifference.h</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="23e4f80e-1e73-4dc6-b54f-8acc1b3bfec2"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler_verification/ee-1d-linear.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmin = -1
+  xmax = 1
+  nx = 200
+  elem_type = EDGE2
+[]
+
+[Functions]
+  [./ic]
+    type = ParsedFunction
+    value = 0
+  [../]
+
+  [./forcing_fn]
+    type = ParsedFunction
+    value = x
+  [../]
+
+  [./exact_fn]
+    type = ParsedFunction
+    value = t*x
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+
+    [./InitialCondition]
+      type = FunctionIC
+      function = ic
+    [../]
+  [../]
+[]
+
+[Kernels]
+  [./ie]
+    type = TimeDerivative
+    variable = u
+    lumping = true
+  [../]
+
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./ffn]
+    type = BodyForce
+    variable = u
+    function = forcing_fn
+  [../]
+[]
+
+[BCs]
+  [./all]
+    type = FunctionDirichletBC
+    variable = u
+    preset = false
+    boundary = &#x27;0 1&#x27;
+    function = exact_fn
+  [../]
+[]
+
+[Postprocessors]
+  [./l2_err]
+    type = ElementL2Error
+    variable = u
+    function = exact_fn
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  start_time = 0.0
+  num_steps = 20
+  dt = 0.00005
+
+  [./TimeIntegrator]
+    type = ActuallyExplicitEuler
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  [./console]
+    type = Console
+    max_rows = 10
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a3d08c8c-f02c-43e3-9d19-d62e61eec1ce"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler/actually_explicit_euler.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = CoefDiffusion
+    variable = u
+    coef = 0.1
+  [../]
+  [./time]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    preset = false
+    boundary = &#x27;left&#x27;
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    preset = false
+    boundary = &#x27;right&#x27;
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 10
+  dt = 0.001
+  l_tol = 1e-12
+
+  [./TimeIntegrator]
+    type = ActuallyExplicitEuler
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="dfadf731-b2d6-4a24-a738-d01151045e89"><div class="modal-content"><h4>test/tests/time_integrators/actually_explicit_euler_verification/ee-2d-linear.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -1
+  xmax = 1
+  ymin = -1
+  ymax = 1
+  nx = 10
+  ny = 10
+  elem_type = QUAD4
+[]
+
+[Functions]
+  [./ic]
+    type = ParsedFunction
+    value = 0
+  [../]
+
+  [./forcing_fn]
+    type = ParsedFunction
+    value = (x+y)
+  [../]
+
+  [./exact_fn]
+    type = ParsedFunction
+    value = t*(x+y)
+  [../]
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+
+    [./InitialCondition]
+      type = FunctionIC
+      function = ic
+    [../]
+  [../]
+[]
+
+[Kernels]
+  [./ie]
+    type = TimeDerivative
+    variable = u
+  [../]
+
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./ffn]
+    type = BodyForce
+    variable = u
+    function = forcing_fn
+  [../]
+[]
+
+[BCs]
+  [./all]
+    type = FunctionDirichletBC
+    variable = u
+    preset = false
+    boundary = &#x27;0 1 2 3&#x27;
+    function = exact_fn
+  [../]
+[]
+
+[Postprocessors]
+  [./l2_err]
+    type = ElementL2Error
+    variable = u
+    function = exact_fn
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  start_time = 0.0
+  num_steps = 20
+  dt = 0.00005
+  l_tol = 1e-12
+
+  [./TimeIntegrator]
+    type = ActuallyExplicitEuler
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  [./console]
+    type = Console
+    max_rows = 10
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="6e3bd6a7-e35e-4f51-aeb1-295d8d55f53a" data-section-level="2" data-section-text="Child Objects"><h2 id="child-objects">Child Objects</h2><ul class="moose-list-children browser-default"><li><a href="#3a871c5c-713f-44d0-9731-21668d0c986c" class="modal-trigger">framework/include/timeintegrators/CentralDifference.h</a></li></ul><div class="modal moose-modal" id="3a871c5c-713f-44d0-9731-21668d0c986c"><div class="modal-content"><h4>framework/include/timeintegrators/CentralDifference.h</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
 // https://www.mooseframework.org
 //
 // All rights reserved, see COPYRIGHT for full restrictions
@@ -958,4 +958,4 @@ CentralDifference::computeTimeDerivativeHelper(T &amp; u_dot,
   u_dotdot += u_old_old_old;
   u_dotdot *= 1.0 / (_dt * _dt);
 }
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#846be756-222b-401f-b253-51303d4f1396" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#0f5f37f8-371b-4e9b-b869-3d53530ee42d" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li><li><a href="#c1eadc14-fc0f-4127-9cd0-c1baf891910f" class="tooltipped" data-position="left" data-tooltip="Child Objects">Child Objects</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#9ec9126d-580a-47bd-afde-2cd82e8fece1" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#e93c6d41-c437-4e4a-bb91-204fbed30976" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li><li><a href="#6e3bd6a7-e35e-4f51-aeb1-295d8d55f53a" class="tooltipped" data-position="left" data-tooltip="Child Objects">Child Objects</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

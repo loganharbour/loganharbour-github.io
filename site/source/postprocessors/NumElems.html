@@ -1,8 +1,12 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>NumElems.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="6090f152-dce2-4b54-b83e-e8f31aea3de2"><i class="material-icons">menu</i></a><ul class="sidenav" id="6090f152-dce2-4b54-b83e-e8f31aea3de2"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">postprocessors</span><a href="#" class="breadcrumb">NumElems</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="e8f0aab8-54d9-4c7b-8f91-1041dc10e8e6" data-section-level="1" data-section-text="NumElems"><h1 id="numelems">NumElems</h1><p>The NumElems Postprocessor provides information about the number of elements in the simulation. This postprocessor is capable of providing either the active number of elements in the simulation (i.e. only the elements that are being used for calculations), or the total number of elements (i.e. includes parent elements of refined elements, which are maintained for the purpose of coarsening).</p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">note</span></div><div class="card-content"><div class="moose-alert-content"><p><p>This postprocessor returns the aggregate number of elements when using DistributedMesh.</p></p></div></div></div><section class="scrollspy" id="95c8e457-b702-42dd-b724-cb75a78c93f8" data-section-level="2" data-section-text="Syntax and Description"><h2 id="syntax-and-description">Syntax and Description</h2><p>Return the number of active or total elements in the simulation.</p></section><section class="scrollspy" id="7d74c300-c852-4e69-bc38-812d9bc321ed" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="8264197b-5dbe-4fcb-a2d7-305490d71aa0" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">elem_filter</span><span class="moose-parameter-header-default">active</span><span class="moose-parameter-header-description">The type of elements to include in the count (active, total). Default == active</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>active</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>active total</p><p class="moose-parameter-description"><span>Description:</span>The type of elements to include in the count (active, total). Default == active</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM TRANSFER</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="9c09c0d4-49bd-4707-82e8-6c912d37b65c" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">allow_duplicate_execution_on_initial</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preaux</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREAUX</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREAUX</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preic</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREIC during initial setup</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREIC during initial setup</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="30f87f8d-f273-4bb3-bb8c-5ff13dab4945" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#940c2bcd-c30a-42dd-a821-7351ce6224e2" class="modal-trigger">test/tests/outputs/hide_vector_pp/hide_vector_pp.i</a></li><li><a href="#b6f7b012-f1e0-4349-96aa-0b325069a301" class="modal-trigger">modules/phase_field/test/tests/grain_tracker_test/split_grain.i</a></li><li><a href="#0894cc0a-9c19-4a78-a298-d794e4b3febc" class="modal-trigger">modules/phase_field/examples/grain_growth/3D_6000_gr.i</a></li><li><a href="#00a95300-5e4c-4c48-8d88-daf58bb3c7da" class="modal-trigger">test/tests/postprocessors/num_elems/num_elems.i</a></li><li><a href="#c7b5f0e7-9a89-47ce-adef-896796c82afa" class="modal-trigger">modules/phase_field/test/tests/reconstruction/euler2rgb_non_uniform_orientation.i</a></li><li><a href="#207db085-51d4-4929-9eac-97ba21dea8e9" class="modal-trigger">modules/xfem/test/tests/moment_fitting/solid_mechanics_moment_fitting.i</a></li><li><a href="#36856e4d-ec4f-4409-9369-5665770c7867" class="modal-trigger">test/tests/postprocessors/num_residual_eval/num_residual_eval.i</a></li><li><a href="#05372767-a2fa-40c1-a0ff-4ec5b0b6a153" class="modal-trigger">test/tests/mesh/splitting/geometric_neighbors.i</a></li><li><a href="#e9b9d24c-41b6-4bc0-981e-71423ac5c182" class="modal-trigger">test/tests/postprocessors/relative_difference/relative_difference.i</a></li><li><a href="#b9471a34-f257-4b7d-ad7a-667b2c8e0124" class="modal-trigger">test/tests/postprocessors/linear_combination/linear_combination.i</a></li><li><a href="#72d50d8d-802a-4212-a154-29179667a3f6" class="modal-trigger">modules/combined/examples/phase_field-mechanics/EBSD_reconstruction_grain_growth_mech.i</a></li><li><a href="#1376122f-ddab-4e1d-a49c-566b2b91df36" class="modal-trigger">test/tests/outputs/perf_graph/perf_graph.i</a></li><li><a href="#0ffeb9bb-346f-47a6-a7d3-a700a9777ddf" class="modal-trigger">test/tests/postprocessors/difference_pps/difference_depend_check.i</a></li><li><a href="#c2c96aab-1112-4cf2-baa3-72008213e2c5" class="modal-trigger">modules/phase_field/examples/ebsd_reconstruction/IN100-111grn.i</a></li></ul><div class="modal moose-modal" id="940c2bcd-c30a-42dd-a821-7351ce6224e2"><div class="modal-content"><h4>test/tests/outputs/hide_vector_pp/hide_vector_pp.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+<!DOCTYPE html><head><meta charset="UTF-8"><title>NumElems.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="1e9fb5df-0e5d-466c-bae8-6322f5eb4a82"><i class="material-icons">menu</i></a><ul class="sidenav" id="1e9fb5df-0e5d-466c-bae8-6322f5eb4a82"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">postprocessors</span><a href="#" class="breadcrumb">NumElems</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="142fefdc-9e69-4035-a9e7-2785e70e2224" data-section-level="1" data-section-text="NumElems"><h1 id="numelems">NumElems</h1><p>The NumElems Postprocessor provides information about the number of elements in the simulation. This postprocessor is capable of providing either the active number of elements in the simulation (i.e. only the elements that are being used for calculations), or the total number of elements (i.e. includes parent elements of refined elements, which are maintained for the purpose of coarsening).</p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">note</span></div><div class="card-content"><div class="moose-alert-content"><p><p>This postprocessor returns the aggregate number of elements when using DistributedMesh.</p></p></div></div></div><section class="scrollspy" id="b51fb391-2af6-4806-b02b-49e0360351ad" data-section-level="2" data-section-text="Syntax and Description"><h2 id="syntax-and-description">Syntax and Description</h2><p>Return the number of active or total elements in the simulation.</p></section><section class="scrollspy" id="f812157a-d87b-4684-85c4-34f5062c97b1" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="2ef39d0d-6341-45ca-92f9-972b06a20c1d" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">elem_filter</span><span class="moose-parameter-header-default">active</span><span class="moose-parameter-header-description">The type of elements to include in the count (active, total). Default == active</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>active</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>active total</p><p class="moose-parameter-description"><span>Description:</span>The type of elements to include in the count (active, total). Default == active</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM TRANSFER</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="de4dda64-b29f-48c6-98ef-342502f1d2c0" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">allow_duplicate_execution_on_initial</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preaux</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREAUX</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREAUX</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preic</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREIC during initial setup</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREIC during initial setup</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="ff023fdd-720c-4250-8e96-5ff998e56e1c" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#82c782f9-3891-41a7-a514-88f116efd0a0" class="modal-trigger">test/tests/postprocessors/difference_pps/difference_depend_check.i</a></li><li><a href="#65fb0c18-8454-4d0c-af93-ff6c6da1b9c1" class="modal-trigger">modules/phase_field/examples/grain_growth/3D_6000_gr.i</a></li><li><a href="#c94ee058-5bc0-49f9-bba6-f61af8cb49c5" class="modal-trigger">test/tests/postprocessors/linear_combination/linear_combination.i</a></li><li><a href="#a0cf1aee-12ee-4948-9e70-23396e285da5" class="modal-trigger">test/tests/postprocessors/num_residual_eval/num_residual_eval.i</a></li><li><a href="#8a45b7e4-e2e0-4a15-b1d5-9bfefcae4571" class="modal-trigger">modules/combined/examples/phase_field-mechanics/EBSD_reconstruction_grain_growth_mech.i</a></li><li><a href="#43a0a31a-ba46-4f88-8429-b85f24ed33e1" class="modal-trigger">modules/xfem/test/tests/moment_fitting/solid_mechanics_moment_fitting.i</a></li><li><a href="#0277d458-de8a-4158-9eff-f93a5ef8fb72" class="modal-trigger">modules/phase_field/examples/ebsd_reconstruction/IN100-111grn.i</a></li><li><a href="#7d34b422-1332-4158-a929-38ba417bfab7" class="modal-trigger">modules/phase_field/test/tests/reconstruction/euler2rgb_non_uniform_orientation.i</a></li><li><a href="#8c6e8ef0-1de6-4049-9866-8d2f6d3212ce" class="modal-trigger">test/tests/mesh/splitting/geometric_neighbors.i</a></li><li><a href="#f78fca48-3b18-4b4d-876a-23856518619d" class="modal-trigger">test/tests/outputs/perf_graph/perf_graph.i</a></li><li><a href="#ba0e54c2-7933-4fd2-84c7-bcb8663e1a78" class="modal-trigger">test/tests/postprocessors/num_elems/num_elems.i</a></li><li><a href="#f5c0c86c-564d-4076-8fb3-fd5ef7695b35" class="modal-trigger">test/tests/postprocessors/relative_difference/relative_difference.i</a></li><li><a href="#d94a24a5-f363-467d-8828-91733a0ceb15" class="modal-trigger">modules/phase_field/test/tests/grain_tracker_test/split_grain.i</a></li><li><a href="#3e45f8b0-a211-439c-8b94-d5fb44e9d619" class="modal-trigger">test/tests/outputs/hide_vector_pp/hide_vector_pp.i</a></li></ul><div class="modal moose-modal" id="82c782f9-3891-41a7-a514-88f116efd0a0"><div class="modal-content"><h4>test/tests/postprocessors/difference_pps/difference_depend_check.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
-  nx = 10
-  ny = 10
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  nx = 2
+  ny = 2
 []
 
 [Variables]
@@ -10,253 +14,51 @@
   [../]
 []
 
-[Kernels]
-  [./diff]
-    type = CoefDiffusion
-    variable = u
-    coef = 0.1
-  [../]
-  [./time]
-    type = TimeDerivative
-    variable = u
+[AuxVariables]
+  [./v]
   [../]
 []
 
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = right
+[AuxKernels]
+  [./one]
+    type = ConstantAux
+    variable = v
     value = 1
   [../]
 []
 
 [Postprocessors]
-  [./pp]
-    type = NumElems
-    outputs = csv
-  [../]
-[]
-
-[VectorPostprocessors]
-  [./vpp]
-    type = LineValueSampler
-    variable = u
-    start_point = &#x27;0 0 0&#x27;
-    end_point = &#x27;1 1 0&#x27;
-    num_points = 10
-    sort_by = id
-    outputs = &#x27;test&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 20
-  dt = 0.1
-  solve_type = PJFNK
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[Outputs]
-  csv = true
-  [./test]
-    type = CSV
-    execute_on = &#x27;FINAL&#x27;
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b6f7b012-f1e0-4349-96aa-0b325069a301"><div class="modal-content"><h4>modules/phase_field/test/tests/grain_tracker_test/split_grain.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = EBSDMesh
-  filename = EBSD_split_grain.txt
-[]
-
-[GlobalParams]
-  op_num = 4
-  var_name_base = gr
-[]
-
-[UserObjects]
-  [./ebsd_reader]
-    type = EBSDReader
-  [../]
-  [./ebsd]
-    type = PolycrystalEBSD
-    coloring_algorithm = bt
-    ebsd_reader = ebsd_reader
-    enable_var_coloring = true
-    output_adjacency_matrix = true
-  [../]
-  [./grain_tracker]
-    type = GrainTracker
-    flood_entity_type = ELEMENTAL
-    compute_halo_maps = true # For displaying HALO fields
-    polycrystal_ic_uo = ebsd
-  [../]
-[]
-
-[ICs]
-  [./PolycrystalICs]
-    [./PolycrystalColoringIC]
-      polycrystal_ic_uo = ebsd
-    [../]
-  [../]
-[]
-
-[Variables]
-  [./PolycrystalVariables]
-  [../]
-[]
-
-[AuxVariables]
-  [./bnds]
-  [../]
-  [./unique_grains]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./ghost_elements]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./halos]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./var_indices]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./ebsd_grains]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-[]
-
-[Kernels]
-  [./PolycrystalKernel]
-  [../]
-[]
-
-[AuxKernels]
-  [./BndsCalc]
-    type = BndsCalcAux
-    variable = bnds
+  # This postprocessor is listed first on purpose to give the resolver something to do
+  [./diff]
+    type = DifferencePostprocessor
+    value1 = nodes
+    value2 = elems
     execute_on = &#x27;initial timestep_end&#x27;
   [../]
-  [./ghost_elements]
-    type = FeatureFloodCountAux
-    variable = ghost_elements
-    field_display = GHOSTED_ENTITIES
-    execute_on = &#x27;initial timestep_end&#x27;
-    flood_counter = grain_tracker
-  [../]
-  [./halos]
-    type = FeatureFloodCountAux
-    variable = halos
-    field_display = HALOS
-    execute_on = &#x27;initial timestep_end&#x27;
-    flood_counter = grain_tracker
-  [../]
-  [./var_indices]
-    type = FeatureFloodCountAux
-    variable = var_indices
-    execute_on = &#x27;initial timestep_end&#x27;
-    flood_counter = grain_tracker
-    field_display = VARIABLE_COLORING
-  [../]
-  [./unique_grains]
-    type = FeatureFloodCountAux
-    variable = unique_grains
-    execute_on = &#x27;initial timestep_end&#x27;
-    flood_counter = grain_tracker
-    field_display = UNIQUE_REGION
-  [../]
-  [./grain_aux]
-    type = EBSDReaderPointDataAux
-    variable = ebsd_grains
-    ebsd_reader = ebsd_reader
-    data_name = &#x27;feature_id&#x27;
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-[]
-
-[Modules]
-  [./PhaseField]
-    [./EulerAngles2RGB]
-      crystal_structure = cubic
-      euler_angle_provider = ebsd_reader
-      grain_tracker = grain_tracker
-    [../]
-  [../]
-[]
-
-[Materials]
-  [./Copper]
-    # T = 500 # K
-    type = GBEvolution
-    T = 500
-    wGB = 0.6               # um
-    GBmob0 = 2.5e-6         # m^4/(Js) from Schoenfelder 1997
-    Q = 0.23                # Migration energy in eV
-    GBenergy = 0.708        # GB energy in J/m^2
-    molar_volume = 7.11e-6  # Molar volume in m^3/mol
-    length_scale = 1.0e-6
-    time_scale = 1.0e-6
-  [../]
-[]
-
-[Postprocessors]
-  [./n_elements]
-    type = NumElems
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./n_nodes]
+  [./nodes]
     type = NumNodes
     execute_on = &#x27;initial timestep_end&#x27;
   [../]
-  [./DOFs]
-    type = NumDOFs
+  [./elems]
+    type = NumElems
+    execute_on = &#x27;initial timestep_end&#x27;
   [../]
+[]
+
+[Problem]
+  type = FEProblem
+  solve = false
+  kernel_coverage_check = false
 []
 
 [Executioner]
-  type = Transient
-  scheme = bdf2
-  solve_type = PJFNK
-
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -pc_hypre_boomeramg_strong_threshold&#x27;
-  petsc_options_value = &#x27;hypre    boomeramg      0.7&#x27;
-
-  l_tol = 1.0e-4
-  l_max_its = 20
-  nl_max_its = 20
-  nl_rel_tol = 1.0e-8
-
-  start_time = 0.0
-  num_steps = 2
-
-  [./TimeStepper]
-    type = IterationAdaptiveDT
-    cutback_factor = 0.9
-    dt = 10.0
-    growth_factor = 1.1
-    optimal_iterations = 7
-  [../]
+  type = Steady
 []
 
 [Outputs]
-  exodus = true
   csv = true
-  perf_graph = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0894cc0a-9c19-4a78-a298-d794e4b3febc"><div class="modal-content"><h4>modules/phase_field/examples/grain_growth/3D_6000_gr.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="65fb0c18-8454-4d0c-af93-ff6c6da1b9c1"><div class="modal-content"><h4>modules/phase_field/examples/grain_growth/3D_6000_gr.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 3
   nx = 180
@@ -458,399 +260,49 @@
     type = Console
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="00a95300-5e4c-4c48-8d88-daf58bb3c7da"><div class="modal-content"><h4>test/tests/postprocessors/num_elems/num_elems.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 4
-  ny = 4
-  nz = 0
-  zmax = 0
-  elem_type = QUAD4
-  uniform_refine = 1
-[]
-
-[Variables]
-  [./u]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[AuxVariables]
-  [./u_aux]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./v_aux]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[Functions]
-  [./force]
-    type = ParsedFunction
-    value = t
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-  [./force]
-    type = BodyForce
-    variable = u
-    function = force
-  [../]
-[]
-
-[BCs]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  [../]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 3
-  dt = 1
-  solve_type = PJFNK
-[]
-
-[Adaptivity]
-  steps = 1
-  marker = box
-  max_h_level = 3
-  [./Markers]
-    [./box]
-      bottom_left = &#x27;0.3 0.3 0&#x27;
-      inside = refine
-      top_right = &#x27;0.6 0.6 0&#x27;
-      outside = do_nothing
-      type = BoxMarker
-    [../]
-  [../]
-[]
-
-[Postprocessors]
-  [./num_elems_active]
-    type = NumElems
-    elem_filter = &#x27;ACTIVE&#x27;
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./num_elems_total]
-    type = NumElems
-    elem_filter = &#x27;TOTAL&#x27;
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-[]
-
-[Outputs]
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c7b5f0e7-9a89-47ce-adef-896796c82afa"><div class="modal-content"><h4>modules/phase_field/test/tests/reconstruction/euler2rgb_non_uniform_orientation.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = EBSDMesh
-  filename = ebsd_scan.txt
-[]
-
-[GlobalParams]
-  op_num = 10
-  var_name_base = gr
-[]
-
-[UserObjects]
-  [./ebsd_reader]
-    type = EBSDReader
-    bins = 40
-  [../]
-  [./ebsd]
-    type = PolycrystalEBSD
-    coloring_algorithm = jp
-    ebsd_reader = ebsd_reader
-    enable_var_coloring = true
-  [../]
-  [./grain_tracker]
-    type = GrainTracker
-    flood_entity_type = ELEMENTAL
-    compute_halo_maps = true # For displaying HALO fields
-    polycrystal_ic_uo = ebsd
-  [../]
-[]
-
-[ICs]
-  [./PolycrystalICs]
-    [./PolycrystalColoringIC]
-      polycrystal_ic_uo = ebsd
-    [../]
-  [../]
-[]
-
-[Variables]
-  [./PolycrystalVariables]
-  [../]
-[]
-
-[AuxVariables]
-  [./bnds]
-  [../]
-[]
-
-[Kernels]
-  [./PolycrystalKernel]
-  [../]
-[]
-
-[AuxKernels]
-  [./BndsCalc]
-    type = BndsCalcAux
-    variable = bnds
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-[]
-
-[Modules]
-  [./PhaseField]
-    [./EulerAngles2RGB]
-      crystal_structure = cubic
-      euler_angle_provider = ebsd_reader
-      grain_tracker = grain_tracker
-    [../]
-  [../]
-[]
-
-[Materials]
-  [./Copper]
-    # T = 500 # K
-    type = GBEvolution
-    T = 500
-    wGB = 0.6               # um
-    GBmob0 = 2.5e-6         # m^4/(Js) from Schoenfelder 1997
-    Q = 0.23                # Migration energy in eV
-    GBenergy = 0.708        # GB energy in J/m^2
-    molar_volume = 7.11e-6  # Molar volume in m^3/mol
-    length_scale = 1.0e-6
-    time_scale = 1.0e-6
-  [../]
-[]
-
-[Postprocessors]
-  [./dt]
-    type = TimestepSize
-  [../]
-  [./n_elements]
-    type = NumElems
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./n_nodes]
-    type = NumNodes
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./DOFs]
-    type = NumDOFs
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  scheme = bdf2
-  solve_type = Newton
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -pc_hypre_boomeramg_strong_threshold&#x27;
-  petsc_options_value = &#x27;hypre    boomeramg      0.7&#x27;
-  l_tol = 1.0e-6
-  l_max_its = 100
-  nl_max_its = 20
-  nl_rel_tol = 1.0e-8
-  start_time = 0.0
-  num_steps = 0
-[]
-
-[Outputs]
-  exodus = true
-  perf_graph = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="207db085-51d4-4929-9eac-97ba21dea8e9"><div class="modal-content"><h4>modules/xfem/test/tests/moment_fitting/solid_mechanics_moment_fitting.i</h4><pre class="moose-pre"><code class="language-text"># Test for a mechanics problem which uses four points moment_fitting approach.
-# See this paper (https://doi.org/10.1007/s00466-018-1544-2) for more details about moment_fitting approach.
-
-[GlobalParams]
-  order = FIRST
-  family = LAGRANGE
-  displacements = &#x27;disp_x disp_y&#x27;
-  volumetric_locking_correction = true
-[]
-
-[XFEM]
-  qrule = moment_fitting
-  output_cut_plane = true
-[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c94ee058-5bc0-49f9-bba6-f61af8cb49c5"><div class="modal-content"><h4>test/tests/postprocessors/linear_combination/linear_combination.i</h4><pre class="moose-pre"><code class="language-text"># Tests the LinearCombinationPostprocessor post-processor, which computes
+# a linear combination of an arbitrary number of post-processor values.
 
 [Mesh]
   type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-  xmin = 0.0
-  xmax = 1.0
-  ymin = 0.0
-  ymax = 1.0
-  elem_type = QUAD4
+  dim = 1
+  nx = 2
 []
 
-[UserObjects]
-  [./line_seg_cut_uo0]
-    type = LineSegmentCutUserObject
-    cut_data = &#x27;0.0000e+00   6.3330e-01   3.9000e-01   6.3330e-01&#x27;
-    time_start_cut = 0.0
-    time_end_cut = 0.0
-  [../]
-  [./line_seg_cut_uo1]
-    type = LineSegmentCutUserObject
-    cut_data = &#x27;3.9000e-01   6.3330e-01   6.8000e-01   6.3330e-01&#x27;
-    time_start_cut = 0.0
-    time_end_cut = 0.0
-  [../]
-[]
-
-[Variables]
-  [./disp_x]
-  [../]
-  [./disp_y]
-  [../]
-[]
-
-[Modules/TensorMechanics/Master]
-  [./all]
-    strain = SMALL
-  [../]
-[]
-
-[Functions]
-  [./right_trac_x]
-    type = ParsedFunction
-    value = &#x27;-(t*M*y)/I&#x27;
-    vars = &#x27;M E I&#x27;
-    vals = &#x27;2e4 1e6 0.666666667&#x27;
-  [../]
-  [./bottom_disp_y]
-    type = ParsedFunction
-    value = &#x27;((t*M)/(2*E*I))*(1-nu*nu)*(x*x-0.25*l*l)&#x27;
-    vars = &#x27;M E I l nu&#x27;
-    vals = &#x27;2e4 1e6 0.666666667 2.0 0.3&#x27;
-  [../]
-  [./soln_x]
-    type = ParsedFunction
-    value = &#x27;-(M/(E*I))*(1-nu*nu)*x*y&#x27;
-    vars = &#x27;M E I nu&#x27;
-    vals = &#x27;2e4 1e6 0.666666667 0.3&#x27;
-  [../]
-  [./soln_y]
-    type = ParsedFunction
-    value = &#x27;(M/(2*E*I))*(1-nu*nu)*(x*x-0.25*l*l+(nu/(1-nu))*y*y)&#x27;
-    vars = &#x27;M E I l nu&#x27;
-    vals = &#x27;2e4 1e6 0.666666667 2.0 0.3&#x27;
-  [../]
-[]
-
-[BCs]
-  [./right_x]
-    type = FunctionNeumannBC
-    boundary = 1
-    variable = disp_x
-    function = right_trac_x
-  [../]
-  [./bottom_y]
-    type = FunctionDirichletBC
-    boundary = 0
-    variable = disp_y
-    function = bottom_disp_y
-  [../]
-  [./left_x]
-    type = DirichletBC
-    boundary = 3
-    variable = disp_x
-    value = 0.0
-  [../]
-[]
-
-[Materials]
-  [./elasticity_tensor]
-    type = ComputeIsotropicElasticityTensor
-    youngs_modulus = 1e6
-    poissons_ratio = 0.3
-  [../]
-  [./stress]
-    type = ComputeLinearElasticStress
-  [../]
+[Problem]
+  solve = false
 []
 
 [Executioner]
-  type = Transient
-
-  solve_type = &#x27;PJFNK&#x27;
-  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
-  petsc_options_value = &#x27;201                hypre    boomeramg      8&#x27;
-
-  line_search = &#x27;none&#x27;
-
-#  [./Quadrature]
-#    order = FOURTH
-#    type = MONOMIAL
-#  [../]
-
-  [./Predictor]
-    type = SimplePredictor
-    scale = 1.0
-  [../]
-
-# controls for linear iterations
-  l_max_its = 100
-  l_tol = 1e-2
-
-# controls for nonlinear iterations
-  nl_max_its = 15
-  nl_rel_tol = 1e-16
-  nl_abs_tol = 1e-10
-
-# time control
-  start_time = 0.0
-  dt = 0.5
-  end_time = 1.0
-  num_steps = 5000
+  type = Steady
 []
 
 [Postprocessors]
-  [./numel]
+  [./pp1]
+    # number of elements, equal to 2
     type = NumElems
-    execute_on = timestep_end
   [../]
-  [./integral]
-    type = ElementVectorL2Error
-    var_x = disp_x
-    var_y = disp_y
-    function_x = soln_x
-    function_y = soln_y
-    execute_on = timestep_end
+  [./pp2]
+    # number of nodes, equal to 3
+    type = NumNodes
+  [../]
+
+  # post-processor value being tested; value should be the following:
+  #   value = c1 * pp1 + c2 * pp2 + b
+  #         = 2  * 2   + -1 * 3   + 5 = 6
+  [./linear_combination]
+    type = LinearCombinationPostprocessor
+    pp_names = &#x27;pp1 pp2&#x27;
+    pp_coefs = &#x27;2   -1&#x27;
+    b = 5
   [../]
 []
 
 [Outputs]
-  exodus = true
-  [./console]
-    type = Console
-    output_linear = true
-  [../]
+  show = linear_combination
+  csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="36856e4d-ec4f-4409-9369-5665770c7867"><div class="modal-content"><h4>test/tests/postprocessors/num_residual_eval/num_residual_eval.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a0cf1aee-12ee-4948-9e70-23396e285da5"><div class="modal-content"><h4>test/tests/postprocessors/num_residual_eval/num_residual_eval.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 5
@@ -935,170 +387,7 @@
   exodus = false
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="05372767-a2fa-40c1-a0ff-4ec5b0b6a153"><div class="modal-content"><h4>test/tests/mesh/splitting/geometric_neighbors.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 8
-  ny = 2
-
-  xmax = 8
-  ymax = 2
-
-  # We are testing geometric ghosted functors
-  # so we have to use distributed mesh
-  parallel_type = distributed
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[AuxVariables]
-  [./ghosted_elements]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./proc]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-[]
-
-[AuxKernels]
-  [./random_elemental]
-    type = ElementUOAux
-    variable = ghosted_elements
-    element_user_object = ghost_uo
-    field_name = &quot;ghosted&quot;
-    execute_on = initial
-  [../]
-  [./proc]
-    type = ProcessorIDAux
-    variable = proc
-    execute_on = initial
-  [../]
-[]
-
-[UserObjects]
-  [./ghost_uo]
-    type = ElemSideNeighborLayersGeomTester
-    execute_on = initial
-    element_side_neighbor_layers = 2
-  [../]
-[]
-
-[Postprocessors]
-  [./num_elems]
-    type = NumElems
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-[]
-
-[Outputs]
-  exodus = true
-[]
-
-[Problem]
-  solve = false
-  kernel_coverage_check = false
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e9b9d24c-41b6-4bc0-981e-71423ac5c182"><div class="modal-content"><h4>test/tests/postprocessors/relative_difference/relative_difference.i</h4><pre class="moose-pre"><code class="language-text"># Tests the RelativeDifferencePostprocessor post-processor, which computes
-# the relative difference between 2 post-processor values.
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 2
-[]
-
-[Problem]
-  solve = false
-[]
-
-[Executioner]
-  type = Steady
-[]
-
-[Postprocessors]
-  [./num_elems]
-    # number of elements, equal to 2
-    type = NumElems
-  [../]
-  [./num_nodes]
-    # number of nodes, equal to 3
-    type = NumNodes
-  [../]
-  [./zero]
-    # zero post-processor value
-    type = EmptyPostprocessor
-  [../]
-
-  # For the case in this input file, this will be computed as
-  #   y = abs((num_nodes - num_elems) / num_elems)
-  #   y = abs((3         - 2        ) / 2        ) = 0.5
-  # When the command-line modification &quot;Postprocessors/relative_difference/value2=zero&quot; is used,
-  #   y = abs(num_nodes - zero)
-  #   y = abs(3         - 0   ) = 3
-  [./relative_difference]
-    type = RelativeDifferencePostprocessor
-    value1 = num_nodes
-    value2 = num_elems
-  [../]
-[]
-
-[Outputs]
-  [./out]
-    type = CSV
-    show = relative_difference
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b9471a34-f257-4b7d-ad7a-667b2c8e0124"><div class="modal-content"><h4>test/tests/postprocessors/linear_combination/linear_combination.i</h4><pre class="moose-pre"><code class="language-text"># Tests the LinearCombinationPostprocessor post-processor, which computes
-# a linear combination of an arbitrary number of post-processor values.
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 2
-[]
-
-[Problem]
-  solve = false
-[]
-
-[Executioner]
-  type = Steady
-[]
-
-[Postprocessors]
-  [./pp1]
-    # number of elements, equal to 2
-    type = NumElems
-  [../]
-  [./pp2]
-    # number of nodes, equal to 3
-    type = NumNodes
-  [../]
-
-  # post-processor value being tested; value should be the following:
-  #   value = c1 * pp1 + c2 * pp2 + b
-  #         = 2  * 2   + -1 * 3   + 5 = 6
-  [./linear_combination]
-    type = LinearCombinationPostprocessor
-    pp_names = &#x27;pp1 pp2&#x27;
-    pp_coefs = &#x27;2   -1&#x27;
-    b = 5
-  [../]
-[]
-
-[Outputs]
-  show = linear_combination
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="72d50d8d-802a-4212-a154-29179667a3f6"><div class="modal-content"><h4>modules/combined/examples/phase_field-mechanics/EBSD_reconstruction_grain_growth_mech.i</h4><pre class="moose-pre"><code class="language-text"># This example reconstructs the grain structure from an EBSD data file
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8a45b7e4-e2e0-4a15-b1d5-9bfefcae4571"><div class="modal-content"><h4>modules/combined/examples/phase_field-mechanics/EBSD_reconstruction_grain_growth_mech.i</h4><pre class="moose-pre"><code class="language-text"># This example reconstructs the grain structure from an EBSD data file
 # Then, an isotropic grain model is run with linear elasticity and an anisotropic
 # elasticity tensor that uses the measured EBSD angles.
 [Mesh]
@@ -1371,124 +660,178 @@
   csv = true
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1376122f-ddab-4e1d-a49c-566b2b91df36"><div class="modal-content"><h4>test/tests/outputs/perf_graph/perf_graph.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 3
-  nx = 20
-  ny = 20
-  nz = 20
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="43a0a31a-ba46-4f88-8429-b85f24ed33e1"><div class="modal-content"><h4>modules/xfem/test/tests/moment_fitting/solid_mechanics_moment_fitting.i</h4><pre class="moose-pre"><code class="language-text"># Test for a mechanics problem which uses four points moment_fitting approach.
+# See this paper (https://doi.org/10.1007/s00466-018-1544-2) for more details about moment_fitting approach.
+
+[GlobalParams]
+  order = FIRST
+  family = LAGRANGE
+  displacements = &#x27;disp_x disp_y&#x27;
+  volumetric_locking_correction = true
 []
 
-[Variables]
-  [./u]
+[XFEM]
+  qrule = moment_fitting
+  output_cut_plane = true
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  xmin = 0.0
+  xmax = 1.0
+  ymin = 0.0
+  ymax = 1.0
+  elem_type = QUAD4
+[]
+
+[UserObjects]
+  [./line_seg_cut_uo0]
+    type = LineSegmentCutUserObject
+    cut_data = &#x27;0.0000e+00   6.3330e-01   3.9000e-01   6.3330e-01&#x27;
+    time_start_cut = 0.0
+    time_end_cut = 0.0
+  [../]
+  [./line_seg_cut_uo1]
+    type = LineSegmentCutUserObject
+    cut_data = &#x27;3.9000e-01   6.3330e-01   6.8000e-01   6.3330e-01&#x27;
+    time_start_cut = 0.0
+    time_end_cut = 0.0
   [../]
 []
 
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./all]
+    strain = SMALL
+  [../]
+[]
+
+[Functions]
+  [./right_trac_x]
+    type = ParsedFunction
+    value = &#x27;-(t*M*y)/I&#x27;
+    vars = &#x27;M E I&#x27;
+    vals = &#x27;2e4 1e6 0.666666667&#x27;
+  [../]
+  [./bottom_disp_y]
+    type = ParsedFunction
+    value = &#x27;((t*M)/(2*E*I))*(1-nu*nu)*(x*x-0.25*l*l)&#x27;
+    vars = &#x27;M E I l nu&#x27;
+    vals = &#x27;2e4 1e6 0.666666667 2.0 0.3&#x27;
+  [../]
+  [./soln_x]
+    type = ParsedFunction
+    value = &#x27;-(M/(E*I))*(1-nu*nu)*x*y&#x27;
+    vars = &#x27;M E I nu&#x27;
+    vals = &#x27;2e4 1e6 0.666666667 0.3&#x27;
+  [../]
+  [./soln_y]
+    type = ParsedFunction
+    value = &#x27;(M/(2*E*I))*(1-nu*nu)*(x*x-0.25*l*l+(nu/(1-nu))*y*y)&#x27;
+    vars = &#x27;M E I l nu&#x27;
+    vals = &#x27;2e4 1e6 0.666666667 2.0 0.3&#x27;
   [../]
 []
 
 [BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
+  [./right_x]
+    type = FunctionNeumannBC
+    boundary = 1
+    variable = disp_x
+    function = right_trac_x
   [../]
-  [./right]
+  [./bottom_y]
+    type = FunctionDirichletBC
+    boundary = 0
+    variable = disp_y
+    function = bottom_disp_y
+  [../]
+  [./left_x]
     type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
+    boundary = 3
+    variable = disp_x
+    value = 0.0
   [../]
 []
 
-[Postprocessors]
-  [./num_dofs]
-    type = NumElems
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e6
+    poissons_ratio = 0.3
   [../]
-[../]
+  [./stress]
+    type = ComputeLinearElasticStress
+  [../]
+[]
 
 [Executioner]
-  type = Steady
+  type = Transient
+
   solve_type = &#x27;PJFNK&#x27;
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
+  petsc_options_value = &#x27;201                hypre    boomeramg      8&#x27;
 
-[Outputs]
-#  perf_graph = true
-  [./pgraph]
-    type = PerfGraphOutput
-    level = 1
-    heaviest_branch = true
-    heaviest_sections = 10
-  []
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0ffeb9bb-346f-47a6-a7d3-a700a9777ddf"><div class="modal-content"><h4>test/tests/postprocessors/difference_pps/difference_depend_check.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = 0
-  xmax = 1
-  ymin = 0
-  ymax = 1
-  nx = 2
-  ny = 2
-[]
+  line_search = &#x27;none&#x27;
 
-[Variables]
-  [./u]
+#  [./Quadrature]
+#    order = FOURTH
+#    type = MONOMIAL
+#  [../]
+
+  [./Predictor]
+    type = SimplePredictor
+    scale = 1.0
   [../]
-[]
 
-[AuxVariables]
-  [./v]
-  [../]
-[]
+# controls for linear iterations
+  l_max_its = 100
+  l_tol = 1e-2
 
-[AuxKernels]
-  [./one]
-    type = ConstantAux
-    variable = v
-    value = 1
-  [../]
+# controls for nonlinear iterations
+  nl_max_its = 15
+  nl_rel_tol = 1e-16
+  nl_abs_tol = 1e-10
+
+# time control
+  start_time = 0.0
+  dt = 0.5
+  end_time = 1.0
+  num_steps = 5000
 []
 
 [Postprocessors]
-  # This postprocessor is listed first on purpose to give the resolver something to do
-  [./diff]
-    type = DifferencePostprocessor
-    value1 = nodes
-    value2 = elems
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./nodes]
-    type = NumNodes
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./elems]
+  [./numel]
     type = NumElems
-    execute_on = &#x27;initial timestep_end&#x27;
+    execute_on = timestep_end
   [../]
-[]
-
-[Problem]
-  type = FEProblem
-  solve = false
-  kernel_coverage_check = false
-[]
-
-[Executioner]
-  type = Steady
+  [./integral]
+    type = ElementVectorL2Error
+    var_x = disp_x
+    var_y = disp_y
+    function_x = soln_x
+    function_y = soln_y
+    execute_on = timestep_end
+  [../]
 []
 
 [Outputs]
-  csv = true
+  exodus = true
+  [./console]
+    type = Console
+    output_linear = true
+  [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c2c96aab-1112-4cf2-baa3-72008213e2c5"><div class="modal-content"><h4>modules/phase_field/examples/ebsd_reconstruction/IN100-111grn.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0277d458-de8a-4158-9eff-f93a5ef8fb72"><div class="modal-content"><h4>modules/phase_field/examples/ebsd_reconstruction/IN100-111grn.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = EBSDMesh
   filename = IN100_120x120.txt
   uniform_refine = 2
@@ -1704,4 +1047,661 @@
   checkpoint = true
   perf_graph = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="ead6f265-1d04-47e7-89c6-0cdff0de4dca" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#95c8e457-b702-42dd-b724-cb75a78c93f8" class="tooltipped" data-position="left" data-tooltip="Syntax and Description">Syntax and Description</a></li><li><a href="#7d74c300-c852-4e69-bc38-812d9bc321ed" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#30f87f8d-f273-4bb3-bb8c-5ff13dab4945" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li><li><a href="#ead6f265-1d04-47e7-89c6-0cdff0de4dca" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="7d34b422-1332-4158-a929-38ba417bfab7"><div class="modal-content"><h4>modules/phase_field/test/tests/reconstruction/euler2rgb_non_uniform_orientation.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = EBSDMesh
+  filename = ebsd_scan.txt
+[]
+
+[GlobalParams]
+  op_num = 10
+  var_name_base = gr
+[]
+
+[UserObjects]
+  [./ebsd_reader]
+    type = EBSDReader
+    bins = 40
+  [../]
+  [./ebsd]
+    type = PolycrystalEBSD
+    coloring_algorithm = jp
+    ebsd_reader = ebsd_reader
+    enable_var_coloring = true
+  [../]
+  [./grain_tracker]
+    type = GrainTracker
+    flood_entity_type = ELEMENTAL
+    compute_halo_maps = true # For displaying HALO fields
+    polycrystal_ic_uo = ebsd
+  [../]
+[]
+
+[ICs]
+  [./PolycrystalICs]
+    [./PolycrystalColoringIC]
+      polycrystal_ic_uo = ebsd
+    [../]
+  [../]
+[]
+
+[Variables]
+  [./PolycrystalVariables]
+  [../]
+[]
+
+[AuxVariables]
+  [./bnds]
+  [../]
+[]
+
+[Kernels]
+  [./PolycrystalKernel]
+  [../]
+[]
+
+[AuxKernels]
+  [./BndsCalc]
+    type = BndsCalcAux
+    variable = bnds
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Modules]
+  [./PhaseField]
+    [./EulerAngles2RGB]
+      crystal_structure = cubic
+      euler_angle_provider = ebsd_reader
+      grain_tracker = grain_tracker
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./Copper]
+    # T = 500 # K
+    type = GBEvolution
+    T = 500
+    wGB = 0.6               # um
+    GBmob0 = 2.5e-6         # m^4/(Js) from Schoenfelder 1997
+    Q = 0.23                # Migration energy in eV
+    GBenergy = 0.708        # GB energy in J/m^2
+    molar_volume = 7.11e-6  # Molar volume in m^3/mol
+    length_scale = 1.0e-6
+    time_scale = 1.0e-6
+  [../]
+[]
+
+[Postprocessors]
+  [./dt]
+    type = TimestepSize
+  [../]
+  [./n_elements]
+    type = NumElems
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./n_nodes]
+    type = NumNodes
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./DOFs]
+    type = NumDOFs
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = Newton
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -pc_hypre_boomeramg_strong_threshold&#x27;
+  petsc_options_value = &#x27;hypre    boomeramg      0.7&#x27;
+  l_tol = 1.0e-6
+  l_max_its = 100
+  nl_max_its = 20
+  nl_rel_tol = 1.0e-8
+  start_time = 0.0
+  num_steps = 0
+[]
+
+[Outputs]
+  exodus = true
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8c6e8ef0-1de6-4049-9866-8d2f6d3212ce"><div class="modal-content"><h4>test/tests/mesh/splitting/geometric_neighbors.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 8
+  ny = 2
+
+  xmax = 8
+  ymax = 2
+
+  # We are testing geometric ghosted functors
+  # so we have to use distributed mesh
+  parallel_type = distributed
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[AuxVariables]
+  [./ghosted_elements]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./proc]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./random_elemental]
+    type = ElementUOAux
+    variable = ghosted_elements
+    element_user_object = ghost_uo
+    field_name = &quot;ghosted&quot;
+    execute_on = initial
+  [../]
+  [./proc]
+    type = ProcessorIDAux
+    variable = proc
+    execute_on = initial
+  [../]
+[]
+
+[UserObjects]
+  [./ghost_uo]
+    type = ElemSideNeighborLayersGeomTester
+    execute_on = initial
+    element_side_neighbor_layers = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./num_elems]
+    type = NumElems
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[Problem]
+  solve = false
+  kernel_coverage_check = false
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f78fca48-3b18-4b4d-876a-23856518619d"><div class="modal-content"><h4>test/tests/outputs/perf_graph/perf_graph.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 20
+  ny = 20
+  nz = 20
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Postprocessors]
+  [./num_dofs]
+    type = NumElems
+  [../]
+[../]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+#  perf_graph = true
+  [./pgraph]
+    type = PerfGraphOutput
+    level = 1
+    heaviest_branch = true
+    heaviest_sections = 10
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ba0e54c2-7933-4fd2-84c7-bcb8663e1a78"><div class="modal-content"><h4>test/tests/postprocessors/num_elems/num_elems.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 4
+  ny = 4
+  nz = 0
+  zmax = 0
+  elem_type = QUAD4
+  uniform_refine = 1
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./u_aux]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./v_aux]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Functions]
+  [./force]
+    type = ParsedFunction
+    value = t
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./force]
+    type = BodyForce
+    variable = u
+    function = force
+  [../]
+[]
+
+[BCs]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 3
+  dt = 1
+  solve_type = PJFNK
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = box
+  max_h_level = 3
+  [./Markers]
+    [./box]
+      bottom_left = &#x27;0.3 0.3 0&#x27;
+      inside = refine
+      top_right = &#x27;0.6 0.6 0&#x27;
+      outside = do_nothing
+      type = BoxMarker
+    [../]
+  [../]
+[]
+
+[Postprocessors]
+  [./num_elems_active]
+    type = NumElems
+    elem_filter = &#x27;ACTIVE&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./num_elems_total]
+    type = NumElems
+    elem_filter = &#x27;TOTAL&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f5c0c86c-564d-4076-8fb3-fd5ef7695b35"><div class="modal-content"><h4>test/tests/postprocessors/relative_difference/relative_difference.i</h4><pre class="moose-pre"><code class="language-text"># Tests the RelativeDifferencePostprocessor post-processor, which computes
+# the relative difference between 2 post-processor values.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 2
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Postprocessors]
+  [./num_elems]
+    # number of elements, equal to 2
+    type = NumElems
+  [../]
+  [./num_nodes]
+    # number of nodes, equal to 3
+    type = NumNodes
+  [../]
+  [./zero]
+    # zero post-processor value
+    type = EmptyPostprocessor
+  [../]
+
+  # For the case in this input file, this will be computed as
+  #   y = abs((num_nodes - num_elems) / num_elems)
+  #   y = abs((3         - 2        ) / 2        ) = 0.5
+  # When the command-line modification &quot;Postprocessors/relative_difference/value2=zero&quot; is used,
+  #   y = abs(num_nodes - zero)
+  #   y = abs(3         - 0   ) = 3
+  [./relative_difference]
+    type = RelativeDifferencePostprocessor
+    value1 = num_nodes
+    value2 = num_elems
+  [../]
+[]
+
+[Outputs]
+  [./out]
+    type = CSV
+    show = relative_difference
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d94a24a5-f363-467d-8828-91733a0ceb15"><div class="modal-content"><h4>modules/phase_field/test/tests/grain_tracker_test/split_grain.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = EBSDMesh
+  filename = EBSD_split_grain.txt
+[]
+
+[GlobalParams]
+  op_num = 4
+  var_name_base = gr
+[]
+
+[UserObjects]
+  [./ebsd_reader]
+    type = EBSDReader
+  [../]
+  [./ebsd]
+    type = PolycrystalEBSD
+    coloring_algorithm = bt
+    ebsd_reader = ebsd_reader
+    enable_var_coloring = true
+    output_adjacency_matrix = true
+  [../]
+  [./grain_tracker]
+    type = GrainTracker
+    flood_entity_type = ELEMENTAL
+    compute_halo_maps = true # For displaying HALO fields
+    polycrystal_ic_uo = ebsd
+  [../]
+[]
+
+[ICs]
+  [./PolycrystalICs]
+    [./PolycrystalColoringIC]
+      polycrystal_ic_uo = ebsd
+    [../]
+  [../]
+[]
+
+[Variables]
+  [./PolycrystalVariables]
+  [../]
+[]
+
+[AuxVariables]
+  [./bnds]
+  [../]
+  [./unique_grains]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./ghost_elements]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./halos]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./var_indices]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./ebsd_grains]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+[]
+
+[Kernels]
+  [./PolycrystalKernel]
+  [../]
+[]
+
+[AuxKernels]
+  [./BndsCalc]
+    type = BndsCalcAux
+    variable = bnds
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./ghost_elements]
+    type = FeatureFloodCountAux
+    variable = ghost_elements
+    field_display = GHOSTED_ENTITIES
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+  [../]
+  [./halos]
+    type = FeatureFloodCountAux
+    variable = halos
+    field_display = HALOS
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+  [../]
+  [./var_indices]
+    type = FeatureFloodCountAux
+    variable = var_indices
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+    field_display = VARIABLE_COLORING
+  [../]
+  [./unique_grains]
+    type = FeatureFloodCountAux
+    variable = unique_grains
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+    field_display = UNIQUE_REGION
+  [../]
+  [./grain_aux]
+    type = EBSDReaderPointDataAux
+    variable = ebsd_grains
+    ebsd_reader = ebsd_reader
+    data_name = &#x27;feature_id&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Modules]
+  [./PhaseField]
+    [./EulerAngles2RGB]
+      crystal_structure = cubic
+      euler_angle_provider = ebsd_reader
+      grain_tracker = grain_tracker
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./Copper]
+    # T = 500 # K
+    type = GBEvolution
+    T = 500
+    wGB = 0.6               # um
+    GBmob0 = 2.5e-6         # m^4/(Js) from Schoenfelder 1997
+    Q = 0.23                # Migration energy in eV
+    GBenergy = 0.708        # GB energy in J/m^2
+    molar_volume = 7.11e-6  # Molar volume in m^3/mol
+    length_scale = 1.0e-6
+    time_scale = 1.0e-6
+  [../]
+[]
+
+[Postprocessors]
+  [./n_elements]
+    type = NumElems
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./n_nodes]
+    type = NumNodes
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./DOFs]
+    type = NumDOFs
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = PJFNK
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -pc_hypre_boomeramg_strong_threshold&#x27;
+  petsc_options_value = &#x27;hypre    boomeramg      0.7&#x27;
+
+  l_tol = 1.0e-4
+  l_max_its = 20
+  nl_max_its = 20
+  nl_rel_tol = 1.0e-8
+
+  start_time = 0.0
+  num_steps = 2
+
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    cutback_factor = 0.9
+    dt = 10.0
+    growth_factor = 1.1
+    optimal_iterations = 7
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3e45f8b0-a211-439c-8b94-d5fb44e9d619"><div class="modal-content"><h4>test/tests/outputs/hide_vector_pp/hide_vector_pp.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = CoefDiffusion
+    variable = u
+    coef = 0.1
+  [../]
+  [./time]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Postprocessors]
+  [./pp]
+    type = NumElems
+    outputs = csv
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./vpp]
+    type = LineValueSampler
+    variable = u
+    start_point = &#x27;0 0 0&#x27;
+    end_point = &#x27;1 1 0&#x27;
+    num_points = 10
+    sort_by = id
+    outputs = &#x27;test&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 20
+  dt = 0.1
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  csv = true
+  [./test]
+    type = CSV
+    execute_on = &#x27;FINAL&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="641da568-b8dd-4ac4-b836-e1cd8d82df2f" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#b51fb391-2af6-4806-b02b-49e0360351ad" class="tooltipped" data-position="left" data-tooltip="Syntax and Description">Syntax and Description</a></li><li><a href="#f812157a-d87b-4684-85c4-34f5062c97b1" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#ff023fdd-720c-4250-8e96-5ff998e56e1c" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li><li><a href="#641da568-b8dd-4ac4-b836-e1cd8d82df2f" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

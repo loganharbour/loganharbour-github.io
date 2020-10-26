@@ -1,4 +1,4 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>MassLumpedTimeDerivative.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="952aad23-d012-45fe-8637-987791f11952"><i class="material-icons">menu</i></a><ul class="sidenav" id="952aad23-d012-45fe-8637-987791f11952"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">kernels</span><a href="#" class="breadcrumb">MassLumpedTimeDerivative</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="69970a9b-7176-48b3-b98d-38e823fe9a72" data-section-level="1" data-section-text="MassLumpedTimeDerivative"><h1 id="masslumpedtimederivative">MassLumpedTimeDerivative</h1><section class="scrollspy" id="23f8730a-75eb-4037-aece-c8e2110e7606" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>Lumping of the time derivative can be useful for a couple of reasons. Lumping helps ensure conservation of mass at a node. In a standard node-based Galerkin approximation, fluxes from spatial terms can be thought of as &quot;entering&quot; nodes. If there is no flux to a node, then the mass at that node should stay fixed. However, if the standard Galerkin method is applied to a time derivative term, <span bookmark="moose-equation-9c936865-f9e4-4d5f-8f0b-1fb91b2f786c" recursive="True" class="moose-katex-inline-equation" id="moose-equation-9c936865-f9e4-4d5f-8f0b-1fb91b2f786c"><script>var element = document.getElementById("moose-equation-9c936865-f9e4-4d5f-8f0b-1fb91b2f786c");katex.render("", element, {displayMode:false,throwOnError:false});</script></span>(\psi_i, \frac{\partial u_h}{\partial t}<span bookmark="moose-equation-d6e21446-73a0-4b8b-8fa8-d5ba081a542b" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d6e21446-73a0-4b8b-8fa8-d5ba081a542b"><script>var element = document.getElementById("moose-equation-d6e21446-73a0-4b8b-8fa8-d5ba081a542b");katex.render("", element, {displayMode:false,throwOnError:false});</script></span> the corresponding coefficient matrix is tri-diagonal and the mass at a node is affected by fluxes to neighboring nodes. This can lead to violation of local mass conservation and generation of spurious oscillations with unphysical under- and over-shoot phenomena. Lumping fixes this problem by isolating a nodal solution from neighboring nodal solutions in the time derivative term. Mathematically, lumping looks like this. We start with our governing equation <span bookmark="moose-equation-9718cbce-e08f-4e01-a7b6-ce607fd47e6b" recursive="True" class="moose-katex-inline-equation" id="moose-equation-9718cbce-e08f-4e01-a7b6-ce607fd47e6b"><script>var element = document.getElementById("moose-equation-9718cbce-e08f-4e01-a7b6-ce607fd47e6b");katex.render("", element, {displayMode:false,throwOnError:false});</script></span>u_t = Au<span bookmark="moose-equation-5b4a925f-7a60-4fda-b28b-a8f45184d9d7" recursive="True" class="moose-katex-inline-equation" id="moose-equation-5b4a925f-7a60-4fda-b28b-a8f45184d9d7"><script>var element = document.getElementById("moose-equation-5b4a925f-7a60-4fda-b28b-a8f45184d9d7");katex.render("", element, {displayMode:false,throwOnError:false});</script></span> where A is a differential operator. We write our finite element solution as</p><p><span bookmark="moose-equation-da316937-6d63-4a77-aee9-0121dfffbe51" recursive="True" class="moose-katex-inline-equation" id="moose-equation-da316937-6d63-4a77-aee9-0121dfffbe51"><script>var element = document.getElementById("moose-equation-da316937-6d63-4a77-aee9-0121dfffbe51");katex.render("", element, {displayMode:false,throwOnError:false});</script></span> u(t, x) = \sum u_j(t) \phi_j(x) <span bookmark="moose-equation-6266772a-1097-4499-8546-46d5aec199b1" recursive="True" class="moose-katex-inline-equation" id="moose-equation-6266772a-1097-4499-8546-46d5aec199b1"><script>var element = document.getElementById("moose-equation-6266772a-1097-4499-8546-46d5aec199b1");katex.render("", element, {displayMode:false,throwOnError:false});</script></span></p><p>Substituting into our governing equation, we have:</p><p><span bookmark="moose-equation-bdef540b-6279-4bfc-b715-cf406c8234b8" recursive="True" class="moose-katex-inline-equation" id="moose-equation-bdef540b-6279-4bfc-b715-cf406c8234b8"><script>var element = document.getElementById("moose-equation-bdef540b-6279-4bfc-b715-cf406c8234b8");katex.render("", element, {displayMode:false,throwOnError:false});</script></span> \sum u_j&#x27;\phi_j = Sum u_jA\phi_j <span bookmark="moose-equation-517be679-d8ee-4165-ac83-13beb23352dc" recursive="True" class="moose-katex-inline-equation" id="moose-equation-517be679-d8ee-4165-ac83-13beb23352dc"><script>var element = document.getElementById("moose-equation-517be679-d8ee-4165-ac83-13beb23352dc");katex.render("", element, {displayMode:false,throwOnError:false});</script></span></p><p>Now we apply our test functions <span tex="\psi_i" bookmark="moose-equation-f9c53c07-df93-45f4-b1d2-8d33028168dd" recursive="True" class="moose-katex-inline-equation" id="moose-equation-f9c53c07-df93-45f4-b1d2-8d33028168dd"><script>var element = document.getElementById("moose-equation-f9c53c07-df93-45f4-b1d2-8d33028168dd");katex.render("\\psi_i", element, {displayMode:false,throwOnError:false});</script></span> and integrate over the volume:</p><p><span bookmark="moose-equation-dbd750e4-7238-42b3-a270-943bd0d82f08" recursive="True" class="moose-katex-inline-equation" id="moose-equation-dbd750e4-7238-42b3-a270-943bd0d82f08"><script>var element = document.getElementById("moose-equation-dbd750e4-7238-42b3-a270-943bd0d82f08");katex.render("", element, {displayMode:false,throwOnError:false});</script></span> \sum u_j&#x27; (\psi_i\phi_j) = \sum u_j (\psi_i, Au_j) <span bookmark="moose-equation-2e2ff5c0-6dec-48d2-9c3a-3a27c2908b87" recursive="True" class="moose-katex-inline-equation" id="moose-equation-2e2ff5c0-6dec-48d2-9c3a-3a27c2908b87"><script>var element = document.getElementById("moose-equation-2e2ff5c0-6dec-48d2-9c3a-3a27c2908b87");katex.render("", element, {displayMode:false,throwOnError:false});</script></span></p><p>After applying all of our test functions, we have the matrix system</p><p><span bookmark="moose-equation-4c55e9bb-b281-4cea-b5c7-bed0f6fc614e" recursive="True" class="moose-katex-inline-equation" id="moose-equation-4c55e9bb-b281-4cea-b5c7-bed0f6fc614e"><script>var element = document.getElementById("moose-equation-4c55e9bb-b281-4cea-b5c7-bed0f6fc614e");katex.render("", element, {displayMode:false,throwOnError:false});</script></span> \widetilde{M}\vec{u&#x27;} = \widetilde{K}\vec{u} <span bookmark="moose-equation-6f531f3a-9ab3-4041-9bca-74471d1e3de2" recursive="True" class="moose-katex-inline-equation" id="moose-equation-6f531f3a-9ab3-4041-9bca-74471d1e3de2"><script>var element = document.getElementById("moose-equation-6f531f3a-9ab3-4041-9bca-74471d1e3de2");katex.render("", element, {displayMode:false,throwOnError:false});</script></span></p><p>where here <span tex="\vec{u}" bookmark="moose-equation-16761604-475b-47b1-8aff-5ad3acf6eb2d" recursive="True" class="moose-katex-inline-equation" id="moose-equation-16761604-475b-47b1-8aff-5ad3acf6eb2d"><script>var element = document.getElementById("moose-equation-16761604-475b-47b1-8aff-5ad3acf6eb2d");katex.render("\\vec{u}", element, {displayMode:false,throwOnError:false});</script></span> denotes the vector of coefficients <span tex="u_j" bookmark="moose-equation-66264b20-161e-40e7-9900-f430ee4940db" recursive="True" class="moose-katex-inline-equation" id="moose-equation-66264b20-161e-40e7-9900-f430ee4940db"><script>var element = document.getElementById("moose-equation-66264b20-161e-40e7-9900-f430ee4940db");katex.render("u_j", element, {displayMode:false,throwOnError:false});</script></span>. <span tex="\widetilde{M}" bookmark="moose-equation-c6d8da2f-d701-4aa9-abcb-c923c3bae172" recursive="True" class="moose-katex-inline-equation" id="moose-equation-c6d8da2f-d701-4aa9-abcb-c923c3bae172"><script>var element = document.getElementById("moose-equation-c6d8da2f-d701-4aa9-abcb-c923c3bae172");katex.render("\\widetilde{M}", element, {displayMode:false,throwOnError:false});</script></span> is the mass matrix and <span tex="\widetilde{K}" bookmark="moose-equation-00a596d5-65cd-4248-97f9-ea39f57c2ac1" recursive="True" class="moose-katex-inline-equation" id="moose-equation-00a596d5-65cd-4248-97f9-ea39f57c2ac1"><script>var element = document.getElementById("moose-equation-00a596d5-65cd-4248-97f9-ea39f57c2ac1");katex.render("\\widetilde{K}", element, {displayMode:false,throwOnError:false});</script></span> is the stiffness matrix. Note that neither of these matrices are ever explicitly formed in MOOSE but they are still directly relevant. As mentioned previously, a standard Galerkin procedure results in a tri-diagonal <span tex="\widetilde{M}" bookmark="moose-equation-938049bb-2a06-4cf3-b759-26befdd38c5d" recursive="True" class="moose-katex-inline-equation" id="moose-equation-938049bb-2a06-4cf3-b759-26befdd38c5d"><script>var element = document.getElementById("moose-equation-938049bb-2a06-4cf3-b759-26befdd38c5d");katex.render("\\widetilde{M}", element, {displayMode:false,throwOnError:false});</script></span>. As it turns out, the sum of the matrix row elements in <span tex="\widetilde{M}" bookmark="moose-equation-45aec6b3-87f8-4598-ae6f-0cd6d5555c08" recursive="True" class="moose-katex-inline-equation" id="moose-equation-45aec6b3-87f8-4598-ae6f-0cd6d5555c08"><script>var element = document.getElementById("moose-equation-45aec6b3-87f8-4598-ae6f-0cd6d5555c08");katex.render("\\widetilde{M}", element, {displayMode:false,throwOnError:false});</script></span> is one. Lumping then consists of summing the matrix row elements (result 1) and placing the sums on the diagonals. The result is the identity matrix and <span tex="\widetilde{M}\vec{u'}" bookmark="moose-equation-c0a2e49c-9018-4f3e-99ae-a600f2875094" recursive="True" class="moose-katex-inline-equation" id="moose-equation-c0a2e49c-9018-4f3e-99ae-a600f2875094"><script>var element = document.getElementById("moose-equation-c0a2e49c-9018-4f3e-99ae-a600f2875094");katex.render("\\widetilde{M}\\vec{u'}", element, {displayMode:false,throwOnError:false});</script></span> becomes simply <span tex="\vec{u'}" bookmark="moose-equation-8b94f110-074e-4c1d-bf4e-b77f3e1cae66" recursive="True" class="moose-katex-inline-equation" id="moose-equation-8b94f110-074e-4c1d-bf4e-b77f3e1cae66"><script>var element = document.getElementById("moose-equation-8b94f110-074e-4c1d-bf4e-b77f3e1cae66");katex.render("\\vec{u'}", element, {displayMode:false,throwOnError:false});</script></span>:</p><p><span bookmark="moose-equation-ecc3e4cd-d9fb-4ea9-9b91-4d3e8facbe25" recursive="True" class="moose-katex-inline-equation" id="moose-equation-ecc3e4cd-d9fb-4ea9-9b91-4d3e8facbe25"><script>var element = document.getElementById("moose-equation-ecc3e4cd-d9fb-4ea9-9b91-4d3e8facbe25");katex.render("", element, {displayMode:false,throwOnError:false});</script></span> \vec{u&#x27;} = \widetilde{K}\vec{u} <span bookmark="moose-equation-20db7624-8940-4458-978c-8c12e3920182" recursive="True" class="moose-katex-inline-equation" id="moose-equation-20db7624-8940-4458-978c-8c12e3920182"><script>var element = document.getElementById("moose-equation-20db7624-8940-4458-978c-8c12e3920182");katex.render("", element, {displayMode:false,throwOnError:false});</script></span></p><p>As seen by the above equation, besides helping with local conservation of mass, mass lumping makes explicit time stepping feasible because it removes the need for solving a linear system.</p></section><section class="scrollspy" id="980deee3-43d6-4205-b43c-a6eb264752d9" data-section-level="2" data-section-text="Example Syntax"><h2 id="example-syntax">Example Syntax</h2><p>The <code>MassLumpedTimeDerivative</code> syntax is simple, only taking <code>type</code> and <code>variable</code> as shown in the kernel block below. This particular test file, from which the kernel block is taken, demonstrates a case where the concentration of <span tex="u" bookmark="moose-equation-452c8a64-b189-4d25-a5c7-a345bc409d92" recursive="True" class="moose-katex-inline-equation" id="moose-equation-452c8a64-b189-4d25-a5c7-a345bc409d92"><script>var element = document.getElementById("moose-equation-452c8a64-b189-4d25-a5c7-a345bc409d92");katex.render("u", element, {displayMode:false,throwOnError:false});</script></span> would become negative in a non-lumped scheme for sufficiently small time steps.</p><pre class="moose-pre"><code class="language-text">[Kernels]
+<!DOCTYPE html><head><meta charset="UTF-8"><title>MassLumpedTimeDerivative.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="d6c47872-5bd4-47f6-b24a-c48f3120c327"><i class="material-icons">menu</i></a><ul class="sidenav" id="d6c47872-5bd4-47f6-b24a-c48f3120c327"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">kernels</span><a href="#" class="breadcrumb">MassLumpedTimeDerivative</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="4716d4f4-00cb-48ee-b1ff-3f32d29e3091" data-section-level="1" data-section-text="MassLumpedTimeDerivative"><h1 id="masslumpedtimederivative">MassLumpedTimeDerivative</h1><section class="scrollspy" id="35c9d854-2053-45a5-8a43-6e02de35f214" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>Lumping of the time derivative can be useful for a couple of reasons. Lumping helps ensure conservation of mass at a node. In a standard node-based Galerkin approximation, fluxes from spatial terms can be thought of as &quot;entering&quot; nodes. If there is no flux to a node, then the mass at that node should stay fixed. However, if the standard Galerkin method is applied to a time derivative term, <span bookmark="moose-equation-96cb12ed-ff82-40fd-9b04-877d3e9d7473" recursive="True" class="moose-katex-inline-equation" id="moose-equation-96cb12ed-ff82-40fd-9b04-877d3e9d7473"><script>var element = document.getElementById("moose-equation-96cb12ed-ff82-40fd-9b04-877d3e9d7473");katex.render("", element, {displayMode:false,throwOnError:false});</script></span>(\psi_i, \frac{\partial u_h}{\partial t}<span bookmark="moose-equation-5128eeb4-190b-426a-af13-4cba21cd8cb2" recursive="True" class="moose-katex-inline-equation" id="moose-equation-5128eeb4-190b-426a-af13-4cba21cd8cb2"><script>var element = document.getElementById("moose-equation-5128eeb4-190b-426a-af13-4cba21cd8cb2");katex.render("", element, {displayMode:false,throwOnError:false});</script></span> the corresponding coefficient matrix is tri-diagonal and the mass at a node is affected by fluxes to neighboring nodes. This can lead to violation of local mass conservation and generation of spurious oscillations with unphysical under- and over-shoot phenomena. Lumping fixes this problem by isolating a nodal solution from neighboring nodal solutions in the time derivative term. Mathematically, lumping looks like this. We start with our governing equation <span bookmark="moose-equation-0ce6791d-75a5-4854-af9f-85c2c050eca0" recursive="True" class="moose-katex-inline-equation" id="moose-equation-0ce6791d-75a5-4854-af9f-85c2c050eca0"><script>var element = document.getElementById("moose-equation-0ce6791d-75a5-4854-af9f-85c2c050eca0");katex.render("", element, {displayMode:false,throwOnError:false});</script></span>u_t = Au<span bookmark="moose-equation-ea66f2bd-d6a3-41fc-b97c-05d4a0bbb88e" recursive="True" class="moose-katex-inline-equation" id="moose-equation-ea66f2bd-d6a3-41fc-b97c-05d4a0bbb88e"><script>var element = document.getElementById("moose-equation-ea66f2bd-d6a3-41fc-b97c-05d4a0bbb88e");katex.render("", element, {displayMode:false,throwOnError:false});</script></span> where A is a differential operator. We write our finite element solution as</p><p><span bookmark="moose-equation-0e3053d6-6014-4ca2-a67b-585eaf6a199a" recursive="True" class="moose-katex-inline-equation" id="moose-equation-0e3053d6-6014-4ca2-a67b-585eaf6a199a"><script>var element = document.getElementById("moose-equation-0e3053d6-6014-4ca2-a67b-585eaf6a199a");katex.render("", element, {displayMode:false,throwOnError:false});</script></span> u(t, x) = \sum u_j(t) \phi_j(x) <span bookmark="moose-equation-64db7d68-aa49-48e8-a9dc-5690b406f425" recursive="True" class="moose-katex-inline-equation" id="moose-equation-64db7d68-aa49-48e8-a9dc-5690b406f425"><script>var element = document.getElementById("moose-equation-64db7d68-aa49-48e8-a9dc-5690b406f425");katex.render("", element, {displayMode:false,throwOnError:false});</script></span></p><p>Substituting into our governing equation, we have:</p><p><span bookmark="moose-equation-62919b84-2e44-4479-9824-720d47f4b8d4" recursive="True" class="moose-katex-inline-equation" id="moose-equation-62919b84-2e44-4479-9824-720d47f4b8d4"><script>var element = document.getElementById("moose-equation-62919b84-2e44-4479-9824-720d47f4b8d4");katex.render("", element, {displayMode:false,throwOnError:false});</script></span> \sum u_j&#x27;\phi_j = Sum u_jA\phi_j <span bookmark="moose-equation-59f04140-b948-4878-88df-6660f7aa89b7" recursive="True" class="moose-katex-inline-equation" id="moose-equation-59f04140-b948-4878-88df-6660f7aa89b7"><script>var element = document.getElementById("moose-equation-59f04140-b948-4878-88df-6660f7aa89b7");katex.render("", element, {displayMode:false,throwOnError:false});</script></span></p><p>Now we apply our test functions <span tex="\psi_i" bookmark="moose-equation-c2fb2e46-94ea-48c2-b090-417fe78ba100" recursive="True" class="moose-katex-inline-equation" id="moose-equation-c2fb2e46-94ea-48c2-b090-417fe78ba100"><script>var element = document.getElementById("moose-equation-c2fb2e46-94ea-48c2-b090-417fe78ba100");katex.render("\\psi_i", element, {displayMode:false,throwOnError:false});</script></span> and integrate over the volume:</p><p><span bookmark="moose-equation-d47d0240-eec3-4f53-8393-a633a8e0b893" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d47d0240-eec3-4f53-8393-a633a8e0b893"><script>var element = document.getElementById("moose-equation-d47d0240-eec3-4f53-8393-a633a8e0b893");katex.render("", element, {displayMode:false,throwOnError:false});</script></span> \sum u_j&#x27; (\psi_i\phi_j) = \sum u_j (\psi_i, Au_j) <span bookmark="moose-equation-0bbf8723-9525-4afe-aeb2-31fc22730e2f" recursive="True" class="moose-katex-inline-equation" id="moose-equation-0bbf8723-9525-4afe-aeb2-31fc22730e2f"><script>var element = document.getElementById("moose-equation-0bbf8723-9525-4afe-aeb2-31fc22730e2f");katex.render("", element, {displayMode:false,throwOnError:false});</script></span></p><p>After applying all of our test functions, we have the matrix system</p><p><span bookmark="moose-equation-d5aa2485-adc1-4185-a3c3-b4072da3d972" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d5aa2485-adc1-4185-a3c3-b4072da3d972"><script>var element = document.getElementById("moose-equation-d5aa2485-adc1-4185-a3c3-b4072da3d972");katex.render("", element, {displayMode:false,throwOnError:false});</script></span> \widetilde{M}\vec{u&#x27;} = \widetilde{K}\vec{u} <span bookmark="moose-equation-02336f8d-d1bf-46eb-a03d-cb2b36178c2f" recursive="True" class="moose-katex-inline-equation" id="moose-equation-02336f8d-d1bf-46eb-a03d-cb2b36178c2f"><script>var element = document.getElementById("moose-equation-02336f8d-d1bf-46eb-a03d-cb2b36178c2f");katex.render("", element, {displayMode:false,throwOnError:false});</script></span></p><p>where here <span tex="\vec{u}" bookmark="moose-equation-ae34e750-6727-4bd3-a18a-bb39ddbf4b96" recursive="True" class="moose-katex-inline-equation" id="moose-equation-ae34e750-6727-4bd3-a18a-bb39ddbf4b96"><script>var element = document.getElementById("moose-equation-ae34e750-6727-4bd3-a18a-bb39ddbf4b96");katex.render("\\vec{u}", element, {displayMode:false,throwOnError:false});</script></span> denotes the vector of coefficients <span tex="u_j" bookmark="moose-equation-3869f2ae-e89a-47e1-b742-8cf919bc737c" recursive="True" class="moose-katex-inline-equation" id="moose-equation-3869f2ae-e89a-47e1-b742-8cf919bc737c"><script>var element = document.getElementById("moose-equation-3869f2ae-e89a-47e1-b742-8cf919bc737c");katex.render("u_j", element, {displayMode:false,throwOnError:false});</script></span>. <span tex="\widetilde{M}" bookmark="moose-equation-efaa1214-90c5-4fd0-9519-4b3c5bdfb224" recursive="True" class="moose-katex-inline-equation" id="moose-equation-efaa1214-90c5-4fd0-9519-4b3c5bdfb224"><script>var element = document.getElementById("moose-equation-efaa1214-90c5-4fd0-9519-4b3c5bdfb224");katex.render("\\widetilde{M}", element, {displayMode:false,throwOnError:false});</script></span> is the mass matrix and <span tex="\widetilde{K}" bookmark="moose-equation-6af007ae-b1b7-4159-8cb8-6831416948d3" recursive="True" class="moose-katex-inline-equation" id="moose-equation-6af007ae-b1b7-4159-8cb8-6831416948d3"><script>var element = document.getElementById("moose-equation-6af007ae-b1b7-4159-8cb8-6831416948d3");katex.render("\\widetilde{K}", element, {displayMode:false,throwOnError:false});</script></span> is the stiffness matrix. Note that neither of these matrices are ever explicitly formed in MOOSE but they are still directly relevant. As mentioned previously, a standard Galerkin procedure results in a tri-diagonal <span tex="\widetilde{M}" bookmark="moose-equation-b0dd9ce1-9eb8-4163-9b7b-eecf17ac7795" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b0dd9ce1-9eb8-4163-9b7b-eecf17ac7795"><script>var element = document.getElementById("moose-equation-b0dd9ce1-9eb8-4163-9b7b-eecf17ac7795");katex.render("\\widetilde{M}", element, {displayMode:false,throwOnError:false});</script></span>. As it turns out, the sum of the matrix row elements in <span tex="\widetilde{M}" bookmark="moose-equation-07928e52-a854-4bd2-83e7-4785474e58bb" recursive="True" class="moose-katex-inline-equation" id="moose-equation-07928e52-a854-4bd2-83e7-4785474e58bb"><script>var element = document.getElementById("moose-equation-07928e52-a854-4bd2-83e7-4785474e58bb");katex.render("\\widetilde{M}", element, {displayMode:false,throwOnError:false});</script></span> is one. Lumping then consists of summing the matrix row elements (result 1) and placing the sums on the diagonals. The result is the identity matrix and <span tex="\widetilde{M}\vec{u'}" bookmark="moose-equation-d183b3bb-141d-4c48-ac9a-fccc0cae038f" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d183b3bb-141d-4c48-ac9a-fccc0cae038f"><script>var element = document.getElementById("moose-equation-d183b3bb-141d-4c48-ac9a-fccc0cae038f");katex.render("\\widetilde{M}\\vec{u'}", element, {displayMode:false,throwOnError:false});</script></span> becomes simply <span tex="\vec{u'}" bookmark="moose-equation-ef0852c8-d6ad-438b-892e-66060aa84a3a" recursive="True" class="moose-katex-inline-equation" id="moose-equation-ef0852c8-d6ad-438b-892e-66060aa84a3a"><script>var element = document.getElementById("moose-equation-ef0852c8-d6ad-438b-892e-66060aa84a3a");katex.render("\\vec{u'}", element, {displayMode:false,throwOnError:false});</script></span>:</p><p><span bookmark="moose-equation-8e5a830c-784d-4f10-b037-a562328f1ba9" recursive="True" class="moose-katex-inline-equation" id="moose-equation-8e5a830c-784d-4f10-b037-a562328f1ba9"><script>var element = document.getElementById("moose-equation-8e5a830c-784d-4f10-b037-a562328f1ba9");katex.render("", element, {displayMode:false,throwOnError:false});</script></span> \vec{u&#x27;} = \widetilde{K}\vec{u} <span bookmark="moose-equation-7ff648ae-7ef0-40be-86ea-e7630fd85050" recursive="True" class="moose-katex-inline-equation" id="moose-equation-7ff648ae-7ef0-40be-86ea-e7630fd85050"><script>var element = document.getElementById("moose-equation-7ff648ae-7ef0-40be-86ea-e7630fd85050");katex.render("", element, {displayMode:false,throwOnError:false});</script></span></p><p>As seen by the above equation, besides helping with local conservation of mass, mass lumping makes explicit time stepping feasible because it removes the need for solving a linear system.</p></section><section class="scrollspy" id="f5439087-341e-41d4-80c0-547fd55ff6ff" data-section-level="2" data-section-text="Example Syntax"><h2 id="example-syntax">Example Syntax</h2><p>The <code>MassLumpedTimeDerivative</code> syntax is simple, only taking <code>type</code> and <code>variable</code> as shown in the kernel block below. This particular test file, from which the kernel block is taken, demonstrates a case where the concentration of <span tex="u" bookmark="moose-equation-41a6b542-782a-48dc-a5ee-1f59d64177a2" recursive="True" class="moose-katex-inline-equation" id="moose-equation-41a6b542-782a-48dc-a5ee-1f59d64177a2"><script>var element = document.getElementById("moose-equation-41a6b542-782a-48dc-a5ee-1f59d64177a2");katex.render("u", element, {displayMode:false,throwOnError:false});</script></span> would become negative in a non-lumped scheme for sufficiently small time steps.</p><pre class="moose-pre"><code class="language-text">[Kernels]
   [./time_deriv]
     type = MassLumpedTimeDerivative
     variable = u
@@ -9,7 +9,7 @@
     coef = diff_f
   [../]
 []
-</code></pre><a href="#3d7abd96-a6d1-410f-a9e9-ecdfb41d7132" class="modal-trigger">(test/tests/kernels/mass_lumping/mass_lumping.i)</a><div class="modal moose-modal" id="3d7abd96-a6d1-410f-a9e9-ecdfb41d7132"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/kernels/mass_lumping/mass_lumping.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre><a href="#cbe87c34-0425-4fc7-896b-2f20c91a7dd8" class="modal-trigger">(test/tests/kernels/mass_lumping/mass_lumping.i)</a><div class="modal moose-modal" id="cbe87c34-0425-4fc7-896b-2f20c91a7dd8"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/kernels/mass_lumping/mass_lumping.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 1
   xmin = -1
@@ -62,12 +62,172 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="fe01c064-4dba-4218-b9e7-af69c73d1bca" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="c5d97dc6-569f-4a13-b334-6203b20b4c4c" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this Kernel operates on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this Kernel operates on</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="a514182d-73e7-4067-b2bc-6a184bc75da3" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="26c6c54b-454f-4fd6-8c1c-42f4865d1802" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="82bcbc72-a7b9-4978-99f2-bfd419f30a87" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system time</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system time</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">time</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>time</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="630a882a-acd9-4be5-acba-b91a334c51cb" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#1ae4ba46-32ff-4009-8294-576bbb683b5b" class="modal-trigger">test/tests/kernels/mass_lumping/mass_lumping.i</a></li><li><a href="#eb29bced-3c23-4972-807a-b40051b5c2bd" class="modal-trigger">modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_1D.i</a></li><li><a href="#80fa4129-f842-4cd8-8445-0d20f33ead94" class="modal-trigger">modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_1D_adaptivity.i</a></li><li><a href="#2f009cb4-6af0-42db-aa6c-6f1d1da43022" class="modal-trigger">modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_2D_blocks.i</a></li><li><a href="#87b51ef6-f3fa-4a70-b928-30ca8af8b0e8" class="modal-trigger">modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_2D_angle.i</a></li><li><a href="#44634975-b0e8-4a36-a1d5-7a26600f0ce7" class="modal-trigger">test/tests/kernels/conservative_advection/full_upwinding_1D.i</a></li><li><a href="#3b8e50ce-dd95-4e19-9348-1e74c61b2d2a" class="modal-trigger">modules/porous_flow/test/tests/numerical_diffusion/fltvd.i</a></li><li><a href="#15e3cb98-0e95-4512-b0bb-0879b484864e" class="modal-trigger">modules/porous_flow/test/tests/numerical_diffusion/fltvd_none.i</a></li><li><a href="#8c0ecf0a-24bc-4415-9727-c1d283a72caf" class="modal-trigger">test/tests/kernels/conservative_advection/none_in_all_out.i</a></li><li><a href="#a8823085-19cc-4899-8b24-efac87253fb2" class="modal-trigger">modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_3D.i</a></li><li><a href="#f7c98f2a-9d40-4db3-9245-19c08c570a17" class="modal-trigger">modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_2D.i</a></li><li><a href="#60831ef0-52e4-4b73-a898-fe0b6cbdace4" class="modal-trigger">modules/porous_flow/test/tests/numerical_diffusion/fltvd_no_antidiffusion.i</a></li><li><a href="#1525692a-3b36-49ab-9ed2-fcbd5cbcb4b2" class="modal-trigger">test/tests/kernels/mass_lumping/mass_lumping_jacobian.i</a></li><li><a href="#cda191d6-7dc1-4ad6-899a-e7b8465a0ca1" class="modal-trigger">modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_2D_trimesh.i</a></li><li><a href="#0f3c7bcf-a227-4b86-b67a-26863c5967d4" class="modal-trigger">test/tests/kernels/conservative_advection/none_in_none_out.i</a></li><li><a href="#c425670b-2e9b-4012-a756-a5c9f70c66fb" class="modal-trigger">test/tests/kernels/conservative_advection/full_upwinding_2D.i</a></li></ul><div class="modal moose-modal" id="1ae4ba46-32ff-4009-8294-576bbb683b5b"><div class="modal-content"><h4>test/tests/kernels/mass_lumping/mass_lumping.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="3529ced0-9598-4f69-aaac-fb80e2cb2705" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="0a4f757e-b742-4869-92e7-cd9cdaf70df5" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this Kernel operates on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this Kernel operates on</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="b1461182-897d-420c-a300-bf6e3a65887d" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="fd898073-8023-4617-804f-4daeae7803ab" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="4e4c14c8-ae8b-4e62-b061-8b29f2878ffe" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system time</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system time</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">time</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>time</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="62ab5754-c07d-4471-917d-bc2a3d3ff8ff" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#42554524-621a-4ef4-a0a5-a684537d3531" class="modal-trigger">modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_2D_trimesh.i</a></li><li><a href="#b358d99d-7361-461a-aeb0-2e32145f733b" class="modal-trigger">test/tests/kernels/conservative_advection/full_upwinding_1D.i</a></li><li><a href="#0fb43a57-2efc-49a8-8420-f8d51671939b" class="modal-trigger">test/tests/kernels/conservative_advection/none_in_none_out.i</a></li><li><a href="#377517aa-8375-4323-b37e-bb7a6827fe49" class="modal-trigger">modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_1D.i</a></li><li><a href="#807a6f3b-28d8-4f23-9de6-98ed7476f6b9" class="modal-trigger">modules/porous_flow/test/tests/numerical_diffusion/fltvd.i</a></li><li><a href="#a06375d0-8687-4781-b493-bc4606956913" class="modal-trigger">modules/porous_flow/test/tests/numerical_diffusion/fltvd_no_antidiffusion.i</a></li><li><a href="#31dc6488-0e65-44a6-976e-f65e84f64385" class="modal-trigger">modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_2D_angle.i</a></li><li><a href="#3ad653c0-a73f-4afb-aca3-fa96c9880e31" class="modal-trigger">test/tests/kernels/conservative_advection/none_in_all_out.i</a></li><li><a href="#0db12c6e-33ca-4f6f-99d5-75156162836d" class="modal-trigger">test/tests/kernels/mass_lumping/mass_lumping.i</a></li><li><a href="#9748d57c-c2d8-45de-a0ea-9914d6752e2f" class="modal-trigger">test/tests/kernels/conservative_advection/full_upwinding_2D.i</a></li><li><a href="#bcc5577a-2ee0-480a-a428-fef595e68e03" class="modal-trigger">test/tests/kernels/mass_lumping/mass_lumping_jacobian.i</a></li><li><a href="#af81f752-a0f8-41c7-9f14-bab8d9afbf14" class="modal-trigger">modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_2D.i</a></li><li><a href="#95443bb3-5ed5-42e7-98de-90bd6e528e5e" class="modal-trigger">modules/porous_flow/test/tests/numerical_diffusion/fltvd_none.i</a></li><li><a href="#b5043d68-ccfc-412d-9c07-4d700f15e188" class="modal-trigger">modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_1D_adaptivity.i</a></li><li><a href="#50d193ae-3da6-4093-91dc-ba09a248afea" class="modal-trigger">modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_2D_blocks.i</a></li><li><a href="#447b0c17-9b7c-4349-a11c-9de471436512" class="modal-trigger">modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_3D.i</a></li></ul><div class="modal moose-modal" id="42554524-621a-4ef4-a0a5-a684537d3531"><div class="modal-content"><h4>modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_2D_trimesh.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek, with antidiffusion from superbee flux limiting
+# 2D version
+[Mesh]
+  type = FileMesh
+  file = trimesh.msh
+[]
+
+[GlobalParams]
+  block = &#x27;50&#x27;
+[]
+
+[Variables]
+  [./tracer]
+  [../]
+[]
+
+[ICs]
+  [./tracer]
+    type = FunctionIC
+    variable = tracer
+    function = &#x27;if(x&lt;0.1,0,if(x&gt;0.305,0,1))&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./mass_dot]
+    type = MassLumpedTimeDerivative
+    variable = tracer
+  [../]
+  [./flux]
+    type = FluxLimitedTVDAdvection
+    variable = tracer
+    advective_flux_calculator = fluo
+  [../]
+[]
+
+[UserObjects]
+  [./fluo]
+    type = AdvectiveFluxCalculatorConstantVelocity
+    flux_limiter_type = superbee
+    u = tracer
+    velocity = &#x27;0.1 0 0&#x27;
+  [../]
+[]
+
+[BCs]
+  [./no_tracer_on_left]
+    type = DirichletBC
+    variable = tracer
+    value = 0
+    boundary = left
+  [../]
+  [./remove_tracer]
+# Ideally, an OutflowBC would be used, but that does not exist in the framework
+# In 1D VacuumBC is the same as OutflowBC, with the alpha parameter being twice the velocity
+    type = VacuumBC
+    boundary = right
+    alpha = 0.2 # 2 * velocity
+    variable = tracer
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
+    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
+  [../]
+  [./preferred_but_might_not_be_installed]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./tracer]
+    type = LineValueSampler
+    start_point = &#x27;0 0 0&#x27;
+    end_point = &#x27;1 0.04 0&#x27;
+    num_points = 101
+    sort_by = x
+    variable = tracer
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  end_time = 6
+  dt = 6E-2
+  timestep_tolerance = 1E-3
+[]
+
+[Outputs]
+  print_linear_residuals = false
+  [./out]
+    type = CSV
+    execute_on = final
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b358d99d-7361-461a-aeb0-2e32145f733b"><div class="modal-content"><h4>test/tests/kernels/conservative_advection/full_upwinding_1D.i</h4><pre class="moose-pre"><code class="language-text"># ConservativeAdvection with upwinding_type = full
+# Apply a velocity = (1, 0, 0) and see a pulse advect to the right
+# Note that the pulse diffuses more than with no upwinding,
+# but there are no overshoots and undershoots and that the
+# center of the pulse at u=0.5 advects with the correct velocity
+[Mesh]
   type = GeneratedMesh
   dim = 1
-  xmin = -1
-  xmax = 1
-  nx = 2
+  nx = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[BCs]
+  [./u_injection_left]
+    type = InflowBC
+    boundary = left
+    variable = u
+    velocity = &#x27;1 0 0&#x27;
+    inlet_conc = 1
+  [../]
+[]
+
+[Kernels]
+  [./udot]
+    type = MassLumpedTimeDerivative
+    variable = u
+  [../]
+  [./advection]
+    type = ConservativeAdvection
+    variable = u
+    velocity = &#x27;1 0 0&#x27;
+    upwinding_type = full
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = LINEAR
+  dt = 0.1
+  end_time = 1
+  l_tol = 1E-14
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0fb43a57-2efc-49a8-8420-f8d51671939b"><div class="modal-content"><h4>test/tests/kernels/conservative_advection/none_in_none_out.i</h4><pre class="moose-pre"><code class="language-text"># Using ConservativeAdvection with full upwinding
+# This demonstrates BCs (no BCs) that allow no mass to
+# enter or exit the domain.
+# Total mass remains constant and the pulse advects
+# with the correct velocity
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmin = 0
+  xmax = 10
+  nx = 10
 []
 
 [Variables]
@@ -76,47 +236,47 @@
 []
 
 [ICs]
-  [./u_init]
+  [./u]
     type = FunctionIC
     variable = u
-    function = init_f
+    function = &#x27;if(x&lt;5,x,10-x)&#x27;
   [../]
 []
 
 [Kernels]
-  [./time_deriv]
+  [./dot]
     type = MassLumpedTimeDerivative
     variable = u
   [../]
-  [./diff]
-    type = FuncCoefDiffusion
+  [./advection]
+    type = ConservativeAdvection
     variable = u
-    coef = diff_f
+    upwinding_type = full
+    velocity = &#x27;1 0 0&#x27;
   [../]
 []
 
-[Functions]
-  [./init_f]
-    type = ParsedFunction
-    value = max(x,0) #(x&gt;0)
-  [../]
-  [./diff_f]
-    type = ParsedFunction
-    value = max(x,0)
+[Postprocessors]
+  [./total_mass]
+    type = VariableInnerProduct
+    variable = u
+    second_variable = 1
   [../]
 []
-
 
 [Executioner]
   type = Transient
-  end_time = 1
-  solve_type = &#x27;NEWTON&#x27;
+  solve_type = Linear
+  dt = 1
+  end_time = 10
+  l_tol = 1E-14
 []
 
 [Outputs]
-  exodus = true
+  csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="eb29bced-3c23-4972-807a-b40051b5c2bd"><div class="modal-content"><h4>modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_1D.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek, with antidiffusion from superbee flux limiting
+
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="377517aa-8375-4323-b37e-bb7a6827fe49"><div class="modal-content"><h4>modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_1D.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek, with antidiffusion from superbee flux limiting
 # 1D version
 [Mesh]
   type = GeneratedMesh
@@ -222,7 +382,738 @@
     execute_on = final
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="80fa4129-f842-4cd8-8445-0d20f33ead94"><div class="modal-content"><h4>modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_1D_adaptivity.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek, with antidiffusion from superbee flux limiting
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="807a6f3b-28d8-4f23-9de6-98ed7476f6b9"><div class="modal-content"><h4>modules/porous_flow/test/tests/numerical_diffusion/fltvd.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek, with antidiffusion from superbee flux limiting
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 100
+  xmin = 0
+  xmax = 1
+[]
+
+[Variables]
+  [./tracer]
+  [../]
+[]
+
+[ICs]
+  [./tracer]
+    type = FunctionIC
+    variable = tracer
+    function = &#x27;if(x&lt;0.1,0,if(x&gt;0.3,0,1))&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./mass_dot]
+    type = MassLumpedTimeDerivative
+    variable = tracer
+  [../]
+  [./flux]
+    type = FluxLimitedTVDAdvection
+    variable = tracer
+    advective_flux_calculator = fluo
+  [../]
+[]
+
+[UserObjects]
+  [./fluo]
+    type = AdvectiveFluxCalculatorConstantVelocity
+    flux_limiter_type = superbee
+    u = tracer
+    velocity = &#x27;0.1 0 0&#x27;
+  [../]
+[]
+
+[BCs]
+  [./no_tracer_on_left]
+    type = DirichletBC
+    variable = tracer
+    value = 0
+    boundary = left
+  [../]
+  [./remove_tracer]
+# Ideally, an OutflowBC would be used, but that does not exist in the framework
+# In 1D VacuumBC is the same as OutflowBC, with the alpha parameter being twice the velocity
+    type = VacuumBC
+    boundary = right
+    alpha = 0.2 # 2 * velocity
+    variable = tracer
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
+    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
+  [../]
+  [./preferred_but_might_not_be_installed]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./tracer]
+    type = LineValueSampler
+    start_point = &#x27;0 0 0&#x27;
+    end_point = &#x27;1 0 0&#x27;
+    num_points = 101
+    sort_by = x
+    variable = tracer
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  end_time = 6
+  dt = 6E-2
+  nl_abs_tol = 1E-8
+  nl_max_its = 500
+  timestep_tolerance = 1E-3
+[]
+
+[Outputs]
+  [./out]
+    type = CSV
+    execute_on = final
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a06375d0-8687-4781-b493-bc4606956913"><div class="modal-content"><h4>modules/porous_flow/test/tests/numerical_diffusion/fltvd_no_antidiffusion.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek, but without any antidiffusion
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 100
+  xmin = 0
+  xmax = 1
+[]
+
+[Variables]
+  [./tracer]
+  [../]
+[]
+
+[ICs]
+  [./tracer]
+    type = FunctionIC
+    variable = tracer
+    function = &#x27;if(x&lt;0.1,0,if(x&gt;0.3,0,1))&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./mass_dot]
+    type = MassLumpedTimeDerivative
+    variable = tracer
+  [../]
+  [./flux]
+    type = FluxLimitedTVDAdvection
+    variable = tracer
+    advective_flux_calculator = fluo
+  [../]
+[]
+
+[UserObjects]
+  [./fluo]
+    type = AdvectiveFluxCalculatorConstantVelocity
+    flux_limiter_type = none
+    u = tracer
+    velocity = &#x27;0.1 0 0&#x27;
+  [../]
+[]
+
+[BCs]
+  [./no_tracer_on_left]
+    type = DirichletBC
+    variable = tracer
+    value = 0
+    boundary = left
+  [../]
+  [./remove_tracer]
+# Ideally, an OutflowBC would be used, but that does not exist in the framework
+# In 1D VacuumBC is the same as OutflowBC, with the alpha parameter being twice the velocity
+    type = VacuumBC
+    boundary = right
+    alpha = 0.2 # 2 * velocity
+    variable = tracer
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
+    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
+  [../]
+  [./preferred_but_might_not_be_installed]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./tracer]
+    type = LineValueSampler
+    start_point = &#x27;0 0 0&#x27;
+    end_point = &#x27;1 0 0&#x27;
+    num_points = 101
+    sort_by = x
+    variable = tracer
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  end_time = 6
+  dt = 6E-1
+  nl_abs_tol = 1E-8
+  nl_max_its = 500
+  timestep_tolerance = 1E-3
+[]
+
+[Outputs]
+  [./out]
+    type = CSV
+    execute_on = final
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="31dc6488-0e65-44a6-976e-f65e84f64385"><div class="modal-content"><h4>modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_2D_angle.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek, with antidiffusion from superbee flux limiting
+# 2D version with velocity = (0.1, 0.2, 0)
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  xmin = 0
+  xmax = 1
+  ny = 10
+  ymin = 0
+  ymax = 1
+[]
+
+[Variables]
+  [./tracer]
+  [../]
+[]
+
+[ICs]
+  [./tracer]
+    type = FunctionIC
+    variable = tracer
+    function = &#x27;if(x&lt;0.1 | x &gt; 0.3 | y &lt; 0.1 | y &gt; 0.3, 0, 1)&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./mass_dot]
+    type = MassLumpedTimeDerivative
+    variable = tracer
+  [../]
+  [./flux]
+    type = FluxLimitedTVDAdvection
+    variable = tracer
+    advective_flux_calculator = fluo
+  [../]
+[]
+
+[UserObjects]
+  [./fluo]
+    type = AdvectiveFluxCalculatorConstantVelocity
+    flux_limiter_type = superbee
+    u = tracer
+    velocity = &#x27;0.1 0.2 0&#x27;
+  [../]
+[]
+
+[BCs]
+  [./no_tracer_on_left]
+    type = DirichletBC
+    variable = tracer
+    value = 0
+    boundary = left
+  [../]
+  [./remove_tracer]
+# Ideally, an OutflowBC would be used, but that does not exist in the framework
+# In 1D VacuumBC is the same as OutflowBC, with the alpha parameter being twice the velocity
+    type = VacuumBC
+    boundary = right
+    alpha = 0.2 # 2 * velocity
+    variable = tracer
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
+    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
+  [../]
+  [./preferred_but_might_not_be_installed]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  end_time = 2
+  dt = 0.1
+[]
+
+[Outputs]
+  print_linear_residuals = false
+  [./out]
+    type = Exodus
+    execute_on = &#x27;initial final&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3ad653c0-a73f-4afb-aca3-fa96c9880e31"><div class="modal-content"><h4>test/tests/kernels/conservative_advection/none_in_all_out.i</h4><pre class="moose-pre"><code class="language-text"># Using ConservativeAdvection with full upwinding
+# This demonstrates BCs that introduce no mass into
+# the domain but allow it to exit freely.
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmin = 0
+  xmax = 10
+  nx = 100
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[ICs]
+  [./u]
+    type = FunctionIC
+    variable = u
+    function = &#x27;if(x&lt;5,x,10-x)&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./dot]
+    type = MassLumpedTimeDerivative
+    variable = u
+  [../]
+  [./advection]
+    type = ConservativeAdvection
+    variable = u
+    upwinding_type = full
+    velocity = &#x27;1 0 0&#x27;
+  [../]
+[]
+
+[BCs]
+  [./allow_mass_out]
+    type = OutflowBC
+    boundary = right
+    variable = u
+    velocity = &#x27;1 0 0&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Linear
+  dt = 1
+  end_time = 10
+  l_tol = 1E-14
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0db12c6e-33ca-4f6f-99d5-75156162836d"><div class="modal-content"><h4>test/tests/kernels/mass_lumping/mass_lumping.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmin = -1
+  xmax = 1
+  nx = 2
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[ICs]
+  [./u_init]
+    type = FunctionIC
+    variable = u
+    function = init_f
+  [../]
+[]
+
+[Kernels]
+  [./time_deriv]
+    type = MassLumpedTimeDerivative
+    variable = u
+  [../]
+  [./diff]
+    type = FuncCoefDiffusion
+    variable = u
+    coef = diff_f
+  [../]
+[]
+
+[Functions]
+  [./init_f]
+    type = ParsedFunction
+    value = max(x,0) #(x&gt;0)
+  [../]
+  [./diff_f]
+    type = ParsedFunction
+    value = max(x,0)
+  [../]
+[]
+
+
+[Executioner]
+  type = Transient
+  end_time = 1
+  solve_type = &#x27;NEWTON&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9748d57c-c2d8-45de-a0ea-9914d6752e2f"><div class="modal-content"><h4>test/tests/kernels/conservative_advection/full_upwinding_2D.i</h4><pre class="moose-pre"><code class="language-text"># 2D test of advection with full upwinding
+# Note there are no overshoots or undershoots
+# but there is numerical diffusion.
+# The center of the blob advects with the correct velocity
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 40
+  ny = 40
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[ICs]
+  [./u_blob]
+    type = FunctionIC
+    variable = u
+    function = &#x27;if(x&lt;0.2,if(y&lt;0.2,1,0),0)&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./udot]
+    type = MassLumpedTimeDerivative
+    variable = u
+  [../]
+  [./advection]
+    type = ConservativeAdvection
+    variable = u
+    upwinding_type = full
+    velocity = &#x27;2 1 0&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = LINEAR
+  dt = 0.01
+  end_time = 0.1
+  l_tol = 1E-14
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="bcc5577a-2ee0-480a-a428-fef595e68e03"><div class="modal-content"><h4>test/tests/kernels/mass_lumping/mass_lumping_jacobian.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  xmin = -1
+  xmax = 1
+  nx = 2
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[ICs]
+  [./u_init]
+    type = FunctionIC
+    variable = u
+    function = init_f
+  [../]
+[]
+
+[Kernels]
+  [./time_deriv]
+    type = MassLumpedTimeDerivative
+    variable = u
+  [../]
+  [./diff]
+    type = FuncCoefDiffusion
+    variable = u
+    coef = diff_f
+  [../]
+[]
+
+[Functions]
+  [./init_f]
+    type = ParsedFunction
+    value = max(x,0) #(x&gt;0)
+  [../]
+  [./diff_f]
+    type = ParsedFunction
+    value = max(x,0)
+  [../]
+[]
+
+
+[Executioner]
+  type = Transient
+  end_time = 1
+  solve_type = &#x27;NEWTON&#x27;
+  petsc_options_iname = &#x27;-snes_type&#x27;
+  petsc_options_value = &#x27;test&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="af81f752-a0f8-41c7-9f14-bab8d9afbf14"><div class="modal-content"><h4>modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_2D.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek, with antidiffusion from superbee flux limiting
+# 2D version
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  xmin = 0
+  xmax = 1
+  ny = 4
+  ymin = 0
+  ymax = 0.5
+[]
+
+[Variables]
+  [./tracer]
+  [../]
+[]
+
+[ICs]
+  [./tracer]
+    type = FunctionIC
+    variable = tracer
+    function = &#x27;if(x&lt;0.1,0,if(x&gt;0.3,0,1))&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./mass_dot]
+    type = MassLumpedTimeDerivative
+    variable = tracer
+  [../]
+  [./flux]
+    type = FluxLimitedTVDAdvection
+    variable = tracer
+    advective_flux_calculator = fluo
+  [../]
+[]
+
+[UserObjects]
+  [./fluo]
+    type = AdvectiveFluxCalculatorConstantVelocity
+    flux_limiter_type = superbee
+    u = tracer
+    velocity = &#x27;0.1 0 0&#x27;
+  [../]
+[]
+
+[BCs]
+  [./no_tracer_on_left]
+    type = DirichletBC
+    variable = tracer
+    value = 0
+    boundary = left
+  [../]
+  [./remove_tracer]
+# Ideally, an OutflowBC would be used, but that does not exist in the framework
+# In 1D VacuumBC is the same as OutflowBC, with the alpha parameter being twice the velocity
+    type = VacuumBC
+    boundary = right
+    alpha = 0.2 # 2 * velocity
+    variable = tracer
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
+    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
+  [../]
+  [./preferred_but_might_not_be_installed]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./tracer]
+    type = LineValueSampler
+    start_point = &#x27;0 0 0&#x27;
+    end_point = &#x27;1 0.5 0&#x27;
+    num_points = 11
+    sort_by = x
+    variable = tracer
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  end_time = 6
+  dt = 6E-2
+  nl_abs_tol = 1E-8
+  nl_max_its = 500
+  timestep_tolerance = 1E-3
+[]
+
+[Outputs]
+  print_linear_residuals = false
+  [./out]
+    type = CSV
+    execute_on = final
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="95443bb3-5ed5-42e7-98de-90bd6e528e5e"><div class="modal-content"><h4>modules/porous_flow/test/tests/numerical_diffusion/fltvd_none.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek
+# No antidiffusion, so this is identical to full-upwinding
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 100
+  xmin = 0
+  xmax = 1
+[]
+
+[Variables]
+  [./tracer]
+  [../]
+[]
+
+[ICs]
+  [./tracer]
+    type = FunctionIC
+    variable = tracer
+    function = &#x27;if(x&lt;0.1,0,if(x&gt;0.3,0,1))&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./mass_dot]
+    type = MassLumpedTimeDerivative
+    variable = tracer
+  [../]
+  [./flux]
+    type = FluxLimitedTVDAdvection
+    variable = tracer
+    advective_flux_calculator = fluo
+  [../]
+[]
+
+[UserObjects]
+  [./fluo]
+    type = AdvectiveFluxCalculator
+    flux_limiter_type = none
+    u = tracer
+    velocity = &#x27;0.1 0 0&#x27;
+  [../]
+[]
+
+[BCs]
+  [./no_tracer_on_left]
+    type = DirichletBC
+    variable = tracer
+    value = 0
+    boundary = left
+  [../]
+  [./remove_tracer]
+# Ideally, an OutflowBC would be used, but that does not exist in the framework
+# In 1D VacuumBC is the same as OutflowBC, with the alpha parameter being twice the velocity
+    type = VacuumBC
+    boundary = right
+    alpha = 0.2 # 2 * velocity
+    variable = tracer
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
+    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
+  [../]
+  [./preferred_but_might_not_be_installed]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./tracer]
+    type = LineValueSampler
+    start_point = &#x27;0 0 0&#x27;
+    end_point = &#x27;1 0 0&#x27;
+    num_points = 101
+    sort_by = x
+    variable = tracer
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  end_time = 6
+  dt = 6E-1
+  nl_abs_tol = 1E-8
+  nl_max_its = 500
+  timestep_tolerance = 1E-3
+[]
+
+[Outputs]
+  csv = true
+  execute_on = final
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b5043d68-ccfc-412d-9c07-4d700f15e188"><div class="modal-content"><h4>modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_1D_adaptivity.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek, with antidiffusion from superbee flux limiting
 # 1D version with mesh adaptivity
 [Mesh]
   type = GeneratedMesh
@@ -343,7 +1234,7 @@
     execute_on = final
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2f009cb4-6af0-42db-aa6c-6f1d1da43022"><div class="modal-content"><h4>modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_2D_blocks.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="50d193ae-3da6-4093-91dc-ba09a248afea"><div class="modal-content"><h4>modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_2D_blocks.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek
 # 2D version with blocks
 # Top block: tracer is defined here, with velocity = (0.1, 0, 0)
 # Central block: tracer is not defined here
@@ -538,417 +1429,7 @@
     execute_on = final
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="87b51ef6-f3fa-4a70-b928-30ca8af8b0e8"><div class="modal-content"><h4>modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_2D_angle.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek, with antidiffusion from superbee flux limiting
-# 2D version with velocity = (0.1, 0.2, 0)
-[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  xmin = 0
-  xmax = 1
-  ny = 10
-  ymin = 0
-  ymax = 1
-[]
-
-[Variables]
-  [./tracer]
-  [../]
-[]
-
-[ICs]
-  [./tracer]
-    type = FunctionIC
-    variable = tracer
-    function = &#x27;if(x&lt;0.1 | x &gt; 0.3 | y &lt; 0.1 | y &gt; 0.3, 0, 1)&#x27;
-  [../]
-[]
-
-[Kernels]
-  [./mass_dot]
-    type = MassLumpedTimeDerivative
-    variable = tracer
-  [../]
-  [./flux]
-    type = FluxLimitedTVDAdvection
-    variable = tracer
-    advective_flux_calculator = fluo
-  [../]
-[]
-
-[UserObjects]
-  [./fluo]
-    type = AdvectiveFluxCalculatorConstantVelocity
-    flux_limiter_type = superbee
-    u = tracer
-    velocity = &#x27;0.1 0.2 0&#x27;
-  [../]
-[]
-
-[BCs]
-  [./no_tracer_on_left]
-    type = DirichletBC
-    variable = tracer
-    value = 0
-    boundary = left
-  [../]
-  [./remove_tracer]
-# Ideally, an OutflowBC would be used, but that does not exist in the framework
-# In 1D VacuumBC is the same as OutflowBC, with the alpha parameter being twice the velocity
-    type = VacuumBC
-    boundary = right
-    alpha = 0.2 # 2 * velocity
-    variable = tracer
-  [../]
-[]
-
-[Preconditioning]
-  active = basic
-  [./basic]
-    type = SMP
-    full = true
-    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
-    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
-    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
-  [../]
-  [./preferred_but_might_not_be_installed]
-    type = SMP
-    full = true
-    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
-    petsc_options_value = &#x27; lu       mumps&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Newton
-  end_time = 2
-  dt = 0.1
-[]
-
-[Outputs]
-  print_linear_residuals = false
-  [./out]
-    type = Exodus
-    execute_on = &#x27;initial final&#x27;
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="44634975-b0e8-4a36-a1d5-7a26600f0ce7"><div class="modal-content"><h4>test/tests/kernels/conservative_advection/full_upwinding_1D.i</h4><pre class="moose-pre"><code class="language-text"># ConservativeAdvection with upwinding_type = full
-# Apply a velocity = (1, 0, 0) and see a pulse advect to the right
-# Note that the pulse diffuses more than with no upwinding,
-# but there are no overshoots and undershoots and that the
-# center of the pulse at u=0.5 advects with the correct velocity
-[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 10
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[BCs]
-  [./u_injection_left]
-    type = InflowBC
-    boundary = left
-    variable = u
-    velocity = &#x27;1 0 0&#x27;
-    inlet_conc = 1
-  [../]
-[]
-
-[Kernels]
-  [./udot]
-    type = MassLumpedTimeDerivative
-    variable = u
-  [../]
-  [./advection]
-    type = ConservativeAdvection
-    variable = u
-    velocity = &#x27;1 0 0&#x27;
-    upwinding_type = full
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = LINEAR
-  dt = 0.1
-  end_time = 1
-  l_tol = 1E-14
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3b8e50ce-dd95-4e19-9348-1e74c61b2d2a"><div class="modal-content"><h4>modules/porous_flow/test/tests/numerical_diffusion/fltvd.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek, with antidiffusion from superbee flux limiting
-[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 100
-  xmin = 0
-  xmax = 1
-[]
-
-[Variables]
-  [./tracer]
-  [../]
-[]
-
-[ICs]
-  [./tracer]
-    type = FunctionIC
-    variable = tracer
-    function = &#x27;if(x&lt;0.1,0,if(x&gt;0.3,0,1))&#x27;
-  [../]
-[]
-
-[Kernels]
-  [./mass_dot]
-    type = MassLumpedTimeDerivative
-    variable = tracer
-  [../]
-  [./flux]
-    type = FluxLimitedTVDAdvection
-    variable = tracer
-    advective_flux_calculator = fluo
-  [../]
-[]
-
-[UserObjects]
-  [./fluo]
-    type = AdvectiveFluxCalculatorConstantVelocity
-    flux_limiter_type = superbee
-    u = tracer
-    velocity = &#x27;0.1 0 0&#x27;
-  [../]
-[]
-
-[BCs]
-  [./no_tracer_on_left]
-    type = DirichletBC
-    variable = tracer
-    value = 0
-    boundary = left
-  [../]
-  [./remove_tracer]
-# Ideally, an OutflowBC would be used, but that does not exist in the framework
-# In 1D VacuumBC is the same as OutflowBC, with the alpha parameter being twice the velocity
-    type = VacuumBC
-    boundary = right
-    alpha = 0.2 # 2 * velocity
-    variable = tracer
-  [../]
-[]
-
-[Preconditioning]
-  active = basic
-  [./basic]
-    type = SMP
-    full = true
-    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
-    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
-    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
-  [../]
-  [./preferred_but_might_not_be_installed]
-    type = SMP
-    full = true
-    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
-    petsc_options_value = &#x27; lu       mumps&#x27;
-  [../]
-[]
-
-[VectorPostprocessors]
-  [./tracer]
-    type = LineValueSampler
-    start_point = &#x27;0 0 0&#x27;
-    end_point = &#x27;1 0 0&#x27;
-    num_points = 101
-    sort_by = x
-    variable = tracer
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Newton
-  end_time = 6
-  dt = 6E-2
-  nl_abs_tol = 1E-8
-  nl_max_its = 500
-  timestep_tolerance = 1E-3
-[]
-
-[Outputs]
-  [./out]
-    type = CSV
-    execute_on = final
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="15e3cb98-0e95-4512-b0bb-0879b484864e"><div class="modal-content"><h4>modules/porous_flow/test/tests/numerical_diffusion/fltvd_none.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek
-# No antidiffusion, so this is identical to full-upwinding
-[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 100
-  xmin = 0
-  xmax = 1
-[]
-
-[Variables]
-  [./tracer]
-  [../]
-[]
-
-[ICs]
-  [./tracer]
-    type = FunctionIC
-    variable = tracer
-    function = &#x27;if(x&lt;0.1,0,if(x&gt;0.3,0,1))&#x27;
-  [../]
-[]
-
-[Kernels]
-  [./mass_dot]
-    type = MassLumpedTimeDerivative
-    variable = tracer
-  [../]
-  [./flux]
-    type = FluxLimitedTVDAdvection
-    variable = tracer
-    advective_flux_calculator = fluo
-  [../]
-[]
-
-[UserObjects]
-  [./fluo]
-    type = AdvectiveFluxCalculator
-    flux_limiter_type = none
-    u = tracer
-    velocity = &#x27;0.1 0 0&#x27;
-  [../]
-[]
-
-[BCs]
-  [./no_tracer_on_left]
-    type = DirichletBC
-    variable = tracer
-    value = 0
-    boundary = left
-  [../]
-  [./remove_tracer]
-# Ideally, an OutflowBC would be used, but that does not exist in the framework
-# In 1D VacuumBC is the same as OutflowBC, with the alpha parameter being twice the velocity
-    type = VacuumBC
-    boundary = right
-    alpha = 0.2 # 2 * velocity
-    variable = tracer
-  [../]
-[]
-
-[Preconditioning]
-  active = basic
-  [./basic]
-    type = SMP
-    full = true
-    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
-    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
-    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
-  [../]
-  [./preferred_but_might_not_be_installed]
-    type = SMP
-    full = true
-    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
-    petsc_options_value = &#x27; lu       mumps&#x27;
-  [../]
-[]
-
-[VectorPostprocessors]
-  [./tracer]
-    type = LineValueSampler
-    start_point = &#x27;0 0 0&#x27;
-    end_point = &#x27;1 0 0&#x27;
-    num_points = 101
-    sort_by = x
-    variable = tracer
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Newton
-  end_time = 6
-  dt = 6E-1
-  nl_abs_tol = 1E-8
-  nl_max_its = 500
-  timestep_tolerance = 1E-3
-[]
-
-[Outputs]
-  csv = true
-  execute_on = final
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8c0ecf0a-24bc-4415-9727-c1d283a72caf"><div class="modal-content"><h4>test/tests/kernels/conservative_advection/none_in_all_out.i</h4><pre class="moose-pre"><code class="language-text"># Using ConservativeAdvection with full upwinding
-# This demonstrates BCs that introduce no mass into
-# the domain but allow it to exit freely.
-[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  xmin = 0
-  xmax = 10
-  nx = 100
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[ICs]
-  [./u]
-    type = FunctionIC
-    variable = u
-    function = &#x27;if(x&lt;5,x,10-x)&#x27;
-  [../]
-[]
-
-[Kernels]
-  [./dot]
-    type = MassLumpedTimeDerivative
-    variable = u
-  [../]
-  [./advection]
-    type = ConservativeAdvection
-    variable = u
-    upwinding_type = full
-    velocity = &#x27;1 0 0&#x27;
-  [../]
-[]
-
-[BCs]
-  [./allow_mass_out]
-    type = OutflowBC
-    boundary = right
-    variable = u
-    velocity = &#x27;1 0 0&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Linear
-  dt = 1
-  end_time = 10
-  l_tol = 1E-14
-[]
-
-[Outputs]
-  exodus = true
-[]
-
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a8823085-19cc-4899-8b24-efac87253fb2"><div class="modal-content"><h4>modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_3D.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek, with antidiffusion from superbee flux limiting
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="447b0c17-9b7c-4349-a11c-9de471436512"><div class="modal-content"><h4>modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_3D.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek, with antidiffusion from superbee flux limiting
 # 3D version
 [Mesh]
   type = GeneratedMesh
@@ -1064,485 +1545,4 @@
     execute_on = final
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f7c98f2a-9d40-4db3-9245-19c08c570a17"><div class="modal-content"><h4>modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_2D.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek, with antidiffusion from superbee flux limiting
-# 2D version
-[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  xmin = 0
-  xmax = 1
-  ny = 4
-  ymin = 0
-  ymax = 0.5
-[]
-
-[Variables]
-  [./tracer]
-  [../]
-[]
-
-[ICs]
-  [./tracer]
-    type = FunctionIC
-    variable = tracer
-    function = &#x27;if(x&lt;0.1,0,if(x&gt;0.3,0,1))&#x27;
-  [../]
-[]
-
-[Kernels]
-  [./mass_dot]
-    type = MassLumpedTimeDerivative
-    variable = tracer
-  [../]
-  [./flux]
-    type = FluxLimitedTVDAdvection
-    variable = tracer
-    advective_flux_calculator = fluo
-  [../]
-[]
-
-[UserObjects]
-  [./fluo]
-    type = AdvectiveFluxCalculatorConstantVelocity
-    flux_limiter_type = superbee
-    u = tracer
-    velocity = &#x27;0.1 0 0&#x27;
-  [../]
-[]
-
-[BCs]
-  [./no_tracer_on_left]
-    type = DirichletBC
-    variable = tracer
-    value = 0
-    boundary = left
-  [../]
-  [./remove_tracer]
-# Ideally, an OutflowBC would be used, but that does not exist in the framework
-# In 1D VacuumBC is the same as OutflowBC, with the alpha parameter being twice the velocity
-    type = VacuumBC
-    boundary = right
-    alpha = 0.2 # 2 * velocity
-    variable = tracer
-  [../]
-[]
-
-[Preconditioning]
-  active = basic
-  [./basic]
-    type = SMP
-    full = true
-    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
-    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
-    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
-  [../]
-  [./preferred_but_might_not_be_installed]
-    type = SMP
-    full = true
-    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
-    petsc_options_value = &#x27; lu       mumps&#x27;
-  [../]
-[]
-
-[VectorPostprocessors]
-  [./tracer]
-    type = LineValueSampler
-    start_point = &#x27;0 0 0&#x27;
-    end_point = &#x27;1 0.5 0&#x27;
-    num_points = 11
-    sort_by = x
-    variable = tracer
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Newton
-  end_time = 6
-  dt = 6E-2
-  nl_abs_tol = 1E-8
-  nl_max_its = 500
-  timestep_tolerance = 1E-3
-[]
-
-[Outputs]
-  print_linear_residuals = false
-  [./out]
-    type = CSV
-    execute_on = final
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="60831ef0-52e4-4b73-a898-fe0b6cbdace4"><div class="modal-content"><h4>modules/porous_flow/test/tests/numerical_diffusion/fltvd_no_antidiffusion.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek, but without any antidiffusion
-[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 100
-  xmin = 0
-  xmax = 1
-[]
-
-[Variables]
-  [./tracer]
-  [../]
-[]
-
-[ICs]
-  [./tracer]
-    type = FunctionIC
-    variable = tracer
-    function = &#x27;if(x&lt;0.1,0,if(x&gt;0.3,0,1))&#x27;
-  [../]
-[]
-
-[Kernels]
-  [./mass_dot]
-    type = MassLumpedTimeDerivative
-    variable = tracer
-  [../]
-  [./flux]
-    type = FluxLimitedTVDAdvection
-    variable = tracer
-    advective_flux_calculator = fluo
-  [../]
-[]
-
-[UserObjects]
-  [./fluo]
-    type = AdvectiveFluxCalculatorConstantVelocity
-    flux_limiter_type = none
-    u = tracer
-    velocity = &#x27;0.1 0 0&#x27;
-  [../]
-[]
-
-[BCs]
-  [./no_tracer_on_left]
-    type = DirichletBC
-    variable = tracer
-    value = 0
-    boundary = left
-  [../]
-  [./remove_tracer]
-# Ideally, an OutflowBC would be used, but that does not exist in the framework
-# In 1D VacuumBC is the same as OutflowBC, with the alpha parameter being twice the velocity
-    type = VacuumBC
-    boundary = right
-    alpha = 0.2 # 2 * velocity
-    variable = tracer
-  [../]
-[]
-
-[Preconditioning]
-  active = basic
-  [./basic]
-    type = SMP
-    full = true
-    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
-    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
-    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
-  [../]
-  [./preferred_but_might_not_be_installed]
-    type = SMP
-    full = true
-    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
-    petsc_options_value = &#x27; lu       mumps&#x27;
-  [../]
-[]
-
-[VectorPostprocessors]
-  [./tracer]
-    type = LineValueSampler
-    start_point = &#x27;0 0 0&#x27;
-    end_point = &#x27;1 0 0&#x27;
-    num_points = 101
-    sort_by = x
-    variable = tracer
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Newton
-  end_time = 6
-  dt = 6E-1
-  nl_abs_tol = 1E-8
-  nl_max_its = 500
-  timestep_tolerance = 1E-3
-[]
-
-[Outputs]
-  [./out]
-    type = CSV
-    execute_on = final
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1525692a-3b36-49ab-9ed2-fcbd5cbcb4b2"><div class="modal-content"><h4>test/tests/kernels/mass_lumping/mass_lumping_jacobian.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  xmin = -1
-  xmax = 1
-  nx = 2
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[ICs]
-  [./u_init]
-    type = FunctionIC
-    variable = u
-    function = init_f
-  [../]
-[]
-
-[Kernels]
-  [./time_deriv]
-    type = MassLumpedTimeDerivative
-    variable = u
-  [../]
-  [./diff]
-    type = FuncCoefDiffusion
-    variable = u
-    coef = diff_f
-  [../]
-[]
-
-[Functions]
-  [./init_f]
-    type = ParsedFunction
-    value = max(x,0) #(x&gt;0)
-  [../]
-  [./diff_f]
-    type = ParsedFunction
-    value = max(x,0)
-  [../]
-[]
-
-
-[Executioner]
-  type = Transient
-  end_time = 1
-  solve_type = &#x27;NEWTON&#x27;
-  petsc_options_iname = &#x27;-snes_type&#x27;
-  petsc_options_value = &#x27;test&#x27;
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="cda191d6-7dc1-4ad6-899a-e7b8465a0ca1"><div class="modal-content"><h4>modules/porous_flow/test/tests/flux_limited_TVD_advection/fltvd_2D_trimesh.i</h4><pre class="moose-pre"><code class="language-text"># Using Flux-Limited TVD Advection ala Kuzmin and Turek, with antidiffusion from superbee flux limiting
-# 2D version
-[Mesh]
-  type = FileMesh
-  file = trimesh.msh
-[]
-
-[GlobalParams]
-  block = &#x27;50&#x27;
-[]
-
-[Variables]
-  [./tracer]
-  [../]
-[]
-
-[ICs]
-  [./tracer]
-    type = FunctionIC
-    variable = tracer
-    function = &#x27;if(x&lt;0.1,0,if(x&gt;0.305,0,1))&#x27;
-  [../]
-[]
-
-[Kernels]
-  [./mass_dot]
-    type = MassLumpedTimeDerivative
-    variable = tracer
-  [../]
-  [./flux]
-    type = FluxLimitedTVDAdvection
-    variable = tracer
-    advective_flux_calculator = fluo
-  [../]
-[]
-
-[UserObjects]
-  [./fluo]
-    type = AdvectiveFluxCalculatorConstantVelocity
-    flux_limiter_type = superbee
-    u = tracer
-    velocity = &#x27;0.1 0 0&#x27;
-  [../]
-[]
-
-[BCs]
-  [./no_tracer_on_left]
-    type = DirichletBC
-    variable = tracer
-    value = 0
-    boundary = left
-  [../]
-  [./remove_tracer]
-# Ideally, an OutflowBC would be used, but that does not exist in the framework
-# In 1D VacuumBC is the same as OutflowBC, with the alpha parameter being twice the velocity
-    type = VacuumBC
-    boundary = right
-    alpha = 0.2 # 2 * velocity
-    variable = tracer
-  [../]
-[]
-
-[Preconditioning]
-  active = basic
-  [./basic]
-    type = SMP
-    full = true
-    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
-    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
-    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
-  [../]
-  [./preferred_but_might_not_be_installed]
-    type = SMP
-    full = true
-    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
-    petsc_options_value = &#x27; lu       mumps&#x27;
-  [../]
-[]
-
-[VectorPostprocessors]
-  [./tracer]
-    type = LineValueSampler
-    start_point = &#x27;0 0 0&#x27;
-    end_point = &#x27;1 0.04 0&#x27;
-    num_points = 101
-    sort_by = x
-    variable = tracer
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Newton
-  end_time = 6
-  dt = 6E-2
-  timestep_tolerance = 1E-3
-[]
-
-[Outputs]
-  print_linear_residuals = false
-  [./out]
-    type = CSV
-    execute_on = final
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0f3c7bcf-a227-4b86-b67a-26863c5967d4"><div class="modal-content"><h4>test/tests/kernels/conservative_advection/none_in_none_out.i</h4><pre class="moose-pre"><code class="language-text"># Using ConservativeAdvection with full upwinding
-# This demonstrates BCs (no BCs) that allow no mass to
-# enter or exit the domain.
-# Total mass remains constant and the pulse advects
-# with the correct velocity
-[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  xmin = 0
-  xmax = 10
-  nx = 10
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[ICs]
-  [./u]
-    type = FunctionIC
-    variable = u
-    function = &#x27;if(x&lt;5,x,10-x)&#x27;
-  [../]
-[]
-
-[Kernels]
-  [./dot]
-    type = MassLumpedTimeDerivative
-    variable = u
-  [../]
-  [./advection]
-    type = ConservativeAdvection
-    variable = u
-    upwinding_type = full
-    velocity = &#x27;1 0 0&#x27;
-  [../]
-[]
-
-[Postprocessors]
-  [./total_mass]
-    type = VariableInnerProduct
-    variable = u
-    second_variable = 1
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Linear
-  dt = 1
-  end_time = 10
-  l_tol = 1E-14
-[]
-
-[Outputs]
-  csv = true
-[]
-
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c425670b-2e9b-4012-a756-a5c9f70c66fb"><div class="modal-content"><h4>test/tests/kernels/conservative_advection/full_upwinding_2D.i</h4><pre class="moose-pre"><code class="language-text"># 2D test of advection with full upwinding
-# Note there are no overshoots or undershoots
-# but there is numerical diffusion.
-# The center of the blob advects with the correct velocity
-[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 40
-  ny = 40
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[ICs]
-  [./u_blob]
-    type = FunctionIC
-    variable = u
-    function = &#x27;if(x&lt;0.2,if(y&lt;0.2,1,0),0)&#x27;
-  [../]
-[]
-
-[Kernels]
-  [./udot]
-    type = MassLumpedTimeDerivative
-    variable = u
-  [../]
-  [./advection]
-    type = ConservativeAdvection
-    variable = u
-    upwinding_type = full
-    velocity = &#x27;2 1 0&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = LINEAR
-  dt = 0.01
-  end_time = 0.1
-  l_tol = 1E-14
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#23f8730a-75eb-4037-aece-c8e2110e7606" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#980deee3-43d6-4205-b43c-a6eb264752d9" class="tooltipped" data-position="left" data-tooltip="Example Syntax">Example Syntax</a></li><li><a href="#fe01c064-4dba-4218-b9e7-af69c73d1bca" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#630a882a-acd9-4be5-acba-b91a334c51cb" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#35c9d854-2053-45a5-8a43-6e02de35f214" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#f5439087-341e-41d4-80c0-547fd55ff6ff" class="tooltipped" data-position="left" data-tooltip="Example Syntax">Example Syntax</a></li><li><a href="#3529ced0-9598-4f69-aaac-fb80e2cb2705" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#62ab5754-c07d-4471-917d-bc2a3d3ff8ff" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

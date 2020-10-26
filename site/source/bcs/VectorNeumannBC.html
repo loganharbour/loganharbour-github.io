@@ -1,10 +1,10 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>VectorNeumannBC.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="ae10909b-ae43-4613-996f-15aa1878aa11"><i class="material-icons">menu</i></a><ul class="sidenav" id="ae10909b-ae43-4613-996f-15aa1878aa11"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">bcs</span><a href="#" class="breadcrumb">VectorNeumannBC</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="4d2ed916-d48a-46c8-9dec-01ccf0af271d" data-section-level="1" data-section-text="VectorNeumannBC"><h1 id="vectorneumannbc">VectorNeumannBC</h1><p>Imposes the integrated boundary condition <span tex="\frac{\partial u}{\partial n}=\vec{V}\cdot\hat{n}" bookmark="moose-equation-fb638016-370c-44bd-8236-aa50e66a802a" recursive="True" class="moose-katex-inline-equation" id="moose-equation-fb638016-370c-44bd-8236-aa50e66a802a"><script>var element = document.getElementById("moose-equation-fb638016-370c-44bd-8236-aa50e66a802a");katex.render("\\frac{\\partial u}{\\partial n}=\\vec{V}\\cdot\\hat{n}", element, {displayMode:false,throwOnError:false});</script></span>, where <span tex="\vec{V}" bookmark="moose-equation-cf080be9-eea1-4b88-9f09-4f3217fd1790" recursive="True" class="moose-katex-inline-equation" id="moose-equation-cf080be9-eea1-4b88-9f09-4f3217fd1790"><script>var element = document.getElementById("moose-equation-cf080be9-eea1-4b88-9f09-4f3217fd1790");katex.render("\\vec{V}", element, {displayMode:false,throwOnError:false});</script></span> is a user-defined, constant vector.</p><section class="scrollspy" id="302152b6-b1a5-4be5-8db7-89cfca76f0fa" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>VectorNeumannBC</code> is an <code>IntegratedBC</code> which weakly imposes the flux boundary condition <span tex="\frac{\partial u}{\partial n} = \vec{V}\cdot\hat{n}" bookmark="moose-equation-7641f9ef-9ab9-457c-99fb-af70e59453d3" recursive="True" class="moose-katex-inline-equation" id="moose-equation-7641f9ef-9ab9-457c-99fb-af70e59453d3"><script>var element = document.getElementById("moose-equation-7641f9ef-9ab9-457c-99fb-af70e59453d3");katex.render("\\frac{\\partial u}{\\partial n} = \\vec{V}\\cdot\\hat{n}", element, {displayMode:false,throwOnError:false});</script></span>, where the user specifies the vector <span tex="\vec{V}" bookmark="moose-equation-5659ee47-006e-4541-8e6e-fb98ca08a388" recursive="True" class="moose-katex-inline-equation" id="moose-equation-5659ee47-006e-4541-8e6e-fb98ca08a388"><script>var element = document.getElementById("moose-equation-5659ee47-006e-4541-8e6e-fb98ca08a388");katex.render("\\vec{V}", element, {displayMode:false,throwOnError:false});</script></span> and the unit normal vector <span tex="\hat{n}" bookmark="moose-equation-37da10a2-3dac-4bdc-8190-6837eca7461c" recursive="True" class="moose-katex-inline-equation" id="moose-equation-37da10a2-3dac-4bdc-8190-6837eca7461c"><script>var element = document.getElementById("moose-equation-37da10a2-3dac-4bdc-8190-6837eca7461c");katex.render("\\hat{n}", element, {displayMode:false,throwOnError:false});</script></span> is determined by the geometry of the domain <span tex="\Omega" bookmark="moose-equation-6dc27296-616c-4cb7-8529-a22668de7122" recursive="True" class="moose-katex-inline-equation" id="moose-equation-6dc27296-616c-4cb7-8529-a22668de7122"><script>var element = document.getElementById("moose-equation-6dc27296-616c-4cb7-8529-a22668de7122");katex.render("\\Omega", element, {displayMode:false,throwOnError:false});</script></span>. This class is appropriate to use in systems of partial differential equations (PDEs) of the form <span class="moose-katex-block-equation"><span tex="\begin{aligned}   -\nabla^2 u &= f && \quad \in \Omega \\   u &= g && \quad \in \partial \Omega_D \\   \frac{\partial u}{\partial n} &= \vec{V} \cdot \hat{n} && \quad \in \partial \Omega_N \end{aligned}" bookmark="moose-equation-0aab6122-c991-496b-838f-be62e93b856f" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-0aab6122-c991-496b-838f-be62e93b856f"></span><script>var element = document.getElementById("moose-equation-0aab6122-c991-496b-838f-be62e93b856f");katex.render("\\begin{aligned}   -\\nabla^2 u &= f && \\quad \\in \\Omega \\\\   u &= g && \\quad \\in \\partial \\Omega_D \\\\   \\frac{\\partial u}{\\partial n} &= \\vec{V} \\cdot \\hat{n} && \\quad \\in \\partial \\Omega_N \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span></p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">note</span></div><div class="card-content"><div class="moose-alert-content"><p><p>There is not a 1:1 correspondence between the choice of<span tex="\vec{V}" bookmark="moose-equation-c3990f19-25f9-4dc6-9218-179a32ed34e9" recursive="True" class="moose-katex-inline-equation" id="moose-equation-c3990f19-25f9-4dc6-9218-179a32ed34e9"><script>var element = document.getElementById("moose-equation-c3990f19-25f9-4dc6-9218-179a32ed34e9");katex.render("\\vec{V}", element, {displayMode:false,throwOnError:false});</script></span> and the resulting solution, since the component of <span tex="\vec{V}" bookmark="moose-equation-8f7c317c-1d39-4c68-8b36-d8837f16df62" recursive="True" class="moose-katex-inline-equation" id="moose-equation-8f7c317c-1d39-4c68-8b36-d8837f16df62"><script>var element = document.getElementById("moose-equation-8f7c317c-1d39-4c68-8b36-d8837f16df62");katex.render("\\vec{V}", element, {displayMode:false,throwOnError:false});</script></span>which is orthogonal to the outward normal vector will not have any effect on the result.</p></p></div></div></div><p>This class exists mainly for convenience: if the true solution has a constant flux, then it is easier to specify Neumann boundary conditions on parts of the boundary with different outward normal vectors by simply specifying the true constant flux vector, and allowing MOOSE to dot it with the appropriate outward normals as necessary.</p></section><section class="scrollspy" id="845808e2-214f-465b-a7f5-e5fa9975dbce" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">  [./top]
+<!DOCTYPE html><head><meta charset="UTF-8"><title>VectorNeumannBC.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="1576e410-7d91-489f-8290-196dcb4a9a9e"><i class="material-icons">menu</i></a><ul class="sidenav" id="1576e410-7d91-489f-8290-196dcb4a9a9e"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">bcs</span><a href="#" class="breadcrumb">VectorNeumannBC</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="fc9242e2-33a2-4b74-b05d-210f0259ea4f" data-section-level="1" data-section-text="VectorNeumannBC"><h1 id="vectorneumannbc">VectorNeumannBC</h1><p>Imposes the integrated boundary condition <span tex="\frac{\partial u}{\partial n}=\vec{V}\cdot\hat{n}" bookmark="moose-equation-fecd902f-3857-4d85-86d9-c48fa5938c76" recursive="True" class="moose-katex-inline-equation" id="moose-equation-fecd902f-3857-4d85-86d9-c48fa5938c76"><script>var element = document.getElementById("moose-equation-fecd902f-3857-4d85-86d9-c48fa5938c76");katex.render("\\frac{\\partial u}{\\partial n}=\\vec{V}\\cdot\\hat{n}", element, {displayMode:false,throwOnError:false});</script></span>, where <span tex="\vec{V}" bookmark="moose-equation-d8a08de8-31ec-440c-b318-aadde7854e13" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d8a08de8-31ec-440c-b318-aadde7854e13"><script>var element = document.getElementById("moose-equation-d8a08de8-31ec-440c-b318-aadde7854e13");katex.render("\\vec{V}", element, {displayMode:false,throwOnError:false});</script></span> is a user-defined, constant vector.</p><section class="scrollspy" id="e2a59fa3-77f4-43bd-a379-e9ab597f05ed" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>VectorNeumannBC</code> is an <code>IntegratedBC</code> which weakly imposes the flux boundary condition <span tex="\frac{\partial u}{\partial n} = \vec{V}\cdot\hat{n}" bookmark="moose-equation-c2bfacd3-5b31-4d21-ba37-912c7aa5d0d0" recursive="True" class="moose-katex-inline-equation" id="moose-equation-c2bfacd3-5b31-4d21-ba37-912c7aa5d0d0"><script>var element = document.getElementById("moose-equation-c2bfacd3-5b31-4d21-ba37-912c7aa5d0d0");katex.render("\\frac{\\partial u}{\\partial n} = \\vec{V}\\cdot\\hat{n}", element, {displayMode:false,throwOnError:false});</script></span>, where the user specifies the vector <span tex="\vec{V}" bookmark="moose-equation-ff63da8d-9222-4a4a-a1bf-4d6bf1ea8131" recursive="True" class="moose-katex-inline-equation" id="moose-equation-ff63da8d-9222-4a4a-a1bf-4d6bf1ea8131"><script>var element = document.getElementById("moose-equation-ff63da8d-9222-4a4a-a1bf-4d6bf1ea8131");katex.render("\\vec{V}", element, {displayMode:false,throwOnError:false});</script></span> and the unit normal vector <span tex="\hat{n}" bookmark="moose-equation-95cf82d6-23db-4de2-a099-4826e61fe670" recursive="True" class="moose-katex-inline-equation" id="moose-equation-95cf82d6-23db-4de2-a099-4826e61fe670"><script>var element = document.getElementById("moose-equation-95cf82d6-23db-4de2-a099-4826e61fe670");katex.render("\\hat{n}", element, {displayMode:false,throwOnError:false});</script></span> is determined by the geometry of the domain <span tex="\Omega" bookmark="moose-equation-404d9839-d9aa-439f-b7e3-af7f79ba0472" recursive="True" class="moose-katex-inline-equation" id="moose-equation-404d9839-d9aa-439f-b7e3-af7f79ba0472"><script>var element = document.getElementById("moose-equation-404d9839-d9aa-439f-b7e3-af7f79ba0472");katex.render("\\Omega", element, {displayMode:false,throwOnError:false});</script></span>. This class is appropriate to use in systems of partial differential equations (PDEs) of the form <span class="moose-katex-block-equation"><span tex="\begin{aligned}   -\nabla^2 u &= f && \quad \in \Omega \\   u &= g && \quad \in \partial \Omega_D \\   \frac{\partial u}{\partial n} &= \vec{V} \cdot \hat{n} && \quad \in \partial \Omega_N \end{aligned}" bookmark="moose-equation-6833a026-6997-427d-b11e-76b1af6042c5" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-6833a026-6997-427d-b11e-76b1af6042c5"></span><script>var element = document.getElementById("moose-equation-6833a026-6997-427d-b11e-76b1af6042c5");katex.render("\\begin{aligned}   -\\nabla^2 u &= f && \\quad \\in \\Omega \\\\   u &= g && \\quad \\in \\partial \\Omega_D \\\\   \\frac{\\partial u}{\\partial n} &= \\vec{V} \\cdot \\hat{n} && \\quad \\in \\partial \\Omega_N \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span></p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">note</span></div><div class="card-content"><div class="moose-alert-content"><p><p>There is not a 1:1 correspondence between the choice of<span tex="\vec{V}" bookmark="moose-equation-663405dd-492b-4d9c-beb0-550a16a320e6" recursive="True" class="moose-katex-inline-equation" id="moose-equation-663405dd-492b-4d9c-beb0-550a16a320e6"><script>var element = document.getElementById("moose-equation-663405dd-492b-4d9c-beb0-550a16a320e6");katex.render("\\vec{V}", element, {displayMode:false,throwOnError:false});</script></span> and the resulting solution, since the component of <span tex="\vec{V}" bookmark="moose-equation-750b7b98-ab3d-4356-92f0-8b7d9fb5502e" recursive="True" class="moose-katex-inline-equation" id="moose-equation-750b7b98-ab3d-4356-92f0-8b7d9fb5502e"><script>var element = document.getElementById("moose-equation-750b7b98-ab3d-4356-92f0-8b7d9fb5502e");katex.render("\\vec{V}", element, {displayMode:false,throwOnError:false});</script></span>which is orthogonal to the outward normal vector will not have any effect on the result.</p></p></div></div></div><p>This class exists mainly for convenience: if the true solution has a constant flux, then it is easier to specify Neumann boundary conditions on parts of the boundary with different outward normal vectors by simply specifying the true constant flux vector, and allowing MOOSE to dot it with the appropriate outward normals as necessary.</p></section><section class="scrollspy" id="8c405a32-2dae-43bd-b02f-8ecb34a616ae" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">  [./top]
     type = VectorNeumannBC
     variable = u
     vector_value = &#x27;1 1 0&#x27;
     boundary = 2
   [../]
-</code></pre><a href="#4c400c9b-8923-4990-97c1-75f938570b29" class="modal-trigger">(test/tests/bcs/misc_bcs/vector_neumann_bc_test.i)</a><div class="modal moose-modal" id="4c400c9b-8923-4990-97c1-75f938570b29"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/bcs/misc_bcs/vector_neumann_bc_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre><a href="#954d6390-a813-46d8-ab19-e6de2e6b24fd" class="modal-trigger">(test/tests/bcs/misc_bcs/vector_neumann_bc_test.i)</a><div class="modal moose-modal" id="954d6390-a813-46d8-ab19-e6de2e6b24fd"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/bcs/misc_bcs/vector_neumann_bc_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
@@ -67,440 +67,7 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="59f0c1b4-09e8-44b1-b2ba-a152dce125de" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="ec7fe7ba-dcde-48a8-94f5-6095fb70d3f2" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this boundary condition applies to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this boundary condition applies to</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="30be4809-e2d3-48cc-83aa-92f7ddf80a72" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_value</span><span class="moose-parameter-header-default">0 0 0</span><span class="moose-parameter-header-description">vector this BC should act in</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0 0 0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>libMesh::VectorValue<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>vector this BC should act in</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="f9bba9c3-f719-4f18-8240-629adc2144fa" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="3d1e0264-bf4f-4221-92b9-0ee3027979cd" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="0151c3bd-1b7c-4098-85b6-83be157d99a9" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#965ee225-3efc-4d88-99cd-a608fa07e687" class="modal-trigger">test/tests/bcs/misc_bcs/vector_neumann_bc_test.i</a></li><li><a href="#5cf6c750-3c89-49c9-86b4-386d3cb979de" class="modal-trigger">modules/tensor_mechanics/test/tests/static_deformations/beam_cosserat_01.i</a></li><li><a href="#874a00f0-3462-4ab2-8d12-060971259518" class="modal-trigger">modules/tensor_mechanics/test/tests/static_deformations/beam_cosserat_01_slippery.i</a></li><li><a href="#382c29e0-762c-4893-ba1a-7022ab0a89e6" class="modal-trigger">modules/tensor_mechanics/test/tests/static_deformations/beam_cosserat_02_apply_stress.i</a></li></ul><div class="modal moose-modal" id="965ee225-3efc-4d88-99cd-a608fa07e687"><div class="modal-content"><h4>test/tests/bcs/misc_bcs/vector_neumann_bc_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-  nz = 0
-  zmin = 0
-  zmax = 0
-  elem_type = QUAD4
-[]
-
-[Variables]
-  active = &#x27;u&#x27;
-
-  [./u]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[Kernels]
-  active = &#x27;diff&#x27;
-
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[BCs]
-  active = &#x27;left right top&#x27;
-
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = 3
-    value = 0.0
-  [../]
-
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = 1
-    value = 2.0
-  [../]
-
-  [./top]
-    type = VectorNeumannBC
-    variable = u
-    vector_value = &#x27;1 1 0&#x27;
-    boundary = 2
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-
-  solve_type = &#x27;PJFNK&#x27;
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5cf6c750-3c89-49c9-86b4-386d3cb979de"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/static_deformations/beam_cosserat_01.i</h4><pre class="moose-pre"><code class="language-text"># Beam bending.  One end is clamped and the other end is subjected to
-# a surface traction.
-# The joint normal and shear stiffnesses are set very large, so
-# that this situation should be identical to the standard (non-Cosserat)
-# isotropic elasticity case.
-[Mesh]
-  type = GeneratedMesh
-  dim = 3
-  nx = 40
-  xmax = 10
-  ny = 1
-  nz = 4
-  zmin = -0.5
-  zmax = 0.5
-[]
-
-[GlobalParams]
-  displacements = &#x27;disp_x disp_y disp_z&#x27;
-  Cosserat_rotations = &#x27;wc_x wc_y wc_z&#x27;
-[]
-
-[Variables]
-  [./disp_x]
-  [../]
-  [./disp_y]
-  [../]
-  [./disp_z]
-  [../]
-  [./wc_x]
-  [../]
-  [./wc_y]
-  [../]
-[]
-
-[Kernels]
-  [./cx_elastic]
-    type = CosseratStressDivergenceTensors
-    variable = disp_x
-    component = 0
-  [../]
-  [./cy_elastic]
-    type = CosseratStressDivergenceTensors
-    variable = disp_y
-    component = 1
-  [../]
-  [./cz_elastic]
-    type = CosseratStressDivergenceTensors
-    variable = disp_z
-    component = 2
-  [../]
-  [./x_couple]
-    type = StressDivergenceTensors
-    variable = wc_x
-    displacements = &#x27;wc_x wc_y wc_z&#x27;
-    component = 0
-    base_name = couple
-  [../]
-  [./y_couple]
-    type = StressDivergenceTensors
-    variable = wc_y
-    displacements = &#x27;wc_x wc_y wc_z&#x27;
-    component = 1
-    base_name = couple
-  [../]
-  [./x_moment]
-    type = MomentBalancing
-    variable = wc_x
-    component = 0
-  [../]
-  [./y_moment]
-    type = MomentBalancing
-    variable = wc_y
-    component = 1
-  [../]
-[]
-
-[BCs]
-  # zmin is called back
-  # zmax is called front
-  # ymin is called bottom
-  # ymax is called top
-  # xmin is called left
-  # xmax is called right
-  [./no_dispy]
-    type = DirichletBC
-    variable = disp_y
-    boundary = &#x27;bottom top&#x27;
-    value = 0.0
-  [../]
-  [./no_wc_x]
-    type = DirichletBC
-    variable = wc_x
-    boundary = &#x27;bottom top back front left right&#x27;
-    value = 0.0
-  [../]
-  [./clamp_z]
-    type = DirichletBC
-    variable = disp_z
-    boundary = left
-    value = 0.0
-  [../]
-  [./clamp_x]
-    type = DirichletBC
-    variable = disp_x
-    boundary = left
-    value = 0.0
-  [../]
-  [./end_traction]
-    type = VectorNeumannBC
-    variable = disp_z
-    vector_value = &#x27;-2E-4 0 0&#x27;
-    boundary = right
-  [../]
-[]
-
-[AuxVariables]
-  [./wc_z]
-  [../]
-  [./stress_xx]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./stress_xy]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./stress_xz]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./stress_yx]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./stress_yy]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./stress_yz]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./stress_zx]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./stress_zy]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./stress_zz]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./couple_stress_xx]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./couple_stress_xy]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./couple_stress_xz]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./couple_stress_yx]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./couple_stress_yy]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./couple_stress_yz]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./couple_stress_zx]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./couple_stress_zy]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./couple_stress_zz]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-[]
-
-[AuxKernels]
-  [./stress_xx]
-    type = RankTwoAux
-    rank_two_tensor = stress
-    variable = stress_xx
-    index_i = 0
-    index_j = 0
-  [../]
-  [./stress_xy]
-    type = RankTwoAux
-    rank_two_tensor = stress
-    variable = stress_xy
-    index_i = 0
-    index_j = 1
-  [../]
-  [./stress_xz]
-    type = RankTwoAux
-    rank_two_tensor = stress
-    variable = stress_xz
-    index_i = 0
-    index_j = 2
-  [../]
-  [./stress_yx]
-    type = RankTwoAux
-    rank_two_tensor = stress
-    variable = stress_yx
-    index_i = 1
-    index_j = 0
-  [../]
-  [./stress_yy]
-    type = RankTwoAux
-    rank_two_tensor = stress
-    variable = stress_yy
-    index_i = 1
-    index_j = 1
-  [../]
-  [./stress_yz]
-    type = RankTwoAux
-    rank_two_tensor = stress
-    variable = stress_yz
-    index_i = 1
-    index_j = 2
-  [../]
-  [./stress_zx]
-    type = RankTwoAux
-    rank_two_tensor = stress
-    variable = stress_zx
-    index_i = 2
-    index_j = 0
-  [../]
-  [./stress_zy]
-    type = RankTwoAux
-    rank_two_tensor = stress
-    variable = stress_zy
-    index_i = 2
-    index_j = 1
-  [../]
-  [./stress_zz]
-    type = RankTwoAux
-    rank_two_tensor = stress
-    variable = stress_zz
-    index_i = 2
-    index_j = 2
-  [../]
-  [./couple_stress_xx]
-    type = RankTwoAux
-    rank_two_tensor = couple_stress
-    variable = couple_stress_xx
-    index_i = 0
-    index_j = 0
-  [../]
-  [./couple_stress_xy]
-    type = RankTwoAux
-    rank_two_tensor = couple_stress
-    variable = couple_stress_xy
-    index_i = 0
-    index_j = 1
-  [../]
-  [./couple_stress_xz]
-    type = RankTwoAux
-    rank_two_tensor = couple_stress
-    variable = couple_stress_xz
-    index_i = 0
-    index_j = 2
-  [../]
-  [./couple_stress_yx]
-    type = RankTwoAux
-    rank_two_tensor = couple_stress
-    variable = couple_stress_yx
-    index_i = 1
-    index_j = 0
-  [../]
-  [./couple_stress_yy]
-    type = RankTwoAux
-    rank_two_tensor = couple_stress
-    variable = couple_stress_yy
-    index_i = 1
-    index_j = 1
-  [../]
-  [./couple_stress_yz]
-    type = RankTwoAux
-    rank_two_tensor = couple_stress
-    variable = couple_stress_yz
-    index_i = 1
-    index_j = 2
-  [../]
-  [./couple_stress_zx]
-    type = RankTwoAux
-    rank_two_tensor = couple_stress
-    variable = couple_stress_zx
-    index_i = 2
-    index_j = 0
-  [../]
-  [./couple_stress_zy]
-    type = RankTwoAux
-    rank_two_tensor = couple_stress
-    variable = couple_stress_zy
-    index_i = 2
-    index_j = 1
-  [../]
-  [./couple_stress_zz]
-    type = RankTwoAux
-    rank_two_tensor = couple_stress
-    variable = couple_stress_zz
-    index_i = 2
-    index_j = 2
-  [../]
-[]
-
-[VectorPostprocessors]
-  [./soln]
-    type = LineValueSampler
-    sort_by = x
-    variable = &#x27;disp_x disp_z stress_xx stress_xz stress_zx stress_zz wc_x wc_y  couple_stress_xx couple_stress_xz couple_stress_zx couple_stress_zz&#x27;
-    start_point = &#x27;0 0 0.5&#x27;
-    end_point = &#x27;10 0 0.5&#x27;
-    num_points = 11
-  [../]
-[]
-
-[Materials]
-  [./elasticity_tensor]
-    type = ComputeLayeredCosseratElasticityTensor
-    young = 1.2
-    poisson = 0.3
-    layer_thickness = 1
-    joint_normal_stiffness = 1E16
-    joint_shear_stiffness = 1E16
-  [../]
-  [./strain]
-    type = ComputeCosseratSmallStrain
-  [../]
-  [./stress]
-    type = ComputeCosseratLinearElasticStress
-  [../]
-[]
-
-[Preconditioning]
-  [./andy]
-    type = SMP
-    full = true
-    petsc_options_iname = &#x27;-ksp_type -pc_type -sub_pc_type -snes_atol -snes_rtol -snes_max_it -ksp_atol -ksp_rtol -sub_pc_factor_shift_type&#x27;
-    petsc_options_value = &#x27;gmres asm lu 1E-10 1E-14 10 1E-15 1E-10 NONZERO&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Newton
-  num_steps = 1
-[]
-
-[Outputs]
-  execute_on = &#x27;timestep_end&#x27;
-  file_base = beam_cosserat_01
-  csv = true
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="874a00f0-3462-4ab2-8d12-060971259518"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/static_deformations/beam_cosserat_01_slippery.i</h4><pre class="moose-pre"><code class="language-text"># Beam bending.  One end is clamped and the other end is subjected to
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="34398569-f78e-41ce-b3f7-969907231f1b" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="ae366ff1-ff35-4481-a256-a92cf93efb56" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this boundary condition applies to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this boundary condition applies to</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="f3bd86fc-4125-4fef-9abe-6d5900d41f63" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_value</span><span class="moose-parameter-header-default">0 0 0</span><span class="moose-parameter-header-description">vector this BC should act in</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0 0 0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>libMesh::VectorValue<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>vector this BC should act in</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="be35f982-ad0f-444b-a413-610b9f323681" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="7ec99b77-d47f-424a-8575-711c66f21e2c" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="7d01e21c-100a-4d5a-a25a-bbe0943ce634" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#5551b278-e6f8-4463-8f24-f1724cb903f6" class="modal-trigger">modules/tensor_mechanics/test/tests/static_deformations/beam_cosserat_01_slippery.i</a></li><li><a href="#aae88fee-1c4f-4dfb-91b2-09093fd64124" class="modal-trigger">modules/tensor_mechanics/test/tests/static_deformations/beam_cosserat_02_apply_stress.i</a></li><li><a href="#676cc1ea-947a-4756-a6ba-2c625f3b6afe" class="modal-trigger">modules/tensor_mechanics/test/tests/static_deformations/beam_cosserat_01.i</a></li><li><a href="#23f66a8a-9c27-4f11-9a4f-e8a43e435fc9" class="modal-trigger">test/tests/bcs/misc_bcs/vector_neumann_bc_test.i</a></li></ul><div class="modal moose-modal" id="5551b278-e6f8-4463-8f24-f1724cb903f6"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/static_deformations/beam_cosserat_01_slippery.i</h4><pre class="moose-pre"><code class="language-text"># Beam bending.  One end is clamped and the other end is subjected to
 # a constant surface traction.
 # The beam thickness is 1, and the Cosserat layer thickness is 0.5,
 # so the beam contains 2 Cosserat layers.
@@ -970,7 +537,7 @@
   csv = true
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="382c29e0-762c-4893-ba1a-7022ab0a89e6"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/static_deformations/beam_cosserat_02_apply_stress.i</h4><pre class="moose-pre"><code class="language-text"># Beam bending.
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="aae88fee-1c4f-4dfb-91b2-09093fd64124"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/static_deformations/beam_cosserat_02_apply_stress.i</h4><pre class="moose-pre"><code class="language-text"># Beam bending.
 # One end is clamped and the other end is subjected to a stress
 # and micromechanical moment that will induce bending.
 # The stress that will induce bending around the y axis is
@@ -1485,4 +1052,437 @@
   exodus = true
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#302152b6-b1a5-4be5-8db7-89cfca76f0fa" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#845808e2-214f-465b-a7f5-e5fa9975dbce" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#59f0c1b4-09e8-44b1-b2ba-a152dce125de" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#0151c3bd-1b7c-4098-85b6-83be157d99a9" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="676cc1ea-947a-4756-a6ba-2c625f3b6afe"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/static_deformations/beam_cosserat_01.i</h4><pre class="moose-pre"><code class="language-text"># Beam bending.  One end is clamped and the other end is subjected to
+# a surface traction.
+# The joint normal and shear stiffnesses are set very large, so
+# that this situation should be identical to the standard (non-Cosserat)
+# isotropic elasticity case.
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 40
+  xmax = 10
+  ny = 1
+  nz = 4
+  zmin = -0.5
+  zmax = 0.5
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+  Cosserat_rotations = &#x27;wc_x wc_y wc_z&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+  [./disp_z]
+  [../]
+  [./wc_x]
+  [../]
+  [./wc_y]
+  [../]
+[]
+
+[Kernels]
+  [./cx_elastic]
+    type = CosseratStressDivergenceTensors
+    variable = disp_x
+    component = 0
+  [../]
+  [./cy_elastic]
+    type = CosseratStressDivergenceTensors
+    variable = disp_y
+    component = 1
+  [../]
+  [./cz_elastic]
+    type = CosseratStressDivergenceTensors
+    variable = disp_z
+    component = 2
+  [../]
+  [./x_couple]
+    type = StressDivergenceTensors
+    variable = wc_x
+    displacements = &#x27;wc_x wc_y wc_z&#x27;
+    component = 0
+    base_name = couple
+  [../]
+  [./y_couple]
+    type = StressDivergenceTensors
+    variable = wc_y
+    displacements = &#x27;wc_x wc_y wc_z&#x27;
+    component = 1
+    base_name = couple
+  [../]
+  [./x_moment]
+    type = MomentBalancing
+    variable = wc_x
+    component = 0
+  [../]
+  [./y_moment]
+    type = MomentBalancing
+    variable = wc_y
+    component = 1
+  [../]
+[]
+
+[BCs]
+  # zmin is called back
+  # zmax is called front
+  # ymin is called bottom
+  # ymax is called top
+  # xmin is called left
+  # xmax is called right
+  [./no_dispy]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;bottom top&#x27;
+    value = 0.0
+  [../]
+  [./no_wc_x]
+    type = DirichletBC
+    variable = wc_x
+    boundary = &#x27;bottom top back front left right&#x27;
+    value = 0.0
+  [../]
+  [./clamp_z]
+    type = DirichletBC
+    variable = disp_z
+    boundary = left
+    value = 0.0
+  [../]
+  [./clamp_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./end_traction]
+    type = VectorNeumannBC
+    variable = disp_z
+    vector_value = &#x27;-2E-4 0 0&#x27;
+    boundary = right
+  [../]
+[]
+
+[AuxVariables]
+  [./wc_z]
+  [../]
+  [./stress_xx]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./stress_xy]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./stress_xz]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./stress_yx]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./stress_yy]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./stress_yz]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./stress_zx]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./stress_zy]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./stress_zz]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./couple_stress_xx]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./couple_stress_xy]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./couple_stress_xz]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./couple_stress_yx]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./couple_stress_yy]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./couple_stress_yz]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./couple_stress_zx]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./couple_stress_zy]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./couple_stress_zz]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_xx]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xx
+    index_i = 0
+    index_j = 0
+  [../]
+  [./stress_xy]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xy
+    index_i = 0
+    index_j = 1
+  [../]
+  [./stress_xz]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xz
+    index_i = 0
+    index_j = 2
+  [../]
+  [./stress_yx]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_yx
+    index_i = 1
+    index_j = 0
+  [../]
+  [./stress_yy]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_yy
+    index_i = 1
+    index_j = 1
+  [../]
+  [./stress_yz]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_yz
+    index_i = 1
+    index_j = 2
+  [../]
+  [./stress_zx]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_zx
+    index_i = 2
+    index_j = 0
+  [../]
+  [./stress_zy]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_zy
+    index_i = 2
+    index_j = 1
+  [../]
+  [./stress_zz]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_zz
+    index_i = 2
+    index_j = 2
+  [../]
+  [./couple_stress_xx]
+    type = RankTwoAux
+    rank_two_tensor = couple_stress
+    variable = couple_stress_xx
+    index_i = 0
+    index_j = 0
+  [../]
+  [./couple_stress_xy]
+    type = RankTwoAux
+    rank_two_tensor = couple_stress
+    variable = couple_stress_xy
+    index_i = 0
+    index_j = 1
+  [../]
+  [./couple_stress_xz]
+    type = RankTwoAux
+    rank_two_tensor = couple_stress
+    variable = couple_stress_xz
+    index_i = 0
+    index_j = 2
+  [../]
+  [./couple_stress_yx]
+    type = RankTwoAux
+    rank_two_tensor = couple_stress
+    variable = couple_stress_yx
+    index_i = 1
+    index_j = 0
+  [../]
+  [./couple_stress_yy]
+    type = RankTwoAux
+    rank_two_tensor = couple_stress
+    variable = couple_stress_yy
+    index_i = 1
+    index_j = 1
+  [../]
+  [./couple_stress_yz]
+    type = RankTwoAux
+    rank_two_tensor = couple_stress
+    variable = couple_stress_yz
+    index_i = 1
+    index_j = 2
+  [../]
+  [./couple_stress_zx]
+    type = RankTwoAux
+    rank_two_tensor = couple_stress
+    variable = couple_stress_zx
+    index_i = 2
+    index_j = 0
+  [../]
+  [./couple_stress_zy]
+    type = RankTwoAux
+    rank_two_tensor = couple_stress
+    variable = couple_stress_zy
+    index_i = 2
+    index_j = 1
+  [../]
+  [./couple_stress_zz]
+    type = RankTwoAux
+    rank_two_tensor = couple_stress
+    variable = couple_stress_zz
+    index_i = 2
+    index_j = 2
+  [../]
+[]
+
+[VectorPostprocessors]
+  [./soln]
+    type = LineValueSampler
+    sort_by = x
+    variable = &#x27;disp_x disp_z stress_xx stress_xz stress_zx stress_zz wc_x wc_y  couple_stress_xx couple_stress_xz couple_stress_zx couple_stress_zz&#x27;
+    start_point = &#x27;0 0 0.5&#x27;
+    end_point = &#x27;10 0 0.5&#x27;
+    num_points = 11
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeLayeredCosseratElasticityTensor
+    young = 1.2
+    poisson = 0.3
+    layer_thickness = 1
+    joint_normal_stiffness = 1E16
+    joint_shear_stiffness = 1E16
+  [../]
+  [./strain]
+    type = ComputeCosseratSmallStrain
+  [../]
+  [./stress]
+    type = ComputeCosseratLinearElasticStress
+  [../]
+[]
+
+[Preconditioning]
+  [./andy]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-ksp_type -pc_type -sub_pc_type -snes_atol -snes_rtol -snes_max_it -ksp_atol -ksp_rtol -sub_pc_factor_shift_type&#x27;
+    petsc_options_value = &#x27;gmres asm lu 1E-10 1E-14 10 1E-15 1E-10 NONZERO&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  num_steps = 1
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  file_base = beam_cosserat_01
+  csv = true
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="23f66a8a-9c27-4f11-9a4f-e8a43e435fc9"><div class="modal-content"><h4>test/tests/bcs/misc_bcs/vector_neumann_bc_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  zmin = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[Variables]
+  active = &#x27;u&#x27;
+
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  active = &#x27;diff&#x27;
+
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left right top&#x27;
+
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 3
+    value = 0.0
+  [../]
+
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 2.0
+  [../]
+
+  [./top]
+    type = VectorNeumannBC
+    variable = u
+    vector_value = &#x27;1 1 0&#x27;
+    boundary = 2
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#e2a59fa3-77f4-43bd-a379-e9ab597f05ed" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#8c405a32-2dae-43bd-b02f-8ecb34a616ae" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#34398569-f78e-41ce-b3f7-969907231f1b" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#7d01e21c-100a-4d5a-a25a-bbe0943ce634" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

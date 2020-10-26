@@ -1,4 +1,342 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>AverageNodalVariableValue.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="2c7caf0a-dfa8-478b-80d7-6c885ac02d98"><i class="material-icons">menu</i></a><ul class="sidenav" id="2c7caf0a-dfa8-478b-80d7-6c885ac02d98"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">postprocessors</span><a href="#" class="breadcrumb">AverageNodalVariableValue</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="f63d6818-2015-4244-91b6-8d889a2ff8f0" data-section-level="1" data-section-text="AverageNodalVariableValue"><h1 id="averagenodalvariablevalue">AverageNodalVariableValue</h1><p>Computes the average value of a field by sampling all nodal solutions on the domain or within a subdomain</p><section class="scrollspy" id="45a88aac-7812-4cc1-8294-6c20f9070fa6" data-section-level="2" data-section-text="Example Input File Syntax"><h2 id="example-input-file-syntax">Example Input File Syntax</h2></section><section class="scrollspy" id="26043012-e7e4-45b3-9ccf-7402784ef4c6" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="c0515b31-532e-402c-ae12-3091b073b3eb" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this postprocessor operates on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this postprocessor operates on</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="ac5d28bb-8331-4e8a-bd6f-63d5c5d6d1e0" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM TRANSFER</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">unique_node_execute</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">When false (default), block restricted objects will have the execute method called multiple times on a single node if the node lies on a interface between two subdomains.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When false (default), block restricted objects will have the execute method called multiple times on a single node if the node lies on a interface between two subdomains.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="b343a459-d1f7-4bc9-ac30-c31953ba0813" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">allow_duplicate_execution_on_initial</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="4f3e1526-3f6f-4cf2-96f9-7116697b5c86" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#914c3ff4-c123-479b-a8e7-497f7a1467a7" class="modal-trigger">modules/stochastic_tools/examples/parameter_study/diffusion.i</a></li><li><a href="#32747592-1d49-4ac9-b30e-0eff761847ed" class="modal-trigger">modules/stochastic_tools/test/tests/surrogates/poly_chaos/sub.i</a></li><li><a href="#adcdc9a7-43f0-4985-8e6c-acdc4c357f26" class="modal-trigger">modules/tensor_mechanics/test/tests/thermal_expansion/ad_constant_expansion_stress_free_temp.i</a></li><li><a href="#f8b720d5-2ffe-45bf-8052-bbbdf3517909" class="modal-trigger">modules/stochastic_tools/test/tests/transfers/sampler_postprocessor/sub.i</a></li><li><a href="#b69f60d1-2f3d-4076-bede-58289a4353b0" class="modal-trigger">modules/tensor_mechanics/test/tests/thermal_expansion/multiple_thermal_eigenstrains.i</a></li><li><a href="#8e8dc7fa-462e-4261-b310-b6da1abc27b7" class="modal-trigger">modules/combined/test/tests/thermo_mech/youngs_modulus_function_temp.i</a></li><li><a href="#14bebafe-5853-4fce-b7f5-e99904a574da" class="modal-trigger">modules/stochastic_tools/test/tests/surrogates/load_store/sub.i</a></li><li><a href="#eb07308d-93a5-4c79-b8d8-2c8d06a35b73" class="modal-trigger">modules/stochastic_tools/test/tests/surrogates/gaussian_process/sub.i</a></li><li><a href="#9e7a532d-b05a-40de-ac19-d6233ecd875b" class="modal-trigger">modules/stochastic_tools/test/tests/transfers/sampler_postprocessor/errors/sub.i</a></li><li><a href="#cf42ee56-4a09-4a7c-94fe-c919b69f28e6" class="modal-trigger">modules/stochastic_tools/test/tests/vectorpostprocessors/stochastic_results/sub.i</a></li><li><a href="#343215c6-81fe-4134-8092-1774952e11ca" class="modal-trigger">test/tests/postprocessors/avg_nodal_var_value/avg_nodal_var_value_ts_begin.i</a></li><li><a href="#e05e1f5a-98ad-4079-81d2-e4d868156e25" class="modal-trigger">modules/stochastic_tools/examples/sobol/diffusion.i</a></li><li><a href="#19d5b92f-13b7-41a6-aab8-2ead845a99bd" class="modal-trigger">modules/stochastic_tools/examples/surrogates/sub.i</a></li><li><a href="#322ea85a-77d6-4c4d-b845-f77888ca85e2" class="modal-trigger">modules/stochastic_tools/test/tests/vectorpostprocessors/stochastic_results_complete_history/sub.i</a></li><li><a href="#4c4809ac-175a-45b2-8590-e028a0ff02bd" class="modal-trigger">test/tests/controls/time_periods/user_objects/user_object.i</a></li><li><a href="#05a24b5c-3b98-4dd4-a14e-91f663dd268f" class="modal-trigger">modules/tensor_mechanics/test/tests/thermal_expansion/constant_expansion_coeff.i</a></li><li><a href="#b739195b-417f-4718-8767-b8c192caaef7" class="modal-trigger">modules/combined/test/tests/thermo_mech/ad-youngs_modulus_function_temp.i</a></li><li><a href="#1e371a67-96d9-4873-ab6c-6fa68b84d51c" class="modal-trigger">modules/stochastic_tools/examples/batch/sub.i</a></li><li><a href="#f0f05d22-5e30-44cf-bd20-a5b9c5242c45" class="modal-trigger">modules/tensor_mechanics/test/tests/thermal_expansion/constant_expansion_stress_free_temp.i</a></li><li><a href="#3a058f7c-1493-4eb4-a19b-d2ef94829675" class="modal-trigger">modules/stochastic_tools/test/tests/multiapps/batch_sampler_transient_multiapp/sub.i</a></li><li><a href="#17281fd8-b691-4780-acdb-c43fcd479833" class="modal-trigger">modules/stochastic_tools/test/tests/multiapps/batch_full_solve_multiapp/sub.i</a></li><li><a href="#beca1f1b-591c-48f2-a5a7-3b9510eaab51" class="modal-trigger">modules/stochastic_tools/test/tests/transfers/batch_sampler_transfer/sub.i</a></li><li><a href="#805a5412-0d84-4707-a344-4dc862347e37" class="modal-trigger">modules/tensor_mechanics/test/tests/thermal_expansion/constant_expansion_coeff_restart.i</a></li><li><a href="#1dc477f5-a2cc-46ab-93c7-5c0f8d8b1e6f" class="modal-trigger">modules/stochastic_tools/test/tests/vectorpostprocessors/multiple_stochastic_results/sub.i</a></li><li><a href="#bbe5149f-8736-4323-ae03-2be96e597dcc" class="modal-trigger">test/tests/postprocessors/avg_nodal_var_value/avg_nodal_var_value.i</a></li><li><a href="#fc941369-ba34-4b27-8ca6-0f6c3a2310c6" class="modal-trigger">modules/tensor_mechanics/test/tests/thermal_expansion/ad_constant_expansion_coeff.i</a></li></ul><div class="modal moose-modal" id="914c3ff4-c123-479b-a8e7-497f7a1467a7"><div class="modal-content"><h4>modules/stochastic_tools/examples/parameter_study/diffusion.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+<!DOCTYPE html><head><meta charset="UTF-8"><title>AverageNodalVariableValue.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="d5f2cbd2-c20a-4565-879a-ddf66f30bc29"><i class="material-icons">menu</i></a><ul class="sidenav" id="d5f2cbd2-c20a-4565-879a-ddf66f30bc29"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">postprocessors</span><a href="#" class="breadcrumb">AverageNodalVariableValue</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="670b40f3-6869-46b0-8a75-59c9ee237b95" data-section-level="1" data-section-text="AverageNodalVariableValue"><h1 id="averagenodalvariablevalue">AverageNodalVariableValue</h1><p>Computes the average value of a field by sampling all nodal solutions on the domain or within a subdomain</p><section class="scrollspy" id="ca110458-08b8-4f67-9063-343f3c080b9b" data-section-level="2" data-section-text="Example Input File Syntax"><h2 id="example-input-file-syntax">Example Input File Syntax</h2></section><section class="scrollspy" id="96b4297e-2ea1-4ec3-87d7-78a0ad54ec31" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="21b49eb3-545e-4b27-998f-ac8f9be48751" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this postprocessor operates on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this postprocessor operates on</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="9a319932-2e62-401e-a002-48daf77c0f83" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM TRANSFER</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">unique_node_execute</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">When false (default), block restricted objects will have the execute method called multiple times on a single node if the node lies on a interface between two subdomains.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When false (default), block restricted objects will have the execute method called multiple times on a single node if the node lies on a interface between two subdomains.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="5a562e56-fa2f-4181-a94c-d75935371b8b" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">allow_duplicate_execution_on_initial</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="9327f44b-980b-4761-a9b8-ace16999a751" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#b8c179fe-261f-4c25-81cd-9250bfafc627" class="modal-trigger">modules/tensor_mechanics/test/tests/thermal_expansion/multiple_thermal_eigenstrains.i</a></li><li><a href="#fc0e09f9-a671-41b4-8c53-8f15b727c089" class="modal-trigger">modules/tensor_mechanics/test/tests/thermal_expansion/ad_constant_expansion_coeff.i</a></li><li><a href="#ca63f6e3-fda5-45dc-add9-e9408707e61a" class="modal-trigger">modules/stochastic_tools/examples/parameter_study/diffusion.i</a></li><li><a href="#a3f936dc-cf53-47d4-bc4b-61a9df3b11c8" class="modal-trigger">modules/stochastic_tools/test/tests/multiapps/batch_full_solve_multiapp/sub.i</a></li><li><a href="#4ffd818f-2e9d-408e-a239-239a402e8aa5" class="modal-trigger">modules/stochastic_tools/test/tests/surrogates/gaussian_process/sub.i</a></li><li><a href="#204e7c75-81b3-4ce0-8d52-c703c7fdab54" class="modal-trigger">modules/tensor_mechanics/test/tests/thermal_expansion/constant_expansion_coeff.i</a></li><li><a href="#4b76e93e-8443-4d6c-9abf-2367cc77e99b" class="modal-trigger">modules/stochastic_tools/examples/sobol/diffusion.i</a></li><li><a href="#aed711d4-f9df-4b85-8e8d-a380a68a90dc" class="modal-trigger">modules/stochastic_tools/examples/batch/sub.i</a></li><li><a href="#9455af5d-038b-4f74-8ed0-84330417309b" class="modal-trigger">modules/stochastic_tools/test/tests/surrogates/poly_chaos/sub.i</a></li><li><a href="#81825aa9-4df3-4742-aaa8-bf171fd6e4b3" class="modal-trigger">modules/stochastic_tools/test/tests/transfers/sampler_postprocessor/sub.i</a></li><li><a href="#4422dd39-6d60-4e5a-bc4b-1b3c31fea2d5" class="modal-trigger">test/tests/postprocessors/avg_nodal_var_value/avg_nodal_var_value_ts_begin.i</a></li><li><a href="#c9091a0c-ffa9-45f2-99b5-e0b4500b7c1e" class="modal-trigger">modules/stochastic_tools/test/tests/vectorpostprocessors/multiple_stochastic_results/sub.i</a></li><li><a href="#9d094a77-d675-4765-a777-24f62296c689" class="modal-trigger">modules/stochastic_tools/test/tests/multiapps/batch_sampler_transient_multiapp/sub.i</a></li><li><a href="#65693f5e-c4c6-47b7-8068-b4fb7869c8bf" class="modal-trigger">modules/combined/test/tests/thermo_mech/youngs_modulus_function_temp.i</a></li><li><a href="#8bdf9040-13bb-4844-af4e-0f39095bd344" class="modal-trigger">modules/tensor_mechanics/test/tests/thermal_expansion/constant_expansion_coeff_restart.i</a></li><li><a href="#1adaaf45-b02f-432c-b12b-e27d5099c9ea" class="modal-trigger">modules/stochastic_tools/examples/surrogates/sub.i</a></li><li><a href="#95884002-001f-443a-ab55-eee81ce9a4fe" class="modal-trigger">modules/stochastic_tools/test/tests/surrogates/load_store/sub.i</a></li><li><a href="#e53e26d3-6ba8-4d5b-a88f-cd6e5e63505d" class="modal-trigger">modules/stochastic_tools/test/tests/transfers/batch_sampler_transfer/sub.i</a></li><li><a href="#c597e353-b0eb-4e4b-95df-74af77f1cd41" class="modal-trigger">test/tests/controls/time_periods/user_objects/user_object.i</a></li><li><a href="#633b9695-e4d9-4a38-bcb3-7df4e9f606f3" class="modal-trigger">modules/stochastic_tools/test/tests/vectorpostprocessors/stochastic_results_complete_history/sub.i</a></li><li><a href="#10bd2edb-f61f-45b0-9e4f-ccc265eda8c4" class="modal-trigger">modules/stochastic_tools/test/tests/transfers/sampler_postprocessor/errors/sub.i</a></li><li><a href="#5ec19671-f408-439a-a821-2b145b8811d5" class="modal-trigger">modules/tensor_mechanics/test/tests/thermal_expansion/ad_constant_expansion_stress_free_temp.i</a></li><li><a href="#1f78ddb9-81c3-41dd-97f7-f901caa372a3" class="modal-trigger">modules/tensor_mechanics/test/tests/thermal_expansion/constant_expansion_stress_free_temp.i</a></li><li><a href="#fc49d10d-0101-4de0-b272-6e1d6d1cbb0c" class="modal-trigger">modules/stochastic_tools/test/tests/vectorpostprocessors/stochastic_results/sub.i</a></li><li><a href="#54a59a28-cf52-4e08-be77-48b6e056d394" class="modal-trigger">test/tests/postprocessors/avg_nodal_var_value/avg_nodal_var_value.i</a></li><li><a href="#eacd3d42-8c92-44ce-8fda-6fc7ef7188eb" class="modal-trigger">modules/combined/test/tests/thermo_mech/ad-youngs_modulus_function_temp.i</a></li></ul><div class="modal moose-modal" id="b8c179fe-261f-4c25-81cd-9250bfafc627"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/thermal_expansion/multiple_thermal_eigenstrains.i</h4><pre class="moose-pre"><code class="language-text"># The primary purpose of this test is to verify that the ability to combine
+# multiple eigenstrains works correctly.  It should behave identically to the
+# constant_expansion_coeff.i model in this directory. Instead of applying the
+# thermal expansion in one eigenstrain, it splits that into two eigenstrains
+# that get added together.
+
+# This test involves only thermal expansion strains on a 2x2x2 cube of approximate
+# steel material.  An initial temperature of 25 degrees C is given for the material,
+# and an auxkernel is used to calculate the temperature in the entire cube to
+# raise the temperature each time step.  After the first timestep,in which the
+# temperature jumps, the temperature increases by 6.25C each timestep.
+# The thermal strain increment should therefore be
+#     6.25 C * 1.3e-5 1/C = 8.125e-5 m/m.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 2
+  ny = 2
+  nz = 2
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+  [./disp_z]
+  [../]
+[]
+
+[AuxVariables]
+  [./temp]
+  [../]
+
+  [./strain_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Functions]
+  [./temperature_load]
+    type = ParsedFunction
+    value = t*(500.0)+300.0
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+    use_displaced_mesh = true
+  [../]
+[]
+
+[AuxKernels]
+  [./tempfuncaux]
+    type = FunctionAux
+    variable = temp
+    function = temperature_load
+    use_displaced_mesh = false
+  [../]
+
+  [./strain_xx]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_xx
+    index_i = 0
+    index_j = 0
+  [../]
+  [./strain_yy]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_yy
+    index_i = 1
+    index_j = 1
+  [../]
+  [./strain_zz]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_zz
+    index_i = 2
+    index_j = 2
+  [../]
+[]
+
+[BCs]
+  [./x_bot]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  [../]
+  [./z_bot]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 2.1e5
+    poissons_ratio = 0.3
+  [../]
+  [./small_strain]
+    type = ComputeIncrementalSmallStrain
+    eigenstrain_names = &#x27;eigenstrain1 eigenstrain2&#x27;
+  [../]
+  [./small_stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+  [./thermal_expansion_strain1]
+    type = ComputeThermalExpansionEigenstrain
+    stress_free_temperature = 298
+    thermal_expansion_coeff = 1.0e-5
+    temperature = temp
+    eigenstrain_name = eigenstrain1
+  [../]
+  [./thermal_expansion_strain2]
+    type = ComputeThermalExpansionEigenstrain
+    stress_free_temperature = 298
+    thermal_expansion_coeff = 0.3e-5
+    temperature = temp
+    eigenstrain_name = eigenstrain2
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+
+  l_max_its = 50
+  nl_max_its = 50
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+  l_tol = 1e-9
+
+  start_time = 0.0
+  end_time = 0.075
+  dt = 0.0125
+  dtmin = 0.0001
+[]
+
+[Outputs]
+  csv = true
+  exodus = true
+  checkpoint = true
+[]
+
+[Postprocessors]
+  [./strain_xx]
+    type = ElementAverageValue
+    variable = strain_xx
+    block = 0
+  [../]
+  [./strain_yy]
+    type = ElementAverageValue
+    variable = strain_yy
+    block = 0
+  [../]
+  [./strain_zz]
+    type = ElementAverageValue
+    variable = strain_zz
+    block = 0
+  [../]
+  [./temperature]
+    type = AverageNodalVariableValue
+    variable = temp
+    block = 0
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fc0e09f9-a671-41b4-8c53-8f15b727c089"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/thermal_expansion/ad_constant_expansion_coeff.i</h4><pre class="moose-pre"><code class="language-text"># This test involves only thermal expansion strains on a 2x2x2 cube of approximate
+# steel material.  An initial temperature of 25 degrees C is given for the material,
+# and an auxkernel is used to calculate the temperature in the entire cube to
+# raise the temperature each time step.  After the first timestep,in which the
+# temperature jumps, the temperature increases by 6.25C each timestep.
+# The thermal strain increment should therefore be
+#     6.25 C * 1.3e-5 1/C = 8.125e-5 m/m.
+
+# This test is also designed to be used to identify problems with restart files
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 2
+  ny = 2
+  nz = 2
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Variables]
+  [./temp]
+  [../]
+[]
+
+[Functions]
+  [./temperature_load]
+    type = ParsedFunction
+    value = t*(500.0)+300.0
+  [../]
+[]
+
+[Modules]
+  [./TensorMechanics]
+    [./Master]
+      [./all]
+        strain = SMALL
+        incremental = true
+        add_variables = true
+        eigenstrain_names = eigenstrain
+        generate_output = &#x27;strain_xx strain_yy strain_zz&#x27;
+        use_automatic_differentiation = true
+      [../]
+    [../]
+  [../]
+[]
+
+[Kernels]
+  [./tempfuncaux]
+    type = Diffusion
+    variable = temp
+  [../]
+[]
+
+[BCs]
+  [./x_bot]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  [../]
+  [./z_bot]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0.0
+  [../]
+  [./temp]
+    type = FunctionDirichletBC
+    variable = temp
+    function = temperature_load
+    boundary = &#x27;left right&#x27;
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ADComputeIsotropicElasticityTensor
+    youngs_modulus = 2.1e5
+    poissons_ratio = 0.3
+  [../]
+  [./small_stress]
+    type = ADComputeFiniteStrainElasticStress
+  [../]
+  [./thermal_expansion_strain]
+    type = ADComputeThermalExpansionEigenstrain
+    stress_free_temperature = 298
+    thermal_expansion_coeff = 1.3e-5
+    temperature = temp
+    eigenstrain_name = eigenstrain
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;NEWTON&#x27;
+
+  l_max_its = 50
+  nl_max_its = 50
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+  l_tol = 1e-9
+
+  start_time = 0.0
+  end_time = 0.075
+  dt = 0.0125
+  dtmin = 0.0001
+[]
+
+[Outputs]
+  csv = true
+  exodus = true
+[]
+
+[Postprocessors]
+  [./strain_xx]
+    type = ElementAverageValue
+    variable = strain_xx
+  [../]
+  [./strain_yy]
+    type = ElementAverageValue
+    variable = strain_yy
+  [../]
+  [./strain_zz]
+    type = ElementAverageValue
+    variable = strain_zz
+  [../]
+  [./temperature]
+    type = AverageNodalVariableValue
+    variable = temp
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ca63f6e3-fda5-45dc-add9-e9408707e61a"><div class="modal-content"><h4>modules/stochastic_tools/examples/parameter_study/diffusion.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
@@ -73,7 +411,394 @@
 
 [Outputs]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="32747592-1d49-4ac9-b30e-0eff761847ed"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/surrogates/poly_chaos/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a3f936dc-cf53-47d4-bc4b-61a9df3b11c8"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/multiapps/batch_full_solve_multiapp/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = ADDiffusion
+    variable = u
+  []
+  [time]
+    type = ADTimeDerivative
+    variable = u
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Postprocessors]
+  [average]
+    type = AverageNodalVariableValue
+    variable = u
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+  dt = 0.25
+  solve_type = NEWTON
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4ffd818f-2e9d-408e-a239-239a402e8aa5"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/surrogates/gaussian_process/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 100
+  xmax = 1
+  elem_type = EDGE3
+[]
+
+[Variables]
+  [T]
+    order = SECOND
+    family = LAGRANGE
+  []
+[]
+
+[Kernels]
+  [diffusion]
+    type = MatDiffusion
+    variable = T
+    diffusivity = k
+  []
+  [source]
+    type = BodyForce
+    variable = T
+    value = 1.0
+  []
+[]
+
+[Materials]
+  [conductivity]
+    type = GenericConstantMaterial
+    prop_names = k
+    prop_values = 2.0
+  []
+[]
+
+[BCs]
+  [right]
+    type = DirichletBC
+    variable = T
+    boundary = right
+    value = 300
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Postprocessors]
+  [avg]
+    type = AverageNodalVariableValue
+    variable = T
+  []
+[]
+
+[Outputs]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="204e7c75-81b3-4ce0-8d52-c703c7fdab54"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/thermal_expansion/constant_expansion_coeff.i</h4><pre class="moose-pre"><code class="language-text"># This test involves only thermal expansion strains on a 2x2x2 cube of approximate
+# steel material.  An initial temperature of 25 degrees C is given for the material,
+# and an auxkernel is used to calculate the temperature in the entire cube to
+# raise the temperature each time step.  After the first timestep,in which the
+# temperature jumps, the temperature increases by 6.25C each timestep.
+# The thermal strain increment should therefore be
+#     6.25 C * 1.3e-5 1/C = 8.125e-5 m/m.
+
+# This test is also designed to be used to identify problems with restart files
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 2
+  ny = 2
+  nz = 2
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[AuxVariables]
+  [./temp]
+  [../]
+[]
+
+[Functions]
+  [./temperature_load]
+    type = ParsedFunction
+    value = t*(500.0)+300.0
+  [../]
+[]
+
+[Modules]
+  [./TensorMechanics]
+    [./Master]
+      [./all]
+        strain = SMALL
+        incremental = true
+        add_variables = true
+        eigenstrain_names = eigenstrain
+        generate_output = &#x27;strain_xx strain_yy strain_zz&#x27;
+      [../]
+    [../]
+  [../]
+[]
+
+[AuxKernels]
+  [./tempfuncaux]
+    type = FunctionAux
+    variable = temp
+    function = temperature_load
+  [../]
+[]
+
+[BCs]
+  [./x_bot]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  [../]
+  [./z_bot]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 2.1e5
+    poissons_ratio = 0.3
+  [../]
+  [./small_stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+  [./thermal_expansion_strain]
+    type = ComputeThermalExpansionEigenstrain
+    stress_free_temperature = 298
+    thermal_expansion_coeff = 1.3e-5
+    temperature = temp
+    eigenstrain_name = eigenstrain
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+
+  l_max_its = 50
+  nl_max_its = 50
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+  l_tol = 1e-9
+
+  start_time = 0.0
+  end_time = 0.075
+  dt = 0.0125
+  dtmin = 0.0001
+[]
+
+[Outputs]
+  csv = true
+  exodus = true
+  checkpoint = true
+[]
+
+[Postprocessors]
+  [./strain_xx]
+    type = ElementAverageValue
+    variable = strain_xx
+  [../]
+  [./strain_yy]
+    type = ElementAverageValue
+    variable = strain_yy
+  [../]
+  [./strain_zz]
+    type = ElementAverageValue
+    variable = strain_zz
+  [../]
+  [./temperature]
+    type = AverageNodalVariableValue
+    variable = temp
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4b76e93e-8443-4d6c-9abf-2367cc77e99b"><div class="modal-content"><h4>modules/stochastic_tools/examples/sobol/diffusion.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables/T]
+[]
+
+[Kernels]
+  [time]
+    type = ADTimeDerivative
+    variable = T
+  []
+  [diff]
+    type = ADMatDiffusion
+    variable = T
+    diffusivity = diffusivity
+  []
+  [source]
+    type = ADBodyForce
+    variable = T
+    value = 1
+    function = 1
+  []
+[]
+
+[BCs]
+  [left]
+    type = ADDirichletBC
+    variable = T
+    boundary = left
+    value = -10
+  []
+  [right]
+    type = ADNeumannBC
+    variable = T
+    boundary = right
+    value = -100
+  []
+[]
+
+[Materials/constant]
+  type = ADGenericConstantMaterial
+  prop_names = &#x27;diffusivity&#x27;
+  prop_values = 1
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  num_steps = 4
+  dt = 0.25
+[]
+
+[Postprocessors]
+  [T_avg]
+    type = AverageNodalVariableValue
+    variable = T
+  []
+  [q_left]
+    type = ADSideFluxAverage
+    variable = T
+    boundary = left
+    diffusivity = diffusivity
+  []
+[]
+
+[Controls/stochastic]
+  type = SamplerReceiver
+[]
+
+[Outputs]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="aed711d4-f9df-4b85-8e8d-a380a68a90dc"><div class="modal-content"><h4>modules/stochastic_tools/examples/batch/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 10
+  ny = 10
+  nz = 10
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = ADDiffusion
+    variable = u
+  []
+  [time]
+    type = ADTimeDerivative
+    variable = u
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Postprocessors]
+  [average]
+    type = AverageNodalVariableValue
+    variable = u
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+  dt = 0.25
+  solve_type = NEWTON
+[]
+
+[Controls]
+  [receiver]
+    type = SamplerReceiver
+  []
+[]
+
+[Outputs]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9455af5d-038b-4f74-8ed0-84330417309b"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/surrogates/poly_chaos/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 1
   nx = 100
@@ -158,7 +883,1078 @@
 
 [Outputs]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="adcdc9a7-43f0-4985-8e6c-acdc4c357f26"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/thermal_expansion/ad_constant_expansion_stress_free_temp.i</h4><pre class="moose-pre"><code class="language-text"># This test involves only thermal expansion strains on a 2x2x2 cube of approximate
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="81825aa9-4df3-4742-aaa8-bf171fd6e4b3"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/transfers/sampler_postprocessor/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 10
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 5
+  dt = 0.01
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  error_on_dtmin = false
+[]
+
+[Controls]
+  [stochastic]
+    type = SamplerReceiver
+  []
+[]
+
+[Postprocessors]
+  [avg]
+    type = AverageNodalVariableValue
+    variable = u
+  []
+[]
+
+[Outputs]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4422dd39-6d60-4e5a-bc4b-1b3c31fea2d5"><div class="modal-content"><h4>test/tests/postprocessors/avg_nodal_var_value/avg_nodal_var_value_ts_begin.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  file = square-2x2-nodeids.e
+[]
+
+[Variables]
+  active = &#x27;u v&#x27;
+
+  [./u]
+    order = SECOND
+    family = LAGRANGE
+  [../]
+
+  [./v]
+    order = SECOND
+    family = LAGRANGE
+  [../]
+[]
+
+[Functions]
+  active = &#x27;force_fn exact_fn left_bc&#x27;
+
+  [./force_fn]
+    type = ParsedFunction
+    value = &#x27;1-x*x+2*t&#x27;
+  [../]
+
+  [./exact_fn]
+    type = ParsedFunction
+    value = &#x27;(1-x*x)*t&#x27;
+  [../]
+
+  [./left_bc]
+    type = ParsedFunction
+    value = t
+  [../]
+[]
+
+[Kernels]
+  active = &#x27;
+    time_u diff_u ffn_u
+    time_v diff_v&#x27;
+
+  [./time_u]
+    type = TimeDerivative
+    variable = u
+  [../]
+
+  [./diff_u]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./ffn_u]
+    type = BodyForce
+    variable = u
+    function = force_fn
+  [../]
+
+  [./time_v]
+    type = TimeDerivative
+    variable = v
+  [../]
+
+  [./diff_v]
+    type = Diffusion
+    variable = v
+  [../]
+[]
+
+[BCs]
+  active = &#x27;all_u left_v right_v&#x27;
+
+  [./all_u]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = &#x27;1&#x27;
+    function = exact_fn
+  [../]
+
+  [./left_v]
+    type = FunctionDirichletBC
+    variable = v
+    boundary = &#x27;3&#x27;
+    function = left_bc
+  [../]
+
+  [./right_v]
+    type = DirichletBC
+    variable = v
+    boundary = &#x27;2&#x27;
+    value = 0
+  [../]
+[]
+
+[Postprocessors]
+  [./l2]
+    type = ElementL2Error
+    variable = u
+    function = exact_fn
+  [../]
+
+  [./node1]
+    type = AverageNodalVariableValue
+    variable = u
+    boundary = 10
+    execute_on = TIMESTEP_BEGIN
+  [../]
+
+  [./node4]
+    type = AverageNodalVariableValue
+    variable = v
+    boundary = 13
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  dt = 0.1
+  start_time = 0
+  end_time = 1
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  file_base = out_avg_nodal_var_value_ts_begin
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c9091a0c-ffa9-45f2-99b5-e0b4500b7c1e"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/vectorpostprocessors/multiple_stochastic_results/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 10
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 5
+  dt = 0.01
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Controls]
+  [stochastic]
+    type = SamplerReceiver
+  []
+[]
+
+[Postprocessors]
+  [avg]
+    type = AverageNodalVariableValue
+    variable = u
+  []
+  [max]
+    type = NodalExtremeValue
+    value_type = MAX
+    variable = u
+  []
+[]
+
+[Outputs]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9d094a77-d675-4765-a777-24f62296c689"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/multiapps/batch_sampler_transient_multiapp/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 5
+  dt = 0.1
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Postprocessors]
+  [average]
+    type = AverageNodalVariableValue
+    variable = u
+  []
+[]
+
+[Controls]
+  [stochastic]
+    type = SamplerReceiver
+  []
+[]
+
+[Outputs]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="65693f5e-c4c6-47b7-8068-b4fb7869c8bf"><div class="modal-content"><h4>modules/combined/test/tests/thermo_mech/youngs_modulus_function_temp.i</h4><pre class="moose-pre"><code class="language-text"># ---------------------------------------------------------------------------
+# This test is designed to verify the variable elasticity tensor functionality in the
+# ComputeFiniteStrainElasticStress class with the elasticity_tensor_has_changed flag
+# by varying the young&#x27;s modulus with temperature. A constant strain is applied
+# to the mesh in this case, and the stress varies with the changing elastic constants.
+#
+# Geometry: A single element cube in symmetry boundary conditions and pulled
+#           at a constant displacement to create a constant strain in the x-direction.
+#
+# Temperature:  The temperature varies from 400K to 700K in this simulation by
+#           100K each time step. The temperature is held constant in the last
+#           timestep to ensure that the elasticity tensor components are constant
+#           under constant temperature.
+#
+# Results: Because Poisson&#x27;s ratio is set to zero, only the stress along the x
+#          axis is non-zero.  The stress changes with temperature.
+#
+#    Temperature(K)   strain_{xx}(m/m)     Young&#x27;s Modulus(Pa)   stress_{xx}(Pa)
+#          400              0.001             10.0e6               1.0e4
+#          500              0.001             10.0e6               1.0e4
+#          600              0.001              9.94e6              9.94e3
+#          700              0.001              9.93e6              9.93e3
+#
+#    The tensor mechanics results align exactly with the analytical results above
+#    when this test is run with ComputeIncrementalSmallStrain.  When the test is
+#    run with ComputeFiniteStrain, a 0.05% discrepancy between the analytical
+#    strains and the simulation strain results is observed, and this discrepancy
+#    is carried over into the calculation of the elastic stress.
+#-------------------------------------------------------------------------
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 1
+  ny = 1
+  nz = 1
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+  [./disp_z]
+  [../]
+  [./temp]
+    initial_condition = 400
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./elastic_strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Functions]
+  [./temperature_function]
+    type = PiecewiseLinear
+    x = &#x27;1       4&#x27;
+    y = &#x27;400   700&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./heat]
+    type = Diffusion
+    variable = temp
+  [../]
+
+  [./TensorMechanics]
+    use_displaced_mesh = true
+  [../]
+[]
+
+
+[AuxKernels]
+  [./stress_xx]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xx
+    index_i = 0
+    index_j = 0
+  [../]
+
+ [./elastic_strain_xx]
+    type = RankTwoAux
+    rank_two_tensor = elastic_strain
+    variable = elastic_strain_xx
+    index_i = 0
+    index_j = 0
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./u_left_fix]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./u_bottom_fix]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  [../]
+  [./u_back_fix]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0.0
+  [../]
+  [./u_pull_right]
+    type = DirichletBC
+    variable = disp_x
+    boundary = right
+    value = 0.001
+  [../]
+
+  [./temp_bc_1]
+    type = FunctionDirichletBC
+    variable = temp
+    preset = false
+    boundary = &#x27;1 2 3 4&#x27;
+    function = temperature_function
+  [../]
+[]
+
+[Materials]
+  [./youngs_modulus]
+    type = PiecewiseLinearInterpolationMaterial
+    xy_data = &#x27;0          10e+6
+               599.9999   10e+6
+               600        9.94e+6
+               99900      10e3&#x27;
+    property = youngs_modulus
+    variable = temp
+  [../]
+  [./elasticity_tensor]
+    type = ComputeVariableIsotropicElasticityTensor
+    args = temp
+    youngs_modulus = youngs_modulus
+    poissons_ratio = 0.0
+  [../]
+  [./strain]
+    type = ComputeIncrementalSmallStrain
+  [../]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  end_time = 5
+[]
+
+[Postprocessors]
+  [./elastic_strain_xx]
+    type = ElementAverageValue
+    variable = elastic_strain_xx
+  [../]
+  [./elastic_stress_xx]
+    type = ElementAverageValue
+    variable = stress_xx
+  [../]
+
+  [./temp]
+    type = AverageNodalVariableValue
+    variable = temp
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8bdf9040-13bb-4844-af4e-0f39095bd344"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/thermal_expansion/constant_expansion_coeff_restart.i</h4><pre class="moose-pre"><code class="language-text"># This test involves only thermal expansion strains on a 2x2x2 cube of approximate
+# steel material.  An initial temperature of 25 degrees C is given for the material,
+# and an auxkernel is used to calculate the temperature in the entire cube to
+# raise the temperature each time step.  After the first timestep,in which the
+# temperature jumps, the temperature increases by 6.25C each timestep.
+# The thermal strain increment should therefore be
+#     6.25 C * 1.3e-5 1/C = 8.125e-5 m/m.
+
+# This test is also designed to be used to identify problems with restart files
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 2
+  ny = 2
+  nz = 2
+[]
+
+[Problem]
+  restart_file_base =  constant_expansion_coeff_out_cp/LATEST
+  force_restart = true
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[AuxVariables]
+  [./temp]
+  [../]
+[]
+
+[Functions]
+  [./temperature_load]
+    type = ParsedFunction
+    value = t*(500.0)+300.0
+  [../]
+[]
+
+[Modules]
+    [TensorMechanics]
+        [Master]
+            [./all]
+                strain = SMALL
+                incremental = true
+                add_variables = true
+                eigenstrain_names = eigenstrain
+                generate_output = &#x27;strain_xx strain_yy strain_zz&#x27;
+            [../]
+        [../]
+    [../]
+[]
+
+[AuxKernels]
+  [./tempfuncaux]
+    type = FunctionAux
+    variable = temp
+    function = temperature_load
+    use_displaced_mesh = false
+  [../]
+[]
+
+[BCs]
+  [./x_bot]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  [../]
+  [./z_bot]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 2.1e5
+    poissons_ratio = 0.3
+  [../]
+  [./small_stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+  [./thermal_expansion_strain]
+    type = ComputeThermalExpansionEigenstrain
+    stress_free_temperature = 298
+    thermal_expansion_coeff = 1.3e-5
+    temperature = temp
+    eigenstrain_name = eigenstrain
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options = &#x27;-snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;101&#x27;
+
+  line_search = &#x27;none&#x27;
+
+  l_max_its = 50
+  nl_max_its = 50
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+  l_tol = 1e-9
+
+  end_time = 0.1
+  dt = 0.0125
+  dtmin = 0.0001
+[]
+
+[Outputs]
+  csv = true
+  exodus = true
+  checkpoint = true
+[]
+
+[Postprocessors]
+  [./strain_xx]
+    type = ElementAverageValue
+    variable = strain_xx
+  [../]
+  [./strain_yy]
+    type = ElementAverageValue
+    variable = strain_yy
+  [../]
+  [./strain_zz]
+    type = ElementAverageValue
+    variable = strain_zz
+  [../]
+  [./temperature]
+    type = AverageNodalVariableValue
+    variable = temp
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1adaaf45-b02f-432c-b12b-e27d5099c9ea"><div class="modal-content"><h4>modules/stochastic_tools/examples/surrogates/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 100
+  xmax = 1
+  elem_type = EDGE3
+[]
+
+[Variables]
+  [T]
+    order = SECOND
+    family = LAGRANGE
+  []
+[]
+
+[Kernels]
+  [diffusion]
+    type = MatDiffusion
+    variable = T
+    diffusivity = k
+  []
+  [source]
+    type = BodyForce
+    variable = T
+    value = 1.0
+  []
+[]
+
+[Materials]
+  [conductivity]
+    type = GenericConstantMaterial
+    prop_names = k
+    prop_values = 2.0
+  []
+[]
+
+[BCs]
+  [right]
+    type = DirichletBC
+    variable = T
+    boundary = right
+    value = 300
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Postprocessors]
+  [avg]
+    type = AverageNodalVariableValue
+    variable = T
+  []
+  [max]
+    type = NodalExtremeValue
+    variable = T
+    value_type = max
+  []
+[]
+
+[Outputs]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="95884002-001f-443a-ab55-eee81ce9a4fe"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/surrogates/load_store/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 100
+  xmax = 10
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[Kernels]
+  [diffusion]
+    type = MatDiffusion
+    variable = u
+    diffusivity = D
+  []
+  [absorption]
+    type = MaterialReaction
+    variable = u
+    coefficient = sig
+  []
+  [source]
+    type = BodyForce
+    variable = u
+    value = 1.0
+  []
+[]
+
+[Materials]
+  [diffusivity]
+    type = GenericConstantMaterial
+    prop_names = D
+    prop_values = 2.0
+  []
+  [xs]
+    type = GenericConstantMaterial
+    prop_names = sig
+    prop_values = 2.0
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 0
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Controls]
+  [stochastic]
+    type = SamplerReceiver
+  []
+[]
+
+[Postprocessors]
+  [avg]
+    type = AverageNodalVariableValue
+    variable = u
+  []
+  [max]
+    type = NodalExtremeValue
+    variable = u
+    value_type = max
+  []
+[]
+
+[Outputs]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e53e26d3-6ba8-4d5b-a88f-cd6e5e63505d"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/transfers/batch_sampler_transfer/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = ADDiffusion
+    variable = u
+  []
+  [time]
+    type = ADTimeDerivative
+    variable = u
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Postprocessors]
+  [average]
+    type = AverageNodalVariableValue
+    variable = u
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+  dt = 0.25
+  solve_type = NEWTON
+[]
+
+[Controls]
+  [stochastic]
+    type = SamplerReceiver
+  []
+[]
+
+[Outputs]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c597e353-b0eb-4e4b-95df-74af77f1cd41"><div class="modal-content"><h4>test/tests/controls/time_periods/user_objects/user_object.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+    initial_condition = 0.01
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [./time]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Postprocessors]
+  [./nodal]
+    type = AverageNodalVariableValue
+    variable = u
+    execute_on = &#x27;TIMESTEP_END&#x27;
+  [../]
+  [./elemental]
+    type = ElementAverageValue
+    variable = u
+    execute_on = &#x27;TIMESTEP_END&#x27;
+  [../]
+  [./general]
+    type = PointValue
+    point = &#x27;0.5 0.5 0&#x27;
+    variable = u
+    execute_on = &#x27;TIMESTEP_END&#x27;
+  [../]
+  [./internal_side]
+    type = NumInternalSides
+  [../]
+  [./side]
+    type = SideAverageValue
+    boundary = right
+    variable = u
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 10
+  dt = 0.1
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  csv = true
+[]
+
+[Controls]
+  [./pp_control]
+    type = TimePeriod
+    enable_objects = &#x27;*/nodal */elemental */general */internal_side */side&#x27;
+    start_time = 0.5
+    end_time = 1
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="633b9695-e4d9-4a38-bcb3-7df4e9f606f3"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/vectorpostprocessors/stochastic_results_complete_history/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 10
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 2
+  dt = 0.01
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Controls]
+  [stochastic]
+    type = SamplerReceiver
+  []
+[]
+
+[Postprocessors]
+  [avg]
+    type = AverageNodalVariableValue
+    variable = u
+  []
+[]
+
+[Outputs]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="10bd2edb-f61f-45b0-9e4f-ccc265eda8c4"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/transfers/sampler_postprocessor/errors/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 10
+[]
+
+[Variables]
+  [u]
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 5
+  dt = 0.01
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Controls]
+  [stochastic]
+    type = SamplerReceiver
+  []
+[]
+
+[Postprocessors]
+  [avg]
+    type = AverageNodalVariableValue
+    variable = u
+  []
+[]
+
+[Outputs]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5ec19671-f408-439a-a821-2b145b8811d5"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/thermal_expansion/ad_constant_expansion_stress_free_temp.i</h4><pre class="moose-pre"><code class="language-text"># This test involves only thermal expansion strains on a 2x2x2 cube of approximate
 # steel material; however, in this case the stress free temperature of the material
 # has been set to 200K so that there is an initial delta temperature of 100K.
 
@@ -406,81 +2202,19 @@
     execute_on = &#x27;initial timestep_end&#x27;
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f8b720d5-2ffe-45bf-8052-bbbdf3517909"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/transfers/sampler_postprocessor/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 10
-[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1f78ddb9-81c3-41dd-97f7-f901caa372a3"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/thermal_expansion/constant_expansion_stress_free_temp.i</h4><pre class="moose-pre"><code class="language-text"># This test involves only thermal expansion strains on a 2x2x2 cube of approximate
+# steel material; however, in this case the stress free temperature of the material
+# has been set to 200K so that there is an initial delta temperature of 100K.
 
-[Variables]
-  [u]
-  []
-[]
-
-[Kernels]
-  [diff]
-    type = Diffusion
-    variable = u
-  []
-  [time]
-    type = TimeDerivative
-    variable = u
-  []
-[]
-
-[BCs]
-  [left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  []
-  [right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  []
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 5
-  dt = 0.01
-  solve_type = PJFNK
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-  error_on_dtmin = false
-[]
-
-[Controls]
-  [stochastic]
-    type = SamplerReceiver
-  []
-[]
-
-[Postprocessors]
-  [avg]
-    type = AverageNodalVariableValue
-    variable = u
-  []
-[]
-
-[Outputs]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b69f60d1-2f3d-4076-bede-58289a4353b0"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/thermal_expansion/multiple_thermal_eigenstrains.i</h4><pre class="moose-pre"><code class="language-text"># The primary purpose of this test is to verify that the ability to combine
-# multiple eigenstrains works correctly.  It should behave identically to the
-# constant_expansion_coeff.i model in this directory. Instead of applying the
-# thermal expansion in one eigenstrain, it splits that into two eigenstrains
-# that get added together.
-
-# This test involves only thermal expansion strains on a 2x2x2 cube of approximate
-# steel material.  An initial temperature of 25 degrees C is given for the material,
+# An initial temperature of 300K is given for the material,
 # and an auxkernel is used to calculate the temperature in the entire cube to
-# raise the temperature each time step.  After the first timestep,in which the
-# temperature jumps, the temperature increases by 6.25C each timestep.
+# raise the temperature each time step.  The final temperature is 675K
 # The thermal strain increment should therefore be
-#     6.25 C * 1.3e-5 1/C = 8.125e-5 m/m.
+#     (675K - 300K) * 1.3e-5 1/K + 100K * 1.3e-5 1/K = 6.175e-3 m/m.
+
+# This test uses a start up step to identify problems in the calculation of
+# eigenstrains with a stress free temperature that is different from the initial
+# value of the temperature in the problem
 
 [Mesh]
   type = GeneratedMesh
@@ -494,28 +2228,31 @@
   displacements = &#x27;disp_x disp_y disp_z&#x27;
 []
 
-[Variables]
-  [./disp_x]
-  [../]
-  [./disp_y]
-  [../]
-  [./disp_z]
-  [../]
-[]
-
 [AuxVariables]
   [./temp]
+    initial_condition = 300.0
   [../]
-
-  [./strain_yy]
+  [./eigenstrain_yy]
     order = CONSTANT
     family = MONOMIAL
   [../]
-  [./strain_xx]
+  [./eigenstrain_xx]
     order = CONSTANT
     family = MONOMIAL
   [../]
-  [./strain_zz]
+  [./eigenstrain_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./total_strain_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./total_strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./total_strain_zz]
     order = CONSTANT
     family = MONOMIAL
   [../]
@@ -524,13 +2261,20 @@
 [Functions]
   [./temperature_load]
     type = ParsedFunction
-    value = t*(500.0)+300.0
+    value = t*(5000.0)+300.0
   [../]
 []
 
-[Kernels]
+[Modules]
   [./TensorMechanics]
-    use_displaced_mesh = true
+    [./Master]
+      [./all]
+        strain = SMALL
+        incremental = true
+        add_variables = true
+        eigenstrain_names = eigenstrain
+      [../]
+    [../]
   [../]
 []
 
@@ -539,29 +2283,54 @@
     type = FunctionAux
     variable = temp
     function = temperature_load
-    use_displaced_mesh = false
   [../]
-
-  [./strain_xx]
+  [./eigenstrain_yy]
     type = RankTwoAux
-    rank_two_tensor = total_strain
-    variable = strain_xx
-    index_i = 0
-    index_j = 0
-  [../]
-  [./strain_yy]
-    type = RankTwoAux
-    rank_two_tensor = total_strain
-    variable = strain_yy
+    rank_two_tensor = eigenstrain
+    variable = eigenstrain_yy
     index_i = 1
     index_j = 1
+    execute_on = &#x27;initial timestep_end&#x27;
   [../]
-  [./strain_zz]
+  [./eigenstrain_xx]
     type = RankTwoAux
-    rank_two_tensor = total_strain
-    variable = strain_zz
+    rank_two_tensor = eigenstrain
+    variable = eigenstrain_xx
+    index_i = 0
+    index_j = 0
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./eigenstrain_zz]
+    type = RankTwoAux
+    rank_two_tensor = eigenstrain
+    variable = eigenstrain_zz
     index_i = 2
     index_j = 2
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./total_strain_yy]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = total_strain_yy
+    index_i = 1
+    index_j = 1
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./total_strain_xx]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = total_strain_xx
+    index_i = 0
+    index_j = 0
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./total_strain_zz]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = total_strain_zz
+    index_i = 2
+    index_j = 2
+    execute_on = &#x27;initial timestep_end&#x27;
   [../]
 []
 
@@ -592,26 +2361,15 @@
     youngs_modulus = 2.1e5
     poissons_ratio = 0.3
   [../]
-  [./small_strain]
-    type = ComputeIncrementalSmallStrain
-    eigenstrain_names = &#x27;eigenstrain1 eigenstrain2&#x27;
-  [../]
   [./small_stress]
     type = ComputeFiniteStrainElasticStress
   [../]
-  [./thermal_expansion_strain1]
+  [./thermal_expansion_strain]
     type = ComputeThermalExpansionEigenstrain
-    stress_free_temperature = 298
-    thermal_expansion_coeff = 1.0e-5
+    stress_free_temperature = 200
+    thermal_expansion_coeff = 1.3e-5
     temperature = temp
-    eigenstrain_name = eigenstrain1
-  [../]
-  [./thermal_expansion_strain2]
-    type = ComputeThermalExpansionEigenstrain
-    stress_free_temperature = 298
-    thermal_expansion_coeff = 0.3e-5
-    temperature = temp
-    eigenstrain_name = eigenstrain2
+    eigenstrain_name = eigenstrain
   [../]
 []
 
@@ -625,375 +2383,55 @@
   nl_abs_tol = 1e-10
   l_tol = 1e-9
 
-  start_time = 0.0
+  start_time = -0.0125
+  n_startup_steps = 1
   end_time = 0.075
   dt = 0.0125
   dtmin = 0.0001
 []
 
 [Outputs]
-  csv = true
   exodus = true
-  checkpoint = true
 []
 
 [Postprocessors]
-  [./strain_xx]
+  [./eigenstrain_xx]
     type = ElementAverageValue
-    variable = strain_xx
-    block = 0
+    variable = eigenstrain_xx
+    execute_on = &#x27;initial timestep_end&#x27;
   [../]
-  [./strain_yy]
+  [./eigenstrain_yy]
     type = ElementAverageValue
-    variable = strain_yy
-    block = 0
+    variable = eigenstrain_yy
+    execute_on = &#x27;initial timestep_end&#x27;
   [../]
-  [./strain_zz]
+  [./eigenstrain_zz]
     type = ElementAverageValue
-    variable = strain_zz
-    block = 0
+    variable = eigenstrain_zz
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./total_strain_xx]
+    type = ElementAverageValue
+    variable = total_strain_xx
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./total_strain_yy]
+    type = ElementAverageValue
+    variable = total_strain_yy
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+  [./total_strain_zz]
+    type = ElementAverageValue
+    variable = total_strain_zz
+    execute_on = &#x27;initial timestep_end&#x27;
   [../]
   [./temperature]
     type = AverageNodalVariableValue
     variable = temp
-    block = 0
+    execute_on = &#x27;initial timestep_end&#x27;
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8e8dc7fa-462e-4261-b310-b6da1abc27b7"><div class="modal-content"><h4>modules/combined/test/tests/thermo_mech/youngs_modulus_function_temp.i</h4><pre class="moose-pre"><code class="language-text"># ---------------------------------------------------------------------------
-# This test is designed to verify the variable elasticity tensor functionality in the
-# ComputeFiniteStrainElasticStress class with the elasticity_tensor_has_changed flag
-# by varying the young&#x27;s modulus with temperature. A constant strain is applied
-# to the mesh in this case, and the stress varies with the changing elastic constants.
-#
-# Geometry: A single element cube in symmetry boundary conditions and pulled
-#           at a constant displacement to create a constant strain in the x-direction.
-#
-# Temperature:  The temperature varies from 400K to 700K in this simulation by
-#           100K each time step. The temperature is held constant in the last
-#           timestep to ensure that the elasticity tensor components are constant
-#           under constant temperature.
-#
-# Results: Because Poisson&#x27;s ratio is set to zero, only the stress along the x
-#          axis is non-zero.  The stress changes with temperature.
-#
-#    Temperature(K)   strain_{xx}(m/m)     Young&#x27;s Modulus(Pa)   stress_{xx}(Pa)
-#          400              0.001             10.0e6               1.0e4
-#          500              0.001             10.0e6               1.0e4
-#          600              0.001              9.94e6              9.94e3
-#          700              0.001              9.93e6              9.93e3
-#
-#    The tensor mechanics results align exactly with the analytical results above
-#    when this test is run with ComputeIncrementalSmallStrain.  When the test is
-#    run with ComputeFiniteStrain, a 0.05% discrepancy between the analytical
-#    strains and the simulation strain results is observed, and this discrepancy
-#    is carried over into the calculation of the elastic stress.
-#-------------------------------------------------------------------------
-
-[GlobalParams]
-  displacements = &#x27;disp_x disp_y disp_z&#x27;
-[]
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 3
-  nx = 1
-  ny = 1
-  nz = 1
-[]
-
-[Variables]
-  [./disp_x]
-  [../]
-  [./disp_y]
-  [../]
-  [./disp_z]
-  [../]
-  [./temp]
-    initial_condition = 400
-  [../]
-[]
-
-[AuxVariables]
-  [./stress_xx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./elastic_strain_xx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-[]
-
-[Functions]
-  [./temperature_function]
-    type = PiecewiseLinear
-    x = &#x27;1       4&#x27;
-    y = &#x27;400   700&#x27;
-  [../]
-[]
-
-[Kernels]
-  [./heat]
-    type = Diffusion
-    variable = temp
-  [../]
-
-  [./TensorMechanics]
-    use_displaced_mesh = true
-  [../]
-[]
-
-
-[AuxKernels]
-  [./stress_xx]
-    type = RankTwoAux
-    rank_two_tensor = stress
-    variable = stress_xx
-    index_i = 0
-    index_j = 0
-  [../]
-
- [./elastic_strain_xx]
-    type = RankTwoAux
-    rank_two_tensor = elastic_strain
-    variable = elastic_strain_xx
-    index_i = 0
-    index_j = 0
-    execute_on = timestep_end
-  [../]
-[]
-
-[BCs]
-  [./u_left_fix]
-    type = DirichletBC
-    variable = disp_x
-    boundary = left
-    value = 0.0
-  [../]
-  [./u_bottom_fix]
-    type = DirichletBC
-    variable = disp_y
-    boundary = bottom
-    value = 0.0
-  [../]
-  [./u_back_fix]
-    type = DirichletBC
-    variable = disp_z
-    boundary = back
-    value = 0.0
-  [../]
-  [./u_pull_right]
-    type = DirichletBC
-    variable = disp_x
-    boundary = right
-    value = 0.001
-  [../]
-
-  [./temp_bc_1]
-    type = FunctionDirichletBC
-    variable = temp
-    preset = false
-    boundary = &#x27;1 2 3 4&#x27;
-    function = temperature_function
-  [../]
-[]
-
-[Materials]
-  [./youngs_modulus]
-    type = PiecewiseLinearInterpolationMaterial
-    xy_data = &#x27;0          10e+6
-               599.9999   10e+6
-               600        9.94e+6
-               99900      10e3&#x27;
-    property = youngs_modulus
-    variable = temp
-  [../]
-  [./elasticity_tensor]
-    type = ComputeVariableIsotropicElasticityTensor
-    args = temp
-    youngs_modulus = youngs_modulus
-    poissons_ratio = 0.0
-  [../]
-  [./strain]
-    type = ComputeIncrementalSmallStrain
-  [../]
-  [./stress]
-    type = ComputeFiniteStrainElasticStress
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-
-  end_time = 5
-[]
-
-[Postprocessors]
-  [./elastic_strain_xx]
-    type = ElementAverageValue
-    variable = elastic_strain_xx
-  [../]
-  [./elastic_stress_xx]
-    type = ElementAverageValue
-    variable = stress_xx
-  [../]
-
-  [./temp]
-    type = AverageNodalVariableValue
-    variable = temp
-  [../]
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="14bebafe-5853-4fce-b7f5-e99904a574da"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/surrogates/load_store/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 100
-  xmax = 10
-[]
-
-[Variables]
-  [u]
-  []
-[]
-
-[Kernels]
-  [diffusion]
-    type = MatDiffusion
-    variable = u
-    diffusivity = D
-  []
-  [absorption]
-    type = MaterialReaction
-    variable = u
-    coefficient = sig
-  []
-  [source]
-    type = BodyForce
-    variable = u
-    value = 1.0
-  []
-[]
-
-[Materials]
-  [diffusivity]
-    type = GenericConstantMaterial
-    prop_names = D
-    prop_values = 2.0
-  []
-  [xs]
-    type = GenericConstantMaterial
-    prop_names = sig
-    prop_values = 2.0
-  []
-[]
-
-[BCs]
-  [left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  []
-  [right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 0
-  []
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = PJFNK
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[Controls]
-  [stochastic]
-    type = SamplerReceiver
-  []
-[]
-
-[Postprocessors]
-  [avg]
-    type = AverageNodalVariableValue
-    variable = u
-  []
-  [max]
-    type = NodalExtremeValue
-    variable = u
-    value_type = max
-  []
-[]
-
-[Outputs]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="eb07308d-93a5-4c79-b8d8-2c8d06a35b73"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/surrogates/gaussian_process/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 100
-  xmax = 1
-  elem_type = EDGE3
-[]
-
-[Variables]
-  [T]
-    order = SECOND
-    family = LAGRANGE
-  []
-[]
-
-[Kernels]
-  [diffusion]
-    type = MatDiffusion
-    variable = T
-    diffusivity = k
-  []
-  [source]
-    type = BodyForce
-    variable = T
-    value = 1.0
-  []
-[]
-
-[Materials]
-  [conductivity]
-    type = GenericConstantMaterial
-    prop_names = k
-    prop_values = 2.0
-  []
-[]
-
-[BCs]
-  [right]
-    type = DirichletBC
-    variable = T
-    boundary = right
-    value = 300
-  []
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = PJFNK
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[Postprocessors]
-  [avg]
-    type = AverageNodalVariableValue
-    variable = T
-  []
-[]
-
-[Outputs]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9e7a532d-b05a-40de-ac19-d6233ecd875b"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/transfers/sampler_postprocessor/errors/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fc49d10d-0101-4de0-b272-6e1d6d1cbb0c"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/vectorpostprocessors/stochastic_results/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 1
   nx = 10
@@ -1054,68 +2492,7 @@
 
 [Outputs]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="cf42ee56-4a09-4a7c-94fe-c919b69f28e6"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/vectorpostprocessors/stochastic_results/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 10
-[]
-
-[Variables]
-  [u]
-  []
-[]
-
-[Kernels]
-  [diff]
-    type = Diffusion
-    variable = u
-  []
-  [time]
-    type = TimeDerivative
-    variable = u
-  []
-[]
-
-[BCs]
-  [left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  []
-  [right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  []
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 5
-  dt = 0.01
-  solve_type = PJFNK
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[Controls]
-  [stochastic]
-    type = SamplerReceiver
-  []
-[]
-
-[Postprocessors]
-  [avg]
-    type = AverageNodalVariableValue
-    variable = u
-  []
-[]
-
-[Outputs]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="343215c6-81fe-4134-8092-1774952e11ca"><div class="modal-content"><h4>test/tests/postprocessors/avg_nodal_var_value/avg_nodal_var_value_ts_begin.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="54a59a28-cf52-4e08-be77-48b6e056d394"><div class="modal-content"><h4>test/tests/postprocessors/avg_nodal_var_value/avg_nodal_var_value.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   file = square-2x2-nodeids.e
 []
 
@@ -1220,7 +2597,6 @@
     type = AverageNodalVariableValue
     variable = u
     boundary = 10
-    execute_on = TIMESTEP_BEGIN
   [../]
 
   [./node4]
@@ -1242,435 +2618,10 @@
 
 [Outputs]
   execute_on = &#x27;timestep_end&#x27;
-  file_base = out_avg_nodal_var_value_ts_begin
+  file_base = out_avg_nodal_var_value
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e05e1f5a-98ad-4079-81d2-e4d868156e25"><div class="modal-content"><h4>modules/stochastic_tools/examples/sobol/diffusion.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-[]
-
-[Variables/T]
-[]
-
-[Kernels]
-  [time]
-    type = ADTimeDerivative
-    variable = T
-  []
-  [diff]
-    type = ADMatDiffusion
-    variable = T
-    diffusivity = diffusivity
-  []
-  [source]
-    type = ADBodyForce
-    variable = T
-    value = 1
-    function = 1
-  []
-[]
-
-[BCs]
-  [left]
-    type = ADDirichletBC
-    variable = T
-    boundary = left
-    value = -10
-  []
-  [right]
-    type = ADNeumannBC
-    variable = T
-    boundary = right
-    value = -100
-  []
-[]
-
-[Materials/constant]
-  type = ADGenericConstantMaterial
-  prop_names = &#x27;diffusivity&#x27;
-  prop_values = 1
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = NEWTON
-  num_steps = 4
-  dt = 0.25
-[]
-
-[Postprocessors]
-  [T_avg]
-    type = AverageNodalVariableValue
-    variable = T
-  []
-  [q_left]
-    type = ADSideFluxAverage
-    variable = T
-    boundary = left
-    diffusivity = diffusivity
-  []
-[]
-
-[Controls/stochastic]
-  type = SamplerReceiver
-[]
-
-[Outputs]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="19d5b92f-13b7-41a6-aab8-2ead845a99bd"><div class="modal-content"><h4>modules/stochastic_tools/examples/surrogates/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 100
-  xmax = 1
-  elem_type = EDGE3
-[]
-
-[Variables]
-  [T]
-    order = SECOND
-    family = LAGRANGE
-  []
-[]
-
-[Kernels]
-  [diffusion]
-    type = MatDiffusion
-    variable = T
-    diffusivity = k
-  []
-  [source]
-    type = BodyForce
-    variable = T
-    value = 1.0
-  []
-[]
-
-[Materials]
-  [conductivity]
-    type = GenericConstantMaterial
-    prop_names = k
-    prop_values = 2.0
-  []
-[]
-
-[BCs]
-  [right]
-    type = DirichletBC
-    variable = T
-    boundary = right
-    value = 300
-  []
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = PJFNK
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[Postprocessors]
-  [avg]
-    type = AverageNodalVariableValue
-    variable = T
-  []
-  [max]
-    type = NodalExtremeValue
-    variable = T
-    value_type = max
-  []
-[]
-
-[Outputs]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="322ea85a-77d6-4c4d-b845-f77888ca85e2"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/vectorpostprocessors/stochastic_results_complete_history/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 10
-[]
-
-[Variables]
-  [u]
-  []
-[]
-
-[Kernels]
-  [diff]
-    type = Diffusion
-    variable = u
-  []
-  [time]
-    type = TimeDerivative
-    variable = u
-  []
-[]
-
-[BCs]
-  [left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  []
-  [right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  []
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 2
-  dt = 0.01
-  solve_type = PJFNK
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[Controls]
-  [stochastic]
-    type = SamplerReceiver
-  []
-[]
-
-[Postprocessors]
-  [avg]
-    type = AverageNodalVariableValue
-    variable = u
-  []
-[]
-
-[Outputs]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4c4809ac-175a-45b2-8590-e028a0ff02bd"><div class="modal-content"><h4>test/tests/controls/time_periods/user_objects/user_object.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  [./u]
-    initial_condition = 0.01
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-  [./time]
-    type = TimeDerivative
-    variable = u
-  [../]
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  [../]
-[]
-
-[Postprocessors]
-  [./nodal]
-    type = AverageNodalVariableValue
-    variable = u
-    execute_on = &#x27;TIMESTEP_END&#x27;
-  [../]
-  [./elemental]
-    type = ElementAverageValue
-    variable = u
-    execute_on = &#x27;TIMESTEP_END&#x27;
-  [../]
-  [./general]
-    type = PointValue
-    point = &#x27;0.5 0.5 0&#x27;
-    variable = u
-    execute_on = &#x27;TIMESTEP_END&#x27;
-  [../]
-  [./internal_side]
-    type = NumInternalSides
-  [../]
-  [./side]
-    type = SideAverageValue
-    boundary = right
-    variable = u
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 10
-  dt = 0.1
-  solve_type = PJFNK
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[Outputs]
-  csv = true
-[]
-
-[Controls]
-  [./pp_control]
-    type = TimePeriod
-    enable_objects = &#x27;*/nodal */elemental */general */internal_side */side&#x27;
-    start_time = 0.5
-    end_time = 1
-    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="05a24b5c-3b98-4dd4-a14e-91f663dd268f"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/thermal_expansion/constant_expansion_coeff.i</h4><pre class="moose-pre"><code class="language-text"># This test involves only thermal expansion strains on a 2x2x2 cube of approximate
-# steel material.  An initial temperature of 25 degrees C is given for the material,
-# and an auxkernel is used to calculate the temperature in the entire cube to
-# raise the temperature each time step.  After the first timestep,in which the
-# temperature jumps, the temperature increases by 6.25C each timestep.
-# The thermal strain increment should therefore be
-#     6.25 C * 1.3e-5 1/C = 8.125e-5 m/m.
-
-# This test is also designed to be used to identify problems with restart files
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 3
-  nx = 2
-  ny = 2
-  nz = 2
-[]
-
-[GlobalParams]
-  displacements = &#x27;disp_x disp_y disp_z&#x27;
-[]
-
-[AuxVariables]
-  [./temp]
-  [../]
-[]
-
-[Functions]
-  [./temperature_load]
-    type = ParsedFunction
-    value = t*(500.0)+300.0
-  [../]
-[]
-
-[Modules]
-  [./TensorMechanics]
-    [./Master]
-      [./all]
-        strain = SMALL
-        incremental = true
-        add_variables = true
-        eigenstrain_names = eigenstrain
-        generate_output = &#x27;strain_xx strain_yy strain_zz&#x27;
-      [../]
-    [../]
-  [../]
-[]
-
-[AuxKernels]
-  [./tempfuncaux]
-    type = FunctionAux
-    variable = temp
-    function = temperature_load
-  [../]
-[]
-
-[BCs]
-  [./x_bot]
-    type = DirichletBC
-    variable = disp_x
-    boundary = left
-    value = 0.0
-  [../]
-  [./y_bot]
-    type = DirichletBC
-    variable = disp_y
-    boundary = bottom
-    value = 0.0
-  [../]
-  [./z_bot]
-    type = DirichletBC
-    variable = disp_z
-    boundary = back
-    value = 0.0
-  [../]
-[]
-
-[Materials]
-  [./elasticity_tensor]
-    type = ComputeIsotropicElasticityTensor
-    youngs_modulus = 2.1e5
-    poissons_ratio = 0.3
-  [../]
-  [./small_stress]
-    type = ComputeFiniteStrainElasticStress
-  [../]
-  [./thermal_expansion_strain]
-    type = ComputeThermalExpansionEigenstrain
-    stress_free_temperature = 298
-    thermal_expansion_coeff = 1.3e-5
-    temperature = temp
-    eigenstrain_name = eigenstrain
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = &#x27;PJFNK&#x27;
-
-  l_max_its = 50
-  nl_max_its = 50
-  nl_rel_tol = 1e-12
-  nl_abs_tol = 1e-10
-  l_tol = 1e-9
-
-  start_time = 0.0
-  end_time = 0.075
-  dt = 0.0125
-  dtmin = 0.0001
-[]
-
-[Outputs]
-  csv = true
-  exodus = true
-  checkpoint = true
-[]
-
-[Postprocessors]
-  [./strain_xx]
-    type = ElementAverageValue
-    variable = strain_xx
-  [../]
-  [./strain_yy]
-    type = ElementAverageValue
-    variable = strain_yy
-  [../]
-  [./strain_zz]
-    type = ElementAverageValue
-    variable = strain_zz
-  [../]
-  [./temperature]
-    type = AverageNodalVariableValue
-    variable = temp
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b739195b-417f-4718-8767-b8c192caaef7"><div class="modal-content"><h4>modules/combined/test/tests/thermo_mech/ad-youngs_modulus_function_temp.i</h4><pre class="moose-pre"><code class="language-text"># ---------------------------------------------------------------------------
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="eacd3d42-8c92-44ce-8fda-6fc7ef7188eb"><div class="modal-content"><h4>modules/combined/test/tests/thermo_mech/ad-youngs_modulus_function_temp.i</h4><pre class="moose-pre"><code class="language-text"># ---------------------------------------------------------------------------
 # This test is designed to verify the variable elasticity tensor functionality in the
 # ADComputeFiniteStrainElasticStress class with the elasticity_tensor_has_changed flag
 # by varying the young&#x27;s modulus with temperature. A constant strain is applied
@@ -1864,955 +2815,4 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1e371a67-96d9-4873-ab6c-6fa68b84d51c"><div class="modal-content"><h4>modules/stochastic_tools/examples/batch/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 3
-  nx = 10
-  ny = 10
-  nz = 10
-[]
-
-[Variables]
-  [u]
-  []
-[]
-
-[Kernels]
-  [diff]
-    type = ADDiffusion
-    variable = u
-  []
-  [time]
-    type = ADTimeDerivative
-    variable = u
-  []
-[]
-
-[BCs]
-  [left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  []
-  [right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  []
-[]
-
-[Postprocessors]
-  [average]
-    type = AverageNodalVariableValue
-    variable = u
-  []
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 1
-  dt = 0.25
-  solve_type = NEWTON
-[]
-
-[Controls]
-  [receiver]
-    type = SamplerReceiver
-  []
-[]
-
-[Outputs]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f0f05d22-5e30-44cf-bd20-a5b9c5242c45"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/thermal_expansion/constant_expansion_stress_free_temp.i</h4><pre class="moose-pre"><code class="language-text"># This test involves only thermal expansion strains on a 2x2x2 cube of approximate
-# steel material; however, in this case the stress free temperature of the material
-# has been set to 200K so that there is an initial delta temperature of 100K.
-
-# An initial temperature of 300K is given for the material,
-# and an auxkernel is used to calculate the temperature in the entire cube to
-# raise the temperature each time step.  The final temperature is 675K
-# The thermal strain increment should therefore be
-#     (675K - 300K) * 1.3e-5 1/K + 100K * 1.3e-5 1/K = 6.175e-3 m/m.
-
-# This test uses a start up step to identify problems in the calculation of
-# eigenstrains with a stress free temperature that is different from the initial
-# value of the temperature in the problem
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 3
-  nx = 2
-  ny = 2
-  nz = 2
-[]
-
-[GlobalParams]
-  displacements = &#x27;disp_x disp_y disp_z&#x27;
-[]
-
-[AuxVariables]
-  [./temp]
-    initial_condition = 300.0
-  [../]
-  [./eigenstrain_yy]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./eigenstrain_xx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./eigenstrain_zz]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./total_strain_yy]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./total_strain_xx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./total_strain_zz]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-[]
-
-[Functions]
-  [./temperature_load]
-    type = ParsedFunction
-    value = t*(5000.0)+300.0
-  [../]
-[]
-
-[Modules]
-  [./TensorMechanics]
-    [./Master]
-      [./all]
-        strain = SMALL
-        incremental = true
-        add_variables = true
-        eigenstrain_names = eigenstrain
-      [../]
-    [../]
-  [../]
-[]
-
-[AuxKernels]
-  [./tempfuncaux]
-    type = FunctionAux
-    variable = temp
-    function = temperature_load
-  [../]
-  [./eigenstrain_yy]
-    type = RankTwoAux
-    rank_two_tensor = eigenstrain
-    variable = eigenstrain_yy
-    index_i = 1
-    index_j = 1
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./eigenstrain_xx]
-    type = RankTwoAux
-    rank_two_tensor = eigenstrain
-    variable = eigenstrain_xx
-    index_i = 0
-    index_j = 0
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./eigenstrain_zz]
-    type = RankTwoAux
-    rank_two_tensor = eigenstrain
-    variable = eigenstrain_zz
-    index_i = 2
-    index_j = 2
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./total_strain_yy]
-    type = RankTwoAux
-    rank_two_tensor = total_strain
-    variable = total_strain_yy
-    index_i = 1
-    index_j = 1
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./total_strain_xx]
-    type = RankTwoAux
-    rank_two_tensor = total_strain
-    variable = total_strain_xx
-    index_i = 0
-    index_j = 0
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./total_strain_zz]
-    type = RankTwoAux
-    rank_two_tensor = total_strain
-    variable = total_strain_zz
-    index_i = 2
-    index_j = 2
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-[]
-
-[BCs]
-  [./x_bot]
-    type = DirichletBC
-    variable = disp_x
-    boundary = left
-    value = 0.0
-  [../]
-  [./y_bot]
-    type = DirichletBC
-    variable = disp_y
-    boundary = bottom
-    value = 0.0
-  [../]
-  [./z_bot]
-    type = DirichletBC
-    variable = disp_z
-    boundary = back
-    value = 0.0
-  [../]
-[]
-
-[Materials]
-  [./elasticity_tensor]
-    type = ComputeIsotropicElasticityTensor
-    youngs_modulus = 2.1e5
-    poissons_ratio = 0.3
-  [../]
-  [./small_stress]
-    type = ComputeFiniteStrainElasticStress
-  [../]
-  [./thermal_expansion_strain]
-    type = ComputeThermalExpansionEigenstrain
-    stress_free_temperature = 200
-    thermal_expansion_coeff = 1.3e-5
-    temperature = temp
-    eigenstrain_name = eigenstrain
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = &#x27;PJFNK&#x27;
-
-  l_max_its = 50
-  nl_max_its = 50
-  nl_rel_tol = 1e-12
-  nl_abs_tol = 1e-10
-  l_tol = 1e-9
-
-  start_time = -0.0125
-  n_startup_steps = 1
-  end_time = 0.075
-  dt = 0.0125
-  dtmin = 0.0001
-[]
-
-[Outputs]
-  exodus = true
-[]
-
-[Postprocessors]
-  [./eigenstrain_xx]
-    type = ElementAverageValue
-    variable = eigenstrain_xx
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./eigenstrain_yy]
-    type = ElementAverageValue
-    variable = eigenstrain_yy
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./eigenstrain_zz]
-    type = ElementAverageValue
-    variable = eigenstrain_zz
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./total_strain_xx]
-    type = ElementAverageValue
-    variable = total_strain_xx
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./total_strain_yy]
-    type = ElementAverageValue
-    variable = total_strain_yy
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./total_strain_zz]
-    type = ElementAverageValue
-    variable = total_strain_zz
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-  [./temperature]
-    type = AverageNodalVariableValue
-    variable = temp
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3a058f7c-1493-4eb4-a19b-d2ef94829675"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/multiapps/batch_sampler_transient_multiapp/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  [u]
-  []
-[]
-
-[Kernels]
-  [diff]
-    type = Diffusion
-    variable = u
-  []
-[]
-
-[BCs]
-  [left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  []
-  [right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  []
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 5
-  dt = 0.1
-  solve_type = PJFNK
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[Postprocessors]
-  [average]
-    type = AverageNodalVariableValue
-    variable = u
-  []
-[]
-
-[Controls]
-  [stochastic]
-    type = SamplerReceiver
-  []
-[]
-
-[Outputs]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="17281fd8-b691-4780-acdb-c43fcd479833"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/multiapps/batch_full_solve_multiapp/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  [u]
-  []
-[]
-
-[Kernels]
-  [diff]
-    type = ADDiffusion
-    variable = u
-  []
-  [time]
-    type = ADTimeDerivative
-    variable = u
-  []
-[]
-
-[BCs]
-  [left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  []
-  [right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  []
-[]
-
-[Postprocessors]
-  [average]
-    type = AverageNodalVariableValue
-    variable = u
-  []
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 1
-  dt = 0.25
-  solve_type = NEWTON
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="beca1f1b-591c-48f2-a5a7-3b9510eaab51"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/transfers/batch_sampler_transfer/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  [u]
-  []
-[]
-
-[Kernels]
-  [diff]
-    type = ADDiffusion
-    variable = u
-  []
-  [time]
-    type = ADTimeDerivative
-    variable = u
-  []
-[]
-
-[BCs]
-  [left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  []
-  [right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  []
-[]
-
-[Postprocessors]
-  [average]
-    type = AverageNodalVariableValue
-    variable = u
-  []
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 1
-  dt = 0.25
-  solve_type = NEWTON
-[]
-
-[Controls]
-  [stochastic]
-    type = SamplerReceiver
-  []
-[]
-
-[Outputs]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="805a5412-0d84-4707-a344-4dc862347e37"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/thermal_expansion/constant_expansion_coeff_restart.i</h4><pre class="moose-pre"><code class="language-text"># This test involves only thermal expansion strains on a 2x2x2 cube of approximate
-# steel material.  An initial temperature of 25 degrees C is given for the material,
-# and an auxkernel is used to calculate the temperature in the entire cube to
-# raise the temperature each time step.  After the first timestep,in which the
-# temperature jumps, the temperature increases by 6.25C each timestep.
-# The thermal strain increment should therefore be
-#     6.25 C * 1.3e-5 1/C = 8.125e-5 m/m.
-
-# This test is also designed to be used to identify problems with restart files
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 3
-  nx = 2
-  ny = 2
-  nz = 2
-[]
-
-[Problem]
-  restart_file_base =  constant_expansion_coeff_out_cp/LATEST
-  force_restart = true
-[]
-
-[GlobalParams]
-  displacements = &#x27;disp_x disp_y disp_z&#x27;
-[]
-
-[AuxVariables]
-  [./temp]
-  [../]
-[]
-
-[Functions]
-  [./temperature_load]
-    type = ParsedFunction
-    value = t*(500.0)+300.0
-  [../]
-[]
-
-[Modules]
-    [TensorMechanics]
-        [Master]
-            [./all]
-                strain = SMALL
-                incremental = true
-                add_variables = true
-                eigenstrain_names = eigenstrain
-                generate_output = &#x27;strain_xx strain_yy strain_zz&#x27;
-            [../]
-        [../]
-    [../]
-[]
-
-[AuxKernels]
-  [./tempfuncaux]
-    type = FunctionAux
-    variable = temp
-    function = temperature_load
-    use_displaced_mesh = false
-  [../]
-[]
-
-[BCs]
-  [./x_bot]
-    type = DirichletBC
-    variable = disp_x
-    boundary = left
-    value = 0.0
-  [../]
-  [./y_bot]
-    type = DirichletBC
-    variable = disp_y
-    boundary = bottom
-    value = 0.0
-  [../]
-  [./z_bot]
-    type = DirichletBC
-    variable = disp_z
-    boundary = back
-    value = 0.0
-  [../]
-[]
-
-[Materials]
-  [./elasticity_tensor]
-    type = ComputeIsotropicElasticityTensor
-    youngs_modulus = 2.1e5
-    poissons_ratio = 0.3
-  [../]
-  [./small_stress]
-    type = ComputeFiniteStrainElasticStress
-  [../]
-  [./thermal_expansion_strain]
-    type = ComputeThermalExpansionEigenstrain
-    stress_free_temperature = 298
-    thermal_expansion_coeff = 1.3e-5
-    temperature = temp
-    eigenstrain_name = eigenstrain
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = &#x27;PJFNK&#x27;
-
-  petsc_options = &#x27;-snes_ksp_ew&#x27;
-  petsc_options_iname = &#x27;-ksp_gmres_restart&#x27;
-  petsc_options_value = &#x27;101&#x27;
-
-  line_search = &#x27;none&#x27;
-
-  l_max_its = 50
-  nl_max_its = 50
-  nl_rel_tol = 1e-12
-  nl_abs_tol = 1e-10
-  l_tol = 1e-9
-
-  end_time = 0.1
-  dt = 0.0125
-  dtmin = 0.0001
-[]
-
-[Outputs]
-  csv = true
-  exodus = true
-  checkpoint = true
-[]
-
-[Postprocessors]
-  [./strain_xx]
-    type = ElementAverageValue
-    variable = strain_xx
-  [../]
-  [./strain_yy]
-    type = ElementAverageValue
-    variable = strain_yy
-  [../]
-  [./strain_zz]
-    type = ElementAverageValue
-    variable = strain_zz
-  [../]
-  [./temperature]
-    type = AverageNodalVariableValue
-    variable = temp
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1dc477f5-a2cc-46ab-93c7-5c0f8d8b1e6f"><div class="modal-content"><h4>modules/stochastic_tools/test/tests/vectorpostprocessors/multiple_stochastic_results/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 10
-[]
-
-[Variables]
-  [u]
-  []
-[]
-
-[Kernels]
-  [diff]
-    type = Diffusion
-    variable = u
-  []
-  [time]
-    type = TimeDerivative
-    variable = u
-  []
-[]
-
-[BCs]
-  [left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  []
-  [right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  []
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 5
-  dt = 0.01
-  solve_type = PJFNK
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[Controls]
-  [stochastic]
-    type = SamplerReceiver
-  []
-[]
-
-[Postprocessors]
-  [avg]
-    type = AverageNodalVariableValue
-    variable = u
-  []
-  [max]
-    type = NodalExtremeValue
-    value_type = MAX
-    variable = u
-  []
-[]
-
-[Outputs]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="bbe5149f-8736-4323-ae03-2be96e597dcc"><div class="modal-content"><h4>test/tests/postprocessors/avg_nodal_var_value/avg_nodal_var_value.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  file = square-2x2-nodeids.e
-[]
-
-[Variables]
-  active = &#x27;u v&#x27;
-
-  [./u]
-    order = SECOND
-    family = LAGRANGE
-  [../]
-
-  [./v]
-    order = SECOND
-    family = LAGRANGE
-  [../]
-[]
-
-[Functions]
-  active = &#x27;force_fn exact_fn left_bc&#x27;
-
-  [./force_fn]
-    type = ParsedFunction
-    value = &#x27;1-x*x+2*t&#x27;
-  [../]
-
-  [./exact_fn]
-    type = ParsedFunction
-    value = &#x27;(1-x*x)*t&#x27;
-  [../]
-
-  [./left_bc]
-    type = ParsedFunction
-    value = t
-  [../]
-[]
-
-[Kernels]
-  active = &#x27;
-    time_u diff_u ffn_u
-    time_v diff_v&#x27;
-
-  [./time_u]
-    type = TimeDerivative
-    variable = u
-  [../]
-
-  [./diff_u]
-    type = Diffusion
-    variable = u
-  [../]
-
-  [./ffn_u]
-    type = BodyForce
-    variable = u
-    function = force_fn
-  [../]
-
-  [./time_v]
-    type = TimeDerivative
-    variable = v
-  [../]
-
-  [./diff_v]
-    type = Diffusion
-    variable = v
-  [../]
-[]
-
-[BCs]
-  active = &#x27;all_u left_v right_v&#x27;
-
-  [./all_u]
-    type = FunctionDirichletBC
-    variable = u
-    boundary = &#x27;1&#x27;
-    function = exact_fn
-  [../]
-
-  [./left_v]
-    type = FunctionDirichletBC
-    variable = v
-    boundary = &#x27;3&#x27;
-    function = left_bc
-  [../]
-
-  [./right_v]
-    type = DirichletBC
-    variable = v
-    boundary = &#x27;2&#x27;
-    value = 0
-  [../]
-[]
-
-[Postprocessors]
-  [./l2]
-    type = ElementL2Error
-    variable = u
-    function = exact_fn
-  [../]
-
-  [./node1]
-    type = AverageNodalVariableValue
-    variable = u
-    boundary = 10
-  [../]
-
-  [./node4]
-    type = AverageNodalVariableValue
-    variable = v
-    boundary = 13
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-
-  solve_type = &#x27;PJFNK&#x27;
-
-  dt = 0.1
-  start_time = 0
-  end_time = 1
-[]
-
-[Outputs]
-  execute_on = &#x27;timestep_end&#x27;
-  file_base = out_avg_nodal_var_value
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fc941369-ba34-4b27-8ca6-0f6c3a2310c6"><div class="modal-content"><h4>modules/tensor_mechanics/test/tests/thermal_expansion/ad_constant_expansion_coeff.i</h4><pre class="moose-pre"><code class="language-text"># This test involves only thermal expansion strains on a 2x2x2 cube of approximate
-# steel material.  An initial temperature of 25 degrees C is given for the material,
-# and an auxkernel is used to calculate the temperature in the entire cube to
-# raise the temperature each time step.  After the first timestep,in which the
-# temperature jumps, the temperature increases by 6.25C each timestep.
-# The thermal strain increment should therefore be
-#     6.25 C * 1.3e-5 1/C = 8.125e-5 m/m.
-
-# This test is also designed to be used to identify problems with restart files
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 3
-  nx = 2
-  ny = 2
-  nz = 2
-[]
-
-[GlobalParams]
-  displacements = &#x27;disp_x disp_y disp_z&#x27;
-[]
-
-[Variables]
-  [./temp]
-  [../]
-[]
-
-[Functions]
-  [./temperature_load]
-    type = ParsedFunction
-    value = t*(500.0)+300.0
-  [../]
-[]
-
-[Modules]
-  [./TensorMechanics]
-    [./Master]
-      [./all]
-        strain = SMALL
-        incremental = true
-        add_variables = true
-        eigenstrain_names = eigenstrain
-        generate_output = &#x27;strain_xx strain_yy strain_zz&#x27;
-        use_automatic_differentiation = true
-      [../]
-    [../]
-  [../]
-[]
-
-[Kernels]
-  [./tempfuncaux]
-    type = Diffusion
-    variable = temp
-  [../]
-[]
-
-[BCs]
-  [./x_bot]
-    type = DirichletBC
-    variable = disp_x
-    boundary = left
-    value = 0.0
-  [../]
-  [./y_bot]
-    type = DirichletBC
-    variable = disp_y
-    boundary = bottom
-    value = 0.0
-  [../]
-  [./z_bot]
-    type = DirichletBC
-    variable = disp_z
-    boundary = back
-    value = 0.0
-  [../]
-  [./temp]
-    type = FunctionDirichletBC
-    variable = temp
-    function = temperature_load
-    boundary = &#x27;left right&#x27;
-  [../]
-[]
-
-[Materials]
-  [./elasticity_tensor]
-    type = ADComputeIsotropicElasticityTensor
-    youngs_modulus = 2.1e5
-    poissons_ratio = 0.3
-  [../]
-  [./small_stress]
-    type = ADComputeFiniteStrainElasticStress
-  [../]
-  [./thermal_expansion_strain]
-    type = ADComputeThermalExpansionEigenstrain
-    stress_free_temperature = 298
-    thermal_expansion_coeff = 1.3e-5
-    temperature = temp
-    eigenstrain_name = eigenstrain
-  [../]
-[]
-
-[Preconditioning]
-  [./smp]
-    type = SMP
-    full = true
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = &#x27;NEWTON&#x27;
-
-  l_max_its = 50
-  nl_max_its = 50
-  nl_rel_tol = 1e-12
-  nl_abs_tol = 1e-10
-  l_tol = 1e-9
-
-  start_time = 0.0
-  end_time = 0.075
-  dt = 0.0125
-  dtmin = 0.0001
-[]
-
-[Outputs]
-  csv = true
-  exodus = true
-[]
-
-[Postprocessors]
-  [./strain_xx]
-    type = ElementAverageValue
-    variable = strain_xx
-  [../]
-  [./strain_yy]
-    type = ElementAverageValue
-    variable = strain_yy
-  [../]
-  [./strain_zz]
-    type = ElementAverageValue
-    variable = strain_zz
-  [../]
-  [./temperature]
-    type = AverageNodalVariableValue
-    variable = temp
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#45a88aac-7812-4cc1-8294-6c20f9070fa6" class="tooltipped" data-position="left" data-tooltip="Example Input File Syntax">Example Input File Syntax</a></li><li><a href="#26043012-e7e4-45b3-9ccf-7402784ef4c6" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#4f3e1526-3f6f-4cf2-96f9-7116697b5c86" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#ca110458-08b8-4f67-9063-343f3c080b9b" class="tooltipped" data-position="left" data-tooltip="Example Input File Syntax">Example Input File Syntax</a></li><li><a href="#96b4297e-2ea1-4ec3-87d7-78a0ad54ec31" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#9327f44b-980b-4761-a9b8-ace16999a751" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

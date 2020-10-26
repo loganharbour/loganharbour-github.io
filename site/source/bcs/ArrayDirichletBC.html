@@ -1,4 +1,4 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>ArrayDirichletBC.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="273370fc-e4aa-4346-afc1-f5031056e11d"><i class="material-icons">menu</i></a><ul class="sidenav" id="273370fc-e4aa-4346-afc1-f5031056e11d"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">bcs</span><a href="#" class="breadcrumb">ArrayDirichletBC</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="f96c3629-3a2e-4910-8b8c-919a6cc0e543" data-section-level="1" data-section-text="ArrayDirichletBC"><h1 id="arraydirichletbc">ArrayDirichletBC</h1><section class="scrollspy" id="c7609eab-5cb4-4bb8-93c8-6d8e9fa34435" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>This boundary condition applies Dirichlet boundary conditions to all components of an array variable. Its standard variable version is <a href="DirichletBC.html">DirichletBC</a>. Different boundary values for components can be assigned.</p></section><section class="scrollspy" id="a34858d2-b5d3-4d7e-91e5-caa4144e1889" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">[BCs]
+<!DOCTYPE html><head><meta charset="UTF-8"><title>ArrayDirichletBC.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="22deeefa-2510-4cce-b14d-67fa7ee1a16a"><i class="material-icons">menu</i></a><ul class="sidenav" id="22deeefa-2510-4cce-b14d-67fa7ee1a16a"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">bcs</span><a href="#" class="breadcrumb">ArrayDirichletBC</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="14910659-6916-48da-a525-150cdf4dfa64" data-section-level="1" data-section-text="ArrayDirichletBC"><h1 id="arraydirichletbc">ArrayDirichletBC</h1><section class="scrollspy" id="8c6843e2-4f46-4caf-933f-2fa5b3add88c" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>This boundary condition applies Dirichlet boundary conditions to all components of an array variable. Its standard variable version is <a href="DirichletBC.html">DirichletBC</a>. Different boundary values for components can be assigned.</p></section><section class="scrollspy" id="61d48034-f4bb-446d-926d-3f4859cdbc4e" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">[BCs]
   [left]
     type = ArrayDirichletBC
     variable = u
@@ -13,7 +13,7 @@
     values = &#x27;1 2&#x27;
   []
 []
-</code></pre><a href="#9595254f-f744-499f-9f17-7cb45e953ab4" class="modal-trigger">(test/tests/kernels/array_kernels/array_diffusion_test.i)</a><div class="modal moose-modal" id="9595254f-f744-499f-9f17-7cb45e953ab4"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/kernels/array_kernels/array_diffusion_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre><a href="#8eabd4ec-e307-4656-9078-6410b812fbbc" class="modal-trigger">(test/tests/kernels/array_kernels/array_diffusion_test.i)</a><div class="modal moose-modal" id="8eabd4ec-e307-4656-9078-6410b812fbbc"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/kernels/array_kernels/array_diffusion_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 4
@@ -68,11 +68,86 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="90434b29-5ca4-41e8-9c5e-677da757036b" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="1c099ce0-c399-40cc-9388-b151867b4b7f" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">values</span><span class="moose-parameter-header-description">The values the components must take on the boundary</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>Eigen::Matrix<double, -1, 1, 0, -1, 1></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The values the components must take on the boundary</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this boundary condition applies to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this boundary condition applies to</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="db88bc51-8bbc-4110-a2e9-04be5127836b" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="a582d40f-36c4-4a23-bb9a-dfd45ef6c083" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="622da58d-0333-44a9-a9dc-6f22c1b8ab6e" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system time</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system time</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">residual</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>residual</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time residual</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="27b4e421-1eda-4025-8414-b880f8bc17fe" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#36aaa366-d760-4248-8c05-ee7bd4f8c77e" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/array_variable_transfer/sub.i</a></li><li><a href="#d28beb29-3a9c-436f-a9f5-15f4ede8fcd4" class="modal-trigger">test/tests/bcs/array_vacuum/array_vacuum.i</a></li><li><a href="#b6c4727b-b6b3-485a-9062-b4a7e9533274" class="modal-trigger">test/tests/kernels/array_kernels/array_diffusion_reaction_other_coupling.i</a></li><li><a href="#9797c74c-9e93-41ce-bf15-08bbbf717eb5" class="modal-trigger">test/tests/problems/eigen_problem/arraykernels/ne_array_kernels.i</a></li><li><a href="#ce69b57a-b641-4697-8882-06364aee65b8" class="modal-trigger">test/tests/kernels/array_kernels/array_diffusion_test.i</a></li><li><a href="#b418b611-22cb-49f7-b3c9-f213b648061f" class="modal-trigger">test/tests/kernels/array_kernels/array_diffusion_reaction.i</a></li><li><a href="#abc7d2f1-d870-411e-b128-88b88e437962" class="modal-trigger">test/tests/kernels/array_kernels/array_diffusion_reaction_transient.i</a></li><li><a href="#ddc923f2-82ab-4a9f-a546-f4b1adabab12" class="modal-trigger">test/tests/kernels/array_kernels/array_diffusion_reaction_coupling.i</a></li><li><a href="#e9f6817b-48b3-40f7-9261-c35e2df6652c" class="modal-trigger">test/tests/auxkernels/array_var_component/array_var_component.i</a></li></ul><div class="modal moose-modal" id="36aaa366-d760-4248-8c05-ee7bd4f8c77e"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/array_variable_transfer/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="20bd7317-2a65-49c1-8345-70a267cd93bb" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="be162074-bdcd-4615-83fd-e71b37f24894" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">values</span><span class="moose-parameter-header-description">The values the components must take on the boundary</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>Eigen::Matrix<double, -1, 1, 0, -1, 1></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The values the components must take on the boundary</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this boundary condition applies to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this boundary condition applies to</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="64a00f56-2021-4b66-b5b8-b1e10c07523d" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's diagonal jacobian contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this BC's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="3a8d864f-87e3-408c-9cba-4e890b426a27" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="bea33fd3-3f21-4e12-99d6-12da2d0b3731" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system time</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system time</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">residual</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>residual</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time residual</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="bb6a7c5c-8980-480b-9c40-9f238455fd3f" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#d320a7b1-11c2-4540-b1ad-add4fec4a21a" class="modal-trigger">test/tests/auxkernels/array_var_component/array_var_component.i</a></li><li><a href="#5b053323-a35f-4a90-862b-f2765fe8a93a" class="modal-trigger">test/tests/kernels/array_kernels/array_diffusion_reaction.i</a></li><li><a href="#7de9bf36-dcf0-4580-b4c6-e75ce88bad73" class="modal-trigger">test/tests/problems/eigen_problem/arraykernels/ne_array_kernels.i</a></li><li><a href="#fe6bcc75-8d10-4679-813b-e630a04185c6" class="modal-trigger">test/tests/bcs/array_vacuum/array_vacuum.i</a></li><li><a href="#94ce22fe-7bdc-43ec-85fa-6e337c23ce48" class="modal-trigger">test/tests/transfers/multiapp_copy_transfer/array_variable_transfer/sub.i</a></li><li><a href="#bd504bd5-c876-4f1b-a949-65bc806d186f" class="modal-trigger">test/tests/kernels/array_kernels/array_diffusion_reaction_transient.i</a></li><li><a href="#0c6cdece-18ac-4ff5-bfb5-b692dff0595e" class="modal-trigger">test/tests/kernels/array_kernels/array_diffusion_test.i</a></li><li><a href="#fadcdf26-9bda-437a-99e8-b60bf702c537" class="modal-trigger">test/tests/kernels/array_kernels/array_diffusion_reaction_coupling.i</a></li><li><a href="#e53ac9ac-381c-4301-bb76-b35469909b8a" class="modal-trigger">test/tests/kernels/array_kernels/array_diffusion_reaction_other_coupling.i</a></li></ul><div class="modal moose-modal" id="d320a7b1-11c2-4540-b1ad-add4fec4a21a"><div class="modal-content"><h4>test/tests/auxkernels/array_var_component/array_var_component.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
-  nx = 10
-  ny = 10
+  nx = 4
+  ny = 4
+[]
+
+[Variables]
+  [u]
+    order = FIRST
+    family = LAGRANGE
+    components = 2
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = ArrayDiffusion
+    variable = u
+    diffusion_coefficient = dc
+  []
+[]
+
+[BCs]
+  [left]
+    type = ArrayDirichletBC
+    variable = u
+    boundary = 1
+    values = &#x27;0 0&#x27;
+  []
+
+  [right]
+    type = ArrayDirichletBC
+    variable = u
+    boundary = 2
+    values = &#x27;1 2&#x27;
+  []
+[]
+
+[Materials]
+  [dc]
+    type = GenericConstantArray
+    prop_name = dc
+    prop_value = &#x27;1 1&#x27;
+  []
+[]
+
+[AuxVariables]
+  [u0][]
+[]
+
+[AuxKernels]
+  [u0]
+    type = ArrayVariableComponent
+    variable = u0
+    array_variable = u
+    component = 0
+  []
+[]
+
+[Postprocessors]
+  [intu0]
+    type = ElementIntegralVariablePostprocessor
+    variable = u0
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5b053323-a35f-4a90-862b-f2765fe8a93a"><div class="modal-content"><h4>test/tests/kernels/array_kernels/array_diffusion_reaction.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 4
+  ny = 4
 []
 
 [Variables]
@@ -125,18 +200,137 @@
   []
 []
 
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
 [Executioner]
-  type = Transient
-  num_steps = 1
-  solve_type = &#x27;PJFNK&#x27;
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
 []
 
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d28beb29-3a9c-436f-a9f5-15f4ede8fcd4"><div class="modal-content"><h4>test/tests/bcs/array_vacuum/array_vacuum.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="7de9bf36-dcf0-4580-b4c6-e75ce88bad73"><div class="modal-content"><h4>test/tests/problems/eigen_problem/arraykernels/ne_array_kernels.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 10
+  ymin = 0
+  ymax = 10
+  elem_type = QUAD4
+  nx = 8
+  ny = 8
+[]
+
+# the minimum eigenvalue of this problem is 2*(PI/a)^2;
+# Its inverse is 0.5*(a/PI)^2 = 5.0660591821169. Here a is equal to 10.
+
+[Variables]
+  [u]
+    order = FIRST
+    family = LAGRANGE
+    components = 2
+  []
+  [v]
+    order = FIRST
+    family = LAGRANGE
+    components = 2
+  []
+[]
+
+[Kernels]
+  [diffu]
+    type = ArrayDiffusion
+    variable = u
+    diffusion_coefficient = dc
+  []
+
+  [reactionu]
+    type = ArrayReaction
+    variable = u
+    reaction_coefficient = rc
+    extra_vector_tags = &#x27;eigen&#x27;
+  []
+
+  [diffv]
+    type = ArrayDiffusion
+    variable = v
+    diffusion_coefficient = dc
+  []
+
+  [reactionv]
+    type = ArrayReaction
+    variable = v
+    reaction_coefficient = rc
+    extra_vector_tags = &#x27;eigen&#x27;
+  []
+[]
+
+[Materials]
+  [dc]
+    type = GenericConstantArray
+    prop_name = dc
+    prop_value = &#x27;1. 1.&#x27;
+  []
+  [rc]
+    type = GenericConstantArray
+    prop_name = rc
+    prop_value = &#x27;-1 -1&#x27;
+  []
+[]
+
+[BCs]
+  [hom_u]
+    type = ArrayDirichletBC
+    variable = u
+    values = &#x27;0 0&#x27;
+    boundary = &#x27;0 1 2 3&#x27;
+  []
+
+  [eigenhom_u]
+    type = EigenArrayDirichletBC
+    variable = u
+    boundary = &#x27;0 1 2 3&#x27;
+  []
+
+  [hom_v]
+    type = ArrayDirichletBC
+    variable = v
+    values = &#x27;0 0&#x27;
+    boundary = &#x27;0 1 2 3&#x27;
+  []
+
+  [eigenhom_v]
+    type = EigenArrayDirichletBC
+    variable = v
+    boundary = &#x27;0 1 2 3&#x27;
+  []
+[]
+
+[Executioner]
+  type = Eigenvalue
+  matrix_free = true
+  solve_type = NEWTON
+  eigen_problem_type = GEN_NON_HERMITIAN
+[]
+
+[VectorPostprocessors]
+  [./eigenvalues]
+    type = Eigenvalues
+    execute_on = &#x27;timestep_end&#x27;
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  execute_on = &#x27;timestep_end&#x27;
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fe6bcc75-8d10-4679-813b-e630a04185c6"><div class="modal-content"><h4>test/tests/bcs/array_vacuum/array_vacuum.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 4
@@ -208,7 +402,335 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b6c4727b-b6b3-485a-9062-b4a7e9533274"><div class="modal-content"><h4>test/tests/kernels/array_kernels/array_diffusion_reaction_other_coupling.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="94ce22fe-7bdc-43ec-85fa-6e337c23ce48"><div class="modal-content"><h4>test/tests/transfers/multiapp_copy_transfer/array_variable_transfer/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [u]
+    order = FIRST
+    family = LAGRANGE
+    components = 2
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = ArrayDiffusion
+    variable = u
+    diffusion_coefficient = dc
+  []
+  [reaction]
+    type = ArrayReaction
+    variable = u
+    reaction_coefficient = rc
+  []
+[]
+
+[BCs]
+  [left]
+    type = ArrayDirichletBC
+    variable = u
+    boundary = 1
+    values = &#x27;0 0&#x27;
+  []
+
+  [right]
+    type = ArrayDirichletBC
+    variable = u
+    boundary = 2
+    values = &#x27;1 2&#x27;
+  []
+[]
+
+[Materials]
+  [dc]
+    type = GenericConstantArray
+    prop_name = dc
+    prop_value = &#x27;1 1&#x27;
+  []
+  [rc]
+    type = GenericConstant2DArray
+    prop_name = rc
+    prop_value = &#x27;1 0; -0.1 1&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="bd504bd5-c876-4f1b-a949-65bc806d186f"><div class="modal-content"><h4>test/tests/kernels/array_kernels/array_diffusion_reaction_transient.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 4
+  ny = 4
+[]
+
+[Variables]
+  [u]
+    order = FIRST
+    family = LAGRANGE
+    components = 2
+  []
+[]
+
+[Kernels]
+  [dudt]
+    type = ArrayTimeDerivative
+    variable = u
+    time_derivative_coefficient = tc
+  []
+  [diff]
+    type = ArrayDiffusion
+    variable = u
+    diffusion_coefficient = dc
+  []
+  [reaction]
+    type = ArrayReaction
+    variable = u
+    reaction_coefficient = rc
+  []
+[]
+
+[BCs]
+  [left]
+    type = ArrayDirichletBC
+    variable = u
+    boundary = 1
+    values = &#x27;0 0&#x27;
+  []
+
+  [right]
+    type = ArrayDirichletBC
+    variable = u
+    boundary = 2
+    values = &#x27;1 2&#x27;
+  []
+[]
+
+[Materials]
+  [tc]
+    type = GenericConstantArray
+    prop_name = tc
+    prop_value = &#x27;1 1&#x27;
+  []
+  [dc]
+    type = GenericConstantArray
+    prop_name = dc
+    prop_value = &#x27;1 1&#x27;
+  []
+  [rc]
+    type = GenericConstant2DArray
+    prop_name = rc
+    prop_value = &#x27;1 0; -0.1 1&#x27;
+  []
+[]
+
+[Postprocessors]
+  [intu0]
+    type = ElementIntegralArrayVariablePostprocessor
+    variable = u
+    component = 0
+  []
+  [intu1]
+    type = ElementIntegralArrayVariablePostprocessor
+    variable = u
+    component = 1
+  []
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;NEWTON&#x27;
+  dt = 0.1
+  num_steps = 10
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0c6cdece-18ac-4ff5-bfb5-b692dff0595e"><div class="modal-content"><h4>test/tests/kernels/array_kernels/array_diffusion_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 4
+  ny = 4
+[]
+
+[Variables]
+  [u]
+    order = FIRST
+    family = LAGRANGE
+    components = 2
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = ArrayDiffusion
+    variable = u
+    diffusion_coefficient = dc
+  []
+[]
+
+[BCs]
+  [left]
+    type = ArrayDirichletBC
+    variable = u
+    boundary = 1
+    values = &#x27;0 0&#x27;
+  []
+
+  [right]
+    type = ArrayDirichletBC
+    variable = u
+    boundary = 2
+    values = &#x27;1 2&#x27;
+  []
+[]
+
+[Materials]
+  [dc]
+    type = GenericConstantArray
+    prop_name = dc
+    prop_value = &#x27;1 1&#x27;
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fadcdf26-9bda-437a-99e8-b60bf702c537"><div class="modal-content"><h4>test/tests/kernels/array_kernels/array_diffusion_reaction_coupling.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 4
+  ny = 4
+[]
+
+[Variables]
+  [u]
+    order = FIRST
+    family = LAGRANGE
+    components = 2
+  []
+  [v]
+  []
+[]
+
+[Kernels]
+  [diff]
+    type = ArrayDiffusion
+    variable = u
+    diffusion_coefficient = dc
+  []
+  [reaction]
+    type = ArrayReaction
+    variable = u
+    reaction_coefficient = rc
+  []
+  [diffv]
+    type = Diffusion
+    variable = v
+  []
+  [vu]
+    type = ArrayCoupledForce
+    variable = u
+    v = v
+    coef = &#x27;0 0.5&#x27;
+  []
+[]
+
+[BCs]
+  [left]
+    type = ArrayDirichletBC
+    variable = u
+    boundary = 1
+    values = &#x27;0 0&#x27;
+  []
+
+  [right]
+    type = ArrayDirichletBC
+    variable = u
+    boundary = 2
+    values = &#x27;1 2&#x27;
+  []
+
+  [leftv]
+    type = DirichletBC
+    variable = v
+    boundary = 1
+    value = 0
+  []
+
+  [rightv]
+    type = DirichletBC
+    variable = v
+    boundary = 2
+    value = 2
+  []
+[]
+
+[Materials]
+  [dc]
+    type = GenericConstantArray
+    prop_name = dc
+    prop_value = &#x27;1 1&#x27;
+  []
+  [rc]
+    type = GenericConstant2DArray
+    prop_name = rc
+    prop_value = &#x27;1 0; -0.1 1&#x27;
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Postprocessors]
+  [intu0]
+    type = ElementIntegralArrayVariablePostprocessor
+    variable = u
+    component = 0
+  []
+  [intu1]
+    type = ElementIntegralArrayVariablePostprocessor
+    variable = u
+    component = 1
+  []
+  [intv]
+    type = ElementIntegralVariablePostprocessor
+    variable = v
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e53ac9ac-381c-4301-bb76-b35469909b8a"><div class="modal-content"><h4>test/tests/kernels/array_kernels/array_diffusion_reaction_other_coupling.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 4
@@ -329,526 +851,4 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9797c74c-9e93-41ce-bf15-08bbbf717eb5"><div class="modal-content"><h4>test/tests/problems/eigen_problem/arraykernels/ne_array_kernels.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = 0
-  xmax = 10
-  ymin = 0
-  ymax = 10
-  elem_type = QUAD4
-  nx = 8
-  ny = 8
-[]
-
-# the minimum eigenvalue of this problem is 2*(PI/a)^2;
-# Its inverse is 0.5*(a/PI)^2 = 5.0660591821169. Here a is equal to 10.
-
-[Variables]
-  [u]
-    order = FIRST
-    family = LAGRANGE
-    components = 2
-  []
-  [v]
-    order = FIRST
-    family = LAGRANGE
-    components = 2
-  []
-[]
-
-[Kernels]
-  [diffu]
-    type = ArrayDiffusion
-    variable = u
-    diffusion_coefficient = dc
-  []
-
-  [reactionu]
-    type = ArrayReaction
-    variable = u
-    reaction_coefficient = rc
-    extra_vector_tags = &#x27;eigen&#x27;
-  []
-
-  [diffv]
-    type = ArrayDiffusion
-    variable = v
-    diffusion_coefficient = dc
-  []
-
-  [reactionv]
-    type = ArrayReaction
-    variable = v
-    reaction_coefficient = rc
-    extra_vector_tags = &#x27;eigen&#x27;
-  []
-[]
-
-[Materials]
-  [dc]
-    type = GenericConstantArray
-    prop_name = dc
-    prop_value = &#x27;1. 1.&#x27;
-  []
-  [rc]
-    type = GenericConstantArray
-    prop_name = rc
-    prop_value = &#x27;-1 -1&#x27;
-  []
-[]
-
-[BCs]
-  [hom_u]
-    type = ArrayDirichletBC
-    variable = u
-    values = &#x27;0 0&#x27;
-    boundary = &#x27;0 1 2 3&#x27;
-  []
-
-  [eigenhom_u]
-    type = EigenArrayDirichletBC
-    variable = u
-    boundary = &#x27;0 1 2 3&#x27;
-  []
-
-  [hom_v]
-    type = ArrayDirichletBC
-    variable = v
-    values = &#x27;0 0&#x27;
-    boundary = &#x27;0 1 2 3&#x27;
-  []
-
-  [eigenhom_v]
-    type = EigenArrayDirichletBC
-    variable = v
-    boundary = &#x27;0 1 2 3&#x27;
-  []
-[]
-
-[Executioner]
-  type = Eigenvalue
-  matrix_free = true
-  solve_type = NEWTON
-  eigen_problem_type = GEN_NON_HERMITIAN
-[]
-
-[VectorPostprocessors]
-  [./eigenvalues]
-    type = Eigenvalues
-    execute_on = &#x27;timestep_end&#x27;
-  [../]
-[]
-
-[Outputs]
-  csv = true
-  execute_on = &#x27;timestep_end&#x27;
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ce69b57a-b641-4697-8882-06364aee65b8"><div class="modal-content"><h4>test/tests/kernels/array_kernels/array_diffusion_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 4
-  ny = 4
-[]
-
-[Variables]
-  [u]
-    order = FIRST
-    family = LAGRANGE
-    components = 2
-  []
-[]
-
-[Kernels]
-  [diff]
-    type = ArrayDiffusion
-    variable = u
-    diffusion_coefficient = dc
-  []
-[]
-
-[BCs]
-  [left]
-    type = ArrayDirichletBC
-    variable = u
-    boundary = 1
-    values = &#x27;0 0&#x27;
-  []
-
-  [right]
-    type = ArrayDirichletBC
-    variable = u
-    boundary = 2
-    values = &#x27;1 2&#x27;
-  []
-[]
-
-[Materials]
-  [dc]
-    type = GenericConstantArray
-    prop_name = dc
-    prop_value = &#x27;1 1&#x27;
-  []
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = &#x27;NEWTON&#x27;
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b418b611-22cb-49f7-b3c9-f213b648061f"><div class="modal-content"><h4>test/tests/kernels/array_kernels/array_diffusion_reaction.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 4
-  ny = 4
-[]
-
-[Variables]
-  [u]
-    order = FIRST
-    family = LAGRANGE
-    components = 2
-  []
-[]
-
-[Kernels]
-  [diff]
-    type = ArrayDiffusion
-    variable = u
-    diffusion_coefficient = dc
-  []
-  [reaction]
-    type = ArrayReaction
-    variable = u
-    reaction_coefficient = rc
-  []
-[]
-
-[BCs]
-  [left]
-    type = ArrayDirichletBC
-    variable = u
-    boundary = 1
-    values = &#x27;0 0&#x27;
-  []
-
-  [right]
-    type = ArrayDirichletBC
-    variable = u
-    boundary = 2
-    values = &#x27;1 2&#x27;
-  []
-[]
-
-[Materials]
-  [dc]
-    type = GenericConstantArray
-    prop_name = dc
-    prop_value = &#x27;1 1&#x27;
-  []
-  [rc]
-    type = GenericConstant2DArray
-    prop_name = rc
-    prop_value = &#x27;1 0; -0.1 1&#x27;
-  []
-[]
-
-[Preconditioning]
-  [smp]
-    type = SMP
-    full = true
-  []
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = &#x27;NEWTON&#x27;
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="abc7d2f1-d870-411e-b128-88b88e437962"><div class="modal-content"><h4>test/tests/kernels/array_kernels/array_diffusion_reaction_transient.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 4
-  ny = 4
-[]
-
-[Variables]
-  [u]
-    order = FIRST
-    family = LAGRANGE
-    components = 2
-  []
-[]
-
-[Kernels]
-  [dudt]
-    type = ArrayTimeDerivative
-    variable = u
-    time_derivative_coefficient = tc
-  []
-  [diff]
-    type = ArrayDiffusion
-    variable = u
-    diffusion_coefficient = dc
-  []
-  [reaction]
-    type = ArrayReaction
-    variable = u
-    reaction_coefficient = rc
-  []
-[]
-
-[BCs]
-  [left]
-    type = ArrayDirichletBC
-    variable = u
-    boundary = 1
-    values = &#x27;0 0&#x27;
-  []
-
-  [right]
-    type = ArrayDirichletBC
-    variable = u
-    boundary = 2
-    values = &#x27;1 2&#x27;
-  []
-[]
-
-[Materials]
-  [tc]
-    type = GenericConstantArray
-    prop_name = tc
-    prop_value = &#x27;1 1&#x27;
-  []
-  [dc]
-    type = GenericConstantArray
-    prop_name = dc
-    prop_value = &#x27;1 1&#x27;
-  []
-  [rc]
-    type = GenericConstant2DArray
-    prop_name = rc
-    prop_value = &#x27;1 0; -0.1 1&#x27;
-  []
-[]
-
-[Postprocessors]
-  [intu0]
-    type = ElementIntegralArrayVariablePostprocessor
-    variable = u
-    component = 0
-  []
-  [intu1]
-    type = ElementIntegralArrayVariablePostprocessor
-    variable = u
-    component = 1
-  []
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = &#x27;NEWTON&#x27;
-  dt = 0.1
-  num_steps = 10
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ddc923f2-82ab-4a9f-a546-f4b1adabab12"><div class="modal-content"><h4>test/tests/kernels/array_kernels/array_diffusion_reaction_coupling.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 4
-  ny = 4
-[]
-
-[Variables]
-  [u]
-    order = FIRST
-    family = LAGRANGE
-    components = 2
-  []
-  [v]
-  []
-[]
-
-[Kernels]
-  [diff]
-    type = ArrayDiffusion
-    variable = u
-    diffusion_coefficient = dc
-  []
-  [reaction]
-    type = ArrayReaction
-    variable = u
-    reaction_coefficient = rc
-  []
-  [diffv]
-    type = Diffusion
-    variable = v
-  []
-  [vu]
-    type = ArrayCoupledForce
-    variable = u
-    v = v
-    coef = &#x27;0 0.5&#x27;
-  []
-[]
-
-[BCs]
-  [left]
-    type = ArrayDirichletBC
-    variable = u
-    boundary = 1
-    values = &#x27;0 0&#x27;
-  []
-
-  [right]
-    type = ArrayDirichletBC
-    variable = u
-    boundary = 2
-    values = &#x27;1 2&#x27;
-  []
-
-  [leftv]
-    type = DirichletBC
-    variable = v
-    boundary = 1
-    value = 0
-  []
-
-  [rightv]
-    type = DirichletBC
-    variable = v
-    boundary = 2
-    value = 2
-  []
-[]
-
-[Materials]
-  [dc]
-    type = GenericConstantArray
-    prop_name = dc
-    prop_value = &#x27;1 1&#x27;
-  []
-  [rc]
-    type = GenericConstant2DArray
-    prop_name = rc
-    prop_value = &#x27;1 0; -0.1 1&#x27;
-  []
-[]
-
-[Preconditioning]
-  [smp]
-    type = SMP
-    full = true
-  []
-[]
-
-[Postprocessors]
-  [intu0]
-    type = ElementIntegralArrayVariablePostprocessor
-    variable = u
-    component = 0
-  []
-  [intu1]
-    type = ElementIntegralArrayVariablePostprocessor
-    variable = u
-    component = 1
-  []
-  [intv]
-    type = ElementIntegralVariablePostprocessor
-    variable = v
-  []
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = &#x27;NEWTON&#x27;
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e9f6817b-48b3-40f7-9261-c35e2df6652c"><div class="modal-content"><h4>test/tests/auxkernels/array_var_component/array_var_component.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 4
-  ny = 4
-[]
-
-[Variables]
-  [u]
-    order = FIRST
-    family = LAGRANGE
-    components = 2
-  []
-[]
-
-[Kernels]
-  [diff]
-    type = ArrayDiffusion
-    variable = u
-    diffusion_coefficient = dc
-  []
-[]
-
-[BCs]
-  [left]
-    type = ArrayDirichletBC
-    variable = u
-    boundary = 1
-    values = &#x27;0 0&#x27;
-  []
-
-  [right]
-    type = ArrayDirichletBC
-    variable = u
-    boundary = 2
-    values = &#x27;1 2&#x27;
-  []
-[]
-
-[Materials]
-  [dc]
-    type = GenericConstantArray
-    prop_name = dc
-    prop_value = &#x27;1 1&#x27;
-  []
-[]
-
-[AuxVariables]
-  [u0][]
-[]
-
-[AuxKernels]
-  [u0]
-    type = ArrayVariableComponent
-    variable = u0
-    array_variable = u
-    component = 0
-  []
-[]
-
-[Postprocessors]
-  [intu0]
-    type = ElementIntegralVariablePostprocessor
-    variable = u0
-  []
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = &#x27;NEWTON&#x27;
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#c7609eab-5cb4-4bb8-93c8-6d8e9fa34435" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#a34858d2-b5d3-4d7e-91e5-caa4144e1889" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#90434b29-5ca4-41e8-9c5e-677da757036b" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#27b4e421-1eda-4025-8414-b880f8bc17fe" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#8c6843e2-4f46-4caf-933f-2fa5b3add88c" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#61d48034-f4bb-446d-926d-3f4859cdbc4e" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#20bd7317-2a65-49c1-8345-70a267cd93bb" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#bb6a7c5c-8980-480b-9c40-9f238455fd3f" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

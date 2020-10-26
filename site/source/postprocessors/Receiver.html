@@ -1,4 +1,4 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>Receiver.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="93658cfb-df4b-4e24-b47b-72c7725e5aec"><i class="material-icons">menu</i></a><ul class="sidenav" id="93658cfb-df4b-4e24-b47b-72c7725e5aec"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">postprocessors</span><a href="#" class="breadcrumb">Receiver</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="f933089d-3850-4c4d-b17d-16c0e8409acd" data-section-level="1" data-section-text="Receiver"><h1 id="receiver">Receiver</h1><p>Reports the value stored in this processor, which is usually filled in by another object. The Receiver does not compute its own value.</p><section class="scrollspy" id="0039f641-b078-4c50-92d2-ee0fa7b5e04c" data-section-level="2" data-section-text="Overview"><h2 id="overview">Overview</h2><p>The Receiver Postprocessor is useful for reporting scalar values created in other parts of the system such as a Transfer object. It does <strong>not</strong> compute it&#x27;s own value. Note that the user may set a default value with the &quot;default&quot; parameter.</p><p></p></section><section class="scrollspy" id="dfd3b961-1beb-47da-b37b-729ac74b16e4" data-section-level="2" data-section-text="Example Input File Syntax"><h2 id="example-input-file-syntax">Example Input File Syntax</h2><p></p></section><section class="scrollspy" id="06dd909a-54cc-4b34-a0e3-293d7c820fe2" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="fc19570f-9713-4c22-aad8-6b001e3ab708" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">default</span><span class="moose-parameter-header-description">The default value</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The default value</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM TRANSFER</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">initialize_old</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Initialize the old postprocessor value with the default value</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Initialize the old postprocessor value with the default value</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="99d2f14b-a84a-4eb9-a8b7-7e77c6635b35" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">allow_duplicate_execution_on_initial</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preaux</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREAUX</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREAUX</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preic</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREIC during initial setup</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREIC during initial setup</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="aea509d7-d4bc-4a72-aeef-40f9099113c8" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#c1315ee9-1fdc-4c93-a715-cd34287f3051" class="modal-trigger">test/tests/transfers/multiapp_postprocessor_interpolation_transfer/quad_sub1.i</a></li><li><a href="#2bbedd42-ef27-4155-9b20-3f48c11b8934" class="modal-trigger">test/tests/transfers/multiapp_postprocessor_transfer/master_from_multiapp.i</a></li><li><a href="#dd104033-2372-4571-a90d-c0025d131013" class="modal-trigger">test/tests/transfers/multiapp_variable_value_sample_transfer/pp_sub.i</a></li><li><a href="#cf16a734-3c36-42e3-b7bb-e6be66491cb8" class="modal-trigger">test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/picard_sub2.i</a></li><li><a href="#8ed13c79-f24c-4ede-be44-ac74bbe344d4" class="modal-trigger">test/tests/multiapps/centroid_multiapp/sub_app.i</a></li><li><a href="#2d80e988-75b1-42f3-9be1-ffca4b48a091" class="modal-trigger">test/tests/multiapps/initial_transfer/sub.i</a></li><li><a href="#c8bba9f6-5860-4c5f-83d4-7b396d7bad43" class="modal-trigger">test/tests/postprocessors/receiver_default/defaults.i</a></li><li><a href="#552453ca-8e86-4b7f-a3fc-7c9d63c6dde4" class="modal-trigger">test/tests/transfers/multiapp_vector_pp_transfer/sub.i</a></li><li><a href="#caf7f1ef-87ec-43a5-bbde-9e33d4600a1d" class="modal-trigger">test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/picard_sub.i</a></li><li><a href="#b0df10dc-de08-43b4-9c5e-f74cafb3d3ab" class="modal-trigger">test/tests/transfers/multiapp_postprocessor_transfer/from_one_sub_master.i</a></li><li><a href="#0992053b-3495-49da-84c7-747d314cd78d" class="modal-trigger">test/tests/transfers/multiapp_variable_value_sample_transfer/quad_sub.i</a></li><li><a href="#24d01f6c-be74-48e1-8ec9-faebfd3191a1" class="modal-trigger">tutorials/darcy_thermo_mech/step10_multiapps/problems/step10_micro.i</a></li><li><a href="#49e6ef0b-d3f0-406b-81d4-5e1e71c219e8" class="modal-trigger">test/tests/transfers/multiapp_postprocessor_interpolation_transfer/quad_sub2.i</a></li><li><a href="#202cae54-6f9c-42c6-9167-9c5ddcfaaa88" class="modal-trigger">test/tests/transfers/multiapp_postprocessor_transfer/sub.i</a></li></ul><div class="modal moose-modal" id="c1315ee9-1fdc-4c93-a715-cd34287f3051"><div class="modal-content"><h4>test/tests/transfers/multiapp_postprocessor_interpolation_transfer/quad_sub1.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+<!DOCTYPE html><head><meta charset="UTF-8"><title>Receiver.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="379a5d83-3681-48a3-a6bf-d2cb402805fc"><i class="material-icons">menu</i></a><ul class="sidenav" id="379a5d83-3681-48a3-a6bf-d2cb402805fc"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">postprocessors</span><a href="#" class="breadcrumb">Receiver</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="c4d45bba-67a0-4411-97fb-a1ede1c80372" data-section-level="1" data-section-text="Receiver"><h1 id="receiver">Receiver</h1><p>Reports the value stored in this processor, which is usually filled in by another object. The Receiver does not compute its own value.</p><section class="scrollspy" id="394912c2-b1fa-4578-80a5-bf33eb72ae9c" data-section-level="2" data-section-text="Overview"><h2 id="overview">Overview</h2><p>The Receiver Postprocessor is useful for reporting scalar values created in other parts of the system such as a Transfer object. It does <strong>not</strong> compute it&#x27;s own value. Note that the user may set a default value with the &quot;default&quot; parameter.</p><p></p></section><section class="scrollspy" id="46a9d058-a5fd-44e4-80be-fa4e95892e1f" data-section-level="2" data-section-text="Example Input File Syntax"><h2 id="example-input-file-syntax">Example Input File Syntax</h2><p></p></section><section class="scrollspy" id="66a84579-744d-4816-9735-4dfc3d817f0d" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="ccd51db9-21df-4d11-981f-ba52434a2680" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">default</span><span class="moose-parameter-header-description">The default value</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The default value</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM TRANSFER</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">initialize_old</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Initialize the old postprocessor value with the default value</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Initialize the old postprocessor value with the default value</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="ebfcc233-7dc5-4e3f-ae5c-95493bab1cbd" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">allow_duplicate_execution_on_initial</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preaux</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREAUX</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREAUX</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preic</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREIC during initial setup</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREIC during initial setup</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="ebb70dea-53b6-497b-914c-86b49f8e8ab2" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#e27aa886-d5f1-4e5a-9f92-ebebff506bfa" class="modal-trigger">test/tests/transfers/multiapp_postprocessor_interpolation_transfer/quad_sub1.i</a></li><li><a href="#5dc6f8f0-9640-4da2-ad88-7a7f61581e8c" class="modal-trigger">test/tests/transfers/multiapp_postprocessor_transfer/sub.i</a></li><li><a href="#84ed3689-e7cc-4340-be8a-65271a1902d5" class="modal-trigger">test/tests/transfers/multiapp_variable_value_sample_transfer/quad_sub.i</a></li><li><a href="#515006b4-f0b8-44a4-be03-558c88dd8983" class="modal-trigger">tutorials/darcy_thermo_mech/step10_multiapps/problems/step10_micro.i</a></li><li><a href="#5e1cabde-6d91-4051-b3fa-2d6bbc9ba34f" class="modal-trigger">test/tests/postprocessors/receiver_default/defaults.i</a></li><li><a href="#32d1664f-e5d8-43cf-a50e-78668159ef35" class="modal-trigger">test/tests/transfers/multiapp_postprocessor_transfer/master_from_multiapp.i</a></li><li><a href="#d4bda9d4-6b6e-4f6e-b46e-43bec76f40ea" class="modal-trigger">test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/picard_sub2.i</a></li><li><a href="#c4614e2a-0e6c-4294-bced-7560ee69762f" class="modal-trigger">test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/picard_sub.i</a></li><li><a href="#f29136b2-ab86-4995-8be9-6b8c9d69398d" class="modal-trigger">test/tests/transfers/multiapp_variable_value_sample_transfer/pp_sub.i</a></li><li><a href="#55605569-74cb-43ba-9785-0de439d76cc1" class="modal-trigger">test/tests/transfers/multiapp_vector_pp_transfer/sub.i</a></li><li><a href="#5bb670a6-5393-42da-8698-e2845fa6e5d8" class="modal-trigger">test/tests/transfers/multiapp_postprocessor_transfer/from_one_sub_master.i</a></li><li><a href="#09454a09-34aa-42cc-bc5a-f56f47a80cf4" class="modal-trigger">test/tests/transfers/multiapp_postprocessor_interpolation_transfer/quad_sub2.i</a></li><li><a href="#1653dddb-90c2-4bc6-a291-bd791b31ff14" class="modal-trigger">test/tests/multiapps/centroid_multiapp/sub_app.i</a></li><li><a href="#78f15ad3-d541-454e-9cc1-f16bd08de35a" class="modal-trigger">test/tests/multiapps/initial_transfer/sub.i</a></li></ul><div class="modal moose-modal" id="e27aa886-d5f1-4e5a-9f92-ebebff506bfa"><div class="modal-content"><h4>test/tests/transfers/multiapp_postprocessor_interpolation_transfer/quad_sub1.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
@@ -56,7 +56,336 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2bbedd42-ef27-4155-9b20-3f48c11b8934"><div class="modal-content"><h4>test/tests/transfers/multiapp_postprocessor_transfer/master_from_multiapp.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5dc6f8f0-9640-4da2-ad88-7a7f61581e8c"><div class="modal-content"><h4>test/tests/transfers/multiapp_postprocessor_transfer/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = CoefDiffusion
+    variable = u
+    coef = 0.01
+  [../]
+  [./td]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./from_master]
+    type = Receiver
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+  dt = 1
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+
+  nl_rel_tol = 1e-12
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="84ed3689-e7cc-4340-be8a-65271a1902d5"><div class="modal-content"><h4>test/tests/transfers/multiapp_variable_value_sample_transfer/quad_sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  xmax = 0.01
+  ymax = 0.01
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = CoefDiffusion
+    variable = u
+    coef = 0.00001
+  [../]
+  [./time]
+    type = TimeDerivative
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Postprocessors]
+  [./pp]
+    type = Receiver
+    default = -1
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 5
+  dt = 0.1
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  nl_rel_tol = 1e-12
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="515006b4-f0b8-44a4-be03-558c88dd8983"><div class="modal-content"><h4>tutorials/darcy_thermo_mech/step10_multiapps/problems/step10_micro.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  ymax = 0.1
+  xmax = 0.1
+  uniform_refine = 0
+[]
+
+[Adaptivity]
+  max_h_level = 4
+  initial_steps = 6
+  initial_marker = error_marker
+  cycles_per_step = 2
+  marker = error_marker
+  [Indicators]
+    [phi_jump]
+      type = GradientJumpIndicator
+      variable = phi
+    []
+  []
+  [Markers]
+    [error_marker]
+      type = ErrorFractionMarker
+      indicator = phi_jump
+      refine = 0.8
+      coarsen = 0.1
+    []
+  []
+[]
+
+[Variables]
+  [temperature]
+    initial_condition = 300
+  []
+[]
+
+[AuxVariables]
+  [phi]
+  []
+  [por_var]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+[]
+
+[AuxKernels]
+  [corrosion]
+    type = RandomCorrosion
+    variable = phi
+    reference_temperature = 300
+    temperature = temperature_in
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+  [por_var]
+    type = ADMaterialRealAux
+    variable = por_var
+    property = porosity
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+[]
+
+[Kernels]
+  [heat_conduction]
+    type = ADHeatConduction
+    variable = temperature
+  []
+[]
+
+[BCs]
+  [left]
+    type = PostprocessorDirichletBC
+    variable = temperature
+    boundary = left
+    postprocessor = temperature_in
+  []
+  [right]
+    type = NeumannBC
+    variable = temperature
+    boundary = right
+    value = 100 # prescribed flux
+  []
+[]
+
+[Materials]
+  [column]
+    type = PackedColumn
+    temperature = temperature
+    radius = 1 # mm
+    phase = phi
+  []
+[]
+
+[Postprocessors]
+  [temperature_in]
+    type = Receiver
+    default = 301
+  []
+  [k_eff]
+    type = ThermalConductivity
+    variable = temperature
+    T_hot = temperature_in
+    flux = 100
+    dx = 0.1
+    boundary = right
+    length_scale = 1
+    k0 = 12.05
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+  [por_var]
+    type = ElementAverageValue
+    variable = por_var
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+  [t_right]
+    type = SideAverageValue
+    boundary = right
+    variable = temperature
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+  end_time = 1000
+  dt = 1
+  steady_state_tolerance = 1e-9
+  steady_state_detection = true
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+  automatic_scaling = true
+[]
+
+[Outputs]
+  execute_on = &#x27;initial timestep_end&#x27;
+  exodus = true
+[]
+
+[ICs]
+  [close_pack]
+    radius = 0.01 # meter
+    outvalue = 0  # water
+    variable = phi
+    invalue = 1   # steel
+    type = ClosePackIC
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5e1cabde-6d91-4051-b3fa-2d6bbc9ba34f"><div class="modal-content"><h4>test/tests/postprocessors/receiver_default/defaults.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Postprocessors]
+  [./receiver]
+    type = Receiver
+    default = 12345
+    execute_on = &#x27;timestep_end initial&#x27;
+  [../]
+  [./report_old]
+    type = TestPostprocessor
+    execute_on = &#x27;timestep_end initial&#x27;
+    test_type = report_old
+    report_name = receiver
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="32d1664f-e5d8-43cf-a50e-78668159ef35"><div class="modal-content"><h4>test/tests/transfers/multiapp_postprocessor_transfer/master_from_multiapp.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
@@ -168,61 +497,7 @@
     to_postprocessor = sub_maximum
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="dd104033-2372-4571-a90d-c0025d131013"><div class="modal-content"><h4>test/tests/transfers/multiapp_variable_value_sample_transfer/pp_sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 2
-  [../]
-[]
-
-[Postprocessors]
-  [./from_master]
-    type = Receiver
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 1
-  dt = 1
-
-  solve_type = &#x27;PJFNK&#x27;
-
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="cf16a734-3c36-42e3-b7bb-e6be66491cb8"><div class="modal-content"><h4>test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/picard_sub2.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d4bda9d4-6b6e-4f6e-b46e-43bec76f40ea"><div class="modal-content"><h4>test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/picard_sub2.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
@@ -305,215 +580,7 @@
 [Outputs]
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8ed13c79-f24c-4ede-be44-ac74bbe344d4"><div class="modal-content"><h4>test/tests/multiapps/centroid_multiapp/sub_app.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 3
-  ny = 3
-  ymax = 0.1
-  xmax = 0.1
-[]
-
-[Variables]
-  [./x]
-  [../]
-  [./y]
-  [../]
-[]
-
-[Kernels]
-  [./diff_y]
-    type = Diffusion
-    variable = y
-  [../]
-  [./diff_x]
-    type = Diffusion
-    variable = x
-  [../]
-[]
-
-[BCs]
-  [./right_x]
-    type = PostprocessorDirichletBC
-    variable = x
-    boundary = &#x27;right&#x27;
-    postprocessor = incoming_x
-  [../]
-  [./left_y]
-    type = DirichletBC
-    variable = y
-    boundary = &#x27;left&#x27;
-    value = 0
-  [../]
-  [./right_y]
-    type = PostprocessorDirichletBC
-    variable = y
-    boundary = &#x27;right&#x27;
-    postprocessor = incoming_y
-  [../]
-  [./left_x]
-    type = DirichletBC
-    variable = x
-    boundary = &#x27;left&#x27;
-    value = 0
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 1
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-  solve_type = PJFNK
-[]
-
-[Outputs]
-  exodus = true
-[]
-
-[Postprocessors]
-  [./incoming_x]
-    type = Receiver
-    execute_on = &#x27;TIMESTEP_BEGIN&#x27;
-  [../]
-  [./incoming_y]
-    type = Receiver
-    execute_on = &#x27;TIMESTEP_BEGIN&#x27;
-  [../]
-[]
-
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2d80e988-75b1-42f3-9be1-ffca4b48a091"><div class="modal-content"><h4>test/tests/multiapps/initial_transfer/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = 0
-  xmax = 1
-  ymin = 0
-  ymax = 1
-  nx = 2
-  ny = 2
-[]
-
-[Problem]
-  kernel_coverage_check = false
-[]
-
-[Variables][dummy][][]
-
-[Postprocessors]
-  [scaled]
-    type = ScalePostprocessor
-    value = receiver
-    scaling_factor = 2
-    # Note: during subapp initial setup, master postprocessor has not been transferred
-    execute_on = &#x27;initial timestep_end&#x27;
-  []
-  [receiver]
-    type = Receiver
-    default = 0
-  []
-[]
-
-[Executioner]
-  type = Steady
-[]
-
-[Outputs]
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c8bba9f6-5860-4c5f-83d4-7b396d7bad43"><div class="modal-content"><h4>test/tests/postprocessors/receiver_default/defaults.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  [../]
-[]
-
-[Postprocessors]
-  [./receiver]
-    type = Receiver
-    default = 12345
-    execute_on = &#x27;timestep_end initial&#x27;
-  [../]
-  [./report_old]
-    type = TestPostprocessor
-    execute_on = &#x27;timestep_end initial&#x27;
-    test_type = report_old
-    report_name = receiver
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = PJFNK
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="552453ca-8e86-4b7f-a3fc-7c9d63c6dde4"><div class="modal-content"><h4>test/tests/transfers/multiapp_vector_pp_transfer/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = 0
-  xmax = 1
-  ymin = 1
-  ymax = 2
-[]
-
-[Problem]
-  kernel_coverage_check = false
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[Postprocessors]
-  [./receive]
-    type = Receiver
-  [../]
-
-  [./send]
-    type = ScalePostprocessor
-    value = receive
-    scaling_factor = 2
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  nl_abs_tol = 1e-10
-  num_steps = 1
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="caf7f1ef-87ec-43a5-bbde-9e33d4600a1d"><div class="modal-content"><h4>test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/picard_sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c4614e2a-0e6c-4294-bced-7560ee69762f"><div class="modal-content"><h4>test/tests/multiapps/picard_multilevel/multilevel_dt_rejection/picard_sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
@@ -674,7 +741,96 @@
     multi_app = sub2
   []
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b0df10dc-de08-43b4-9c5e-f74cafb3d3ab"><div class="modal-content"><h4>test/tests/transfers/multiapp_postprocessor_transfer/from_one_sub_master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f29136b2-ab86-4995-8be9-6b8c9d69398d"><div class="modal-content"><h4>test/tests/transfers/multiapp_variable_value_sample_transfer/pp_sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 2
+  [../]
+[]
+
+[Postprocessors]
+  [./from_master]
+    type = Receiver
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+  dt = 1
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="55605569-74cb-43ba-9785-0de439d76cc1"><div class="modal-content"><h4>test/tests/transfers/multiapp_vector_pp_transfer/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 1
+  ymin = 1
+  ymax = 2
+[]
+
+[Problem]
+  kernel_coverage_check = false
+[]
+
+[Variables]
+  [./u]
+  [../]
+[]
+
+[Postprocessors]
+  [./receive]
+    type = Receiver
+  [../]
+
+  [./send]
+    type = ScalePostprocessor
+    value = receive
+    scaling_factor = 2
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  nl_abs_tol = 1e-10
+  num_steps = 1
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5bb670a6-5393-42da-8698-e2845fa6e5d8"><div class="modal-content"><h4>test/tests/transfers/multiapp_postprocessor_transfer/from_one_sub_master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
@@ -786,217 +942,7 @@
     to_postprocessor = sub_maximum
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0992053b-3495-49da-84c7-747d314cd78d"><div class="modal-content"><h4>test/tests/transfers/multiapp_variable_value_sample_transfer/quad_sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-  xmax = 0.01
-  ymax = 0.01
-[]
-
-[Variables]
-  [./u]
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = CoefDiffusion
-    variable = u
-    coef = 0.00001
-  [../]
-  [./time]
-    type = TimeDerivative
-    variable = u
-  [../]
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  [../]
-[]
-
-[Postprocessors]
-  [./pp]
-    type = Receiver
-    default = -1
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 5
-  dt = 0.1
-  solve_type = PJFNK
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-  nl_rel_tol = 1e-12
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="24d01f6c-be74-48e1-8ec9-faebfd3191a1"><div class="modal-content"><h4>tutorials/darcy_thermo_mech/step10_multiapps/problems/step10_micro.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 10
-  ny = 10
-  ymax = 0.1
-  xmax = 0.1
-  uniform_refine = 0
-[]
-
-[Adaptivity]
-  max_h_level = 4
-  initial_steps = 6
-  initial_marker = error_marker
-  cycles_per_step = 2
-  marker = error_marker
-  [Indicators]
-    [phi_jump]
-      type = GradientJumpIndicator
-      variable = phi
-    []
-  []
-  [Markers]
-    [error_marker]
-      type = ErrorFractionMarker
-      indicator = phi_jump
-      refine = 0.8
-      coarsen = 0.1
-    []
-  []
-[]
-
-[Variables]
-  [temperature]
-    initial_condition = 300
-  []
-[]
-
-[AuxVariables]
-  [phi]
-  []
-  [por_var]
-    family = MONOMIAL
-    order = CONSTANT
-  []
-[]
-
-[AuxKernels]
-  [corrosion]
-    type = RandomCorrosion
-    variable = phi
-    reference_temperature = 300
-    temperature = temperature_in
-    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
-  []
-  [por_var]
-    type = ADMaterialRealAux
-    variable = por_var
-    property = porosity
-    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
-  []
-[]
-
-[Kernels]
-  [heat_conduction]
-    type = ADHeatConduction
-    variable = temperature
-  []
-[]
-
-[BCs]
-  [left]
-    type = PostprocessorDirichletBC
-    variable = temperature
-    boundary = left
-    postprocessor = temperature_in
-  []
-  [right]
-    type = NeumannBC
-    variable = temperature
-    boundary = right
-    value = 100 # prescribed flux
-  []
-[]
-
-[Materials]
-  [column]
-    type = PackedColumn
-    temperature = temperature
-    radius = 1 # mm
-    phase = phi
-  []
-[]
-
-[Postprocessors]
-  [temperature_in]
-    type = Receiver
-    default = 301
-  []
-  [k_eff]
-    type = ThermalConductivity
-    variable = temperature
-    T_hot = temperature_in
-    flux = 100
-    dx = 0.1
-    boundary = right
-    length_scale = 1
-    k0 = 12.05
-    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
-  []
-  [por_var]
-    type = ElementAverageValue
-    variable = por_var
-    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
-  []
-  [t_right]
-    type = SideAverageValue
-    boundary = right
-    variable = temperature
-    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
-  []
-[]
-
-[Executioner]
-  type = Transient
-  end_time = 1000
-  dt = 1
-  steady_state_tolerance = 1e-9
-  steady_state_detection = true
-  solve_type = NEWTON
-  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
-  petsc_options_value = &#x27;hypre boomeramg&#x27;
-  automatic_scaling = true
-[]
-
-[Outputs]
-  execute_on = &#x27;initial timestep_end&#x27;
-  exodus = true
-[]
-
-[ICs]
-  [close_pack]
-    radius = 0.01 # meter
-    outvalue = 0  # water
-    variable = phi
-    invalue = 1   # steel
-    type = ClosePackIC
-  []
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="49e6ef0b-d3f0-406b-81d4-5e1e71c219e8"><div class="modal-content"><h4>test/tests/transfers/multiapp_postprocessor_interpolation_transfer/quad_sub2.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="09454a09-34aa-42cc-bc5a-f56f47a80cf4"><div class="modal-content"><h4>test/tests/transfers/multiapp_postprocessor_interpolation_transfer/quad_sub2.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 10
@@ -1054,65 +1000,119 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="202cae54-6f9c-42c6-9167-9c5ddcfaaa88"><div class="modal-content"><h4>test/tests/transfers/multiapp_postprocessor_transfer/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1653dddb-90c2-4bc6-a291-bd791b31ff14"><div class="modal-content"><h4>test/tests/multiapps/centroid_multiapp/sub_app.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
-  nx = 10
-  ny = 10
+  nx = 3
+  ny = 3
+  ymax = 0.1
+  xmax = 0.1
 []
 
 [Variables]
-  [./u]
+  [./x]
+  [../]
+  [./y]
   [../]
 []
 
 [Kernels]
-  [./diff]
-    type = CoefDiffusion
-    variable = u
-    coef = 0.01
+  [./diff_y]
+    type = Diffusion
+    variable = y
   [../]
-  [./td]
-    type = TimeDerivative
-    variable = u
+  [./diff_x]
+    type = Diffusion
+    variable = x
   [../]
 []
 
 [BCs]
-  [./left]
+  [./right_x]
+    type = PostprocessorDirichletBC
+    variable = x
+    boundary = &#x27;right&#x27;
+    postprocessor = incoming_x
+  [../]
+  [./left_y]
     type = DirichletBC
-    variable = u
-    boundary = left
+    variable = y
+    boundary = &#x27;left&#x27;
     value = 0
   [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 2
+  [./right_y]
+    type = PostprocessorDirichletBC
+    variable = y
+    boundary = &#x27;right&#x27;
+    postprocessor = incoming_y
   [../]
-[]
-
-[Postprocessors]
-  [./from_master]
-    type = Receiver
+  [./left_x]
+    type = DirichletBC
+    variable = x
+    boundary = &#x27;left&#x27;
+    value = 0
   [../]
 []
 
 [Executioner]
   type = Transient
   num_steps = 1
-  dt = 1
-
-  solve_type = &#x27;PJFNK&#x27;
-
   petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
   petsc_options_value = &#x27;hypre boomeramg&#x27;
-
-  nl_rel_tol = 1e-12
+  solve_type = PJFNK
 []
 
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#0039f641-b078-4c50-92d2-ee0fa7b5e04c" class="tooltipped" data-position="left" data-tooltip="Overview">Overview</a></li><li><a href="#dfd3b961-1beb-47da-b37b-729ac74b16e4" class="tooltipped" data-position="left" data-tooltip="Example Input File Syntax">Example Input File Syntax</a></li><li><a href="#06dd909a-54cc-4b34-a0e3-293d7c820fe2" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#aea509d7-d4bc-4a72-aeef-40f9099113c8" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+
+[Postprocessors]
+  [./incoming_x]
+    type = Receiver
+    execute_on = &#x27;TIMESTEP_BEGIN&#x27;
+  [../]
+  [./incoming_y]
+    type = Receiver
+    execute_on = &#x27;TIMESTEP_BEGIN&#x27;
+  [../]
+[]
+
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="78f15ad3-d541-454e-9cc1-f16bd08de35a"><div class="modal-content"><h4>test/tests/multiapps/initial_transfer/sub.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = 0
+  xmax = 1
+  ymin = 0
+  ymax = 1
+  nx = 2
+  ny = 2
+[]
+
+[Problem]
+  kernel_coverage_check = false
+[]
+
+[Variables][dummy][][]
+
+[Postprocessors]
+  [scaled]
+    type = ScalePostprocessor
+    value = receiver
+    scaling_factor = 2
+    # Note: during subapp initial setup, master postprocessor has not been transferred
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [receiver]
+    type = Receiver
+    default = 0
+  []
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#394912c2-b1fa-4578-80a5-bf33eb72ae9c" class="tooltipped" data-position="left" data-tooltip="Overview">Overview</a></li><li><a href="#46a9d058-a5fd-44e4-80be-fa4e95892e1f" class="tooltipped" data-position="left" data-tooltip="Example Input File Syntax">Example Input File Syntax</a></li><li><a href="#66a84579-744d-4816-9735-4dfc3d817f0d" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#ebb70dea-53b6-497b-914c-86b49f8e8ab2" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

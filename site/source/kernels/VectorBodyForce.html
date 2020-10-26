@@ -1,11 +1,157 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>VectorBodyForce.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="d21384ae-d723-4d46-a9cb-ae49f2c5c143"><i class="material-icons">menu</i></a><ul class="sidenav" id="d21384ae-d723-4d46-a9cb-ae49f2c5c143"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">kernels</span><a href="#" class="breadcrumb">VectorBodyForce</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="60196002-5509-429a-9437-4d18b6283080" data-section-level="1" data-section-text="VectorBodyForce"><h1 id="vectorbodyforce">VectorBodyForce</h1><section class="scrollspy" id="138e3003-5dee-4d52-8955-d03469a54b5f" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>VectorBodyForce</code> is analagous to <a href="BodyForce.html"><code>BodyForce</code></a> except it is applied to vector finite element variables. Instead of taking one <code>function</code> parameter, the user can pass up to three functions representing the individual components of the vector variable. If not supplied by the user, <code>function_x</code> will default to &#x27;1&#x27;, while <code>function_y</code> and <code>function_z</code> default to &#x27;0&#x27;.</p></section><section class="scrollspy" id="90e11174-dd13-4247-aba3-d93d872263b7" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="2eb23ddb-e043-439d-a465-3adda3021879" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this Kernel operates on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this Kernel operates on</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="5da7b87a-b7e7-4466-b96e-7c9e32c1eb11" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function</span><span class="moose-parameter-header-description">A function that defines a vectorValue method. This cannot be supplied with the component parameters.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A function that defines a vectorValue method. This cannot be supplied with the component parameters.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function_x</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">A function that describes the x-component of the body force</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A function that describes the x-component of the body force</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function_y</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">A function that describes the y-component of the body force</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A function that describes the y-component of the body force</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function_z</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">A function that describes the z-component of the body force</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A function that describes the z-component of the body force</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">postprocessor</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">A postprocessor whose value is multiplied by the body force</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>PostprocessorName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A postprocessor whose value is multiplied by the body force</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">value</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">Coefficient to multiply by the body force term</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Coefficient to multiply by the body force term</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="10935ab8-588a-49fe-871b-dc17887baa26" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="12b817c9-663d-4f05-a55d-70280cc1611d" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="7e15da1c-e492-4b01-b604-07585b1b95a8" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#893bebf3-29b3-4831-bdba-ef702284bf14" class="modal-trigger">test/tests/kernels/vector_fe/lagrange_vec_1d.i</a></li><li><a href="#431c71c1-1157-4829-864d-35b41578066a" class="modal-trigger">test/tests/kernels/vector_fe/electromagnetic_coulomb_gauge.i</a></li><li><a href="#a812c52d-df1e-4b10-9643-a3917486cf50" class="modal-trigger">test/tests/kernels/coupled_time_derivative/vector_coupled_time_derivative_test.i</a></li><li><a href="#2c2f2b56-89df-4acb-84e7-5ecb415389cc" class="modal-trigger">test/tests/kernels/vector_fe/lagrange_vec.i</a></li><li><a href="#75e07f94-2dda-41b3-af32-01cc7a327ca0" class="modal-trigger">test/tests/kernels/vector_fe/ad_lagrange_vec.i</a></li></ul><div class="modal moose-modal" id="893bebf3-29b3-4831-bdba-ef702284bf14"><div class="modal-content"><h4>test/tests/kernels/vector_fe/lagrange_vec_1d.i</h4><pre class="moose-pre"><code class="language-text"># This example reproduces the libmesh vector_fe example 1 results
+<!DOCTYPE html><head><meta charset="UTF-8"><title>VectorBodyForce.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="8b8037da-e6fe-4381-a046-54a69ff9bbb7"><i class="material-icons">menu</i></a><ul class="sidenav" id="8b8037da-e6fe-4381-a046-54a69ff9bbb7"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">kernels</span><a href="#" class="breadcrumb">VectorBodyForce</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="ce4ca63f-615f-4d69-8996-d4e295648ef3" data-section-level="1" data-section-text="VectorBodyForce"><h1 id="vectorbodyforce">VectorBodyForce</h1><section class="scrollspy" id="22717a0a-46a4-42c5-9342-89f35f02bc26" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>VectorBodyForce</code> is analagous to <a href="BodyForce.html"><code>BodyForce</code></a> except it is applied to vector finite element variables. Instead of taking one <code>function</code> parameter, the user can pass up to three functions representing the individual components of the vector variable. If not supplied by the user, <code>function_x</code> will default to &#x27;1&#x27;, while <code>function_y</code> and <code>function_z</code> default to &#x27;0&#x27;.</p></section><section class="scrollspy" id="11edcd55-3c3c-4cbd-970d-a8ca4347830b" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="f1619bee-d272-4445-b442-6ff02ebfadb8" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this Kernel operates on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this Kernel operates on</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="14bf4363-1d94-4579-b6c8-8be91ae38c67" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function</span><span class="moose-parameter-header-description">A function that defines a vectorValue method. This cannot be supplied with the component parameters.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A function that defines a vectorValue method. This cannot be supplied with the component parameters.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function_x</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">A function that describes the x-component of the body force</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A function that describes the x-component of the body force</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function_y</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">A function that describes the y-component of the body force</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A function that describes the y-component of the body force</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function_z</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">A function that describes the z-component of the body force</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A function that describes the z-component of the body force</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">postprocessor</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">A postprocessor whose value is multiplied by the body force</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>PostprocessorName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A postprocessor whose value is multiplied by the body force</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">value</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">Coefficient to multiply by the body force term</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Coefficient to multiply by the body force term</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="ec0c9b69-68a9-4b86-ac40-8c36c30729f9" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="58ba54bb-3f68-4f0f-8db2-75422bca6278" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="6b24af29-6154-41fe-9795-07c1dcfc0f38" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#8ffb60e6-5e20-4726-8d41-d8886ca85db3" class="modal-trigger">test/tests/kernels/coupled_time_derivative/vector_coupled_time_derivative_test.i</a></li><li><a href="#3544e8a0-f967-4a3a-b5c9-b6f424739128" class="modal-trigger">test/tests/kernels/vector_fe/ad_lagrange_vec.i</a></li><li><a href="#527affac-7fe2-47e0-8839-9fe5433dc0a6" class="modal-trigger">test/tests/kernels/vector_fe/lagrange_vec.i</a></li><li><a href="#5f52e24c-91a3-494c-a627-6060c22979f5" class="modal-trigger">test/tests/kernels/vector_fe/electromagnetic_coulomb_gauge.i</a></li><li><a href="#2f40ecf5-63a3-4040-8b18-bcfc8e283fb4" class="modal-trigger">test/tests/kernels/vector_fe/lagrange_vec_1d.i</a></li></ul><div class="modal moose-modal" id="8ffb60e6-5e20-4726-8d41-d8886ca85db3"><div class="modal-content"><h4>test/tests/kernels/coupled_time_derivative/vector_coupled_time_derivative_test.i</h4><pre class="moose-pre"><code class="language-text">###########################################################
+# This is a simple test of the VectorCoupledTimeDerivative kernel.
+# The expected solution for the vector variable v is
+# v_x(x) = 1/2 * (x^2 + x)
+# v_y(x) = 1/2 * (x^2 + x)
+###########################################################
 
 [Mesh]
   type = GeneratedMesh
-  dim = 1
+  nx = 5
+  ny = 5
+  dim = 2
+[]
+
+[Variables]
+  [./u]
+    family = LAGRANGE_VEC
+  [../]
+  [./v]
+    family = LAGRANGE_VEC
+  [../]
+[]
+
+[Kernels]
+  [./time_u]
+    type = VectorTimeDerivative
+    variable = u
+  [../]
+  [./fn_u]
+    type = VectorBodyForce
+    variable = u
+    function_x = 1
+    function_y = 1
+  [../]
+  [./time_v]
+    type = VectorCoupledTimeDerivative
+    variable = v
+    v = u
+  [../]
+  [./diff_v]
+    type = VectorDiffusion
+    variable = v
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = VectorDirichletBC
+    variable = v
+    boundary = &#x27;left&#x27;
+    values = &#x27;0 0 0&#x27;
+  [../]
+  [./right]
+    type = VectorDirichletBC
+    variable = v
+    boundary = &#x27;right&#x27;
+    values = &#x27;1 1 0&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+  solve_type = &#x27;NEWTON&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3544e8a0-f967-4a3a-b5c9-b6f424739128"><div class="modal-content"><h4>test/tests/kernels/vector_fe/ad_lagrange_vec.i</h4><pre class="moose-pre"><code class="language-text"># This example reproduces the libmesh vector_fe example 1 results
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
   nx = 15
+  ny = 15
   xmin = -1
-  elem_type = EDGE3
+  ymin = -1
+  elem_type = QUAD9
+[]
+
+[Variables]
+  [./u]
+    family = LAGRANGE_VEC
+    order = SECOND
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = ADVectorDiffusion
+    variable = u
+  [../]
+  [./body_force]
+    type = VectorBodyForce
+    variable = u
+    function_x = &#x27;ffx&#x27;
+    function_y = &#x27;ffy&#x27;
+  [../]
+[]
+
+[BCs]
+  [./bnd]
+    type = ADVectorFunctionDirichletBC
+    variable = u
+    function_x = &#x27;x_exact_sln&#x27;
+    function_y = &#x27;y_exact_sln&#x27;
+    boundary = &#x27;left right top bottom&#x27;
+  [../]
+[]
+
+[Functions]
+  [./x_exact_sln]
+    type = ParsedFunction
+    value = &#x27;cos(.5*pi*x)*sin(.5*pi*y)&#x27;
+  [../]
+  [./y_exact_sln]
+    type = ParsedFunction
+    value = &#x27;sin(.5*pi*x)*cos(.5*pi*y)&#x27;
+  [../]
+  [./ffx]
+    type = ParsedFunction
+    value = &#x27;.5*pi*pi*cos(.5*pi*x)*sin(.5*pi*y)&#x27;
+  [../]
+  [./ffy]
+    type = ParsedFunction
+    value = &#x27;.5*pi*pi*sin(.5*pi*x)*cos(.5*pi*y)&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./pre]
+    type = SMP
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="527affac-7fe2-47e0-8839-9fe5433dc0a6"><div class="modal-content"><h4>test/tests/kernels/vector_fe/lagrange_vec.i</h4><pre class="moose-pre"><code class="language-text"># This example reproduces the libmesh vector_fe example 1 results
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 15
+  ny = 15
+  xmin = -1
+  ymin = -1
+  elem_type = QUAD9
 []
 
 [Variables]
@@ -24,6 +170,7 @@
     type = VectorBodyForce
     variable = u
     function_x = &#x27;ffx&#x27;
+    function_y = &#x27;ffy&#x27;
   [../]
 []
 
@@ -32,18 +179,28 @@
     type = VectorFunctionDirichletBC
     variable = u
     function_x = &#x27;x_exact_sln&#x27;
-    boundary = &#x27;left right&#x27;
+    function_y = &#x27;y_exact_sln&#x27;
+    function_z = &#x27;0&#x27;
+    boundary = &#x27;left right top bottom&#x27;
   [../]
 []
 
 [Functions]
   [./x_exact_sln]
     type = ParsedFunction
-    value = &#x27;cos(.5*pi*x)&#x27;
+    value = &#x27;cos(.5*pi*x)*sin(.5*pi*y)&#x27;
+  [../]
+  [./y_exact_sln]
+    type = ParsedFunction
+    value = &#x27;sin(.5*pi*x)*cos(.5*pi*y)&#x27;
   [../]
   [./ffx]
     type = ParsedFunction
-    value = &#x27;.25*pi*pi*cos(.5*pi*x)&#x27;
+    value = &#x27;.5*pi*pi*cos(.5*pi*x)*sin(.5*pi*y)&#x27;
+  [../]
+  [./ffy]
+    type = ParsedFunction
+    value = &#x27;.5*pi*pi*sin(.5*pi*x)*cos(.5*pi*y)&#x27;
   [../]
 []
 
@@ -55,13 +212,12 @@
 
 [Executioner]
   type = Steady
-  solve_type = NEWTON
 []
 
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="431c71c1-1157-4829-864d-35b41578066a"><div class="modal-content"><h4>test/tests/kernels/vector_fe/electromagnetic_coulomb_gauge.i</h4><pre class="moose-pre"><code class="language-text"># This is an MMS problem that demonstrates solution of Maxwell&#x27;s equations in the
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5f52e24c-91a3-494c-a627-6060c22979f5"><div class="modal-content"><h4>test/tests/kernels/vector_fe/electromagnetic_coulomb_gauge.i</h4><pre class="moose-pre"><code class="language-text"># This is an MMS problem that demonstrates solution of Maxwell&#x27;s equations in the
 # Coulomb gauge potential form. The equations solved are:
 # -\nabla^2 V = f_{V,mms}
 # -\nabla^2 A - \omega^2 A + \nabla \frac{\partial V}{\partial t} = f_{A,mms}
@@ -198,85 +354,14 @@
 [Debug]
   show_var_residual_norms = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a812c52d-df1e-4b10-9643-a3917486cf50"><div class="modal-content"><h4>test/tests/kernels/coupled_time_derivative/vector_coupled_time_derivative_test.i</h4><pre class="moose-pre"><code class="language-text">###########################################################
-# This is a simple test of the VectorCoupledTimeDerivative kernel.
-# The expected solution for the vector variable v is
-# v_x(x) = 1/2 * (x^2 + x)
-# v_y(x) = 1/2 * (x^2 + x)
-###########################################################
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2f40ecf5-63a3-4040-8b18-bcfc8e283fb4"><div class="modal-content"><h4>test/tests/kernels/vector_fe/lagrange_vec_1d.i</h4><pre class="moose-pre"><code class="language-text"># This example reproduces the libmesh vector_fe example 1 results
 
 [Mesh]
   type = GeneratedMesh
-  nx = 5
-  ny = 5
-  dim = 2
-[]
-
-[Variables]
-  [./u]
-    family = LAGRANGE_VEC
-  [../]
-  [./v]
-    family = LAGRANGE_VEC
-  [../]
-[]
-
-[Kernels]
-  [./time_u]
-    type = VectorTimeDerivative
-    variable = u
-  [../]
-  [./fn_u]
-    type = VectorBodyForce
-    variable = u
-    function_x = 1
-    function_y = 1
-  [../]
-  [./time_v]
-    type = VectorCoupledTimeDerivative
-    variable = v
-    v = u
-  [../]
-  [./diff_v]
-    type = VectorDiffusion
-    variable = v
-  [../]
-[]
-
-[BCs]
-  [./left]
-    type = VectorDirichletBC
-    variable = v
-    boundary = &#x27;left&#x27;
-    values = &#x27;0 0 0&#x27;
-  [../]
-  [./right]
-    type = VectorDirichletBC
-    variable = v
-    boundary = &#x27;right&#x27;
-    values = &#x27;1 1 0&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 1
-  solve_type = &#x27;NEWTON&#x27;
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2c2f2b56-89df-4acb-84e7-5ecb415389cc"><div class="modal-content"><h4>test/tests/kernels/vector_fe/lagrange_vec.i</h4><pre class="moose-pre"><code class="language-text"># This example reproduces the libmesh vector_fe example 1 results
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 2
+  dim = 1
   nx = 15
-  ny = 15
   xmin = -1
-  ymin = -1
-  elem_type = QUAD9
+  elem_type = EDGE3
 []
 
 [Variables]
@@ -295,7 +380,6 @@
     type = VectorBodyForce
     variable = u
     function_x = &#x27;ffx&#x27;
-    function_y = &#x27;ffy&#x27;
   [../]
 []
 
@@ -304,28 +388,18 @@
     type = VectorFunctionDirichletBC
     variable = u
     function_x = &#x27;x_exact_sln&#x27;
-    function_y = &#x27;y_exact_sln&#x27;
-    function_z = &#x27;0&#x27;
-    boundary = &#x27;left right top bottom&#x27;
+    boundary = &#x27;left right&#x27;
   [../]
 []
 
 [Functions]
   [./x_exact_sln]
     type = ParsedFunction
-    value = &#x27;cos(.5*pi*x)*sin(.5*pi*y)&#x27;
-  [../]
-  [./y_exact_sln]
-    type = ParsedFunction
-    value = &#x27;sin(.5*pi*x)*cos(.5*pi*y)&#x27;
+    value = &#x27;cos(.5*pi*x)&#x27;
   [../]
   [./ffx]
     type = ParsedFunction
-    value = &#x27;.5*pi*pi*cos(.5*pi*x)*sin(.5*pi*y)&#x27;
-  [../]
-  [./ffy]
-    type = ParsedFunction
-    value = &#x27;.5*pi*pi*sin(.5*pi*x)*cos(.5*pi*y)&#x27;
+    value = &#x27;.25*pi*pi*cos(.5*pi*x)&#x27;
   [../]
 []
 
@@ -337,84 +411,10 @@
 
 [Executioner]
   type = Steady
+  solve_type = NEWTON
 []
 
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="75e07f94-2dda-41b3-af32-01cc7a327ca0"><div class="modal-content"><h4>test/tests/kernels/vector_fe/ad_lagrange_vec.i</h4><pre class="moose-pre"><code class="language-text"># This example reproduces the libmesh vector_fe example 1 results
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 15
-  ny = 15
-  xmin = -1
-  ymin = -1
-  elem_type = QUAD9
-[]
-
-[Variables]
-  [./u]
-    family = LAGRANGE_VEC
-    order = SECOND
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = ADVectorDiffusion
-    variable = u
-  [../]
-  [./body_force]
-    type = VectorBodyForce
-    variable = u
-    function_x = &#x27;ffx&#x27;
-    function_y = &#x27;ffy&#x27;
-  [../]
-[]
-
-[BCs]
-  [./bnd]
-    type = ADVectorFunctionDirichletBC
-    variable = u
-    function_x = &#x27;x_exact_sln&#x27;
-    function_y = &#x27;y_exact_sln&#x27;
-    boundary = &#x27;left right top bottom&#x27;
-  [../]
-[]
-
-[Functions]
-  [./x_exact_sln]
-    type = ParsedFunction
-    value = &#x27;cos(.5*pi*x)*sin(.5*pi*y)&#x27;
-  [../]
-  [./y_exact_sln]
-    type = ParsedFunction
-    value = &#x27;sin(.5*pi*x)*cos(.5*pi*y)&#x27;
-  [../]
-  [./ffx]
-    type = ParsedFunction
-    value = &#x27;.5*pi*pi*cos(.5*pi*x)*sin(.5*pi*y)&#x27;
-  [../]
-  [./ffy]
-    type = ParsedFunction
-    value = &#x27;.5*pi*pi*sin(.5*pi*x)*cos(.5*pi*y)&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  [./pre]
-    type = SMP
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = &#x27;NEWTON&#x27;
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#138e3003-5dee-4d52-8955-d03469a54b5f" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#90e11174-dd13-4247-aba3-d93d872263b7" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#7e15da1c-e492-4b01-b604-07585b1b95a8" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#22717a0a-46a4-42c5-9342-89f35f02bc26" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#11edcd55-3c3c-4cbd-970d-a8ca4347830b" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#6b24af29-6154-41fe-9795-07c1dcfc0f38" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

@@ -1,10 +1,10 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>CSVReader.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="8ce642f1-aa91-4025-b299-2af2c467d3ae"><i class="material-icons">menu</i></a><ul class="sidenav" id="8ce642f1-aa91-4025-b299-2af2c467d3ae"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">vectorpostprocessors</span><a href="#" class="breadcrumb">CSVReader</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="e1e445e3-a4a0-4190-8e22-b1bd8cb3d4be" data-section-level="1" data-section-text="CSVReader"><h1 id="csvreader">CSVReader</h1><p>The CSVReader reads <a href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV</a> data from a file and converts each column into a VectorPostprocessor vector. This object uses the <a href="../utils/MooseUtils.html#delimitedfilereader">DelimitedFileReader</a> utility to perform the reading of the file.</p><section class="scrollspy" id="96116c84-0b28-4bf7-86ee-04093873119b" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">[VectorPostprocessors]
+<!DOCTYPE html><head><meta charset="UTF-8"><title>CSVReader.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="15a9895a-eb56-42bb-8d42-98055960f0a6"><i class="material-icons">menu</i></a><ul class="sidenav" id="15a9895a-eb56-42bb-8d42-98055960f0a6"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">vectorpostprocessors</span><a href="#" class="breadcrumb">CSVReader</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="6248c3ba-48a4-47cc-ad28-2de85a824c68" data-section-level="1" data-section-text="CSVReader"><h1 id="csvreader">CSVReader</h1><p>The CSVReader reads <a href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV</a> data from a file and converts each column into a VectorPostprocessor vector. This object uses the <a href="../utils/MooseUtils.html#delimitedfilereader">DelimitedFileReader</a> utility to perform the reading of the file.</p><section class="scrollspy" id="71393f62-27be-42b6-8d53-115a2940a462" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">[VectorPostprocessors]
   [./reader]
     type = CSVReader
     csv_file = example.csv
   [../]
 []
-</code></pre><a href="#00350c76-c570-40a1-a146-ba8b7274ac53" class="modal-trigger">(test/tests/vectorpostprocessors/csv_reader/read.i)</a><div class="modal moose-modal" id="00350c76-c570-40a1-a146-ba8b7274ac53"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/vectorpostprocessors/csv_reader/read.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre><a href="#1f81ba96-274f-4008-add0-80a0e50b2d75" class="modal-trigger">(test/tests/vectorpostprocessors/csv_reader/read.i)</a><div class="modal moose-modal" id="1f81ba96-274f-4008-add0-80a0e50b2d75"><div class="modal-content"><h4>/Users/harblh/projects/moc/private_moose/test/tests/vectorpostprocessors/csv_reader/read.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 1
 []
@@ -37,92 +37,7 @@
 [Outputs]
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="0991ae36-e8f2-4b97-be95-46cd2efac5f9" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="8ee2f3b6-d577-44de-a67d-6a93001645bf" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">csv_file</span><span class="moose-parameter-header-description">The name of the CSV file to read. Currently, with the exception of the header row, only numeric values are supported.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FileName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the CSV file to read. Currently, with the exception of the header row, only numeric values are supported.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="1c26ed42-c29f-47f9-8ed0-4d73b06e8f64" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">delimiter</span><span class="moose-parameter-header-description">The column delimiter. Despite the name this can read files separated by delimiter other than a comma. If this options is omitted it will read comma or space separated files.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The column delimiter. Despite the name this can read files separated by delimiter other than a comma. If this options is omitted it will read comma or space separated files.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">INITIAL</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>INITIAL</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">header</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">When true it is assumed that the first row contains column headers, these headers are used as the VectorPostprocessor vector names. If false the file is assumed to contain only numbers and the vectors are named automatically based on the column number (e.g., 'column_0000', 'column_0001'). If not supplied the reader attempts to auto detect the headers.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When true it is assumed that the first row contains column headers, these headers are used as the VectorPostprocessor vector names. If false the file is assumed to contain only numbers and the vectors are named automatically based on the column number (e.g., 'column_0000', 'column_0001'). If not supplied the reader attempts to auto detect the headers.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">ignore_empty_lines</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">When true new empty lines in the file are ignored.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When true new empty lines in the file are ignored.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">parallel_type</span><span class="moose-parameter-header-default">REPLICATED</span><span class="moose-parameter-header-description">Set how the data is represented within the VectorPostprocessor (VPP); 'distributed' indicates that data within the VPP is distributed and no auto communication is preformed, this setting will result in parallel output within the CSV output; 'replicated' indicates that the data within the VPP is correct on processor 0, the data will automatically be broadcast to all processors unless the '_auto_broadcast' param is set to false within the validParams function.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>REPLICATED</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>DISTRIBUTED REPLICATED</p><p class="moose-parameter-description"><span>Description:</span>Set how the data is represented within the VectorPostprocessor (VPP); 'distributed' indicates that data within the VPP is distributed and no auto communication is preformed, this setting will result in parallel output within the CSV output; 'replicated' indicates that the data within the VPP is correct on processor 0, the data will automatically be broadcast to all processors unless the '_auto_broadcast' param is set to false within the validParams function.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="2881c5d7-da4f-4c9c-b572-3310b0b0b3f1" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">allow_duplicate_execution_on_initial</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preaux</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREAUX</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREAUX</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preic</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREIC during initial setup</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREIC during initial setup</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="492b3292-2050-4c23-ac1e-302bee0b2280" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#1efdfcbb-27d1-4f51-a3d8-42bf43949819" class="modal-trigger">test/tests/vectorpostprocessors/least_squares_fit/least_squares_fit_csv_data.i</a></li><li><a href="#2c66a083-152f-4add-a0b7-4ad1d0553bed" class="modal-trigger">test/tests/functions/vector_postprocessor_function/vpp_time_interpolation.i</a></li><li><a href="#c7f90081-2521-45cd-b7a6-a91ee7f6445d" class="modal-trigger">test/tests/vectorpostprocessors/csv_reader/read.i</a></li><li><a href="#91f00e5d-6ba5-4a74-9230-3be661901c2d" class="modal-trigger">test/tests/vectorpostprocessors/csv_reader/transfer/master.i</a></li><li><a href="#ca77f0a1-59ae-4b98-b4ac-d9833fa5af43" class="modal-trigger">test/tests/vectorpostprocessors/csv_reader/read_preic.i</a></li><li><a href="#42513ba7-d8b3-4e24-bca5-19477bfa4b33" class="modal-trigger">test/tests/vectorpostprocessors/csv_reader/multi_read_fail.i</a></li><li><a href="#202203a3-82d3-4c35-8c48-1cf4543e27c8" class="modal-trigger">test/tests/postprocessors/vector_postprocessor_component/vpp_component.i</a></li></ul><div class="modal moose-modal" id="1efdfcbb-27d1-4f51-a3d8-42bf43949819"><div class="modal-content"><h4>test/tests/vectorpostprocessors/least_squares_fit/least_squares_fit_csv_data.i</h4><pre class="moose-pre"><code class="language-text">[Problem]
-  solve = false
-[]
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 1
-[]
-
-[Executioner]
-  type = Transient
-  start_time = 0.0
-  end_time = 0.0
-[]
-
-[VectorPostprocessors]
-  [./csv_data]
-    type = CSVReader
-    csv_file = fit_data_0.csv
-    header = true
-    outputs = none
-  [../]
-  [./least_squares_fit_coeffs]
-    type = LeastSquaresFit
-    vectorpostprocessor = csv_data
-    x_name = &#x27;id&#x27;
-    y_name = &#x27;u&#x27;
-    order = 0
-    output = coefficients
-    truncate_order = false
-    execute_on = initial
-  [../]
-[]
-
-[Outputs]
-  file_base = csv0
-  execute_on = initial
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2c66a083-152f-4add-a0b7-4ad1d0553bed"><div class="modal-content"><h4>test/tests/functions/vector_postprocessor_function/vpp_time_interpolation.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 1
-[]
-
-[Problem]
-  kernel_coverage_check = false
-[]
-
-[Variables][dummy][][]
-
-[Functions]
-  [./interpolate_vpp]
-    type = VectorPostprocessorFunction
-    vectorpostprocessor_name = read_data
-    argument_column = time
-    value_column = value
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 5
-[]
-
-[Postprocessors]
-  [./check_value]
-    type = FunctionValuePostprocessor
-    function = interpolate_vpp
-    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
-  [../]
-[]
-
-[VectorPostprocessors]
-  [./read_data]
-    type = CSVReader
-    csv_file = time_data.csv
-    force_preaux = true # necessary so that vpp data exists to interpolate on step 0
-    outputs = none
-  [../]
-[]
-
-[Outputs]
-  csv = true # write out FunctionValuePostprocessor results for comparison
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c7f90081-2521-45cd-b7a6-a91ee7f6445d"><div class="modal-content"><h4>test/tests/vectorpostprocessors/csv_reader/read.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="68c0ae4f-2677-4cab-902f-dfc66e2c02e4" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="a118d55a-eae0-4f96-bebf-3edc46b3ce87" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">csv_file</span><span class="moose-parameter-header-description">The name of the CSV file to read. Currently, with the exception of the header row, only numeric values are supported.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FileName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the CSV file to read. Currently, with the exception of the header row, only numeric values are supported.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="11dbaee2-ae77-4122-ba03-47aa05ad29b2" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">delimiter</span><span class="moose-parameter-header-description">The column delimiter. Despite the name this can read files separated by delimiter other than a comma. If this options is omitted it will read comma or space separated files.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The column delimiter. Despite the name this can read files separated by delimiter other than a comma. If this options is omitted it will read comma or space separated files.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">INITIAL</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>INITIAL</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">header</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">When true it is assumed that the first row contains column headers, these headers are used as the VectorPostprocessor vector names. If false the file is assumed to contain only numbers and the vectors are named automatically based on the column number (e.g., 'column_0000', 'column_0001'). If not supplied the reader attempts to auto detect the headers.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When true it is assumed that the first row contains column headers, these headers are used as the VectorPostprocessor vector names. If false the file is assumed to contain only numbers and the vectors are named automatically based on the column number (e.g., 'column_0000', 'column_0001'). If not supplied the reader attempts to auto detect the headers.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">ignore_empty_lines</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">When true new empty lines in the file are ignored.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When true new empty lines in the file are ignored.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">parallel_type</span><span class="moose-parameter-header-default">REPLICATED</span><span class="moose-parameter-header-description">Set how the data is represented within the VectorPostprocessor (VPP); 'distributed' indicates that data within the VPP is distributed and no auto communication is preformed, this setting will result in parallel output within the CSV output; 'replicated' indicates that the data within the VPP is correct on processor 0, the data will automatically be broadcast to all processors unless the '_auto_broadcast' param is set to false within the validParams function.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>REPLICATED</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>DISTRIBUTED REPLICATED</p><p class="moose-parameter-description"><span>Description:</span>Set how the data is represented within the VectorPostprocessor (VPP); 'distributed' indicates that data within the VPP is distributed and no auto communication is preformed, this setting will result in parallel output within the CSV output; 'replicated' indicates that the data within the VPP is correct on processor 0, the data will automatically be broadcast to all processors unless the '_auto_broadcast' param is set to false within the validParams function.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="c5242a85-9803-4d5b-a8bf-2b8b70a684c4" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">allow_duplicate_execution_on_initial</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>In the case where this UserObject is depended upon by an initial condition, allow it to be executed twice during the initial setup (once before the IC and again after mesh adaptivity (if applicable).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preaux</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREAUX</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREAUX</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">force_preic</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Forces the GeneralUserObject to be executed in PREIC during initial setup</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Forces the GeneralUserObject to be executed in PREIC during initial setup</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="9704e198-7e9c-4b86-82d1-485edb53500b" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#ea375b4f-1845-44e1-89a9-5885a065a67b" class="modal-trigger">test/tests/vectorpostprocessors/csv_reader/multi_read_fail.i</a></li><li><a href="#26f39c8d-7b65-47dc-b7b6-918a81bca95a" class="modal-trigger">test/tests/vectorpostprocessors/csv_reader/transfer/master.i</a></li><li><a href="#e7fcb34e-b83c-4692-818f-b5e73411b817" class="modal-trigger">test/tests/vectorpostprocessors/csv_reader/read.i</a></li><li><a href="#31eab6c5-acc8-446e-920f-8fc73851eb0a" class="modal-trigger">test/tests/vectorpostprocessors/least_squares_fit/least_squares_fit_csv_data.i</a></li><li><a href="#6d8392dc-b6bd-49fd-a7f1-c50c208d96dc" class="modal-trigger">test/tests/functions/vector_postprocessor_function/vpp_time_interpolation.i</a></li><li><a href="#53ef714b-82fb-4027-b53d-a8c1429df56b" class="modal-trigger">test/tests/postprocessors/vector_postprocessor_component/vpp_component.i</a></li><li><a href="#30e6b912-3b61-452c-9f78-2ded9bbf1d9b" class="modal-trigger">test/tests/vectorpostprocessors/csv_reader/read_preic.i</a></li></ul><div class="modal moose-modal" id="ea375b4f-1845-44e1-89a9-5885a065a67b"><div class="modal-content"><h4>test/tests/vectorpostprocessors/csv_reader/multi_read_fail.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 1
 []
@@ -135,27 +50,16 @@
   type = Steady
 []
 
-[UserObjects]
-  [./tester]
-    type = TestCSVReader
-    vectorpostprocessor = reader
-    vector = year
-    gold = &#x27;1980 1980 2011 2013&#x27;
-    rank = 1
-  [../]
-[]
-
 [VectorPostprocessors]
   [./reader]
     type = CSVReader
-    csv_file = example.csv
+    csv_file = &#x27;example.csv&#x27;
+
+    # execute twice to invoke the error
+    execute_on = &#x27;TIMESTEP_BEGIN TIMESTEP_END&#x27;
   [../]
 []
-
-[Outputs]
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="91f00e5d-6ba5-4a74-9230-3be661901c2d"><div class="modal-content"><h4>test/tests/vectorpostprocessors/csv_reader/transfer/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="26f39c8d-7b65-47dc-b7b6-918a81bca95a"><div class="modal-content"><h4>test/tests/vectorpostprocessors/csv_reader/transfer/master.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   parallel_type = &#x27;replicated&#x27;
   dim = 2
@@ -226,7 +130,7 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ca77f0a1-59ae-4b98-b4ac-d9833fa5af43"><div class="modal-content"><h4>test/tests/vectorpostprocessors/csv_reader/read_preic.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e7fcb34e-b83c-4692-818f-b5e73411b817"><div class="modal-content"><h4>test/tests/vectorpostprocessors/csv_reader/read.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 1
 []
@@ -239,41 +143,112 @@
   type = Steady
 []
 
+[UserObjects]
+  [./tester]
+    type = TestCSVReader
+    vectorpostprocessor = reader
+    vector = year
+    gold = &#x27;1980 1980 2011 2013&#x27;
+    rank = 1
+  [../]
+[]
+
 [VectorPostprocessors]
   [./reader]
     type = CSVReader
-    csv_file = &#x27;example.csv&#x27;
-    force_preic = true
+    csv_file = example.csv
   [../]
 []
 
 [Outputs]
   csv = true
-  execute_on = INITIAL
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="42513ba7-d8b3-4e24-bca5-19477bfa4b33"><div class="modal-content"><h4>test/tests/vectorpostprocessors/csv_reader/multi_read_fail.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="31eab6c5-acc8-446e-920f-8fc73851eb0a"><div class="modal-content"><h4>test/tests/vectorpostprocessors/least_squares_fit/least_squares_fit_csv_data.i</h4><pre class="moose-pre"><code class="language-text">[Problem]
+  solve = false
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 1
+[]
+
+[Executioner]
+  type = Transient
+  start_time = 0.0
+  end_time = 0.0
+[]
+
+[VectorPostprocessors]
+  [./csv_data]
+    type = CSVReader
+    csv_file = fit_data_0.csv
+    header = true
+    outputs = none
+  [../]
+  [./least_squares_fit_coeffs]
+    type = LeastSquaresFit
+    vectorpostprocessor = csv_data
+    x_name = &#x27;id&#x27;
+    y_name = &#x27;u&#x27;
+    order = 0
+    output = coefficients
+    truncate_order = false
+    execute_on = initial
+  [../]
+[]
+
+[Outputs]
+  file_base = csv0
+  execute_on = initial
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6d8392dc-b6bd-49fd-a7f1-c50c208d96dc"><div class="modal-content"><h4>test/tests/functions/vector_postprocessor_function/vpp_time_interpolation.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 1
 []
 
 [Problem]
-  solve = false
+  kernel_coverage_check = false
+[]
+
+[Variables][dummy][][]
+
+[Functions]
+  [./interpolate_vpp]
+    type = VectorPostprocessorFunction
+    vectorpostprocessor_name = read_data
+    argument_column = time
+    value_column = value
+  [../]
 []
 
 [Executioner]
-  type = Steady
+  type = Transient
+  num_steps = 5
+[]
+
+[Postprocessors]
+  [./check_value]
+    type = FunctionValuePostprocessor
+    function = interpolate_vpp
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  [../]
 []
 
 [VectorPostprocessors]
-  [./reader]
+  [./read_data]
     type = CSVReader
-    csv_file = &#x27;example.csv&#x27;
-
-    # execute twice to invoke the error
-    execute_on = &#x27;TIMESTEP_BEGIN TIMESTEP_END&#x27;
+    csv_file = time_data.csv
+    force_preaux = true # necessary so that vpp data exists to interpolate on step 0
+    outputs = none
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="202203a3-82d3-4c35-8c48-1cf4543e27c8"><div class="modal-content"><h4>test/tests/postprocessors/vector_postprocessor_component/vpp_component.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+
+[Outputs]
+  csv = true # write out FunctionValuePostprocessor results for comparison
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="53ef714b-82fb-4027-b53d-a8c1429df56b"><div class="modal-content"><h4>test/tests/postprocessors/vector_postprocessor_component/vpp_component.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 1
 []
@@ -307,4 +282,29 @@
 [Outputs]
   csv = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#96116c84-0b28-4bf7-86ee-04093873119b" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#0991ae36-e8f2-4b97-be95-46cd2efac5f9" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#492b3292-2050-4c23-ac1e-302bee0b2280" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="30e6b912-3b61-452c-9f78-2ded9bbf1d9b"><div class="modal-content"><h4>test/tests/vectorpostprocessors/csv_reader/read_preic.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+[]
+
+[Problem]
+  solve = false
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[VectorPostprocessors]
+  [./reader]
+    type = CSVReader
+    csv_file = &#x27;example.csv&#x27;
+    force_preic = true
+  [../]
+[]
+
+[Outputs]
+  csv = true
+  execute_on = INITIAL
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#71393f62-27be-42b6-8d53-115a2940a462" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#68c0ae4f-2677-4cab-902f-dfc66e2c02e4" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#9704e198-7e9c-4b86-82d1-485edb53500b" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

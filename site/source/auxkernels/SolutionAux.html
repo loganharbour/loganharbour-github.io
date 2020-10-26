@@ -1,4 +1,547 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>SolutionAux.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="9688f621-942e-4878-8339-336992dd1129"><i class="material-icons">menu</i></a><ul class="sidenav" id="9688f621-942e-4878-8339-336992dd1129"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">auxkernels</span><a href="#" class="breadcrumb">SolutionAux</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="d73b2cb2-6571-4432-b4bb-5a519241449a" data-section-level="1" data-section-text="SolutionAux"><h1 id="solutionaux">SolutionAux</h1><p>This AuxKernel works in conjunction with a <a href="../userobject/SolutionUserObject.html">SolutionUserObject</a> to produce fields. If the solution was created on an equivalent mesh, the direct option can be used to read using DOF information. Otherwise, a point locator is used to find the nearest node or element and the corresponding value. Finally, these values can be scaled and/or added by utilizing the <em>scale_factor</em> or <em>add_factor</em> parameters.</p><p>Creates fields by using information from a SolutionUserObject.</p><section class="scrollspy" id="510a9397-5b15-4fc3-bf62-ebdd00d035e9" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="ca431f66-9d98-41e7-89fe-ef8f3b2ee531" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">solution</span><span class="moose-parameter-header-description">The name of the SolutionUserObject</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>UserObjectName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the SolutionUserObject</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this object applies to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>AuxVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this object applies to</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="3ec8c49a-88a1-4db7-8c12-80b0d524151e" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">add_factor</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">Add this value (b) to the solution (x): ax+b, where a is the 'scale_factor'</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Add this value (b) to the solution (x): ax+b, where a is the 'scale_factor'</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">direct</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">If true the meshes must be the same and then the values are simply copied over.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>If true the meshes must be the same and then the values are simply copied over.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">LINEAR TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM, PRE_DISPLACE.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>LINEAR TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM PRE_DISPLACE</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM, PRE_DISPLACE.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">from_variable</span><span class="moose-parameter-header-description">The name of the variable to extract from the file</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable to extract from the file</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">scale_factor</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">Scale factor (a)  to be applied to the solution (x): ax+b, where b is the 'add_factor'</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Scale factor (a)  to be applied to the solution (x): ax+b, where b is the 'add_factor'</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="7b82c8a0-9fa3-418c-ae3f-7fa8f2987c78" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="92b6b56e-5e88-4eda-bf80-b7f3f975a632" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#9f0d57ad-a5cd-4f40-9d52-1010d08d813e" class="modal-trigger">test/tests/auxkernels/solution_aux/output_error.i</a></li><li><a href="#e15f89fe-1a0c-4b26-9c52-49853fe30f95" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_restart2.i</a></li><li><a href="#c0dac9ca-e49a-4bc5-accd-24a33f77c372" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_direct.i</a></li><li><a href="#192697be-1aed-4b90-bf9f-46b2b055aa65" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_restart1.i</a></li><li><a href="#eda25bb5-13a6-45fe-afcc-560ce1dc5fb9" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux.i</a></li><li><a href="#7d8dfa4a-633e-4a52-8645-b50775b06a00" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_scale.i</a></li><li><a href="#48564556-ee0a-49e7-82ab-ba5757584c4b" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_direct.i</a></li><li><a href="#364ebc94-723e-4b16-b9de-245828f46426" class="modal-trigger">test/tests/auxkernels/solution_aux/aux_nonlinear_solution_xdr.i</a></li><li><a href="#8fd7625e-14a5-432d-88dc-64ff8a3c774b" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_direct.i</a></li><li><a href="#4ec8f514-75f5-4a8b-bef4-4a3dc6ee425b" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus.i</a></li><li><a href="#a8216932-539c-462a-847d-0acd986781fb" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_elemental_only.i</a></li><li><a href="#e128e005-f7d2-4daa-b11c-082dfee4662d" class="modal-trigger">test/tests/auxkernels/solution_aux/aux_nonlinear_solution_xda.i</a></li><li><a href="#07c0ed9e-94fd-4f54-8e85-61a005e0fbc3" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_file_extension.i</a></li><li><a href="#195f1caa-ceab-4192-8a15-d5a58ca27bd0" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_multi_var.i</a></li><li><a href="#0d1f6633-8c52-4653-ab82-76f9cf80efc2" class="modal-trigger">test/tests/auxkernels/solution_aux/aux_nonlinear_solution_adapt_xda.i</a></li><li><a href="#aa7175b9-909d-48e7-934f-79bf3e72469f" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_elemental.i</a></li><li><a href="#f4e432e8-a14b-4b66-9343-eb7d0bd60dcf" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_elem_map.i</a></li><li><a href="#e013b34b-1f55-414a-843f-eb699e59d928" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_multi_err.i</a></li><li><a href="#d8a92cb4-2f6c-4c9e-8c5c-f773047609f8" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_interp.i</a></li></ul><div class="modal moose-modal" id="9f0d57ad-a5cd-4f40-9d52-1010d08d813e"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/output_error.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+<!DOCTYPE html><head><meta charset="UTF-8"><title>SolutionAux.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="06c666ae-0235-4334-84dc-ba3401359470"><i class="material-icons">menu</i></a><ul class="sidenav" id="06c666ae-0235-4334-84dc-ba3401359470"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">auxkernels</span><a href="#" class="breadcrumb">SolutionAux</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="9e66df64-1db9-4d13-b133-0facd2e2a0c0" data-section-level="1" data-section-text="SolutionAux"><h1 id="solutionaux">SolutionAux</h1><p>This AuxKernel works in conjunction with a <a href="../userobject/SolutionUserObject.html">SolutionUserObject</a> to produce fields. If the solution was created on an equivalent mesh, the direct option can be used to read using DOF information. Otherwise, a point locator is used to find the nearest node or element and the corresponding value. Finally, these values can be scaled and/or added by utilizing the <em>scale_factor</em> or <em>add_factor</em> parameters.</p><p>Creates fields by using information from a SolutionUserObject.</p><section class="scrollspy" id="37c580f5-acde-42c1-adf0-f30fff583e73" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="766ece71-c199-4a3d-876e-6533c0466f7d" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">solution</span><span class="moose-parameter-header-description">The name of the SolutionUserObject</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>UserObjectName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the SolutionUserObject</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this object applies to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>AuxVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this object applies to</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="ddfb4ee9-2329-449b-94e8-7225641d6d41" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">add_factor</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">Add this value (b) to the solution (x): ax+b, where a is the 'scale_factor'</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Add this value (b) to the solution (x): ax+b, where a is the 'scale_factor'</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">direct</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">If true the meshes must be the same and then the values are simply copied over.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>If true the meshes must be the same and then the values are simply copied over.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">LINEAR TIMESTEP_END</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM, PRE_DISPLACE.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>LINEAR TIMESTEP_END</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM PRE_DISPLACE</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM, PRE_DISPLACE.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">from_variable</span><span class="moose-parameter-header-description">The name of the variable to extract from the file</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable to extract from the file</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">scale_factor</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">Scale factor (a)  to be applied to the solution (x): ax+b, where b is the 'add_factor'</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Scale factor (a)  to be applied to the solution (x): ax+b, where b is the 'add_factor'</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="d6f7e9e2-1fb5-48d8-bc69-33b7975822cf" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="2a3422e7-f836-4493-8253-5f130d82bf21" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#6ccdcc6e-e004-483d-85c1-9b9f8fa09d02" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_elemental_only.i</a></li><li><a href="#ed139aee-1a50-4fa7-bf99-09b3817d969b" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus.i</a></li><li><a href="#a39e192c-0bdd-4cba-99b1-d91d6d16aa75" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_file_extension.i</a></li><li><a href="#6403cd20-309e-4aec-bbdf-544157d1b0ed" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_elem_map.i</a></li><li><a href="#e58e9d42-eef9-4271-9252-c96cdb058f3b" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_multi_err.i</a></li><li><a href="#81a1c5c1-053e-4958-813a-833ace822851" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_restart2.i</a></li><li><a href="#5cb64339-36cd-4f07-b287-13bc15a884f7" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_restart1.i</a></li><li><a href="#a21be7ed-decf-47e8-989d-f068e910cc06" class="modal-trigger">test/tests/auxkernels/solution_aux/output_error.i</a></li><li><a href="#29cd170e-2190-473c-ba8f-72c0ee01ba9a" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_direct.i</a></li><li><a href="#bbdc15b4-46f1-4292-ac06-2365e75c812d" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_direct.i</a></li><li><a href="#fc00d061-b465-4a78-abfa-bbf999a58610" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_interp.i</a></li><li><a href="#a02ac59a-18f0-4316-9627-3d3cb2760469" class="modal-trigger">test/tests/auxkernels/solution_aux/aux_nonlinear_solution_xda.i</a></li><li><a href="#32ecceff-ca94-453c-8be8-1117a23764e3" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_elemental.i</a></li><li><a href="#d8898f91-d633-42e2-a833-098c5b687c45" class="modal-trigger">test/tests/auxkernels/solution_aux/aux_nonlinear_solution_xdr.i</a></li><li><a href="#34ae5253-947f-49ef-a199-bc2ba4f7c3ba" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_direct.i</a></li><li><a href="#28ebc32e-3f85-481e-b506-d2dfefe6ced3" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_scale.i</a></li><li><a href="#1aceb864-57ec-476b-86ff-6acf10e80e36" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux_multi_var.i</a></li><li><a href="#3bf6f151-8046-4a45-a59e-585bbeed4efb" class="modal-trigger">test/tests/auxkernels/solution_aux/solution_aux.i</a></li><li><a href="#5ce0e0db-3601-476e-b32e-f2191d0db71b" class="modal-trigger">test/tests/auxkernels/solution_aux/aux_nonlinear_solution_adapt_xda.i</a></li></ul><div class="modal moose-modal" id="6ccdcc6e-e004-483d-85c1-9b9f8fa09d02"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_elemental_only.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  file = cubesource.e
+  # The SolutionUserObject uses the copy_nodal_solution() capability
+  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
+  # has been renumbered (it will be reunumbered if you are running with
+  # DistributedMesh in parallel).  Hence, we restrict this test to run with
+  # ReplicatedMesh only.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./en]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./en]
+    type = SolutionAux
+    solution = soln
+    variable = en
+    scale_factor = 2.0
+    from_variable = source_element
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource.e
+    system_variables = &#x27;source_element&#x27;
+    timestep = 2
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;NEWTON&#x27;
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 50
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ed139aee-1a50-4fa7-bf99-09b3817d969b"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  file = cubesource.e
+  # The SolutionUserObject uses the copy_nodal_solution() capability
+  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
+  # has been renumbered (it will be reunumbered if you are running with
+  # DistributedMesh in parallel).  Hence, we restrict this test to run with
+  # ReplicatedMesh only.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./en]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+    type = SolutionAux
+    solution = soln
+    variable = nn
+    scale_factor = 2.0
+  [../]
+  [./en]
+    type = SolutionAux
+    solution = soln
+    variable = en
+    scale_factor = 2.0
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource.e
+    system_variables = source_nodal
+    timestep = 2
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 50
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a39e192c-0bdd-4cba-99b1-d91d6d16aa75"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_file_extension.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  file = cubesource.e
+  # The SolutionUserObject uses the copy_nodal_solution() capability
+  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
+  # has been renumbered (it will be reunumbered if you are running with
+  # DistributedMesh in parallel).  Hence, we restrict this test to run with
+  # ReplicatedMesh only.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./en]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+    type = SolutionAux
+    solution = soln
+    variable = nn
+    scale_factor = 2.0
+  [../]
+  [./en]
+    type = SolutionAux
+    solution = soln
+    variable = en
+    scale_factor = 2.0
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource.e-s003
+    system_variables = source_nodal
+    timestep = 2
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 50
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="6403cd20-309e-4aec-bbdf-544157d1b0ed"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_elem_map.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  file = elem_map.e
+  # The SolutionUserObject uses the copy_nodal_solution() capability
+  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
+  # has been renumbered (it will be reunumbered if you are running with
+  # DistributedMesh in parallel).  Hence, we restrict this test to run with
+  # ReplicatedMesh only.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./matid]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./matid]
+    type = SolutionAux
+    solution = soln
+    variable = matid
+    scale_factor = 1.0
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = elem_map.e
+    system_variables = MatID
+    timestep = LATEST
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1&#x27;
+    value = 1.0
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e58e9d42-eef9-4271-9252-c96cdb058f3b"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_multi_err.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  file = cubesource.e
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./en]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+    type = SolutionAux
+    solution = soln
+    variable = nn
+    scale_factor = 2.0
+    #from_variable = source_nodal
+    #add_factor = -10teg
+  [../]
+  [./en]
+    type = SolutionAux
+    solution = soln
+    variable = en
+    scale_factor = 2.0
+    #from_variable = source_nodal
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource_added.e
+    system_variables = &#x27;source_nodal nodal_10&#x27;
+    timestep = 2
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 50
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="81a1c5c1-053e-4958-813a-833ace822851"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_restart2.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  type = FileMesh
+  file = cubesource.e
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+    type = SolutionAux
+    variable = nn
+    solution = soln
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource.e
+    system_variables = source_nodal
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 5
+  start_time = 2.5
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+
+[Problem]
+  restart_file_base = solution_aux_exodus_interp_restart1_out_cp/0005
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5cb64339-36cd-4f07-b287-13bc15a884f7"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_restart1.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  type = FileMesh
+  file = cubesource.e
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+    type = SolutionAux
+    variable = nn
+    solution = soln
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource.e
+    system_variables = source_nodal
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 5
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+  checkpoint = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a21be7ed-decf-47e8-989d-f068e910cc06"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/output_error.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
   nx = 2
@@ -76,552 +619,7 @@
   exodus = true
   xda = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e15f89fe-1a0c-4b26-9c52-49853fe30f95"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_restart2.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
-  type = FileMesh
-  file = cubesource.e
-  parallel_type = replicated
-[]
-
-[Variables]
-  [./u]
-    order = FIRST
-    family = LAGRANGE
-    initial_condition = 0.0
-  [../]
-[]
-
-[AuxVariables]
-  [./nn]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[AuxKernels]
-  [./nn]
-    type = SolutionAux
-    variable = nn
-    solution = soln
-  [../]
-[]
-
-[UserObjects]
-  [./soln]
-    type = SolutionUserObject
-    mesh = cubesource.e
-    system_variables = source_nodal
-  [../]
-[]
-
-[BCs]
-  [./stuff]
-    type = DirichletBC
-    variable = u
-    boundary = &#x27;1 2&#x27;
-    value = 0.0
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = NEWTON
-  l_max_its = 800
-  nl_rel_tol = 1e-10
-  num_steps = 5
-  start_time = 2.5
-  end_time = 5
-  dt = 0.5
-[]
-
-[Outputs]
-  execute_on = &#x27;timestep_end&#x27;
-  exodus = true
-[]
-
-[Problem]
-  restart_file_base = solution_aux_exodus_interp_restart1_out_cp/0005
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="c0dac9ca-e49a-4bc5-accd-24a33f77c372"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_direct.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = FileMesh
-  file = cubesource.e
-  # The SolutionUserObject uses the copy_nodal_solution() capability
-  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
-  # has been renumbered (it will be reunumbered if you are running with
-  # DistributedMesh in parallel).  Hence, we restrict this test to run with
-  # ReplicatedMesh only.
-  parallel_type = replicated
-[]
-
-[Variables]
-  [./u]
-    order = FIRST
-    family = LAGRANGE
-    initial_condition = 0.0
-  [../]
-[]
-
-[AuxVariables]
-  [./nn]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[AuxKernels]
-  [./nn]
-    type = SolutionAux
-    variable = nn
-    solution = soln
-    direct = true
-    from_variable = source_nodal
-  [../]
-[]
-
-[UserObjects]
-  [./soln]
-    type = SolutionUserObject
-    mesh = cubesource.e
-    system_variables = source_nodal
-  [../]
-[]
-
-[BCs]
-  [./stuff]
-    type = DirichletBC
-    variable = u
-    boundary = &#x27;1 2&#x27;
-    value = 0.0
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-
-  solve_type = &#x27;NEWTON&#x27;
-  l_max_its = 800
-  nl_rel_tol = 1e-10
-  num_steps = 50
-  end_time = 5
-  dt = 0.5
-[]
-
-[Outputs]
-  execute_on = &#x27;timestep_end&#x27;
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="192697be-1aed-4b90-bf9f-46b2b055aa65"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_restart1.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
-  type = FileMesh
-  file = cubesource.e
-  parallel_type = replicated
-[]
-
-[Variables]
-  [./u]
-    order = FIRST
-    family = LAGRANGE
-    initial_condition = 0.0
-  [../]
-[]
-
-[AuxVariables]
-  [./nn]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[AuxKernels]
-  [./nn]
-    type = SolutionAux
-    variable = nn
-    solution = soln
-  [../]
-[]
-
-[UserObjects]
-  [./soln]
-    type = SolutionUserObject
-    mesh = cubesource.e
-    system_variables = source_nodal
-    execute_on = &#x27;initial timestep_begin&#x27;
-  [../]
-[]
-
-[BCs]
-  [./stuff]
-    type = DirichletBC
-    variable = u
-    boundary = &#x27;1 2&#x27;
-    value = 0.0
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = NEWTON
-  l_max_its = 800
-  nl_rel_tol = 1e-10
-  num_steps = 5
-  end_time = 5
-  dt = 0.5
-[]
-
-[Outputs]
-  execute_on = &#x27;timestep_end&#x27;
-  exodus = true
-  checkpoint = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="eda25bb5-13a6-45fe-afcc-560ce1dc5fb9"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  [./square]
-    type = GeneratedMeshGenerator
-    nx = 2
-    ny = 2
-    dim = 2
-  [../]
-  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
-  parallel_type = replicated
-[]
-
-[Variables]
-  [./u]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[AuxVariables]
-  [./u_aux]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[AuxKernels]
-  [./initial_cond_aux]
-    type = SolutionAux
-    solution = xda_soln
-    execute_on = initial
-    variable = u_aux
-  [../]
-[]
-
-[UserObjects]
-  [./xda_soln]
-    type = SolutionUserObject
-    mesh = build_out_0001_mesh.xda
-    es = build_out_0001.xda
-    system_variables = u
-  [../]
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = 3
-    value = 0
-  [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = 1
-    value = 1
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-
-  solve_type = &#x27;PJFNK&#x27;
-
-  nl_rel_tol = 1e-10
-[]
-
-[Outputs]
-  exodus = true
-  [./xda]
-    type = XDA
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="7d8dfa4a-633e-4a52-8645-b50775b06a00"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_scale.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 2
-  ny = 2
-  xmin = 1
-  xmax = 4
-  ymin = 1
-  ymax = 3
-  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
-  parallel_type = replicated
-[]
-
-[Variables]
-  [./u]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[AuxVariables]
-  [./u_aux]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[AuxKernels]
-  [./initial_cond_aux]
-    type = SolutionAux
-    solution = xda_soln
-    execute_on = initial
-    variable = u_aux
-  [../]
-[]
-
-[UserObjects]
-  [./xda_soln]
-    type = SolutionUserObject
-    mesh = build_out_0001_mesh.xda
-    es = build_out_0001.xda
-    system_variables = u
-    scale = &#x27;3 2 1&#x27;
-    translation = &#x27;1 1 0&#x27;
-  [../]
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = &#x27;PJFNK&#x27;
-  nl_rel_tol = 1e-10
-[]
-
-[Outputs]
-  exodus = true
-  xda = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="48564556-ee0a-49e7-82ab-ba5757584c4b"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_direct.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = FileMesh
-  file = cubesource.e
-  # The SolutionUserObject uses the copy_nodal_solution() capability
-  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
-  # has been renumbered (it will be reunumbered if you are running with
-  # DistributedMesh in parallel).  Hence, we restrict this test to run with
-  # ReplicatedMesh only.
-  parallel_type = replicated
-[]
-
-[Variables]
-  [./u]
-    order = FIRST
-    family = LAGRANGE
-    initial_condition = 0.0
-  [../]
-[]
-
-[AuxVariables]
-  [./nn]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[AuxKernels]
-  [./nn]
-    type = SolutionAux
-    solution = soln
-    variable = nn
-    scale_factor = 2.0
-    direct = true
-  [../]
-[]
-
-[UserObjects]
-  [./soln]
-    type = SolutionUserObject
-    mesh = cubesource.e
-    system_variables = source_nodal
-    timestep = 2
-  [../]
-[]
-
-[BCs]
-  [./stuff]
-    type = DirichletBC
-    variable = u
-    boundary = &#x27;1 2&#x27;
-    value = 0.0
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-
-  solve_type = &#x27;NEWTON&#x27;
-  l_max_its = 800
-  nl_rel_tol = 1e-10
-  num_steps = 50
-  end_time = 5
-  dt = 0.5
-[]
-
-[Outputs]
-  execute_on = &#x27;timestep_end&#x27;
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="364ebc94-723e-4b16-b9de-245828f46426"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/aux_nonlinear_solution_xdr.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
-  type = GeneratedMesh
-  parallel_type = replicated
-  dim = 2
-  nx = 2
-  ny = 2
-[]
-
-[Variables]
-  [./u]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[AuxVariables]
-  [./u_aux]
-  [../]
-[]
-
-[Functions]
-  [./u_xdr_func]
-    type = SolutionFunction
-    solution = xdr_u
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[AuxKernels]
-  [./aux_xdr_kernel]
-    type = SolutionAux
-    variable = u_aux
-    solution = xdr_u_aux
-    execute_on = initial
-  [../]
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = 1
-    value = 1
-  [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = 2
-    value = 2
-  [../]
-[]
-
-[UserObjects]
-  [./xdr_u_aux]
-    type = SolutionUserObject
-    system = aux0
-    mesh = aux_nonlinear_solution_xdr_0001_mesh.xdr
-    es = aux_nonlinear_solution_xdr_0001.xdr
-    execute_on = initial
-  [../]
-  [./xdr_u]
-    type = SolutionUserObject
-    system = nl0
-    mesh = aux_nonlinear_solution_xdr_0001_mesh.xdr
-    es = aux_nonlinear_solution_xdr_0001.xdr
-    execute_on = initial
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-  solve_type = PJFNK
-  nl_rel_tol = 1e-10
-[]
-
-[Outputs]
-  exodus = true
-[]
-
-[ICs]
-  [./u_func_ic]
-    function = u_xdr_func
-    variable = u
-    type = FunctionIC
-  [../]
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8fd7625e-14a5-432d-88dc-64ff8a3c774b"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_direct.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="29cd170e-2190-473c-ba8f-72c0ee01ba9a"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_direct.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = FileMesh
   file = build_out_0001_mesh.xda
   # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
@@ -694,7 +692,8 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4ec8f514-75f5-4a8b-bef4-4a3dc6ee425b"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="bbdc15b4-46f1-4292-ac06-2365e75c812d"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_direct.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = FileMesh
   file = cubesource.e
   # The SolutionUserObject uses the copy_nodal_solution() capability
   # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
@@ -717,10 +716,6 @@
     order = FIRST
     family = LAGRANGE
   [../]
-  [./en]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
 []
 
 [Kernels]
@@ -736,12 +731,7 @@
     solution = soln
     variable = nn
     scale_factor = 2.0
-  [../]
-  [./en]
-    type = SolutionAux
-    solution = soln
-    variable = en
-    scale_factor = 2.0
+    direct = true
   [../]
 []
 
@@ -761,14 +751,12 @@
     boundary = &#x27;1 2&#x27;
     value = 0.0
   [../]
-
 []
 
 [Executioner]
   type = Transient
 
   solve_type = &#x27;NEWTON&#x27;
-
   l_max_its = 800
   nl_rel_tol = 1e-10
   num_steps = 50
@@ -780,13 +768,10 @@
   execute_on = &#x27;timestep_end&#x27;
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a8216932-539c-462a-847d-0acd986781fb"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_elemental_only.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fc00d061-b465-4a78-abfa-bbf999a58610"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_interp.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = FileMesh
   file = cubesource.e
-  # The SolutionUserObject uses the copy_nodal_solution() capability
-  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
-  # has been renumbered (it will be reunumbered if you are running with
-  # DistributedMesh in parallel).  Hence, we restrict this test to run with
-  # ReplicatedMesh only.
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
   parallel_type = replicated
 []
 
@@ -799,9 +784,9 @@
 []
 
 [AuxVariables]
-  [./en]
-    order = CONSTANT
-    family = MONOMIAL
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
   [../]
 []
 
@@ -813,12 +798,10 @@
 []
 
 [AuxKernels]
-  [./en]
+  [./nn]
     type = SolutionAux
+    variable = nn
     solution = soln
-    variable = en
-    scale_factor = 2.0
-    from_variable = source_element
   [../]
 []
 
@@ -826,8 +809,7 @@
   [./soln]
     type = SolutionUserObject
     mesh = cubesource.e
-    system_variables = &#x27;source_element&#x27;
-    timestep = 2
+    system_variables = source_nodal
   [../]
 []
 
@@ -842,6 +824,7 @@
 
 [Executioner]
   type = Transient
+
   solve_type = &#x27;NEWTON&#x27;
   l_max_its = 800
   nl_rel_tol = 1e-10
@@ -854,7 +837,7 @@
   execute_on = &#x27;timestep_end&#x27;
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e128e005-f7d2-4daa-b11c-082dfee4662d"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/aux_nonlinear_solution_xda.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a02ac59a-18f0-4316-9627-3d3cb2760469"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/aux_nonlinear_solution_xda.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
   type = GeneratedMesh
   parallel_type = replicated
@@ -949,7 +932,7 @@
     type = FunctionIC
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="07c0ed9e-94fd-4f54-8e85-61a005e0fbc3"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_file_extension.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="32ecceff-ca94-453c-8be8-1117a23764e3"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_elemental.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   file = cubesource.e
   # The SolutionUserObject uses the copy_nodal_solution() capability
   # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
@@ -991,20 +974,22 @@
     solution = soln
     variable = nn
     scale_factor = 2.0
+    from_variable = source_nodal
   [../]
   [./en]
     type = SolutionAux
     solution = soln
     variable = en
     scale_factor = 2.0
+    from_variable = source_element
   [../]
 []
 
 [UserObjects]
   [./soln]
     type = SolutionUserObject
-    mesh = cubesource.e-s003
-    system_variables = source_nodal
+    mesh = cubesource.e
+    system_variables = &#x27;source_nodal source_element&#x27;
     timestep = 2
   [../]
 []
@@ -1016,14 +1001,11 @@
     boundary = &#x27;1 2&#x27;
     value = 0.0
   [../]
-
 []
 
 [Executioner]
   type = Transient
-
   solve_type = &#x27;NEWTON&#x27;
-
   l_max_its = 800
   nl_rel_tol = 1e-10
   num_steps = 50
@@ -1035,7 +1017,254 @@
   execute_on = &#x27;timestep_end&#x27;
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="195f1caa-ceab-4192-8a15-d5a58ca27bd0"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_multi_var.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d8898f91-d633-42e2-a833-098c5b687c45"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/aux_nonlinear_solution_xdr.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  type = GeneratedMesh
+  parallel_type = replicated
+  dim = 2
+  nx = 2
+  ny = 2
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./u_aux]
+  [../]
+[]
+
+[Functions]
+  [./u_xdr_func]
+    type = SolutionFunction
+    solution = xdr_u
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./aux_xdr_kernel]
+    type = SolutionAux
+    variable = u_aux
+    solution = xdr_u_aux
+    execute_on = initial
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 1
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 2
+    value = 2
+  [../]
+[]
+
+[UserObjects]
+  [./xdr_u_aux]
+    type = SolutionUserObject
+    system = aux0
+    mesh = aux_nonlinear_solution_xdr_0001_mesh.xdr
+    es = aux_nonlinear_solution_xdr_0001.xdr
+    execute_on = initial
+  [../]
+  [./xdr_u]
+    type = SolutionUserObject
+    system = nl0
+    mesh = aux_nonlinear_solution_xdr_0001_mesh.xdr
+    es = aux_nonlinear_solution_xdr_0001.xdr
+    execute_on = initial
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = PJFNK
+  nl_rel_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[ICs]
+  [./u_func_ic]
+    function = u_xdr_func
+    variable = u
+    type = FunctionIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="34ae5253-947f-49ef-a199-bc2ba4f7c3ba"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_interp_direct.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = FileMesh
+  file = cubesource.e
+  # The SolutionUserObject uses the copy_nodal_solution() capability
+  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
+  # has been renumbered (it will be reunumbered if you are running with
+  # DistributedMesh in parallel).  Hence, we restrict this test to run with
+  # ReplicatedMesh only.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+[]
+
+[AuxVariables]
+  [./nn]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./nn]
+    type = SolutionAux
+    variable = nn
+    solution = soln
+    direct = true
+    from_variable = source_nodal
+  [../]
+[]
+
+[UserObjects]
+  [./soln]
+    type = SolutionUserObject
+    mesh = cubesource.e
+    system_variables = source_nodal
+  [../]
+[]
+
+[BCs]
+  [./stuff]
+    type = DirichletBC
+    variable = u
+    boundary = &#x27;1 2&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;NEWTON&#x27;
+  l_max_its = 800
+  nl_rel_tol = 1e-10
+  num_steps = 50
+  end_time = 5
+  dt = 0.5
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="28ebc32e-3f85-481e-b506-d2dfefe6ced3"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_scale.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 2
+  ny = 2
+  xmin = 1
+  xmax = 4
+  ymin = 1
+  ymax = 3
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./u_aux]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./initial_cond_aux]
+    type = SolutionAux
+    solution = xda_soln
+    execute_on = initial
+    variable = u_aux
+  [../]
+[]
+
+[UserObjects]
+  [./xda_soln]
+    type = SolutionUserObject
+    mesh = build_out_0001_mesh.xda
+    es = build_out_0001.xda
+    system_variables = u
+    scale = &#x27;3 2 1&#x27;
+    translation = &#x27;1 1 0&#x27;
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;PJFNK&#x27;
+  nl_rel_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+  xda = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="1aceb864-57ec-476b-86ff-6acf10e80e36"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_multi_var.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   file = cubesource.e
   # The SolutionUserObject uses the copy_nodal_solution() capability
   # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
@@ -1122,7 +1351,86 @@
   execute_on = &#x27;timestep_end&#x27;
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0d1f6633-8c52-4653-ab82-76f9cf80efc2"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/aux_nonlinear_solution_adapt_xda.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3bf6f151-8046-4a45-a59e-585bbeed4efb"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [./square]
+    type = GeneratedMeshGenerator
+    nx = 2
+    ny = 2
+    dim = 2
+  [../]
+  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
+  parallel_type = replicated
+[]
+
+[Variables]
+  [./u]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./u_aux]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+[]
+
+[AuxKernels]
+  [./initial_cond_aux]
+    type = SolutionAux
+    solution = xda_soln
+    execute_on = initial
+    variable = u_aux
+  [../]
+[]
+
+[UserObjects]
+  [./xda_soln]
+    type = SolutionUserObject
+    mesh = build_out_0001_mesh.xda
+    es = build_out_0001.xda
+    system_variables = u
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = 3
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = 1
+    value = 1
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  nl_rel_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+  [./xda]
+    type = XDA
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5ce0e0db-3601-476e-b32e-f2191d0db71b"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/aux_nonlinear_solution_adapt_xda.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
   type = FileMesh
   file = aux_nonlinear_solution_adapt_out_0004_mesh.xda
@@ -1233,312 +1541,4 @@
     type = FunctionIC
   [../]
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="aa7175b9-909d-48e7-934f-79bf3e72469f"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_elemental.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  file = cubesource.e
-  # The SolutionUserObject uses the copy_nodal_solution() capability
-  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
-  # has been renumbered (it will be reunumbered if you are running with
-  # DistributedMesh in parallel).  Hence, we restrict this test to run with
-  # ReplicatedMesh only.
-  parallel_type = replicated
-[]
-
-[Variables]
-  [./u]
-    order = FIRST
-    family = LAGRANGE
-    initial_condition = 0.0
-  [../]
-[]
-
-[AuxVariables]
-  [./nn]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./en]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[AuxKernels]
-  [./nn]
-    type = SolutionAux
-    solution = soln
-    variable = nn
-    scale_factor = 2.0
-    from_variable = source_nodal
-  [../]
-  [./en]
-    type = SolutionAux
-    solution = soln
-    variable = en
-    scale_factor = 2.0
-    from_variable = source_element
-  [../]
-[]
-
-[UserObjects]
-  [./soln]
-    type = SolutionUserObject
-    mesh = cubesource.e
-    system_variables = &#x27;source_nodal source_element&#x27;
-    timestep = 2
-  [../]
-[]
-
-[BCs]
-  [./stuff]
-    type = DirichletBC
-    variable = u
-    boundary = &#x27;1 2&#x27;
-    value = 0.0
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = &#x27;NEWTON&#x27;
-  l_max_its = 800
-  nl_rel_tol = 1e-10
-  num_steps = 50
-  end_time = 5
-  dt = 0.5
-[]
-
-[Outputs]
-  execute_on = &#x27;timestep_end&#x27;
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f4e432e8-a14b-4b66-9343-eb7d0bd60dcf"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_elem_map.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  file = elem_map.e
-  # The SolutionUserObject uses the copy_nodal_solution() capability
-  # of the Exodus reader, and therefore won&#x27;t work if the initial mesh
-  # has been renumbered (it will be reunumbered if you are running with
-  # DistributedMesh in parallel).  Hence, we restrict this test to run with
-  # ReplicatedMesh only.
-  parallel_type = replicated
-[]
-
-[Variables]
-  [./u]
-    order = FIRST
-    family = LAGRANGE
-    initial_condition = 0.0
-  [../]
-[]
-
-[AuxVariables]
-  [./matid]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[AuxKernels]
-  [./matid]
-    type = SolutionAux
-    solution = soln
-    variable = matid
-    scale_factor = 1.0
-  [../]
-[]
-
-[UserObjects]
-  [./soln]
-    type = SolutionUserObject
-    mesh = elem_map.e
-    system_variables = MatID
-    timestep = LATEST
-  [../]
-[]
-
-[BCs]
-  [./stuff]
-    type = DirichletBC
-    variable = u
-    boundary = &#x27;1&#x27;
-    value = 1.0
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-
-  solve_type = &#x27;PJFNK&#x27;
-[]
-
-[Outputs]
-  execute_on = &#x27;timestep_end&#x27;
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e013b34b-1f55-414a-843f-eb699e59d928"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_multi_err.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  file = cubesource.e
-  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
-  parallel_type = replicated
-[]
-
-[Variables]
-  [./u]
-    order = FIRST
-    family = LAGRANGE
-    initial_condition = 0.0
-  [../]
-[]
-
-[AuxVariables]
-  [./nn]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./en]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[AuxKernels]
-  [./nn]
-    type = SolutionAux
-    solution = soln
-    variable = nn
-    scale_factor = 2.0
-    #from_variable = source_nodal
-    #add_factor = -10teg
-  [../]
-  [./en]
-    type = SolutionAux
-    solution = soln
-    variable = en
-    scale_factor = 2.0
-    #from_variable = source_nodal
-  [../]
-[]
-
-[UserObjects]
-  [./soln]
-    type = SolutionUserObject
-    mesh = cubesource_added.e
-    system_variables = &#x27;source_nodal nodal_10&#x27;
-    timestep = 2
-  [../]
-[]
-
-[BCs]
-  [./stuff]
-    type = DirichletBC
-    variable = u
-    boundary = &#x27;1 2&#x27;
-    value = 0.0
-  [../]
-
-[]
-
-[Executioner]
-  type = Transient
-
-  solve_type = &#x27;NEWTON&#x27;
-
-  l_max_its = 800
-  nl_rel_tol = 1e-10
-  num_steps = 50
-  end_time = 5
-  dt = 0.5
-[]
-
-[Outputs]
-  execute_on = &#x27;timestep_end&#x27;
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d8a92cb4-2f6c-4c9e-8c5c-f773047609f8"><div class="modal-content"><h4>test/tests/auxkernels/solution_aux/solution_aux_exodus_interp.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = FileMesh
-  file = cubesource.e
-  # This test uses SolutionUserObject which doesn&#x27;t work with DistributedMesh.
-  parallel_type = replicated
-[]
-
-[Variables]
-  [./u]
-    order = FIRST
-    family = LAGRANGE
-    initial_condition = 0.0
-  [../]
-[]
-
-[AuxVariables]
-  [./nn]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-[]
-
-[AuxKernels]
-  [./nn]
-    type = SolutionAux
-    variable = nn
-    solution = soln
-  [../]
-[]
-
-[UserObjects]
-  [./soln]
-    type = SolutionUserObject
-    mesh = cubesource.e
-    system_variables = source_nodal
-  [../]
-[]
-
-[BCs]
-  [./stuff]
-    type = DirichletBC
-    variable = u
-    boundary = &#x27;1 2&#x27;
-    value = 0.0
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-
-  solve_type = &#x27;NEWTON&#x27;
-  l_max_its = 800
-  nl_rel_tol = 1e-10
-  num_steps = 50
-  end_time = 5
-  dt = 0.5
-[]
-
-[Outputs]
-  execute_on = &#x27;timestep_end&#x27;
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#510a9397-5b15-4fc3-bf62-ebdd00d035e9" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#92b6b56e-5e88-4eda-bf80-b7f3f975a632" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#37c580f5-acde-42c1-adf0-f30fff583e73" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#2a3422e7-f836-4493-8253-5f130d82bf21" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

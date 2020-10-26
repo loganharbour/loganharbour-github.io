@@ -1,4 +1,184 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>ScalarLagrangeMultiplier.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="193a3cf5-0dcf-42f7-98d6-db2268af8661"><i class="material-icons">menu</i></a><ul class="sidenav" id="193a3cf5-0dcf-42f7-98d6-db2268af8661"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">kernels</span><a href="#" class="breadcrumb">ScalarLagrangeMultiplier</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="78ce88a7-31b6-4358-a622-6178344fed8c" data-section-level="1" data-section-text="ScalarLagrangeMultiplier"><h1 id="scalarlagrangemultiplier">ScalarLagrangeMultiplier</h1><p>This Kernel implements part of the equation that enforces the constraint of</p><p><span class="moose-katex-block-equation"><span tex="\int_{\Omega} \phi = V_0" bookmark="moose-equation-2fc3982f-1684-432c-bc25-4f31135f6dc7" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-2fc3982f-1684-432c-bc25-4f31135f6dc7"></span><script>var element = document.getElementById("moose-equation-2fc3982f-1684-432c-bc25-4f31135f6dc7");katex.render(" \\int_{\\Omega} \\phi = V_0", element, {displayMode:true,throwOnError:false});</script></span></p><p>where <span tex="V_0" bookmark="moose-equation-e7d3b160-b1ee-468f-8e1a-68a02a4cc8b2" recursive="True" class="moose-katex-inline-equation" id="moose-equation-e7d3b160-b1ee-468f-8e1a-68a02a4cc8b2"><script>var element = document.getElementById("moose-equation-e7d3b160-b1ee-468f-8e1a-68a02a4cc8b2");katex.render("V_0", element, {displayMode:false,throwOnError:false});</script></span> is a given constant, using a Lagrange multiplier approach. The residual of <span tex="\phi" bookmark="moose-equation-2efc4174-9d86-4e39-acce-fa0a38ccc9e8" recursive="True" class="moose-katex-inline-equation" id="moose-equation-2efc4174-9d86-4e39-acce-fa0a38ccc9e8"><script>var element = document.getElementById("moose-equation-2efc4174-9d86-4e39-acce-fa0a38ccc9e8");katex.render("\\phi", element, {displayMode:false,throwOnError:false});</script></span> related to the Lagrange multiplier is given as:</p><p><span class="moose-katex-block-equation"><span tex="F^{(\phi)}_i \equiv \lambda^h \int_{\Omega} \varphi_i \;\text{d}\Omega" label="eq:eq1" number="1" bookmark="moose-equation-73cd440e-900d-4742-8d61-c2ff9c57e942" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-73cd440e-900d-4742-8d61-c2ff9c57e942"></span><span class="moose-katex-equation-number">(1)</span><script>var element = document.getElementById("moose-equation-73cd440e-900d-4742-8d61-c2ff9c57e942");katex.render("  F^{(\\phi)}_i \\equiv \\lambda^h \\int_{\\Omega} \\varphi_i \\;\\text{d}\\Omega ", element, {displayMode:true,throwOnError:false});</script></span></p><p>In particular, this Kernel implements the residual contribution from the <span tex="\lambda" bookmark="moose-equation-fdd01594-da01-466a-a0f1-7d18562f2662" recursive="True" class="moose-katex-inline-equation" id="moose-equation-fdd01594-da01-466a-a0f1-7d18562f2662"><script>var element = document.getElementById("moose-equation-fdd01594-da01-466a-a0f1-7d18562f2662");katex.render("\\lambda", element, {displayMode:false,throwOnError:false});</script></span> in <a href="#moose-equation-73cd440e-900d-4742-8d61-c2ff9c57e942">Eq. (1)</a> , and their Jacobian contributions. See also <a href="AverageValueConstraint.html">AverageValueConstraint</a> for the residual of the Lagrange multiplier variable.</p><p>The detailed description of the derivation can be found at <a href="https://github.com/idaholab/large_media/blob/master/framework/scalar_constraint_kernel.pdf">scalar_constraint_kernel</a>.</p><section class="scrollspy" id="0cdb2309-0253-4102-93f6-a740d88a86cd" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="562a80e4-c2ff-4497-b4bd-33a3ba3604f3" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">lambda</span><span class="moose-parameter-header-description">Lagrange multiplier variable</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Lagrange multiplier variable</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this Kernel operates on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this Kernel operates on</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="672c8913-7838-4a55-9990-cd3cba31318d" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="f1f902db-ebe2-4297-8111-d84f38411253" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="fcd40dc8-d811-49e8-a942-8fa1f7fd1b56" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="fb171ed9-265f-4248-9bc3-91ef5bae07a1" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#b2b6eec6-1d0e-44cf-a969-61fe470cb2e5" class="modal-trigger">test/tests/misc/check_error/coupling_field_into_scalar.i</a></li><li><a href="#e99c4968-67ad-4405-8d3c-ebe79210598b" class="modal-trigger">test/tests/misc/check_error/coupling_nonexistent_scalar.i</a></li><li><a href="#aa509227-eb00-4f41-bb8c-d7ed37e1f2dd" class="modal-trigger">modules/navier_stokes/test/tests/ins/lid_driven/ad_lid_driven_mean_zero_pressure.i</a></li><li><a href="#9747bfb4-74eb-4242-80c7-6c7cf1666cda" class="modal-trigger">test/tests/kernels/bad_scaling_scalar_kernels/ill_conditioned_field_scalar_system.i</a></li><li><a href="#a68c8ee9-bc5e-4923-a356-f39aefe64c72" class="modal-trigger">test/tests/kernels/scalar_constraint/scalar_constraint_kernel.i</a></li><li><a href="#8aac2044-25ea-4514-87d7-4b6fbd1c6aa8" class="modal-trigger">test/tests/kernels/scalar_constraint/scalar_constraint_kernel_disp.i</a></li></ul><div class="modal moose-modal" id="b2b6eec6-1d0e-44cf-a969-61fe470cb2e5"><div class="modal-content"><h4>test/tests/misc/check_error/coupling_field_into_scalar.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+<!DOCTYPE html><head><meta charset="UTF-8"><title>ScalarLagrangeMultiplier.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="9af2f447-82fa-4cdb-97b0-2bd9b17da478"><i class="material-icons">menu</i></a><ul class="sidenav" id="9af2f447-82fa-4cdb-97b0-2bd9b17da478"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">kernels</span><a href="#" class="breadcrumb">ScalarLagrangeMultiplier</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="359cef8e-5cf4-45f4-9e89-38bf60d50beb" data-section-level="1" data-section-text="ScalarLagrangeMultiplier"><h1 id="scalarlagrangemultiplier">ScalarLagrangeMultiplier</h1><p>This Kernel implements part of the equation that enforces the constraint of</p><p><span class="moose-katex-block-equation"><span tex="\int_{\Omega} \phi = V_0" bookmark="moose-equation-ddd49a54-fba1-4955-a269-d5dc7b82f8b5" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-ddd49a54-fba1-4955-a269-d5dc7b82f8b5"></span><script>var element = document.getElementById("moose-equation-ddd49a54-fba1-4955-a269-d5dc7b82f8b5");katex.render(" \\int_{\\Omega} \\phi = V_0", element, {displayMode:true,throwOnError:false});</script></span></p><p>where <span tex="V_0" bookmark="moose-equation-5b29d90d-d04e-4ae3-bd21-9c49d9b5bd61" recursive="True" class="moose-katex-inline-equation" id="moose-equation-5b29d90d-d04e-4ae3-bd21-9c49d9b5bd61"><script>var element = document.getElementById("moose-equation-5b29d90d-d04e-4ae3-bd21-9c49d9b5bd61");katex.render("V_0", element, {displayMode:false,throwOnError:false});</script></span> is a given constant, using a Lagrange multiplier approach. The residual of <span tex="\phi" bookmark="moose-equation-98fea608-41a0-459a-b311-df2c50c3a698" recursive="True" class="moose-katex-inline-equation" id="moose-equation-98fea608-41a0-459a-b311-df2c50c3a698"><script>var element = document.getElementById("moose-equation-98fea608-41a0-459a-b311-df2c50c3a698");katex.render("\\phi", element, {displayMode:false,throwOnError:false});</script></span> related to the Lagrange multiplier is given as:</p><p><span class="moose-katex-block-equation"><span tex="F^{(\phi)}_i \equiv \lambda^h \int_{\Omega} \varphi_i \;\text{d}\Omega" label="eq:eq1" number="1" bookmark="moose-equation-760dd34e-b946-4f28-9af9-6d25fc0ed66e" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-760dd34e-b946-4f28-9af9-6d25fc0ed66e"></span><span class="moose-katex-equation-number">(1)</span><script>var element = document.getElementById("moose-equation-760dd34e-b946-4f28-9af9-6d25fc0ed66e");katex.render("  F^{(\\phi)}_i \\equiv \\lambda^h \\int_{\\Omega} \\varphi_i \\;\\text{d}\\Omega ", element, {displayMode:true,throwOnError:false});</script></span></p><p>In particular, this Kernel implements the residual contribution from the <span tex="\lambda" bookmark="moose-equation-4f8c2119-6f6d-451a-86e8-099bdc22bdbc" recursive="True" class="moose-katex-inline-equation" id="moose-equation-4f8c2119-6f6d-451a-86e8-099bdc22bdbc"><script>var element = document.getElementById("moose-equation-4f8c2119-6f6d-451a-86e8-099bdc22bdbc");katex.render("\\lambda", element, {displayMode:false,throwOnError:false});</script></span> in <a href="#moose-equation-760dd34e-b946-4f28-9af9-6d25fc0ed66e">Eq. (1)</a> , and their Jacobian contributions. See also <a href="AverageValueConstraint.html">AverageValueConstraint</a> for the residual of the Lagrange multiplier variable.</p><p>The detailed description of the derivation can be found at <a href="https://github.com/idaholab/large_media/blob/master/framework/scalar_constraint_kernel.pdf">scalar_constraint_kernel</a>.</p><section class="scrollspy" id="e0e63d1b-b74a-448c-877f-e716099cbc97" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="dae0be5a-0c52-4035-b8e1-9317ee48ffc6" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">lambda</span><span class="moose-parameter-header-description">Lagrange multiplier variable</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Lagrange multiplier variable</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this Kernel operates on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this Kernel operates on</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="bb4275fc-f626-4cb6-9a25-9f44d318ab3d" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="0353e9e5-781f-4a10-8a0a-a898a81f176d" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="110ce660-3cf1-47e4-a63e-0c82d9a75150" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="2486d419-eb9f-45be-a6b2-66b95a875e61" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#12c428bf-d0c6-4ece-bbc6-8cca2628dc8c" class="modal-trigger">test/tests/kernels/scalar_constraint/scalar_constraint_kernel_disp.i</a></li><li><a href="#17b7e1ef-4e94-4dd7-a1be-8bac26247894" class="modal-trigger">test/tests/misc/check_error/coupling_field_into_scalar.i</a></li><li><a href="#f4f3201e-2d60-4bea-ac4e-8d19fb58ed52" class="modal-trigger">test/tests/misc/check_error/coupling_nonexistent_scalar.i</a></li><li><a href="#84f171ea-c989-453a-9f8e-a02ee1624508" class="modal-trigger">test/tests/kernels/scalar_constraint/scalar_constraint_kernel.i</a></li><li><a href="#ae9be19b-ace8-41ce-ac84-5aa7745f3ded" class="modal-trigger">test/tests/kernels/bad_scaling_scalar_kernels/ill_conditioned_field_scalar_system.i</a></li><li><a href="#4c3c5366-f8f8-4774-ba0f-f5d07b584110" class="modal-trigger">modules/navier_stokes/test/tests/ins/lid_driven/ad_lid_driven_mean_zero_pressure.i</a></li></ul><div class="modal moose-modal" id="12c428bf-d0c6-4ece-bbc6-8cca2628dc8c"><div class="modal-content"><h4>test/tests/kernels/scalar_constraint/scalar_constraint_kernel_disp.i</h4><pre class="moose-pre"><code class="language-text">#
+# This test is identical to scalar_constraint_kernel.i, but it everything is evaluated on the displaced mesh
+#
+
+[GlobalParams]
+  use_displaced_mesh = true
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -1
+  xmax = 1
+  ymin = -1
+  ymax = 1
+  nx = 2
+  ny = 2
+  elem_type = QUAD9
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Functions]
+  [./exact_fn]
+    type = ParsedFunction
+    value = &#x27;x*x+y*y&#x27;
+  [../]
+
+  [./ffn]
+    type = ParsedFunction
+    value = -4
+  [../]
+
+  [./bottom_bc_fn]
+    type = ParsedFunction
+    value = -2*y
+  [../]
+
+  [./right_bc_fn]
+    type = ParsedFunction
+    value =  2*x
+  [../]
+
+  [./top_bc_fn]
+    type = ParsedFunction
+    value =  2*y
+  [../]
+
+  [./left_bc_fn]
+    type = ParsedFunction
+    value = -2*x
+  [../]
+[]
+
+[AuxVariables]
+  [./disp_x]
+    family = LAGRANGE
+    order = SECOND
+  [../]
+  [./disp_y]
+    family = LAGRANGE
+    order = SECOND
+  [../]
+[]
+
+[AuxKernels]
+  [./disp_x_ak]
+    type = ConstantAux
+    variable = disp_x
+    value = 0
+  [../]
+  [./disp_y_ak]
+    type = ConstantAux
+    variable = disp_y
+    value = 0
+  [../]
+[]
+
+# NL
+
+[Variables]
+  [./u]
+    family = LAGRANGE
+    order = SECOND
+  [../]
+
+  [./lambda]
+    family = SCALAR
+    order = FIRST
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./ffnk]
+    type = BodyForce
+    variable = u
+    function = ffn
+  [../]
+
+  [./sk_lm]
+    type = ScalarLagrangeMultiplier
+    variable = u
+    lambda = lambda
+  [../]
+[]
+
+[ScalarKernels]
+  [./constraint]
+    type = AverageValueConstraint
+    variable = lambda
+    pp_name = pp
+    value = 2.666666666666666
+    # overrride the global setting, scalar kernels do not live on a mesh
+    use_displaced_mesh = false
+  [../]
+[]
+
+[BCs]
+  [./bottom]
+    type = FunctionNeumannBC
+    variable = u
+    boundary = &#x27;0&#x27;
+    function = bottom_bc_fn
+  [../]
+  [./right]
+    type = FunctionNeumannBC
+    variable = u
+    boundary = &#x27;1&#x27;
+    function = right_bc_fn
+  [../]
+  [./top]
+    type = FunctionNeumannBC
+    variable = u
+    boundary = &#x27;2&#x27;
+    function = top_bc_fn
+  [../]
+  [./left]
+    type = FunctionNeumannBC
+    variable = u
+    boundary = &#x27;3&#x27;
+    function = left_bc_fn
+  [../]
+[]
+
+[Postprocessors]
+  [./pp]
+    type = ElementIntegralVariablePostprocessor
+    variable = u
+    execute_on = linear
+  [../]
+  [./l2_err]
+    type = ElementL2Error
+    variable = u
+    function = exact_fn
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./pc]
+    type = SMP
+    full = true
+    solve_type = &#x27;PJFNK&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  nl_rel_tol = 1e-14
+  l_tol = 1e-7
+[]
+
+[Outputs]
+  exodus = true
+  hide = lambda
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="17b7e1ef-4e94-4dd7-a1be-8bac26247894"><div class="modal-content"><h4>test/tests/misc/check_error/coupling_field_into_scalar.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
 []
@@ -51,7 +231,7 @@
 [Executioner]
   type = Steady
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e99c4968-67ad-4405-8d3c-ebe79210598b"><div class="modal-content"><h4>test/tests/misc/check_error/coupling_nonexistent_scalar.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="f4f3201e-2d60-4bea-ac4e-8d19fb58ed52"><div class="modal-content"><h4>test/tests/misc/check_error/coupling_nonexistent_scalar.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   type = GeneratedMesh
   dim = 2
 []
@@ -73,7 +253,227 @@
 [Executioner]
   type = Steady
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="aa509227-eb00-4f41-bb8c-d7ed37e1f2dd"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/lid_driven/ad_lid_driven_mean_zero_pressure.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="84f171ea-c989-453a-9f8e-a02ee1624508"><div class="modal-content"><h4>test/tests/kernels/scalar_constraint/scalar_constraint_kernel.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmin = -1
+  xmax = 1
+  ymin = -1
+  ymax = 1
+  nx = 2
+  ny = 2
+  elem_type = QUAD9
+[]
+
+[Functions]
+  [./exact_fn]
+    type = ParsedFunction
+    value = &#x27;x*x+y*y&#x27;
+  [../]
+
+  [./ffn]
+    type = ParsedFunction
+    value = -4
+  [../]
+
+  [./bottom_bc_fn]
+    type = ParsedFunction
+    value = -2*y
+  [../]
+
+  [./right_bc_fn]
+    type = ParsedFunction
+    value =  2*x
+  [../]
+
+  [./top_bc_fn]
+    type = ParsedFunction
+    value =  2*y
+  [../]
+
+  [./left_bc_fn]
+    type = ParsedFunction
+    value = -2*x
+  [../]
+[]
+
+[Variables]
+  [./u]
+    family = LAGRANGE
+    order = SECOND
+  [../]
+
+  [./lambda]
+    family = SCALAR
+    order = FIRST
+  [../]
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+
+  [./ffnk]
+    type = BodyForce
+    variable = u
+    function = ffn
+  [../]
+
+  [./sk_lm]
+    type = ScalarLagrangeMultiplier
+    variable = u
+    lambda = lambda
+  [../]
+[]
+
+[ScalarKernels]
+  [./constraint]
+    type = AverageValueConstraint
+    variable = lambda
+    pp_name = pp
+    value = 2.666666666666666
+  [../]
+[]
+
+[BCs]
+  [./bottom]
+    type = FunctionNeumannBC
+    variable = u
+    boundary = &#x27;bottom&#x27;
+    function = bottom_bc_fn
+  [../]
+  [./right]
+    type = FunctionNeumannBC
+    variable = u
+    boundary = &#x27;right&#x27;
+    function = right_bc_fn
+  [../]
+  [./top]
+    type = FunctionNeumannBC
+    variable = u
+    boundary = &#x27;top&#x27;
+    function = top_bc_fn
+  [../]
+  [./left]
+    type = FunctionNeumannBC
+    variable = u
+    boundary = &#x27;left&#x27;
+    function = left_bc_fn
+  [../]
+[]
+
+[Postprocessors]
+  [./pp]
+    type = ElementIntegralVariablePostprocessor
+    variable = u
+    execute_on = linear
+  [../]
+  [./l2_err]
+    type = ElementL2Error
+    variable = u
+    function = exact_fn
+    execute_on = &#x27;initial timestep_end&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./pc]
+    type = SMP
+    full = true
+    solve_type = &#x27;NEWTON&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  nl_rel_tol = 1e-9
+  l_tol = 1.e-10
+  nl_max_its = 10
+  # This example builds an indefinite matrix, so &quot;-pc_type hypre -pc_hypre_type boomeramg&quot; cannot
+  # be used reliably on this problem. ILU(0) seems to do OK in both serial and parallel in my testing,
+  # I have not seen any zero pivot issues.
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type&#x27;
+  petsc_options_value = &#x27;bjacobi  ilu&#x27;
+  # This is a linear problem, so we don&#x27;t need to recompute the
+  # Jacobian. This isn&#x27;t a big deal for a Steady problems, however, as
+  # there is only one solve.
+  solve_type = &#x27;LINEAR&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  hide = lambda
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ae9be19b-ace8-41ce-ac84-5aa7745f3ded"><div class="modal-content"><h4>test/tests/kernels/bad_scaling_scalar_kernels/ill_conditioned_field_scalar_system.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 2
+[]
+
+[Variables]
+  [./u]
+  [../]
+  [v]
+    family = SCALAR
+    initial_condition = 1
+  []
+[]
+
+[Kernels]
+  [./diff]
+    type = Diffusion
+    variable = u
+  [../]
+  [scalar]
+    type = ScalarLagrangeMultiplier
+    variable = u
+    lambda = v
+  []
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  [../]
+  [./right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  [../]
+[]
+
+[ScalarKernels]
+  [reaction]
+    type = ParsedODEKernel
+    function = &#x27;10^20 * v&#x27;
+    variable = v
+  []
+  [time]
+    type = ODETimeDerivative
+    variable = v
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 1
+  dtmin = 1
+  solve_type = NEWTON
+  petsc_options = &#x27;-pc_svd_monitor -ksp_view_pmat -snes_converged_reason -ksp_converged_reason&#x27;
+  petsc_options_iname = &#x27;-pc_type -snes_stol&#x27;
+  petsc_options_value = &#x27;svd      0&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4c3c5366-f8f8-4774-ba0f-f5d07b584110"><div class="modal-content"><h4>modules/navier_stokes/test/tests/ins/lid_driven/ad_lid_driven_mean_zero_pressure.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   [gen]
     type = GeneratedMeshGenerator
     dim = 2
@@ -283,404 +683,4 @@
   exodus = true
   perf_graph = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9747bfb4-74eb-4242-80c7-6c7cf1666cda"><div class="modal-content"><h4>test/tests/kernels/bad_scaling_scalar_kernels/ill_conditioned_field_scalar_system.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 1
-  nx = 2
-[]
-
-[Variables]
-  [./u]
-  [../]
-  [v]
-    family = SCALAR
-    initial_condition = 1
-  []
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-  [scalar]
-    type = ScalarLagrangeMultiplier
-    variable = u
-    lambda = v
-  []
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
-  [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
-  [../]
-[]
-
-[ScalarKernels]
-  [reaction]
-    type = ParsedODEKernel
-    function = &#x27;10^20 * v&#x27;
-    variable = v
-  []
-  [time]
-    type = ODETimeDerivative
-    variable = v
-  []
-[]
-
-[Executioner]
-  type = Transient
-  num_steps = 1
-  dtmin = 1
-  solve_type = NEWTON
-  petsc_options = &#x27;-pc_svd_monitor -ksp_view_pmat -snes_converged_reason -ksp_converged_reason&#x27;
-  petsc_options_iname = &#x27;-pc_type -snes_stol&#x27;
-  petsc_options_value = &#x27;svd      0&#x27;
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a68c8ee9-bc5e-4923-a356-f39aefe64c72"><div class="modal-content"><h4>test/tests/kernels/scalar_constraint/scalar_constraint_kernel.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = -1
-  xmax = 1
-  ymin = -1
-  ymax = 1
-  nx = 2
-  ny = 2
-  elem_type = QUAD9
-[]
-
-[Functions]
-  [./exact_fn]
-    type = ParsedFunction
-    value = &#x27;x*x+y*y&#x27;
-  [../]
-
-  [./ffn]
-    type = ParsedFunction
-    value = -4
-  [../]
-
-  [./bottom_bc_fn]
-    type = ParsedFunction
-    value = -2*y
-  [../]
-
-  [./right_bc_fn]
-    type = ParsedFunction
-    value =  2*x
-  [../]
-
-  [./top_bc_fn]
-    type = ParsedFunction
-    value =  2*y
-  [../]
-
-  [./left_bc_fn]
-    type = ParsedFunction
-    value = -2*x
-  [../]
-[]
-
-[Variables]
-  [./u]
-    family = LAGRANGE
-    order = SECOND
-  [../]
-
-  [./lambda]
-    family = SCALAR
-    order = FIRST
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-
-  [./ffnk]
-    type = BodyForce
-    variable = u
-    function = ffn
-  [../]
-
-  [./sk_lm]
-    type = ScalarLagrangeMultiplier
-    variable = u
-    lambda = lambda
-  [../]
-[]
-
-[ScalarKernels]
-  [./constraint]
-    type = AverageValueConstraint
-    variable = lambda
-    pp_name = pp
-    value = 2.666666666666666
-  [../]
-[]
-
-[BCs]
-  [./bottom]
-    type = FunctionNeumannBC
-    variable = u
-    boundary = &#x27;bottom&#x27;
-    function = bottom_bc_fn
-  [../]
-  [./right]
-    type = FunctionNeumannBC
-    variable = u
-    boundary = &#x27;right&#x27;
-    function = right_bc_fn
-  [../]
-  [./top]
-    type = FunctionNeumannBC
-    variable = u
-    boundary = &#x27;top&#x27;
-    function = top_bc_fn
-  [../]
-  [./left]
-    type = FunctionNeumannBC
-    variable = u
-    boundary = &#x27;left&#x27;
-    function = left_bc_fn
-  [../]
-[]
-
-[Postprocessors]
-  [./pp]
-    type = ElementIntegralVariablePostprocessor
-    variable = u
-    execute_on = linear
-  [../]
-  [./l2_err]
-    type = ElementL2Error
-    variable = u
-    function = exact_fn
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  [./pc]
-    type = SMP
-    full = true
-    solve_type = &#x27;NEWTON&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-  nl_rel_tol = 1e-9
-  l_tol = 1.e-10
-  nl_max_its = 10
-  # This example builds an indefinite matrix, so &quot;-pc_type hypre -pc_hypre_type boomeramg&quot; cannot
-  # be used reliably on this problem. ILU(0) seems to do OK in both serial and parallel in my testing,
-  # I have not seen any zero pivot issues.
-  petsc_options_iname = &#x27;-pc_type -sub_pc_type&#x27;
-  petsc_options_value = &#x27;bjacobi  ilu&#x27;
-  # This is a linear problem, so we don&#x27;t need to recompute the
-  # Jacobian. This isn&#x27;t a big deal for a Steady problems, however, as
-  # there is only one solve.
-  solve_type = &#x27;LINEAR&#x27;
-[]
-
-[Outputs]
-  exodus = true
-  hide = lambda
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8aac2044-25ea-4514-87d7-4b6fbd1c6aa8"><div class="modal-content"><h4>test/tests/kernels/scalar_constraint/scalar_constraint_kernel_disp.i</h4><pre class="moose-pre"><code class="language-text">#
-# This test is identical to scalar_constraint_kernel.i, but it everything is evaluated on the displaced mesh
-#
-
-[GlobalParams]
-  use_displaced_mesh = true
-[]
-
-[Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = -1
-  xmax = 1
-  ymin = -1
-  ymax = 1
-  nx = 2
-  ny = 2
-  elem_type = QUAD9
-  displacements = &#x27;disp_x disp_y&#x27;
-[]
-
-[Functions]
-  [./exact_fn]
-    type = ParsedFunction
-    value = &#x27;x*x+y*y&#x27;
-  [../]
-
-  [./ffn]
-    type = ParsedFunction
-    value = -4
-  [../]
-
-  [./bottom_bc_fn]
-    type = ParsedFunction
-    value = -2*y
-  [../]
-
-  [./right_bc_fn]
-    type = ParsedFunction
-    value =  2*x
-  [../]
-
-  [./top_bc_fn]
-    type = ParsedFunction
-    value =  2*y
-  [../]
-
-  [./left_bc_fn]
-    type = ParsedFunction
-    value = -2*x
-  [../]
-[]
-
-[AuxVariables]
-  [./disp_x]
-    family = LAGRANGE
-    order = SECOND
-  [../]
-  [./disp_y]
-    family = LAGRANGE
-    order = SECOND
-  [../]
-[]
-
-[AuxKernels]
-  [./disp_x_ak]
-    type = ConstantAux
-    variable = disp_x
-    value = 0
-  [../]
-  [./disp_y_ak]
-    type = ConstantAux
-    variable = disp_y
-    value = 0
-  [../]
-[]
-
-# NL
-
-[Variables]
-  [./u]
-    family = LAGRANGE
-    order = SECOND
-  [../]
-
-  [./lambda]
-    family = SCALAR
-    order = FIRST
-  [../]
-[]
-
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = u
-  [../]
-
-  [./ffnk]
-    type = BodyForce
-    variable = u
-    function = ffn
-  [../]
-
-  [./sk_lm]
-    type = ScalarLagrangeMultiplier
-    variable = u
-    lambda = lambda
-  [../]
-[]
-
-[ScalarKernels]
-  [./constraint]
-    type = AverageValueConstraint
-    variable = lambda
-    pp_name = pp
-    value = 2.666666666666666
-    # overrride the global setting, scalar kernels do not live on a mesh
-    use_displaced_mesh = false
-  [../]
-[]
-
-[BCs]
-  [./bottom]
-    type = FunctionNeumannBC
-    variable = u
-    boundary = &#x27;0&#x27;
-    function = bottom_bc_fn
-  [../]
-  [./right]
-    type = FunctionNeumannBC
-    variable = u
-    boundary = &#x27;1&#x27;
-    function = right_bc_fn
-  [../]
-  [./top]
-    type = FunctionNeumannBC
-    variable = u
-    boundary = &#x27;2&#x27;
-    function = top_bc_fn
-  [../]
-  [./left]
-    type = FunctionNeumannBC
-    variable = u
-    boundary = &#x27;3&#x27;
-    function = left_bc_fn
-  [../]
-[]
-
-[Postprocessors]
-  [./pp]
-    type = ElementIntegralVariablePostprocessor
-    variable = u
-    execute_on = linear
-  [../]
-  [./l2_err]
-    type = ElementL2Error
-    variable = u
-    function = exact_fn
-    execute_on = &#x27;initial timestep_end&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  [./pc]
-    type = SMP
-    full = true
-    solve_type = &#x27;PJFNK&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-  nl_rel_tol = 1e-14
-  l_tol = 1e-7
-[]
-
-[Outputs]
-  exodus = true
-  hide = lambda
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#0cdb2309-0253-4102-93f6-a740d88a86cd" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#fb171ed9-265f-4248-9bc3-91ef5bae07a1" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#e0e63d1b-b74a-448c-877f-e716099cbc97" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#2486d419-eb9f-45be-a6b2-66b95a875e61" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

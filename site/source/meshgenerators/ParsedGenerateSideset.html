@@ -1,1162 +1,4 @@
-<!DOCTYPE html><head><meta charset="UTF-8"><title>ParsedGenerateSideset.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="2463b430-5da9-4a8b-9893-923da300947d"><i class="material-icons">menu</i></a><ul class="sidenav" id="2463b430-5da9-4a8b-9893-923da300947d"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">meshgenerators</span><a href="#" class="breadcrumb">ParsedGenerateSideset</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="a17953a1-dc16-4623-929d-2a0fed5bc1e7" data-section-level="1" data-section-text="ParsedGenerateSideset"><h1 id="parsedgeneratesideset">ParsedGenerateSideset</h1><p>A MeshModifier that adds element sides to a sideset if the centroid satisfies the <code>combinatorial_geometry</code> expression. Optionally, element sides are also added if they are included in <code>included_subdomain_ids</code> and if they feature the designated normal.</p><section class="scrollspy" id="77f622c6-7269-47fc-8f6f-45623749b93b" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="3b590ef6-0f52-4c9f-9935-5ae62e137b62" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">combinatorial_geometry</span><span class="moose-parameter-header-description">Function expression encoding a combinatorial geometry</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Function expression encoding a combinatorial geometry</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">input</span><span class="moose-parameter-header-description">The mesh we want to modify</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MeshGeneratorName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The mesh we want to modify</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">new_sideset_name</span><span class="moose-parameter-header-description">The name of the new sideset</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>BoundaryName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the new sideset</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="d6e2e280-b1c2-4fa8-ad0b-dfb527163514" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">constant_expressions</span><span class="moose-parameter-header-description">Vector of values for the constants in constant_names (can be an FParser expression)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of values for the constants in constant_names (can be an FParser expression)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_names</span><span class="moose-parameter-header-description">Vector of constants used in the parsed function (use this for kB etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of constants used in the parsed function (use this for kB etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">fixed_normal</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">This Boolean determines whether we fix our normal or allow it to vary to "paint" around curves</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>This Boolean determines whether we fix our normal or allow it to vary to "paint" around curves</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">included_neighbor_ids</span><span class="moose-parameter-header-description">A set of neighboring subdomain ids. A face is only added if the subdomain id of the neighbor is in this set</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<unsigned short></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A set of neighboring subdomain ids. A face is only added if the subdomain id of the neighbor is in this set</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">included_subdomain_ids</span><span class="moose-parameter-header-description">A set of subdomain ids whose sides will be included in the new sidesets</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<unsigned short></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A set of subdomain ids whose sides will be included in the new sidesets</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">normal</span><span class="moose-parameter-header-default">0 0 0</span><span class="moose-parameter-header-description">If provided specifies the normal vector on sides that are added to the new </span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0 0 0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>libMesh::Point</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>If provided specifies the normal vector on sides that are added to the new </p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">replace</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">If true, replace the old sidesets. If false, the current sidesets (if any) will be preserved.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>If true, replace the old sidesets. If false, the current sidesets (if any) will be preserved.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variance</span><span class="moose-parameter-header-default">0.1</span><span class="moose-parameter-header-description">The variance [0.0 - 1.0] allowed when comparing normals</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0.1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The variance [0.0 - 1.0] allowed when comparing normals</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="0abc8164-bece-4b4f-bf4c-750fff7ca079" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">disable_fpoptimizer</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Disable the function parser algebraic optimizer</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Disable the function parser algebraic optimizer</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable_ad_cache</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Enable cacheing of function derivatives for faster startup time</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Enable cacheing of function derivatives for faster startup time</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable_auto_optimize</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Enable automatic immediate optimization of derivatives</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Enable automatic immediate optimization of derivatives</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable_jit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Enable just-in-time compilation of function expressions for faster evaluation</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Enable just-in-time compilation of function expressions for faster evaluation</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">evalerror_behavior</span><span class="moose-parameter-header-default">nan</span><span class="moose-parameter-header-description">What to do if evaluation error occurs. Options are to pass a nan, pass a nan with a warning, throw a error, or throw an exception</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nan</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nan nan_warning error exception</p><p class="moose-parameter-description"><span>Description:</span>What to do if evaluation error occurs. Options are to pass a nan, pass a nan with a warning, throw a error, or throw an exception</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="4db93eca-8792-4136-b25d-ac89ba7b40f2" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#18339431-f39f-4384-95d1-7369a229abde" class="modal-trigger">modules/porous_flow/examples/tutorial/03.i</a></li><li><a href="#5803ef0e-26b8-4391-a61c-b069b0993d55" class="modal-trigger">test/tests/meshgenerators/parsed_generate_sideset/parsed_generate_sideset_neighbor_sub_id.i</a></li><li><a href="#5cd432eb-28ed-447a-a01e-1853a12e6dfa" class="modal-trigger">modules/porous_flow/examples/tutorial/06_KT.i</a></li><li><a href="#99c1ea4c-fe9a-4107-b4f2-b006da257447" class="modal-trigger">modules/porous_flow/examples/tutorial/00.i</a></li><li><a href="#ba438230-494f-4fb3-aa16-281aa98637bc" class="modal-trigger">modules/porous_flow/examples/tutorial/05_tabulated.i</a></li><li><a href="#9098eccf-7133-408c-a8ae-9399e144bf2d" class="modal-trigger">modules/heat_conduction/test/tests/radiation_transfer_action/radiative_transfer_action_external_boundary.i</a></li><li><a href="#31150ac3-9be4-4d04-92a6-a6e552f61f90" class="modal-trigger">modules/porous_flow/examples/tutorial/10.i</a></li><li><a href="#4f1c8d1d-97e4-4a0a-ae88-bd2ee95ef149" class="modal-trigger">modules/porous_flow/examples/tutorial/07.i</a></li><li><a href="#fdbe92ec-e552-4170-9f64-603bf869a781" class="modal-trigger">modules/porous_flow/examples/tutorial/00_2D.i</a></li><li><a href="#68fd975b-6348-4e50-9255-4c74305c86c5" class="modal-trigger">modules/porous_flow/examples/tutorial/05.i</a></li><li><a href="#2ff0be7e-5f56-4a79-aecc-99885b41b970" class="modal-trigger">modules/porous_flow/examples/tutorial/08.i</a></li><li><a href="#25eb1be1-b1d7-45ee-8f84-358531283c21" class="modal-trigger">modules/porous_flow/examples/tutorial/08_KT.i</a></li><li><a href="#794c4d5b-8eab-4547-9a10-833e827c479a" class="modal-trigger">modules/porous_flow/examples/tutorial/01.i</a></li><li><a href="#b2b7a250-03a7-4a30-97b8-b5b5cb5b506f" class="modal-trigger">modules/heat_conduction/test/tests/radiative_bcs/radiative_bc_cyl.i</a></li><li><a href="#ca60364c-6e9a-4232-a68d-871bad019f4e" class="modal-trigger">modules/porous_flow/examples/tutorial/04.i</a></li><li><a href="#be3f80a8-e9c1-43fc-ae50-b8833e8a5e33" class="modal-trigger">modules/porous_flow/examples/tutorial/11.i</a></li><li><a href="#b83679bc-31b7-4633-8eed-9f72f53b9e8f" class="modal-trigger">modules/porous_flow/examples/tutorial/06.i</a></li><li><a href="#ed7e57f0-65db-4731-8e31-db28d0e45969" class="modal-trigger">modules/porous_flow/examples/tutorial/11_2D.i</a></li><li><a href="#189c3321-671f-4dd5-8147-65e53fd0ac5a" class="modal-trigger">test/tests/meshgenerators/parsed_generate_sideset/parsed_generate_sideset.i</a></li></ul><div class="modal moose-modal" id="18339431-f39f-4384-95d1-7369a229abde"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/03.i</h4><pre class="moose-pre"><code class="language-text"># Darcy flow with heat advection and conduction
-[Mesh]
-  [annular]
-    type = AnnularMeshGenerator
-    nr = 10
-    rmin = 1.0
-    rmax = 10
-    growth_r = 1.4
-    nt = 4
-    dmin = 0
-    dmax = 90
-  []
-  [./make3D]
-    type = MeshExtruderGenerator
-    extrusion_vector = &#x27;0 0 12&#x27;
-    num_layers = 3
-    bottom_sideset = &#x27;bottom&#x27;
-    top_sideset = &#x27;top&#x27;
-    input = annular
-  [../]
-  [./shift_down]
-    type = TransformGenerator
-    transform = TRANSLATE
-    vector_value = &#x27;0 0 -6&#x27;
-    input = make3D
-  [../]
-  [./aquifer]
-    type = SubdomainBoundingBoxGenerator
-    block_id = 1
-    bottom_left = &#x27;0 0 -2&#x27;
-    top_right = &#x27;10 10 2&#x27;
-    input = shift_down
-  [../]
-  [./injection_area]
-    type = ParsedGenerateSideset
-    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
-    included_subdomain_ids = 1
-    new_sideset_name = &#x27;injection_area&#x27;
-    input = &#x27;aquifer&#x27;
-  [../]
-  [./rename]
-    type = RenameBlockGenerator
-    old_block_id = &#x27;0 1&#x27;
-    new_block_name = &#x27;caps aquifer&#x27;
-    input = &#x27;injection_area&#x27;
-  [../]
-[]
-
-[GlobalParams]
-  PorousFlowDictator = dictator
-[]
-
-[Variables]
-  [./porepressure]
-  [../]
-  [./temperature]
-    initial_condition = 293
-    scaling = 1E-8
-  [../]
-[]
-
-[PorousFlowBasicTHM]
-  porepressure = porepressure
-  temperature = temperature
-  coupling_type = ThermoHydro
-  gravity = &#x27;0 0 0&#x27;
-  fp = the_simple_fluid
-[]
-
-[BCs]
-  [./constant_injection_porepressure]
-    type = DirichletBC
-    variable = porepressure
-    value = 1E6
-    boundary = injection_area
-  [../]
-  [./constant_injection_temperature]
-    type = DirichletBC
-    variable = temperature
-    value = 313
-    boundary = injection_area
-  [../]
-[]
-
-[Modules]
-  [./FluidProperties]
-    [./the_simple_fluid]
-      type = SimpleFluidProperties
-      bulk_modulus = 2E9
-      viscosity = 1.0E-3
-      density0 = 1000.0
-      thermal_expansion = 0.0002
-      cp = 4194
-      cv = 4186
-      porepressure_coefficient = 0
-    [../]
-  [../]
-[]
-
-[Materials]
-  [./porosity]
-    type = PorousFlowPorosity
-    porosity_zero = 0.1
-  [../]
-  [./biot_modulus]
-    type = PorousFlowConstantBiotModulus
-    biot_coefficient = 0.8
-    solid_bulk_compliance = 2E-7
-    fluid_bulk_modulus = 1E7
-  [../]
-  [./permeability_aquifer]
-    type = PorousFlowPermeabilityConst
-    block = aquifer
-    permeability = &#x27;1E-14 0 0   0 1E-14 0   0 0 1E-14&#x27;
-  [../]
-  [./permeability_caps]
-    type = PorousFlowPermeabilityConst
-    block = caps
-    permeability = &#x27;1E-15 0 0   0 1E-15 0   0 0 1E-16&#x27;
-  [../]
-
-  [./thermal_expansion]
-    type = PorousFlowConstantThermalExpansionCoefficient
-    biot_coefficient = 0.8
-    drained_coefficient = 0.003
-    fluid_coefficient = 0.0002
-  [../]
-  [./rock_internal_energy]
-    type = PorousFlowMatrixInternalEnergy
-    density = 2500.0
-    specific_heat_capacity = 1200.0
-  [../]
-  [./thermal_conductivity]
-    type = PorousFlowThermalConductivityIdeal
-    dry_thermal_conductivity = &#x27;10 0 0  0 10 0  0 0 10&#x27;
-    block = &#x27;caps aquifer&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  active = basic
-  [./basic]
-    type = SMP
-    full = true
-    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
-    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
-    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
-  [../]
-  [./preferred_but_might_not_be_installed]
-    type = SMP
-    full = true
-    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
-    petsc_options_value = &#x27; lu       mumps&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Newton
-  end_time = 1E6
-  dt = 1E5
-  nl_abs_tol = 1E-10
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5803ef0e-26b8-4391-a61c-b069b0993d55"><div class="modal-content"><h4>test/tests/meshgenerators/parsed_generate_sideset/parsed_generate_sideset_neighbor_sub_id.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
-  [./cmg]
-    type = CartesianMeshGenerator
-    dim = 2
-    dx = &#x27;1 1&#x27;
-    dy = &#x27;2 2&#x27;
-    subdomain_id = &#x27;0 1 0 0&#x27;
-  [../]
-
-  [sideset]
-    type = ParsedGenerateSideset
-    input = cmg
-    combinatorial_geometry = &#x27;abs(x - 1) &lt; 1e-6&#x27;
-    included_neighbor_ids = &#x27;1&#x27;
-    new_sideset_name = interior
-  []
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="5cd432eb-28ed-447a-a01e-1853a12e6dfa"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/06_KT.i</h4><pre class="moose-pre"><code class="language-text"># Darcy flow with a tracer
-[Mesh]
-  [annular]
-    type = AnnularMeshGenerator
-    nr = 10
-    rmin = 1.0
-    rmax = 10
-    growth_r = 1.4
-    nt = 4
-    dmin = 0
-    dmax = 90
-  []
-  [./make3D]
-    type = MeshExtruderGenerator
-    extrusion_vector = &#x27;0 0 12&#x27;
-    num_layers = 3
-    bottom_sideset = &#x27;bottom&#x27;
-    top_sideset = &#x27;top&#x27;
-    input = annular
-  [../]
-  [./shift_down]
-    type = TransformGenerator
-    transform = TRANSLATE
-    vector_value = &#x27;0 0 -6&#x27;
-    input = make3D
-  [../]
-  [./aquifer]
-    type = SubdomainBoundingBoxGenerator
-    block_id = 1
-    bottom_left = &#x27;0 0 -2&#x27;
-    top_right = &#x27;10 10 2&#x27;
-    input = shift_down
-  [../]
-  [./injection_area]
-    type = ParsedGenerateSideset
-    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
-    included_subdomain_ids = 1
-    new_sideset_name = &#x27;injection_area&#x27;
-    input = &#x27;aquifer&#x27;
-  [../]
-  [./rename]
-    type = RenameBlockGenerator
-    old_block_id = &#x27;0 1&#x27;
-    new_block_name = &#x27;caps aquifer&#x27;
-    input = &#x27;injection_area&#x27;
-  [../]
-[]
-
-[GlobalParams]
-  PorousFlowDictator = dictator
-[]
-
-[Variables]
-  [./porepressure]
-  [../]
-  [./tracer_concentration]
-  [../]
-[]
-
-[ICs]
-  [./tracer_concentration]
-    type = FunctionIC
-    function = &#x27;0.5*if(x*x+y*y&lt;1.01,1,0)&#x27;
-    variable = tracer_concentration
-  [../]
-[]
-
-[PorousFlowFullySaturated]
-  porepressure = porepressure
-  coupling_type = Hydro
-  gravity = &#x27;0 0 0&#x27;
-  fp = the_simple_fluid
-  mass_fraction_vars = tracer_concentration
-  stabilization = KT
-  flux_limiter_type = superbee
-[]
-
-[BCs]
-  [./constant_injection_porepressure]
-    type = DirichletBC
-    variable = porepressure
-    value = 1E6
-    boundary = injection_area
-  [../]
-  [./constant_outer_porepressure]
-    type = DirichletBC
-    variable = porepressure
-    value = 0
-    boundary = rmax
-  [../]
-  [./injected_tracer]
-    type = DirichletBC
-    variable = tracer_concentration
-    value = 0.5
-    boundary = injection_area
-  [../]
-[]
-
-[Modules]
-  [./FluidProperties]
-    [./the_simple_fluid]
-      type = SimpleFluidProperties
-      bulk_modulus = 2E9
-      viscosity = 1.0E-3
-      density0 = 1000.0
-    [../]
-  [../]
-[]
-
-[Materials]
-  [./porosity]
-    type = PorousFlowPorosity
-    porosity_zero = 0.1
-  [../]
-  [./permeability_aquifer]
-    type = PorousFlowPermeabilityConst
-    block = aquifer
-    permeability = &#x27;1E-14 0 0   0 1E-14 0   0 0 1E-14&#x27;
-  [../]
-  [./permeability_caps]
-    type = PorousFlowPermeabilityConst
-    block = caps
-    permeability = &#x27;1E-15 0 0   0 1E-15 0   0 0 1E-16&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  active = basic
-  [./basic]
-    type = SMP
-    full = true
-    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
-    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
-    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
-  [../]
-  [./preferred_but_might_not_be_installed]
-    type = SMP
-    full = true
-    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
-    petsc_options_value = &#x27; lu       mumps&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Newton
-  end_time = 1E6
-  dt = 1E5
-  nl_rel_tol = 1E-14
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="99c1ea4c-fe9a-4107-b4f2-b006da257447"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/00.i</h4><pre class="moose-pre"><code class="language-text"># Creates the mesh for the remainder of the tutorial
-[Mesh]
-  [annular]
-    type = AnnularMeshGenerator
-    nr = 10
-    rmin = 1.0
-    rmax = 10
-    growth_r = 1.4
-    nt = 4
-    dmin = 0
-    dmax = 90
-  []
-  [./make3D]
-    type = MeshExtruderGenerator
-    extrusion_vector = &#x27;0 0 12&#x27;
-    num_layers = 3
-    bottom_sideset = &#x27;bottom&#x27;
-    top_sideset = &#x27;top&#x27;
-    input = annular
-  [../]
-  [./shift_down]
-    type = TransformGenerator
-    transform = TRANSLATE
-    vector_value = &#x27;0 0 -6&#x27;
-    input = make3D
-  [../]
-  [./aquifer]
-    type = SubdomainBoundingBoxGenerator
-    block_id = 1
-    bottom_left = &#x27;0 0 -2&#x27;
-    top_right = &#x27;10 10 2&#x27;
-    input = shift_down
-  [../]
-  [./injection_area]
-    type = ParsedGenerateSideset
-    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
-    included_subdomain_ids = 1
-    new_sideset_name = &#x27;injection_area&#x27;
-    input = &#x27;aquifer&#x27;
-  [../]
-  [./rename]
-    type = RenameBlockGenerator
-    old_block_id = &#x27;0 1&#x27;
-    new_block_name = &#x27;caps aquifer&#x27;
-    input = &#x27;injection_area&#x27;
-  [../]
-[]
-
-[Variables]
-  [./dummy_var]
-  [../]
-[]
-[Kernels]
-  [./dummy_diffusion]
-    type = Diffusion
-    variable = dummy_var
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-[]
-
-[Outputs]
-  file_base = 3D_mesh
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ba438230-494f-4fb3-aa16-281aa98637bc"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/05_tabulated.i</h4><pre class="moose-pre"><code class="language-text"># Darcy flow with heat advection and conduction, using Water97 properties
-[Mesh]
-  [annular]
-    type = AnnularMeshGenerator
-    nr = 10
-    rmin = 1.0
-    rmax = 10
-    growth_r = 1.4
-    nt = 4
-    dmin = 0
-    dmax = 90
-  []
-  [./make3D]
-    type = MeshExtruderGenerator
-    extrusion_vector = &#x27;0 0 12&#x27;
-    num_layers = 3
-    bottom_sideset = &#x27;bottom&#x27;
-    top_sideset = &#x27;top&#x27;
-    input = annular
-  [../]
-  [./shift_down]
-    type = TransformGenerator
-    transform = TRANSLATE
-    vector_value = &#x27;0 0 -6&#x27;
-    input = make3D
-  [../]
-  [./aquifer]
-    type = SubdomainBoundingBoxGenerator
-    block_id = 1
-    bottom_left = &#x27;0 0 -2&#x27;
-    top_right = &#x27;10 10 2&#x27;
-    input = shift_down
-  [../]
-  [./injection_area]
-    type = ParsedGenerateSideset
-    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
-    included_subdomain_ids = 1
-    new_sideset_name = &#x27;injection_area&#x27;
-    input = &#x27;aquifer&#x27;
-  [../]
-  [./rename]
-    type = RenameBlockGenerator
-    old_block_id = &#x27;0 1&#x27;
-    new_block_name = &#x27;caps aquifer&#x27;
-    input = &#x27;injection_area&#x27;
-  [../]
-[]
-
-[GlobalParams]
-  PorousFlowDictator = dictator
-[]
-
-[Variables]
-  [./porepressure]
-    initial_condition = 1E6
-  [../]
-  [./temperature]
-    initial_condition = 313
-    scaling = 1E-8
-  [../]
-[]
-
-[PorousFlowBasicTHM]
-  porepressure = porepressure
-  temperature = temperature
-  coupling_type = ThermoHydro
-  gravity = &#x27;0 0 0&#x27;
-  fp = tabulated_water
-[]
-
-[BCs]
-  [./constant_injection_porepressure]
-    type = DirichletBC
-    variable = porepressure
-    value = 2E6
-    boundary = injection_area
-  [../]
-  [./constant_injection_temperature]
-    type = DirichletBC
-    variable = temperature
-    value = 333
-    boundary = injection_area
-  [../]
-[]
-
-[Modules]
-  [./FluidProperties]
-    [./true_water]
-      type = Water97FluidProperties
-    [../]
-    [./tabulated_water]
-      type = TabulatedFluidProperties
-      fp = true_water
-      temperature_min = 275
-      interpolated_properties = &#x27;density viscosity enthalpy internal_energy&#x27;
-      fluid_property_file = water97_tabulated.csv
-    [../]
-  [../]
-[]
-
-[Materials]
-  [./porosity]
-    type = PorousFlowPorosity
-    porosity_zero = 0.1
-  [../]
-  [./biot_modulus]
-    type = PorousFlowConstantBiotModulus
-    biot_coefficient = 0.8
-    solid_bulk_compliance = 2E-7
-    fluid_bulk_modulus = 1E7
-  [../]
-  [./permeability_aquifer]
-    type = PorousFlowPermeabilityConst
-    block = aquifer
-    permeability = &#x27;1E-14 0 0   0 1E-14 0   0 0 1E-14&#x27;
-  [../]
-  [./permeability_caps]
-    type = PorousFlowPermeabilityConst
-    block = caps
-    permeability = &#x27;1E-15 0 0   0 1E-15 0   0 0 1E-16&#x27;
-  [../]
-
-  [./thermal_expansion]
-    type = PorousFlowConstantThermalExpansionCoefficient
-    biot_coefficient = 0.8
-    drained_coefficient = 0.003
-    fluid_coefficient = 0.0002
-  [../]
-  [./rock_internal_energy]
-    type = PorousFlowMatrixInternalEnergy
-    density = 2500.0
-    specific_heat_capacity = 1200.0
-  [../]
-  [./thermal_conductivity]
-    type = PorousFlowThermalConductivityIdeal
-    dry_thermal_conductivity = &#x27;10 0 0  0 10 0  0 0 10&#x27;
-    block = &#x27;caps aquifer&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  active = basic
-  [./basic]
-    type = SMP
-    full = true
-    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
-    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
-    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
-  [../]
-  [./preferred_but_might_not_be_installed]
-    type = SMP
-    full = true
-    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
-    petsc_options_value = &#x27; lu       mumps&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Newton
-  end_time = 1E6
-  dt = 1E5
-  nl_abs_tol = 1E-10
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9098eccf-7133-408c-a8ae-9399e144bf2d"><div class="modal-content"><h4>modules/heat_conduction/test/tests/radiation_transfer_action/radiative_transfer_action_external_boundary.i</h4><pre class="moose-pre"><code class="language-text">[Problem]
-  kernel_coverage_check = false
-[]
-
-[Mesh]
-  [./cmg]
-    type = CartesianMeshGenerator
-    dim = 2
-    dx = &#x27;1 1.3 1.9&#x27;
-    ix = &#x27;3 3 3&#x27;
-    dy = &#x27;6&#x27;
-    iy = &#x27;9&#x27;
-    subdomain_id = &#x27;0 1 2&#x27;
-  [../]
-
-    [./inner_left]
-      type = SideSetsBetweenSubdomainsGenerator
-      input = cmg
-      primary_block = 0
-      paired_block = 1
-      new_boundary = &#x27;inner_left&#x27;
-    [../]
-
-    [./inner_right]
-      type = SideSetsBetweenSubdomainsGenerator
-      input = inner_left
-      primary_block = 2
-      paired_block = 1
-      new_boundary = &#x27;inner_right&#x27;
-    [../]
-
-    [./inner_top]
-      type = ParsedGenerateSideset
-      combinatorial_geometry = &#x27;abs(y - 6) &lt; 1e-10&#x27;
-      normal = &#x27;0 1 0&#x27;
-      included_subdomain_ids = 1
-      new_sideset_name = &#x27;inner_top&#x27;
-      input = &#x27;inner_right&#x27;
-    [../]
-
-    [./inner_bottom]
-      type = ParsedGenerateSideset
-      combinatorial_geometry = &#x27;abs(y) &lt; 1e-10&#x27;
-      normal = &#x27;0 -1 0&#x27;
-      included_subdomain_ids = 1
-      new_sideset_name = &#x27;inner_bottom&#x27;
-      input = &#x27;inner_top&#x27;
-    [../]
-
-    [./rename]
-      type = RenameBlockGenerator
-      old_block_id = &#x27;2&#x27;
-      new_block_id = &#x27;0&#x27;
-      input = inner_bottom
-    [../]
-[]
-
-[Variables]
-  [./temperature]
-    block = 0
-  [../]
-[]
-
-[Kernels]
-  [./heat_conduction]
-    type = HeatConduction
-    variable = temperature
-    block = 0
-    diffusion_coefficient = 5
-  [../]
-[]
-
-[GrayDiffuseRadiation]
-  [./cavity]
-    boundary = &#x27;4 5 6 7&#x27;
-    emissivity = &#x27;0.9 0.8 0.4 1&#x27;
-    n_patches = &#x27;2 2 2 3&#x27;
-    partitioners = &#x27;centroid centroid centroid centroid&#x27;
-    centroid_partitioner_directions = &#x27;x y y x&#x27;
-    final_mesh_generator = rename
-    temperature = temperature
-    adiabatic_boundary = &#x27;7&#x27;
-    fixed_temperature_boundary = &#x27;6&#x27;
-    fixed_boundary_temperatures = &#x27;800&#x27;
-  [../]
-[]
-
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = temperature
-    boundary = left
-    value = 1000
-  [../]
-
-  [./right]
-    type = DirichletBC
-    variable = temperature
-    boundary = right
-    value = 300
-  [../]
-[]
-
-[Postprocessors]
-  [./average_T_inner_right]
-    type = SideAverageValue
-    variable = temperature
-    boundary = inner_right
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="31150ac3-9be4-4d04-92a6-a6e552f61f90"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/10.i</h4><pre class="moose-pre"><code class="language-text"># Unsaturated Darcy-Richards flow without using an Action
-[Mesh]
-  [annular]
-    type = AnnularMeshGenerator
-    nr = 10
-    rmin = 1.0
-    rmax = 10
-    growth_r = 1.4
-    nt = 4
-    dmin = 0
-    dmax = 90
-  []
-  [./make3D]
-    input = annular
-    type = MeshExtruderGenerator
-    extrusion_vector = &#x27;0 0 12&#x27;
-    num_layers = 3
-    bottom_sideset = &#x27;bottom&#x27;
-    top_sideset = &#x27;top&#x27;
-  [../]
-  [./shift_down]
-    type = TransformGenerator
-    transform = TRANSLATE
-    vector_value = &#x27;0 0 -6&#x27;
-    input = make3D
-  [../]
-  [./aquifer]
-    type = SubdomainBoundingBoxGenerator
-    block_id = 1
-    bottom_left = &#x27;0 0 -2&#x27;
-    top_right = &#x27;10 10 2&#x27;
-    input = shift_down
-  [../]
-  [./injection_area]
-    type = ParsedGenerateSideset
-    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
-    included_subdomain_ids = 1
-    new_sideset_name = &#x27;injection_area&#x27;
-    input = &#x27;aquifer&#x27;
-  [../]
-  [./rename]
-    type = RenameBlockGenerator
-    old_block_id = &#x27;0 1&#x27;
-    new_block_name = &#x27;caps aquifer&#x27;
-    input = &#x27;injection_area&#x27;
-  [../]
-[]
-
-[UserObjects]
-  [./dictator]
-    type = PorousFlowDictator
-    porous_flow_vars = pp
-    number_fluid_phases = 1
-    number_fluid_components = 1
-  [../]
-  [./pc]
-    type = PorousFlowCapillaryPressureVG
-    alpha = 1E-6
-    m = 0.6
-  [../]
-[]
-
-[GlobalParams]
-  PorousFlowDictator = dictator
-[]
-
-[Variables]
-  [./pp]
-  [../]
-[]
-
-[Kernels]
-  [./time_derivative]
-    type = PorousFlowMassTimeDerivative
-    variable = pp
-  [../]
-  [./flux]
-    type = PorousFlowAdvectiveFlux
-    variable = pp
-    gravity = &#x27;0 0 0&#x27;
-  [../]
-[]
-
-[AuxVariables]
-  [./sat]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-[]
-
-[AuxKernels]
-  [./saturation]
-    type = PorousFlowPropertyAux
-    variable = sat
-    property = saturation
-  [../]
-[]
-
-
-[BCs]
-  [./production]
-    type = PorousFlowSink
-    variable = pp
-    fluid_phase = 0
-    flux_function = 1E-2
-    use_relperm = true
-    boundary = injection_area
-  [../]
-[]
-
-[Modules]
-  [./FluidProperties]
-    [./the_simple_fluid]
-      type = SimpleFluidProperties
-      bulk_modulus = 2E9
-      viscosity = 1.0E-3
-      density0 = 1000.0
-    [../]
-  [../]
-[]
-
-[Materials]
-  [./porosity]
-    type = PorousFlowPorosity
-    porosity_zero = 0.1
-  [../]
-  [./permeability_aquifer]
-    type = PorousFlowPermeabilityConst
-    block = aquifer
-    permeability = &#x27;1E-14 0 0   0 1E-14 0   0 0 1E-14&#x27;
-  [../]
-  [./permeability_caps]
-    type = PorousFlowPermeabilityConst
-    block = caps
-    permeability = &#x27;1E-15 0 0   0 1E-15 0   0 0 1E-16&#x27;
-  [../]
-  [./saturation_calculator]
-    type = PorousFlow1PhaseP
-    porepressure = pp
-    capillary_pressure = pc
-  [../]
-  [./temperature]
-    type = PorousFlowTemperature
-    temperature = 293
-  [../]
-  [./massfrac]
-    type = PorousFlowMassFraction
-  [../]
-  [./simple_fluid]
-    type = PorousFlowSingleComponentFluid
-    fp = the_simple_fluid
-    phase = 0
-  [../]
-  [./relperm]
-    type = PorousFlowRelativePermeabilityCorey
-    n = 3
-    s_res = 0.1
-    sum_s_res = 0.1
-    phase = 0
-  [../]
-[]
-
-[Preconditioning]
-  active = basic
-  [./basic]
-    type = SMP
-    full = true
-    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
-    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
-    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
-  [../]
-  [./preferred_but_might_not_be_installed]
-    type = SMP
-    full = true
-    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
-    petsc_options_value = &#x27; lu       mumps&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Newton
-  end_time = 1E6
-  dt = 1E5
-  nl_abs_tol = 1E-7
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4f1c8d1d-97e4-4a0a-ae88-bd2ee95ef149"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/07.i</h4><pre class="moose-pre"><code class="language-text"># Darcy flow with a tracer that precipitates causing mineralisation and porosity changes and permeability changes
-[Mesh]
-  [annular]
-    type = AnnularMeshGenerator
-    nr = 10
-    rmin = 1.0
-    rmax = 10
-    growth_r = 1.4
-    nt = 4
-    dmin = 0
-    dmax = 90
-  []
-  [./make3D]
-    input = annular
-    type = MeshExtruderGenerator
-    extrusion_vector = &#x27;0 0 12&#x27;
-    num_layers = 3
-    bottom_sideset = &#x27;bottom&#x27;
-    top_sideset = &#x27;top&#x27;
-  [../]
-  [./shift_down]
-    type = TransformGenerator
-    transform = TRANSLATE
-    vector_value = &#x27;0 0 -6&#x27;
-    input = make3D
-  [../]
-  [./aquifer]
-    type = SubdomainBoundingBoxGenerator
-    block_id = 1
-    bottom_left = &#x27;0 0 -2&#x27;
-    top_right = &#x27;10 10 2&#x27;
-    input = shift_down
-  [../]
-  [./injection_area]
-    type = ParsedGenerateSideset
-    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
-    included_subdomain_ids = 1
-    new_sideset_name = &#x27;injection_area&#x27;
-    input = &#x27;aquifer&#x27;
-  [../]
-  [./rename]
-    type = RenameBlockGenerator
-    old_block_id = &#x27;0 1&#x27;
-    new_block_name = &#x27;caps aquifer&#x27;
-    input = &#x27;injection_area&#x27;
-  [../]
-[]
-
-[GlobalParams]
-  PorousFlowDictator = dictator
-[]
-
-[Variables]
-  [./porepressure]
-  [../]
-  [./tracer_concentration]
-  [../]
-[]
-
-[PorousFlowFullySaturated]
-  porepressure = porepressure
-  coupling_type = Hydro
-  gravity = &#x27;0 0 0&#x27;
-  fp = the_simple_fluid
-  mass_fraction_vars = tracer_concentration
-  number_aqueous_kinetic = 1
-  temperature = 283.0
-[]
-
-[AuxVariables]
-  [./eqm_k]
-    initial_condition = 0.1
-  [../]
-  [./mineral_conc]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./initial_and_reference_conc]
-    initial_condition = 0
-  [../]
-  [./porosity]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-  [./permeability]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-[]
-
-[AuxKernels]
-  [./mineral_conc]
-    type = PorousFlowPropertyAux
-    property = mineral_concentration
-    mineral_species = 0
-    variable = mineral_conc
-  [../]
-  [./porosity]
-    type = PorousFlowPropertyAux
-    property = porosity
-    variable = porosity
-  [../]
-  [./permeability]
-    type = PorousFlowPropertyAux
-    property = permeability
-    column = 0
-    row = 0
-    variable = permeability
-  [../]
-[]
-
-[Kernels]
-  [./precipitation_dissolution]
-    type = PorousFlowPreDis
-    mineral_density = 1000.0
-    stoichiometry = 1
-    variable = tracer_concentration
-  [../]
-[]
-
-[BCs]
-  [./constant_injection_of_tracer]
-    type = PorousFlowSink
-    variable = tracer_concentration
-    flux_function = -5E-3
-    boundary = injection_area
-  [../]
-  [./constant_outer_porepressure]
-    type = DirichletBC
-    variable = porepressure
-    value = 0
-    boundary = rmax
-  [../]
-[]
-
-[Modules]
-  [./FluidProperties]
-    [./the_simple_fluid]
-      type = SimpleFluidProperties
-      bulk_modulus = 2E9
-      viscosity = 1.0E-3
-      density0 = 1000.0
-    [../]
-  [../]
-[]
-
-[Materials]
-  [./porosity]
-    type = PorousFlowPorosity
-    porosity_zero = 0.1
-    chemical = true
-    initial_mineral_concentrations = initial_and_reference_conc
-    reference_chemistry = initial_and_reference_conc
-  [../]
-  [./permeability_aquifer]
-    type = PorousFlowPermeabilityKozenyCarman
-    block = aquifer
-    k0 = 1E-14
-    m = 2
-    n = 3
-    phi0 = 0.1
-    poroperm_function = kozeny_carman_phi0
-  [../]
-  [./permeability_caps]
-    type = PorousFlowPermeabilityKozenyCarman
-    block = caps
-    k0 = 1E-15
-    k_anisotropy = &#x27;1 0 0  0 1 0  0 0 0.1&#x27;
-    m = 2
-    n = 3
-    phi0 = 0.1
-    poroperm_function = kozeny_carman_phi0
-  [../]
-  [./precipitation_dissolution]
-    type = PorousFlowAqueousPreDisChemistry
-    reference_temperature = 283.0
-    activation_energy = 1 # irrelevant because T=Tref
-    equilibrium_constants = eqm_k # equilibrium tracer concentration
-    kinetic_rate_constant = 1E-8
-    molar_volume = 1
-    num_reactions = 1
-    primary_activity_coefficients = 1
-    primary_concentrations = tracer_concentration
-    reactions = 1
-    specific_reactive_surface_area = 1
-  [../]
-  [./mineral_concentration]
-    type = PorousFlowAqueousPreDisMineral
-  [../]
-[]
-
-[Preconditioning]
-  active = basic
-  [./basic]
-    type = SMP
-    full = true
-    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
-    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
-    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
-  [../]
-  [./preferred_but_might_not_be_installed]
-    type = SMP
-    full = true
-    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
-    petsc_options_value = &#x27; lu       mumps&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Newton
-  end_time = 1E6
-  dt = 1E5
-  nl_abs_tol = 1E-10
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="fdbe92ec-e552-4170-9f64-603bf869a781"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/00_2D.i</h4><pre class="moose-pre"><code class="language-text"># Creates the mesh for the remainder of the tutorial
-[Mesh]
-  [gen]
-    type = GeneratedMeshGenerator
-    dim = 2
-    nx = 10
-    xmin = 1.0
-    xmax = 10
-    bias_x = 1.4
-    ny = 3
-    ymin = -6
-    ymax = 6
-  []
-  [./aquifer]
-    type = SubdomainBoundingBoxGenerator
-    block_id = 1
-    bottom_left = &#x27;0 -2 0&#x27;
-    top_right = &#x27;10 2 0&#x27;
-    input = gen
-  [../]
-  [./injection_area]
-    type = ParsedGenerateSideset
-    combinatorial_geometry = &#x27;x&lt;1.0001&#x27;
-    included_subdomain_ids = 1
-    new_sideset_name = &#x27;injection_area&#x27;
-    input = &#x27;aquifer&#x27;
-  [../]
-  [./rename]
-    type = RenameBlockGenerator
-    old_block_id = &#x27;0 1&#x27;
-    new_block_name = &#x27;caps aquifer&#x27;
-    input = &#x27;injection_area&#x27;
-  [../]
-[]
-
-[Variables]
-  [./dummy_var]
-  [../]
-[]
-[Kernels]
-  [./dummy_diffusion]
-    type = Diffusion
-    variable = dummy_var
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-[]
-
-[Outputs]
-  file_base = 2D_mesh
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="68fd975b-6348-4e50-9255-4c74305c86c5"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/05.i</h4><pre class="moose-pre"><code class="language-text"># Darcy flow with heat advection and conduction, using Water97 properties
+<!DOCTYPE html><head><meta charset="UTF-8"><title>ParsedGenerateSideset.md|MOOSE Ray Tracing Module</title><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="/modules/ray_tracing" class="left moose-logo hide-on-med-and-down">MOOSE Ray Tracing Module</a><a href="https://github.com/idaholab/moose" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"></ul><a href="#" class="sidenav-trigger" data-target="ecd43612-00b7-4241-a0ca-46cbecc67908"><i class="material-icons">menu</i></a><ul class="sidenav" id="ecd43612-00b7-4241-a0ca-46cbecc67908"></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="/modules/ray_tracing" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">meshgenerators</span><a href="#" class="breadcrumb">ParsedGenerateSideset</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="b0ea29b3-49f6-4c5e-a36e-69874efa7a24" data-section-level="1" data-section-text="ParsedGenerateSideset"><h1 id="parsedgeneratesideset">ParsedGenerateSideset</h1><p>A MeshModifier that adds element sides to a sideset if the centroid satisfies the <code>combinatorial_geometry</code> expression. Optionally, element sides are also added if they are included in <code>included_subdomain_ids</code> and if they feature the designated normal.</p><section class="scrollspy" id="25e94a43-7319-477b-89ff-1a2695632d3b" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="411aeffa-a461-49c8-bf95-e1c5c0d9d2ef" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">combinatorial_geometry</span><span class="moose-parameter-header-description">Function expression encoding a combinatorial geometry</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Function expression encoding a combinatorial geometry</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">input</span><span class="moose-parameter-header-description">The mesh we want to modify</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MeshGeneratorName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The mesh we want to modify</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">new_sideset_name</span><span class="moose-parameter-header-description">The name of the new sideset</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>BoundaryName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the new sideset</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="5e70f235-0bff-43c8-83ba-5b5ba164985e" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">constant_expressions</span><span class="moose-parameter-header-description">Vector of values for the constants in constant_names (can be an FParser expression)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of values for the constants in constant_names (can be an FParser expression)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_names</span><span class="moose-parameter-header-description">Vector of constants used in the parsed function (use this for kB etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of constants used in the parsed function (use this for kB etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">fixed_normal</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">This Boolean determines whether we fix our normal or allow it to vary to "paint" around curves</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>This Boolean determines whether we fix our normal or allow it to vary to "paint" around curves</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">included_neighbor_ids</span><span class="moose-parameter-header-description">A set of neighboring subdomain ids. A face is only added if the subdomain id of the neighbor is in this set</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<unsigned short></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A set of neighboring subdomain ids. A face is only added if the subdomain id of the neighbor is in this set</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">included_subdomain_ids</span><span class="moose-parameter-header-description">A set of subdomain ids whose sides will be included in the new sidesets</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<unsigned short></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A set of subdomain ids whose sides will be included in the new sidesets</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">normal</span><span class="moose-parameter-header-default">0 0 0</span><span class="moose-parameter-header-description">If provided specifies the normal vector on sides that are added to the new </span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0 0 0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>libMesh::Point</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>If provided specifies the normal vector on sides that are added to the new </p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">replace</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">If true, replace the old sidesets. If false, the current sidesets (if any) will be preserved.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>If true, replace the old sidesets. If false, the current sidesets (if any) will be preserved.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variance</span><span class="moose-parameter-header-default">0.1</span><span class="moose-parameter-header-description">The variance [0.0 - 1.0] allowed when comparing normals</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0.1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The variance [0.0 - 1.0] allowed when comparing normals</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="01c3a52d-9655-4bc3-b614-a3efcb047272" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">disable_fpoptimizer</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Disable the function parser algebraic optimizer</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Disable the function parser algebraic optimizer</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable_ad_cache</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Enable cacheing of function derivatives for faster startup time</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Enable cacheing of function derivatives for faster startup time</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable_auto_optimize</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Enable automatic immediate optimization of derivatives</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Enable automatic immediate optimization of derivatives</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable_jit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Enable just-in-time compilation of function expressions for faster evaluation</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Enable just-in-time compilation of function expressions for faster evaluation</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">evalerror_behavior</span><span class="moose-parameter-header-default">nan</span><span class="moose-parameter-header-description">What to do if evaluation error occurs. Options are to pass a nan, pass a nan with a warning, throw a error, or throw an exception</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nan</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nan nan_warning error exception</p><p class="moose-parameter-description"><span>Description:</span>What to do if evaluation error occurs. Options are to pass a nan, pass a nan with a warning, throw a error, or throw an exception</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="a59b26d6-b671-4b8e-851e-7f5bfb1b5f2a" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a href="#923d09ba-dc1d-48ef-8374-9395ed6618f6" class="modal-trigger">modules/porous_flow/examples/tutorial/05.i</a></li><li><a href="#e6588ab2-2597-4158-ba69-ef0e2a6c5877" class="modal-trigger">modules/porous_flow/examples/tutorial/04.i</a></li><li><a href="#8af38031-0644-43a5-8880-b1c8e4f04a5d" class="modal-trigger">modules/porous_flow/examples/tutorial/06.i</a></li><li><a href="#64de0185-f71c-445b-8c10-cb48ae7971ab" class="modal-trigger">modules/porous_flow/examples/tutorial/01.i</a></li><li><a href="#e2650fb9-ee97-470d-a70b-3a6816ed8bb3" class="modal-trigger">modules/porous_flow/examples/tutorial/11.i</a></li><li><a href="#b50dd966-cd7c-49b3-89c1-c8ff1cee0ca6" class="modal-trigger">modules/heat_conduction/test/tests/radiation_transfer_action/radiative_transfer_action_external_boundary.i</a></li><li><a href="#d704b4a5-cebb-42cc-8923-2b77456fcc8d" class="modal-trigger">test/tests/meshgenerators/parsed_generate_sideset/parsed_generate_sideset_neighbor_sub_id.i</a></li><li><a href="#9e0ea5fb-cbe0-4044-abd0-8edfb424e26f" class="modal-trigger">modules/porous_flow/examples/tutorial/00_2D.i</a></li><li><a href="#a8093574-eecf-44d4-8c06-18407936ec12" class="modal-trigger">modules/porous_flow/examples/tutorial/03.i</a></li><li><a href="#d49f2d2b-4904-436e-8d0f-318361719cbc" class="modal-trigger">modules/heat_conduction/test/tests/radiative_bcs/radiative_bc_cyl.i</a></li><li><a href="#b77beb24-b6c6-4cb3-af6c-2e3d32b88362" class="modal-trigger">modules/porous_flow/examples/tutorial/00.i</a></li><li><a href="#70a4541f-58c9-470e-be2b-644b3a3b8003" class="modal-trigger">modules/porous_flow/examples/tutorial/08_KT.i</a></li><li><a href="#a3ffde48-33a9-48df-b983-a18bb65dc21e" class="modal-trigger">modules/porous_flow/examples/tutorial/11_2D.i</a></li><li><a href="#3fc440ce-64a1-439d-9781-e90a0bde8d44" class="modal-trigger">modules/porous_flow/examples/tutorial/10.i</a></li><li><a href="#172cdc3f-c751-4e88-b1f4-41a879d53494" class="modal-trigger">modules/porous_flow/examples/tutorial/08.i</a></li><li><a href="#91fab8f0-c41c-4378-88d5-907cfc036877" class="modal-trigger">modules/porous_flow/examples/tutorial/06_KT.i</a></li><li><a href="#519bbf72-90e5-43eb-9f3f-5a635f31c28c" class="modal-trigger">modules/porous_flow/examples/tutorial/05_tabulated.i</a></li><li><a href="#620dff39-f797-4b10-a4f4-113912935fb1" class="modal-trigger">test/tests/meshgenerators/parsed_generate_sideset/parsed_generate_sideset.i</a></li><li><a href="#7b9c751d-462e-402d-bc6a-182a5f0408d7" class="modal-trigger">modules/porous_flow/examples/tutorial/07.i</a></li></ul><div class="modal moose-modal" id="923d09ba-dc1d-48ef-8374-9395ed6618f6"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/05.i</h4><pre class="moose-pre"><code class="language-text"># Darcy flow with heat advection and conduction, using Water97 properties
 [Mesh]
   [annular]
     type = AnnularMeshGenerator
@@ -1317,530 +159,7 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="2ff0be7e-5f56-4a79-aecc-99885b41b970"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/08.i</h4><pre class="moose-pre"><code class="language-text"># Unsaturated Darcy-Richards flow
-[Mesh]
-  [annular]
-    type = AnnularMeshGenerator
-    nr = 10
-    rmin = 1.0
-    rmax = 10
-    growth_r = 1.4
-    nt = 4
-    dmin = 0
-    dmax = 90
-  []
-  [./make3D]
-    input = annular
-    type = MeshExtruderGenerator
-    extrusion_vector = &#x27;0 0 12&#x27;
-    num_layers = 3
-    bottom_sideset = &#x27;bottom&#x27;
-    top_sideset = &#x27;top&#x27;
-  [../]
-  [./shift_down]
-    type = TransformGenerator
-    transform = TRANSLATE
-    vector_value = &#x27;0 0 -6&#x27;
-    input = make3D
-  [../]
-  [./aquifer]
-    type = SubdomainBoundingBoxGenerator
-    block_id = 1
-    bottom_left = &#x27;0 0 -2&#x27;
-    top_right = &#x27;10 10 2&#x27;
-    input = shift_down
-  [../]
-  [./injection_area]
-    type = ParsedGenerateSideset
-    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
-    included_subdomain_ids = 1
-    new_sideset_name = &#x27;injection_area&#x27;
-    input = &#x27;aquifer&#x27;
-  [../]
-  [./rename]
-    type = RenameBlockGenerator
-    old_block_id = &#x27;0 1&#x27;
-    new_block_name = &#x27;caps aquifer&#x27;
-    input = &#x27;injection_area&#x27;
-  [../]
-[]
-
-[GlobalParams]
-  PorousFlowDictator = dictator
-[]
-
-[Variables]
-  [./porepressure]
-  [../]
-[]
-
-[PorousFlowUnsaturated]
-  porepressure = porepressure
-  coupling_type = Hydro
-  gravity = &#x27;0 0 0&#x27;
-  fp = the_simple_fluid
-  relative_permeability_exponent = 3
-  relative_permeability_type = Corey
-  residual_saturation = 0.1
-  van_genuchten_alpha = 1E-6
-  van_genuchten_m = 0.6
-[]
-
-[BCs]
-  [./production]
-    type = PorousFlowSink
-    variable = porepressure
-    fluid_phase = 0
-    flux_function = 1E-2
-    use_relperm = true
-    boundary = injection_area
-  [../]
-[]
-
-[Modules]
-  [./FluidProperties]
-    [./the_simple_fluid]
-      type = SimpleFluidProperties
-      bulk_modulus = 2E9
-      viscosity = 1.0E-3
-      density0 = 1000.0
-    [../]
-  [../]
-[]
-
-[Materials]
-  [./porosity]
-    type = PorousFlowPorosity
-    porosity_zero = 0.1
-  [../]
-  [./permeability_aquifer]
-    type = PorousFlowPermeabilityConst
-    block = aquifer
-    permeability = &#x27;1E-14 0 0   0 1E-14 0   0 0 1E-14&#x27;
-  [../]
-  [./permeability_caps]
-    type = PorousFlowPermeabilityConst
-    block = caps
-    permeability = &#x27;1E-15 0 0   0 1E-15 0   0 0 1E-16&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  active = basic
-  [./basic]
-    type = SMP
-    full = true
-    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
-    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
-    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
-  [../]
-  [./preferred_but_might_not_be_installed]
-    type = SMP
-    full = true
-    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
-    petsc_options_value = &#x27; lu       mumps&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Newton
-  end_time = 1E6
-  dt = 1E5
-  nl_abs_tol = 1E-7
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="25eb1be1-b1d7-45ee-8f84-358531283c21"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/08_KT.i</h4><pre class="moose-pre"><code class="language-text"># Unsaturated Darcy-Richards flow
-[Mesh]
-  [annular]
-    type = AnnularMeshGenerator
-    nr = 10
-    rmin = 1.0
-    rmax = 10
-    growth_r = 1.4
-    nt = 4
-    dmin = 0
-    dmax = 90
-  []
-  [./make3D]
-    input = annular
-    type = MeshExtruderGenerator
-    extrusion_vector = &#x27;0 0 12&#x27;
-    num_layers = 3
-    bottom_sideset = &#x27;bottom&#x27;
-    top_sideset = &#x27;top&#x27;
-  [../]
-  [./shift_down]
-    type = TransformGenerator
-    transform = TRANSLATE
-    vector_value = &#x27;0 0 -6&#x27;
-    input = make3D
-  [../]
-  [./aquifer]
-    type = SubdomainBoundingBoxGenerator
-    block_id = 1
-    bottom_left = &#x27;0 0 -2&#x27;
-    top_right = &#x27;10 10 2&#x27;
-    input = shift_down
-  [../]
-  [./injection_area]
-    type = ParsedGenerateSideset
-    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
-    included_subdomain_ids = 1
-    new_sideset_name = &#x27;injection_area&#x27;
-    input = &#x27;aquifer&#x27;
-  [../]
-  [./rename]
-    type = RenameBlockGenerator
-    old_block_id = &#x27;0 1&#x27;
-    new_block_name = &#x27;caps aquifer&#x27;
-    input = &#x27;injection_area&#x27;
-  [../]
-[]
-
-[GlobalParams]
-  PorousFlowDictator = dictator
-[]
-
-[Variables]
-  [./porepressure]
-  [../]
-[]
-
-[PorousFlowUnsaturated]
-  porepressure = porepressure
-  coupling_type = Hydro
-  gravity = &#x27;0 0 0&#x27;
-  fp = the_simple_fluid
-  relative_permeability_exponent = 3
-  relative_permeability_type = Corey
-  residual_saturation = 0.1
-  van_genuchten_alpha = 1E-6
-  van_genuchten_m = 0.6
-  stabilization = KT
-  flux_limiter_type = None
-[]
-
-[BCs]
-  [./production]
-    type = PorousFlowSink
-    variable = porepressure
-    fluid_phase = 0
-    flux_function = 1E-2
-    use_relperm = true
-    boundary = injection_area
-  [../]
-[]
-
-[Modules]
-  [./FluidProperties]
-    [./the_simple_fluid]
-      type = SimpleFluidProperties
-      bulk_modulus = 2E9
-      viscosity = 1.0E-3
-      density0 = 1000.0
-    [../]
-  [../]
-[]
-
-[Materials]
-  [./porosity]
-    type = PorousFlowPorosity
-    porosity_zero = 0.1
-  [../]
-  [./permeability_aquifer]
-    type = PorousFlowPermeabilityConst
-    block = aquifer
-    permeability = &#x27;1E-14 0 0   0 1E-14 0   0 0 1E-14&#x27;
-  [../]
-  [./permeability_caps]
-    type = PorousFlowPermeabilityConst
-    block = caps
-    permeability = &#x27;1E-15 0 0   0 1E-15 0   0 0 1E-16&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  active = basic
-  [./basic]
-    type = SMP
-    full = true
-    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
-    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
-    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
-  [../]
-  [./preferred_but_might_not_be_installed]
-    type = SMP
-    full = true
-    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
-    petsc_options_value = &#x27; lu       mumps&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Newton
-  end_time = 1E5
-  dt = 1E5
-  nl_rel_tol = 1E-14
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="794c4d5b-8eab-4547-9a10-833e827c479a"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/01.i</h4><pre class="moose-pre"><code class="language-text"># Darcy flow
-[Mesh]
-  [annular]
-    type = AnnularMeshGenerator
-    nr = 10
-    rmin = 1.0
-    rmax = 10
-    growth_r = 1.4
-    nt = 4
-    dmin = 0
-    dmax = 90
-  []
-  [./make3D]
-    type = MeshExtruderGenerator
-    extrusion_vector = &#x27;0 0 12&#x27;
-    num_layers = 3
-    bottom_sideset = &#x27;bottom&#x27;
-    top_sideset = &#x27;top&#x27;
-    input = annular
-  [../]
-  [./shift_down]
-    type = TransformGenerator
-    transform = TRANSLATE
-    vector_value = &#x27;0 0 -6&#x27;
-    input = make3D
-  [../]
-  [./aquifer]
-    type = SubdomainBoundingBoxGenerator
-    block_id = 1
-    bottom_left = &#x27;0 0 -2&#x27;
-    top_right = &#x27;10 10 2&#x27;
-    input = shift_down
-  [../]
-  [./injection_area]
-    type = ParsedGenerateSideset
-    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
-    included_subdomain_ids = 1
-    new_sideset_name = &#x27;injection_area&#x27;
-    input = &#x27;aquifer&#x27;
-  [../]
-  [./rename]
-    type = RenameBlockGenerator
-    old_block_id = &#x27;0 1&#x27;
-    new_block_name = &#x27;caps aquifer&#x27;
-    input = &#x27;injection_area&#x27;
-  [../]
-[]
-
-[GlobalParams]
-  PorousFlowDictator = dictator
-[]
-
-[Variables]
-  [./porepressure]
-  [../]
-[]
-
-[PorousFlowBasicTHM]
-  porepressure = porepressure
-  coupling_type = Hydro
-  gravity = &#x27;0 0 0&#x27;
-  fp = the_simple_fluid
-[]
-
-[BCs]
-  [./constant_injection_porepressure]
-    type = DirichletBC
-    variable = porepressure
-    value = 1E6
-    boundary = injection_area
-  [../]
-[]
-
-[Modules]
-  [./FluidProperties]
-    [./the_simple_fluid]
-      type = SimpleFluidProperties
-      bulk_modulus = 2E9
-      viscosity = 1.0E-3
-      density0 = 1000.0
-    [../]
-  [../]
-[]
-
-[Materials]
-  [./porosity]
-    type = PorousFlowPorosity
-    porosity_zero = 0.1
-  [../]
-  [./biot_modulus]
-    type = PorousFlowConstantBiotModulus
-    biot_coefficient = 0.8
-    solid_bulk_compliance = 2E-7
-    fluid_bulk_modulus = 1E7
-  [../]
-  [./permeability_aquifer]
-    type = PorousFlowPermeabilityConst
-    block = aquifer
-    permeability = &#x27;1E-14 0 0   0 1E-14 0   0 0 1E-14&#x27;
-  [../]
-  [./permeability_caps]
-    type = PorousFlowPermeabilityConst
-    block = caps
-    permeability = &#x27;1E-15 0 0   0 1E-15 0   0 0 1E-16&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  active = basic
-  [./basic]
-    type = SMP
-    full = true
-  [../]
-  [./preferred_but_might_not_be_installed]
-    type = SMP
-    full = true
-    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
-    petsc_options_value = &#x27; lu       mumps&#x27;
-  [../]
-[]
-
-[Executioner]
-  type = Transient
-  solve_type = Newton
-  end_time = 1E6
-  dt = 1E5
-  nl_abs_tol = 1E-13
-[]
-
-[Outputs]
-  exodus = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b2b7a250-03a7-4a30-97b8-b5b5cb5b506f"><div class="modal-content"><h4>modules/heat_conduction/test/tests/radiative_bcs/radiative_bc_cyl.i</h4><pre class="moose-pre"><code class="language-text">#
-# Thin cylindrical shell with very high thermal conductivity
-# so that temperature is almost uniform at 500 K. Radiative
-# boundary conditions is applied. Heat flux out of boundary
-# &#x27;right&#x27; should be 3723.36; this is approached as the mesh
-# is refined
-#
-
-[Mesh]
-  type = MeshGeneratorMesh
-  [./cartesian]
-    type = CartesianMeshGenerator
-    dim = 2
-    dx = &#x27;1 1&#x27;
-    ix = &#x27;1 10&#x27;
-    dy = &#x27;1 1&#x27;
-    subdomain_id = &#x27;1 2 1 2&#x27;
-  [../]
-
-  [./remove_1]
-    type = BlockDeletionGenerator
-    block_id = 1
-    input = cartesian
-  [../]
-
-  [./readd_left]
-    type = ParsedGenerateSideset
-    combinatorial_geometry = &#x27;abs(x - 1) &lt; 1e-4&#x27;
-    new_sideset_name = left
-    input = remove_1
-  [../]
-[]
-
-[Problem]
-  coord_type = RZ
-[]
-
-[Variables]
-  [./temp]
-    initial_condition = 800.0
-  [../]
-[]
-
-[Kernels]
-  [./heat]
-    type = HeatConduction
-    variable = temp
-  [../]
-[]
-
-[BCs]
-  [./lefttemp]
-    type = DirichletBC
-    boundary = left
-    variable = temp
-    value = 800
-  [../]
-
-  [./radiative_bc]
-    type = InfiniteCylinderRadiativeBC
-    boundary = right
-    variable = temp
-    boundary_radius = 2
-    boundary_emissivity = 0.2
-    cylinder_radius = 3
-    cylinder_emissivity = 0.7
-    Tinfinity = 500
-  [../]
-[]
-
-[Materials]
-  [./density]
-    type = GenericConstantMaterial
-    prop_names = &#x27;density  thermal_conductivity&#x27;
-    prop_values = &#x27;1 1.0e5&#x27;
-  [../]
-[]
-
-[Preconditioning]
-  [./SMP]
-    type = SMP
-    full = true
-  [../]
-[]
-
-[Executioner]
-  type = Steady
-  petsc_options = &#x27;-snes_converged_reason&#x27;
-  line_search = none
-  nl_rel_tol = 1e-6
-  nl_abs_tol = 1e-7
-[]
-
-[Postprocessors]
-  [./right]
-    type = SideFluxAverage
-    variable = temp
-    boundary = right
-    diffusivity = thermal_conductivity
-  [../]
-
-  [./min_temp]
-    type = ElementExtremeValue
-    variable = temp
-    value_type = min
-  [../]
-
-  [./max_temp]
-    type = ElementExtremeValue
-    variable = temp
-    value_type = max
-  [../]
-[]
-
-[Outputs]
-  csv = true
-[]
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ca60364c-6e9a-4232-a68d-871bad019f4e"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/04.i</h4><pre class="moose-pre"><code class="language-text"># Darcy flow with heat advection and conduction, and elasticity
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e6588ab2-2597-4158-ba69-ef0e2a6c5877"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/04.i</h4><pre class="moose-pre"><code class="language-text"># Darcy flow with heat advection and conduction, and elasticity
 [Mesh]
   [annular]
     type = AnnularMeshGenerator
@@ -2104,7 +423,291 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="be3f80a8-e9c1-43fc-ae50-b8833e8a5e33"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/11.i</h4><pre class="moose-pre"><code class="language-text"># Two-phase borehole injection problem
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="8af38031-0644-43a5-8880-b1c8e4f04a5d"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/06.i</h4><pre class="moose-pre"><code class="language-text"># Darcy flow with a tracer
+[Mesh]
+  [annular]
+    type = AnnularMeshGenerator
+    nr = 10
+    rmin = 1.0
+    rmax = 10
+    growth_r = 1.4
+    nt = 4
+    dmin = 0
+    dmax = 90
+  []
+  [./make3D]
+    type = MeshExtruderGenerator
+    extrusion_vector = &#x27;0 0 12&#x27;
+    num_layers = 3
+    bottom_sideset = &#x27;bottom&#x27;
+    top_sideset = &#x27;top&#x27;
+    input = annular
+  [../]
+  [./shift_down]
+    type = TransformGenerator
+    transform = TRANSLATE
+    vector_value = &#x27;0 0 -6&#x27;
+    input = make3D
+  [../]
+  [./aquifer]
+    type = SubdomainBoundingBoxGenerator
+    block_id = 1
+    bottom_left = &#x27;0 0 -2&#x27;
+    top_right = &#x27;10 10 2&#x27;
+    input = shift_down
+  [../]
+  [./injection_area]
+    type = ParsedGenerateSideset
+    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
+    included_subdomain_ids = 1
+    new_sideset_name = &#x27;injection_area&#x27;
+    input = &#x27;aquifer&#x27;
+  [../]
+  [./rename]
+    type = RenameBlockGenerator
+    old_block_id = &#x27;0 1&#x27;
+    new_block_name = &#x27;caps aquifer&#x27;
+    input = &#x27;injection_area&#x27;
+  [../]
+[]
+
+[GlobalParams]
+  PorousFlowDictator = dictator
+[]
+
+[Variables]
+  [./porepressure]
+  [../]
+  [./tracer_concentration]
+  [../]
+[]
+
+[ICs]
+  [./tracer_concentration]
+    type = FunctionIC
+    function = &#x27;0.5*if(x*x+y*y&lt;1.01,1,0)&#x27;
+    variable = tracer_concentration
+  [../]
+[]
+
+[PorousFlowFullySaturated]
+  porepressure = porepressure
+  coupling_type = Hydro
+  gravity = &#x27;0 0 0&#x27;
+  fp = the_simple_fluid
+  mass_fraction_vars = tracer_concentration
+[]
+
+[BCs]
+  [./constant_injection_porepressure]
+    type = DirichletBC
+    variable = porepressure
+    value = 1E6
+    boundary = injection_area
+  [../]
+  [./constant_outer_porepressure]
+    type = DirichletBC
+    variable = porepressure
+    value = 0
+    boundary = rmax
+  [../]
+  [./injected_tracer]
+    type = DirichletBC
+    variable = tracer_concentration
+    value = 0.5
+    boundary = injection_area
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./the_simple_fluid]
+      type = SimpleFluidProperties
+      bulk_modulus = 2E9
+      viscosity = 1.0E-3
+      density0 = 1000.0
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./porosity]
+    type = PorousFlowPorosity
+    porosity_zero = 0.1
+  [../]
+  [./permeability_aquifer]
+    type = PorousFlowPermeabilityConst
+    block = aquifer
+    permeability = &#x27;1E-14 0 0   0 1E-14 0   0 0 1E-14&#x27;
+  [../]
+  [./permeability_caps]
+    type = PorousFlowPermeabilityConst
+    block = caps
+    permeability = &#x27;1E-15 0 0   0 1E-15 0   0 0 1E-16&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
+    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
+  [../]
+  [./preferred_but_might_not_be_installed]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  end_time = 1E6
+  dt = 1E5
+  nl_rel_tol = 1E-14
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="64de0185-f71c-445b-8c10-cb48ae7971ab"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/01.i</h4><pre class="moose-pre"><code class="language-text"># Darcy flow
+[Mesh]
+  [annular]
+    type = AnnularMeshGenerator
+    nr = 10
+    rmin = 1.0
+    rmax = 10
+    growth_r = 1.4
+    nt = 4
+    dmin = 0
+    dmax = 90
+  []
+  [./make3D]
+    type = MeshExtruderGenerator
+    extrusion_vector = &#x27;0 0 12&#x27;
+    num_layers = 3
+    bottom_sideset = &#x27;bottom&#x27;
+    top_sideset = &#x27;top&#x27;
+    input = annular
+  [../]
+  [./shift_down]
+    type = TransformGenerator
+    transform = TRANSLATE
+    vector_value = &#x27;0 0 -6&#x27;
+    input = make3D
+  [../]
+  [./aquifer]
+    type = SubdomainBoundingBoxGenerator
+    block_id = 1
+    bottom_left = &#x27;0 0 -2&#x27;
+    top_right = &#x27;10 10 2&#x27;
+    input = shift_down
+  [../]
+  [./injection_area]
+    type = ParsedGenerateSideset
+    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
+    included_subdomain_ids = 1
+    new_sideset_name = &#x27;injection_area&#x27;
+    input = &#x27;aquifer&#x27;
+  [../]
+  [./rename]
+    type = RenameBlockGenerator
+    old_block_id = &#x27;0 1&#x27;
+    new_block_name = &#x27;caps aquifer&#x27;
+    input = &#x27;injection_area&#x27;
+  [../]
+[]
+
+[GlobalParams]
+  PorousFlowDictator = dictator
+[]
+
+[Variables]
+  [./porepressure]
+  [../]
+[]
+
+[PorousFlowBasicTHM]
+  porepressure = porepressure
+  coupling_type = Hydro
+  gravity = &#x27;0 0 0&#x27;
+  fp = the_simple_fluid
+[]
+
+[BCs]
+  [./constant_injection_porepressure]
+    type = DirichletBC
+    variable = porepressure
+    value = 1E6
+    boundary = injection_area
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./the_simple_fluid]
+      type = SimpleFluidProperties
+      bulk_modulus = 2E9
+      viscosity = 1.0E-3
+      density0 = 1000.0
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./porosity]
+    type = PorousFlowPorosity
+    porosity_zero = 0.1
+  [../]
+  [./biot_modulus]
+    type = PorousFlowConstantBiotModulus
+    biot_coefficient = 0.8
+    solid_bulk_compliance = 2E-7
+    fluid_bulk_modulus = 1E7
+  [../]
+  [./permeability_aquifer]
+    type = PorousFlowPermeabilityConst
+    block = aquifer
+    permeability = &#x27;1E-14 0 0   0 1E-14 0   0 0 1E-14&#x27;
+  [../]
+  [./permeability_caps]
+    type = PorousFlowPermeabilityConst
+    block = caps
+    permeability = &#x27;1E-15 0 0   0 1E-15 0   0 0 1E-16&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./basic]
+    type = SMP
+    full = true
+  [../]
+  [./preferred_but_might_not_be_installed]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  end_time = 1E6
+  dt = 1E5
+  nl_abs_tol = 1E-13
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e2650fb9-ee97-470d-a70b-3a6816ed8bb3"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/11.i</h4><pre class="moose-pre"><code class="language-text"># Two-phase borehole injection problem
 [Mesh]
   [annular]
     type = AnnularMeshGenerator
@@ -2655,7 +1258,200 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b83679bc-31b7-4633-8eed-9f72f53b9e8f"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/06.i</h4><pre class="moose-pre"><code class="language-text"># Darcy flow with a tracer
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b50dd966-cd7c-49b3-89c1-c8ff1cee0ca6"><div class="modal-content"><h4>modules/heat_conduction/test/tests/radiation_transfer_action/radiative_transfer_action_external_boundary.i</h4><pre class="moose-pre"><code class="language-text">[Problem]
+  kernel_coverage_check = false
+[]
+
+[Mesh]
+  [./cmg]
+    type = CartesianMeshGenerator
+    dim = 2
+    dx = &#x27;1 1.3 1.9&#x27;
+    ix = &#x27;3 3 3&#x27;
+    dy = &#x27;6&#x27;
+    iy = &#x27;9&#x27;
+    subdomain_id = &#x27;0 1 2&#x27;
+  [../]
+
+    [./inner_left]
+      type = SideSetsBetweenSubdomainsGenerator
+      input = cmg
+      primary_block = 0
+      paired_block = 1
+      new_boundary = &#x27;inner_left&#x27;
+    [../]
+
+    [./inner_right]
+      type = SideSetsBetweenSubdomainsGenerator
+      input = inner_left
+      primary_block = 2
+      paired_block = 1
+      new_boundary = &#x27;inner_right&#x27;
+    [../]
+
+    [./inner_top]
+      type = ParsedGenerateSideset
+      combinatorial_geometry = &#x27;abs(y - 6) &lt; 1e-10&#x27;
+      normal = &#x27;0 1 0&#x27;
+      included_subdomain_ids = 1
+      new_sideset_name = &#x27;inner_top&#x27;
+      input = &#x27;inner_right&#x27;
+    [../]
+
+    [./inner_bottom]
+      type = ParsedGenerateSideset
+      combinatorial_geometry = &#x27;abs(y) &lt; 1e-10&#x27;
+      normal = &#x27;0 -1 0&#x27;
+      included_subdomain_ids = 1
+      new_sideset_name = &#x27;inner_bottom&#x27;
+      input = &#x27;inner_top&#x27;
+    [../]
+
+    [./rename]
+      type = RenameBlockGenerator
+      old_block_id = &#x27;2&#x27;
+      new_block_id = &#x27;0&#x27;
+      input = inner_bottom
+    [../]
+[]
+
+[Variables]
+  [./temperature]
+    block = 0
+  [../]
+[]
+
+[Kernels]
+  [./heat_conduction]
+    type = HeatConduction
+    variable = temperature
+    block = 0
+    diffusion_coefficient = 5
+  [../]
+[]
+
+[GrayDiffuseRadiation]
+  [./cavity]
+    boundary = &#x27;4 5 6 7&#x27;
+    emissivity = &#x27;0.9 0.8 0.4 1&#x27;
+    n_patches = &#x27;2 2 2 3&#x27;
+    partitioners = &#x27;centroid centroid centroid centroid&#x27;
+    centroid_partitioner_directions = &#x27;x y y x&#x27;
+    final_mesh_generator = rename
+    temperature = temperature
+    adiabatic_boundary = &#x27;7&#x27;
+    fixed_temperature_boundary = &#x27;6&#x27;
+    fixed_boundary_temperatures = &#x27;800&#x27;
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = temperature
+    boundary = left
+    value = 1000
+  [../]
+
+  [./right]
+    type = DirichletBC
+    variable = temperature
+    boundary = right
+    value = 300
+  [../]
+[]
+
+[Postprocessors]
+  [./average_T_inner_right]
+    type = SideAverageValue
+    variable = temperature
+    boundary = inner_right
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d704b4a5-cebb-42cc-8923-2b77456fcc8d"><div class="modal-content"><h4>test/tests/meshgenerators/parsed_generate_sideset/parsed_generate_sideset_neighbor_sub_id.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [./cmg]
+    type = CartesianMeshGenerator
+    dim = 2
+    dx = &#x27;1 1&#x27;
+    dy = &#x27;2 2&#x27;
+    subdomain_id = &#x27;0 1 0 0&#x27;
+  [../]
+
+  [sideset]
+    type = ParsedGenerateSideset
+    input = cmg
+    combinatorial_geometry = &#x27;abs(x - 1) &lt; 1e-6&#x27;
+    included_neighbor_ids = &#x27;1&#x27;
+    new_sideset_name = interior
+  []
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="9e0ea5fb-cbe0-4044-abd0-8edfb424e26f"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/00_2D.i</h4><pre class="moose-pre"><code class="language-text"># Creates the mesh for the remainder of the tutorial
+[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 10
+    xmin = 1.0
+    xmax = 10
+    bias_x = 1.4
+    ny = 3
+    ymin = -6
+    ymax = 6
+  []
+  [./aquifer]
+    type = SubdomainBoundingBoxGenerator
+    block_id = 1
+    bottom_left = &#x27;0 -2 0&#x27;
+    top_right = &#x27;10 2 0&#x27;
+    input = gen
+  [../]
+  [./injection_area]
+    type = ParsedGenerateSideset
+    combinatorial_geometry = &#x27;x&lt;1.0001&#x27;
+    included_subdomain_ids = 1
+    new_sideset_name = &#x27;injection_area&#x27;
+    input = &#x27;aquifer&#x27;
+  [../]
+  [./rename]
+    type = RenameBlockGenerator
+    old_block_id = &#x27;0 1&#x27;
+    new_block_name = &#x27;caps aquifer&#x27;
+    input = &#x27;injection_area&#x27;
+  [../]
+[]
+
+[Variables]
+  [./dummy_var]
+  [../]
+[]
+[Kernels]
+  [./dummy_diffusion]
+    type = Diffusion
+    variable = dummy_var
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Outputs]
+  file_base = 2D_mesh
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a8093574-eecf-44d4-8c06-18407936ec12"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/03.i</h4><pre class="moose-pre"><code class="language-text"># Darcy flow with heat advection and conduction
 [Mesh]
   [annular]
     type = AnnularMeshGenerator
@@ -2710,24 +1506,18 @@
 [Variables]
   [./porepressure]
   [../]
-  [./tracer_concentration]
+  [./temperature]
+    initial_condition = 293
+    scaling = 1E-8
   [../]
 []
 
-[ICs]
-  [./tracer_concentration]
-    type = FunctionIC
-    function = &#x27;0.5*if(x*x+y*y&lt;1.01,1,0)&#x27;
-    variable = tracer_concentration
-  [../]
-[]
-
-[PorousFlowFullySaturated]
+[PorousFlowBasicTHM]
   porepressure = porepressure
-  coupling_type = Hydro
+  temperature = temperature
+  coupling_type = ThermoHydro
   gravity = &#x27;0 0 0&#x27;
   fp = the_simple_fluid
-  mass_fraction_vars = tracer_concentration
 []
 
 [BCs]
@@ -2737,16 +1527,359 @@
     value = 1E6
     boundary = injection_area
   [../]
-  [./constant_outer_porepressure]
+  [./constant_injection_temperature]
     type = DirichletBC
-    variable = porepressure
-    value = 0
-    boundary = rmax
+    variable = temperature
+    value = 313
+    boundary = injection_area
   [../]
-  [./injected_tracer]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./the_simple_fluid]
+      type = SimpleFluidProperties
+      bulk_modulus = 2E9
+      viscosity = 1.0E-3
+      density0 = 1000.0
+      thermal_expansion = 0.0002
+      cp = 4194
+      cv = 4186
+      porepressure_coefficient = 0
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./porosity]
+    type = PorousFlowPorosity
+    porosity_zero = 0.1
+  [../]
+  [./biot_modulus]
+    type = PorousFlowConstantBiotModulus
+    biot_coefficient = 0.8
+    solid_bulk_compliance = 2E-7
+    fluid_bulk_modulus = 1E7
+  [../]
+  [./permeability_aquifer]
+    type = PorousFlowPermeabilityConst
+    block = aquifer
+    permeability = &#x27;1E-14 0 0   0 1E-14 0   0 0 1E-14&#x27;
+  [../]
+  [./permeability_caps]
+    type = PorousFlowPermeabilityConst
+    block = caps
+    permeability = &#x27;1E-15 0 0   0 1E-15 0   0 0 1E-16&#x27;
+  [../]
+
+  [./thermal_expansion]
+    type = PorousFlowConstantThermalExpansionCoefficient
+    biot_coefficient = 0.8
+    drained_coefficient = 0.003
+    fluid_coefficient = 0.0002
+  [../]
+  [./rock_internal_energy]
+    type = PorousFlowMatrixInternalEnergy
+    density = 2500.0
+    specific_heat_capacity = 1200.0
+  [../]
+  [./thermal_conductivity]
+    type = PorousFlowThermalConductivityIdeal
+    dry_thermal_conductivity = &#x27;10 0 0  0 10 0  0 0 10&#x27;
+    block = &#x27;caps aquifer&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
+    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
+  [../]
+  [./preferred_but_might_not_be_installed]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  end_time = 1E6
+  dt = 1E5
+  nl_abs_tol = 1E-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="d49f2d2b-4904-436e-8d0f-318361719cbc"><div class="modal-content"><h4>modules/heat_conduction/test/tests/radiative_bcs/radiative_bc_cyl.i</h4><pre class="moose-pre"><code class="language-text">#
+# Thin cylindrical shell with very high thermal conductivity
+# so that temperature is almost uniform at 500 K. Radiative
+# boundary conditions is applied. Heat flux out of boundary
+# &#x27;right&#x27; should be 3723.36; this is approached as the mesh
+# is refined
+#
+
+[Mesh]
+  type = MeshGeneratorMesh
+  [./cartesian]
+    type = CartesianMeshGenerator
+    dim = 2
+    dx = &#x27;1 1&#x27;
+    ix = &#x27;1 10&#x27;
+    dy = &#x27;1 1&#x27;
+    subdomain_id = &#x27;1 2 1 2&#x27;
+  [../]
+
+  [./remove_1]
+    type = BlockDeletionGenerator
+    block_id = 1
+    input = cartesian
+  [../]
+
+  [./readd_left]
+    type = ParsedGenerateSideset
+    combinatorial_geometry = &#x27;abs(x - 1) &lt; 1e-4&#x27;
+    new_sideset_name = left
+    input = remove_1
+  [../]
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[Variables]
+  [./temp]
+    initial_condition = 800.0
+  [../]
+[]
+
+[Kernels]
+  [./heat]
+    type = HeatConduction
+    variable = temp
+  [../]
+[]
+
+[BCs]
+  [./lefttemp]
     type = DirichletBC
-    variable = tracer_concentration
-    value = 0.5
+    boundary = left
+    variable = temp
+    value = 800
+  [../]
+
+  [./radiative_bc]
+    type = InfiniteCylinderRadiativeBC
+    boundary = right
+    variable = temp
+    boundary_radius = 2
+    boundary_emissivity = 0.2
+    cylinder_radius = 3
+    cylinder_emissivity = 0.7
+    Tinfinity = 500
+  [../]
+[]
+
+[Materials]
+  [./density]
+    type = GenericConstantMaterial
+    prop_names = &#x27;density  thermal_conductivity&#x27;
+    prop_values = &#x27;1 1.0e5&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  petsc_options = &#x27;-snes_converged_reason&#x27;
+  line_search = none
+  nl_rel_tol = 1e-6
+  nl_abs_tol = 1e-7
+[]
+
+[Postprocessors]
+  [./right]
+    type = SideFluxAverage
+    variable = temp
+    boundary = right
+    diffusivity = thermal_conductivity
+  [../]
+
+  [./min_temp]
+    type = ElementExtremeValue
+    variable = temp
+    value_type = min
+  [../]
+
+  [./max_temp]
+    type = ElementExtremeValue
+    variable = temp
+    value_type = max
+  [../]
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b77beb24-b6c6-4cb3-af6c-2e3d32b88362"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/00.i</h4><pre class="moose-pre"><code class="language-text"># Creates the mesh for the remainder of the tutorial
+[Mesh]
+  [annular]
+    type = AnnularMeshGenerator
+    nr = 10
+    rmin = 1.0
+    rmax = 10
+    growth_r = 1.4
+    nt = 4
+    dmin = 0
+    dmax = 90
+  []
+  [./make3D]
+    type = MeshExtruderGenerator
+    extrusion_vector = &#x27;0 0 12&#x27;
+    num_layers = 3
+    bottom_sideset = &#x27;bottom&#x27;
+    top_sideset = &#x27;top&#x27;
+    input = annular
+  [../]
+  [./shift_down]
+    type = TransformGenerator
+    transform = TRANSLATE
+    vector_value = &#x27;0 0 -6&#x27;
+    input = make3D
+  [../]
+  [./aquifer]
+    type = SubdomainBoundingBoxGenerator
+    block_id = 1
+    bottom_left = &#x27;0 0 -2&#x27;
+    top_right = &#x27;10 10 2&#x27;
+    input = shift_down
+  [../]
+  [./injection_area]
+    type = ParsedGenerateSideset
+    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
+    included_subdomain_ids = 1
+    new_sideset_name = &#x27;injection_area&#x27;
+    input = &#x27;aquifer&#x27;
+  [../]
+  [./rename]
+    type = RenameBlockGenerator
+    old_block_id = &#x27;0 1&#x27;
+    new_block_name = &#x27;caps aquifer&#x27;
+    input = &#x27;injection_area&#x27;
+  [../]
+[]
+
+[Variables]
+  [./dummy_var]
+  [../]
+[]
+[Kernels]
+  [./dummy_diffusion]
+    type = Diffusion
+    variable = dummy_var
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Outputs]
+  file_base = 3D_mesh
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="70a4541f-58c9-470e-be2b-644b3a3b8003"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/08_KT.i</h4><pre class="moose-pre"><code class="language-text"># Unsaturated Darcy-Richards flow
+[Mesh]
+  [annular]
+    type = AnnularMeshGenerator
+    nr = 10
+    rmin = 1.0
+    rmax = 10
+    growth_r = 1.4
+    nt = 4
+    dmin = 0
+    dmax = 90
+  []
+  [./make3D]
+    input = annular
+    type = MeshExtruderGenerator
+    extrusion_vector = &#x27;0 0 12&#x27;
+    num_layers = 3
+    bottom_sideset = &#x27;bottom&#x27;
+    top_sideset = &#x27;top&#x27;
+  [../]
+  [./shift_down]
+    type = TransformGenerator
+    transform = TRANSLATE
+    vector_value = &#x27;0 0 -6&#x27;
+    input = make3D
+  [../]
+  [./aquifer]
+    type = SubdomainBoundingBoxGenerator
+    block_id = 1
+    bottom_left = &#x27;0 0 -2&#x27;
+    top_right = &#x27;10 10 2&#x27;
+    input = shift_down
+  [../]
+  [./injection_area]
+    type = ParsedGenerateSideset
+    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
+    included_subdomain_ids = 1
+    new_sideset_name = &#x27;injection_area&#x27;
+    input = &#x27;aquifer&#x27;
+  [../]
+  [./rename]
+    type = RenameBlockGenerator
+    old_block_id = &#x27;0 1&#x27;
+    new_block_name = &#x27;caps aquifer&#x27;
+    input = &#x27;injection_area&#x27;
+  [../]
+[]
+
+[GlobalParams]
+  PorousFlowDictator = dictator
+[]
+
+[Variables]
+  [./porepressure]
+  [../]
+[]
+
+[PorousFlowUnsaturated]
+  porepressure = porepressure
+  coupling_type = Hydro
+  gravity = &#x27;0 0 0&#x27;
+  fp = the_simple_fluid
+  relative_permeability_exponent = 3
+  relative_permeability_type = Corey
+  residual_saturation = 0.1
+  van_genuchten_alpha = 1E-6
+  van_genuchten_m = 0.6
+  stabilization = KT
+  flux_limiter_type = None
+[]
+
+[BCs]
+  [./production]
+    type = PorousFlowSink
+    variable = porepressure
+    fluid_phase = 0
+    flux_function = 1E-2
+    use_relperm = true
     boundary = injection_area
   [../]
 []
@@ -2799,7 +1932,7 @@
 [Executioner]
   type = Transient
   solve_type = Newton
-  end_time = 1E6
+  end_time = 1E5
   dt = 1E5
   nl_rel_tol = 1E-14
 []
@@ -2807,7 +1940,7 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ed7e57f0-65db-4731-8e31-db28d0e45969"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/11_2D.i</h4><pre class="moose-pre"><code class="language-text"># Two-phase borehole injection problem in RZ coordinates
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="a3ffde48-33a9-48df-b983-a18bb65dc21e"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/11_2D.i</h4><pre class="moose-pre"><code class="language-text"># Two-phase borehole injection problem in RZ coordinates
 [Mesh]
   [gen]
     type = GeneratedMeshGenerator
@@ -3299,7 +2432,655 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="189c3321-671f-4dd5-8147-65e53fd0ac5a"><div class="modal-content"><h4>test/tests/meshgenerators/parsed_generate_sideset/parsed_generate_sideset.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="3fc440ce-64a1-439d-9781-e90a0bde8d44"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/10.i</h4><pre class="moose-pre"><code class="language-text"># Unsaturated Darcy-Richards flow without using an Action
+[Mesh]
+  [annular]
+    type = AnnularMeshGenerator
+    nr = 10
+    rmin = 1.0
+    rmax = 10
+    growth_r = 1.4
+    nt = 4
+    dmin = 0
+    dmax = 90
+  []
+  [./make3D]
+    input = annular
+    type = MeshExtruderGenerator
+    extrusion_vector = &#x27;0 0 12&#x27;
+    num_layers = 3
+    bottom_sideset = &#x27;bottom&#x27;
+    top_sideset = &#x27;top&#x27;
+  [../]
+  [./shift_down]
+    type = TransformGenerator
+    transform = TRANSLATE
+    vector_value = &#x27;0 0 -6&#x27;
+    input = make3D
+  [../]
+  [./aquifer]
+    type = SubdomainBoundingBoxGenerator
+    block_id = 1
+    bottom_left = &#x27;0 0 -2&#x27;
+    top_right = &#x27;10 10 2&#x27;
+    input = shift_down
+  [../]
+  [./injection_area]
+    type = ParsedGenerateSideset
+    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
+    included_subdomain_ids = 1
+    new_sideset_name = &#x27;injection_area&#x27;
+    input = &#x27;aquifer&#x27;
+  [../]
+  [./rename]
+    type = RenameBlockGenerator
+    old_block_id = &#x27;0 1&#x27;
+    new_block_name = &#x27;caps aquifer&#x27;
+    input = &#x27;injection_area&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./dictator]
+    type = PorousFlowDictator
+    porous_flow_vars = pp
+    number_fluid_phases = 1
+    number_fluid_components = 1
+  [../]
+  [./pc]
+    type = PorousFlowCapillaryPressureVG
+    alpha = 1E-6
+    m = 0.6
+  [../]
+[]
+
+[GlobalParams]
+  PorousFlowDictator = dictator
+[]
+
+[Variables]
+  [./pp]
+  [../]
+[]
+
+[Kernels]
+  [./time_derivative]
+    type = PorousFlowMassTimeDerivative
+    variable = pp
+  [../]
+  [./flux]
+    type = PorousFlowAdvectiveFlux
+    variable = pp
+    gravity = &#x27;0 0 0&#x27;
+  [../]
+[]
+
+[AuxVariables]
+  [./sat]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+[]
+
+[AuxKernels]
+  [./saturation]
+    type = PorousFlowPropertyAux
+    variable = sat
+    property = saturation
+  [../]
+[]
+
+
+[BCs]
+  [./production]
+    type = PorousFlowSink
+    variable = pp
+    fluid_phase = 0
+    flux_function = 1E-2
+    use_relperm = true
+    boundary = injection_area
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./the_simple_fluid]
+      type = SimpleFluidProperties
+      bulk_modulus = 2E9
+      viscosity = 1.0E-3
+      density0 = 1000.0
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./porosity]
+    type = PorousFlowPorosity
+    porosity_zero = 0.1
+  [../]
+  [./permeability_aquifer]
+    type = PorousFlowPermeabilityConst
+    block = aquifer
+    permeability = &#x27;1E-14 0 0   0 1E-14 0   0 0 1E-14&#x27;
+  [../]
+  [./permeability_caps]
+    type = PorousFlowPermeabilityConst
+    block = caps
+    permeability = &#x27;1E-15 0 0   0 1E-15 0   0 0 1E-16&#x27;
+  [../]
+  [./saturation_calculator]
+    type = PorousFlow1PhaseP
+    porepressure = pp
+    capillary_pressure = pc
+  [../]
+  [./temperature]
+    type = PorousFlowTemperature
+    temperature = 293
+  [../]
+  [./massfrac]
+    type = PorousFlowMassFraction
+  [../]
+  [./simple_fluid]
+    type = PorousFlowSingleComponentFluid
+    fp = the_simple_fluid
+    phase = 0
+  [../]
+  [./relperm]
+    type = PorousFlowRelativePermeabilityCorey
+    n = 3
+    s_res = 0.1
+    sum_s_res = 0.1
+    phase = 0
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
+    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
+  [../]
+  [./preferred_but_might_not_be_installed]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  end_time = 1E6
+  dt = 1E5
+  nl_abs_tol = 1E-7
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="172cdc3f-c751-4e88-b1f4-41a879d53494"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/08.i</h4><pre class="moose-pre"><code class="language-text"># Unsaturated Darcy-Richards flow
+[Mesh]
+  [annular]
+    type = AnnularMeshGenerator
+    nr = 10
+    rmin = 1.0
+    rmax = 10
+    growth_r = 1.4
+    nt = 4
+    dmin = 0
+    dmax = 90
+  []
+  [./make3D]
+    input = annular
+    type = MeshExtruderGenerator
+    extrusion_vector = &#x27;0 0 12&#x27;
+    num_layers = 3
+    bottom_sideset = &#x27;bottom&#x27;
+    top_sideset = &#x27;top&#x27;
+  [../]
+  [./shift_down]
+    type = TransformGenerator
+    transform = TRANSLATE
+    vector_value = &#x27;0 0 -6&#x27;
+    input = make3D
+  [../]
+  [./aquifer]
+    type = SubdomainBoundingBoxGenerator
+    block_id = 1
+    bottom_left = &#x27;0 0 -2&#x27;
+    top_right = &#x27;10 10 2&#x27;
+    input = shift_down
+  [../]
+  [./injection_area]
+    type = ParsedGenerateSideset
+    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
+    included_subdomain_ids = 1
+    new_sideset_name = &#x27;injection_area&#x27;
+    input = &#x27;aquifer&#x27;
+  [../]
+  [./rename]
+    type = RenameBlockGenerator
+    old_block_id = &#x27;0 1&#x27;
+    new_block_name = &#x27;caps aquifer&#x27;
+    input = &#x27;injection_area&#x27;
+  [../]
+[]
+
+[GlobalParams]
+  PorousFlowDictator = dictator
+[]
+
+[Variables]
+  [./porepressure]
+  [../]
+[]
+
+[PorousFlowUnsaturated]
+  porepressure = porepressure
+  coupling_type = Hydro
+  gravity = &#x27;0 0 0&#x27;
+  fp = the_simple_fluid
+  relative_permeability_exponent = 3
+  relative_permeability_type = Corey
+  residual_saturation = 0.1
+  van_genuchten_alpha = 1E-6
+  van_genuchten_m = 0.6
+[]
+
+[BCs]
+  [./production]
+    type = PorousFlowSink
+    variable = porepressure
+    fluid_phase = 0
+    flux_function = 1E-2
+    use_relperm = true
+    boundary = injection_area
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./the_simple_fluid]
+      type = SimpleFluidProperties
+      bulk_modulus = 2E9
+      viscosity = 1.0E-3
+      density0 = 1000.0
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./porosity]
+    type = PorousFlowPorosity
+    porosity_zero = 0.1
+  [../]
+  [./permeability_aquifer]
+    type = PorousFlowPermeabilityConst
+    block = aquifer
+    permeability = &#x27;1E-14 0 0   0 1E-14 0   0 0 1E-14&#x27;
+  [../]
+  [./permeability_caps]
+    type = PorousFlowPermeabilityConst
+    block = caps
+    permeability = &#x27;1E-15 0 0   0 1E-15 0   0 0 1E-16&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
+    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
+  [../]
+  [./preferred_but_might_not_be_installed]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  end_time = 1E6
+  dt = 1E5
+  nl_abs_tol = 1E-7
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="91fab8f0-c41c-4378-88d5-907cfc036877"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/06_KT.i</h4><pre class="moose-pre"><code class="language-text"># Darcy flow with a tracer
+[Mesh]
+  [annular]
+    type = AnnularMeshGenerator
+    nr = 10
+    rmin = 1.0
+    rmax = 10
+    growth_r = 1.4
+    nt = 4
+    dmin = 0
+    dmax = 90
+  []
+  [./make3D]
+    type = MeshExtruderGenerator
+    extrusion_vector = &#x27;0 0 12&#x27;
+    num_layers = 3
+    bottom_sideset = &#x27;bottom&#x27;
+    top_sideset = &#x27;top&#x27;
+    input = annular
+  [../]
+  [./shift_down]
+    type = TransformGenerator
+    transform = TRANSLATE
+    vector_value = &#x27;0 0 -6&#x27;
+    input = make3D
+  [../]
+  [./aquifer]
+    type = SubdomainBoundingBoxGenerator
+    block_id = 1
+    bottom_left = &#x27;0 0 -2&#x27;
+    top_right = &#x27;10 10 2&#x27;
+    input = shift_down
+  [../]
+  [./injection_area]
+    type = ParsedGenerateSideset
+    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
+    included_subdomain_ids = 1
+    new_sideset_name = &#x27;injection_area&#x27;
+    input = &#x27;aquifer&#x27;
+  [../]
+  [./rename]
+    type = RenameBlockGenerator
+    old_block_id = &#x27;0 1&#x27;
+    new_block_name = &#x27;caps aquifer&#x27;
+    input = &#x27;injection_area&#x27;
+  [../]
+[]
+
+[GlobalParams]
+  PorousFlowDictator = dictator
+[]
+
+[Variables]
+  [./porepressure]
+  [../]
+  [./tracer_concentration]
+  [../]
+[]
+
+[ICs]
+  [./tracer_concentration]
+    type = FunctionIC
+    function = &#x27;0.5*if(x*x+y*y&lt;1.01,1,0)&#x27;
+    variable = tracer_concentration
+  [../]
+[]
+
+[PorousFlowFullySaturated]
+  porepressure = porepressure
+  coupling_type = Hydro
+  gravity = &#x27;0 0 0&#x27;
+  fp = the_simple_fluid
+  mass_fraction_vars = tracer_concentration
+  stabilization = KT
+  flux_limiter_type = superbee
+[]
+
+[BCs]
+  [./constant_injection_porepressure]
+    type = DirichletBC
+    variable = porepressure
+    value = 1E6
+    boundary = injection_area
+  [../]
+  [./constant_outer_porepressure]
+    type = DirichletBC
+    variable = porepressure
+    value = 0
+    boundary = rmax
+  [../]
+  [./injected_tracer]
+    type = DirichletBC
+    variable = tracer_concentration
+    value = 0.5
+    boundary = injection_area
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./the_simple_fluid]
+      type = SimpleFluidProperties
+      bulk_modulus = 2E9
+      viscosity = 1.0E-3
+      density0 = 1000.0
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./porosity]
+    type = PorousFlowPorosity
+    porosity_zero = 0.1
+  [../]
+  [./permeability_aquifer]
+    type = PorousFlowPermeabilityConst
+    block = aquifer
+    permeability = &#x27;1E-14 0 0   0 1E-14 0   0 0 1E-14&#x27;
+  [../]
+  [./permeability_caps]
+    type = PorousFlowPermeabilityConst
+    block = caps
+    permeability = &#x27;1E-15 0 0   0 1E-15 0   0 0 1E-16&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
+    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
+  [../]
+  [./preferred_but_might_not_be_installed]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  end_time = 1E6
+  dt = 1E5
+  nl_rel_tol = 1E-14
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="519bbf72-90e5-43eb-9f3f-5a635f31c28c"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/05_tabulated.i</h4><pre class="moose-pre"><code class="language-text"># Darcy flow with heat advection and conduction, using Water97 properties
+[Mesh]
+  [annular]
+    type = AnnularMeshGenerator
+    nr = 10
+    rmin = 1.0
+    rmax = 10
+    growth_r = 1.4
+    nt = 4
+    dmin = 0
+    dmax = 90
+  []
+  [./make3D]
+    type = MeshExtruderGenerator
+    extrusion_vector = &#x27;0 0 12&#x27;
+    num_layers = 3
+    bottom_sideset = &#x27;bottom&#x27;
+    top_sideset = &#x27;top&#x27;
+    input = annular
+  [../]
+  [./shift_down]
+    type = TransformGenerator
+    transform = TRANSLATE
+    vector_value = &#x27;0 0 -6&#x27;
+    input = make3D
+  [../]
+  [./aquifer]
+    type = SubdomainBoundingBoxGenerator
+    block_id = 1
+    bottom_left = &#x27;0 0 -2&#x27;
+    top_right = &#x27;10 10 2&#x27;
+    input = shift_down
+  [../]
+  [./injection_area]
+    type = ParsedGenerateSideset
+    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
+    included_subdomain_ids = 1
+    new_sideset_name = &#x27;injection_area&#x27;
+    input = &#x27;aquifer&#x27;
+  [../]
+  [./rename]
+    type = RenameBlockGenerator
+    old_block_id = &#x27;0 1&#x27;
+    new_block_name = &#x27;caps aquifer&#x27;
+    input = &#x27;injection_area&#x27;
+  [../]
+[]
+
+[GlobalParams]
+  PorousFlowDictator = dictator
+[]
+
+[Variables]
+  [./porepressure]
+    initial_condition = 1E6
+  [../]
+  [./temperature]
+    initial_condition = 313
+    scaling = 1E-8
+  [../]
+[]
+
+[PorousFlowBasicTHM]
+  porepressure = porepressure
+  temperature = temperature
+  coupling_type = ThermoHydro
+  gravity = &#x27;0 0 0&#x27;
+  fp = tabulated_water
+[]
+
+[BCs]
+  [./constant_injection_porepressure]
+    type = DirichletBC
+    variable = porepressure
+    value = 2E6
+    boundary = injection_area
+  [../]
+  [./constant_injection_temperature]
+    type = DirichletBC
+    variable = temperature
+    value = 333
+    boundary = injection_area
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./true_water]
+      type = Water97FluidProperties
+    [../]
+    [./tabulated_water]
+      type = TabulatedFluidProperties
+      fp = true_water
+      temperature_min = 275
+      interpolated_properties = &#x27;density viscosity enthalpy internal_energy&#x27;
+      fluid_property_file = water97_tabulated.csv
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./porosity]
+    type = PorousFlowPorosity
+    porosity_zero = 0.1
+  [../]
+  [./biot_modulus]
+    type = PorousFlowConstantBiotModulus
+    biot_coefficient = 0.8
+    solid_bulk_compliance = 2E-7
+    fluid_bulk_modulus = 1E7
+  [../]
+  [./permeability_aquifer]
+    type = PorousFlowPermeabilityConst
+    block = aquifer
+    permeability = &#x27;1E-14 0 0   0 1E-14 0   0 0 1E-14&#x27;
+  [../]
+  [./permeability_caps]
+    type = PorousFlowPermeabilityConst
+    block = caps
+    permeability = &#x27;1E-15 0 0   0 1E-15 0   0 0 1E-16&#x27;
+  [../]
+
+  [./thermal_expansion]
+    type = PorousFlowConstantThermalExpansionCoefficient
+    biot_coefficient = 0.8
+    drained_coefficient = 0.003
+    fluid_coefficient = 0.0002
+  [../]
+  [./rock_internal_energy]
+    type = PorousFlowMatrixInternalEnergy
+    density = 2500.0
+    specific_heat_capacity = 1200.0
+  [../]
+  [./thermal_conductivity]
+    type = PorousFlowThermalConductivityIdeal
+    dry_thermal_conductivity = &#x27;10 0 0  0 10 0  0 0 10&#x27;
+    block = &#x27;caps aquifer&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
+    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
+  [../]
+  [./preferred_but_might_not_be_installed]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  end_time = 1E6
+  dt = 1E5
+  nl_abs_tol = 1E-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="620dff39-f797-4b10-a4f4-113912935fb1"><div class="modal-content"><h4>test/tests/meshgenerators/parsed_generate_sideset/parsed_generate_sideset.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
   [./gmg]
     type = GeneratedMeshGenerator
     dim = 3
@@ -3331,4 +3112,223 @@
 [Outputs]
   exodus = true
 []
-</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p></p></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#77f622c6-7269-47fc-8f6f-45623749b93b" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#4db93eca-8792-4136-b25d-ac89ba7b40f2" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="7b9c751d-462e-402d-bc6a-182a5f0408d7"><div class="modal-content"><h4>modules/porous_flow/examples/tutorial/07.i</h4><pre class="moose-pre"><code class="language-text"># Darcy flow with a tracer that precipitates causing mineralisation and porosity changes and permeability changes
+[Mesh]
+  [annular]
+    type = AnnularMeshGenerator
+    nr = 10
+    rmin = 1.0
+    rmax = 10
+    growth_r = 1.4
+    nt = 4
+    dmin = 0
+    dmax = 90
+  []
+  [./make3D]
+    input = annular
+    type = MeshExtruderGenerator
+    extrusion_vector = &#x27;0 0 12&#x27;
+    num_layers = 3
+    bottom_sideset = &#x27;bottom&#x27;
+    top_sideset = &#x27;top&#x27;
+  [../]
+  [./shift_down]
+    type = TransformGenerator
+    transform = TRANSLATE
+    vector_value = &#x27;0 0 -6&#x27;
+    input = make3D
+  [../]
+  [./aquifer]
+    type = SubdomainBoundingBoxGenerator
+    block_id = 1
+    bottom_left = &#x27;0 0 -2&#x27;
+    top_right = &#x27;10 10 2&#x27;
+    input = shift_down
+  [../]
+  [./injection_area]
+    type = ParsedGenerateSideset
+    combinatorial_geometry = &#x27;x*x+y*y&lt;1.01&#x27;
+    included_subdomain_ids = 1
+    new_sideset_name = &#x27;injection_area&#x27;
+    input = &#x27;aquifer&#x27;
+  [../]
+  [./rename]
+    type = RenameBlockGenerator
+    old_block_id = &#x27;0 1&#x27;
+    new_block_name = &#x27;caps aquifer&#x27;
+    input = &#x27;injection_area&#x27;
+  [../]
+[]
+
+[GlobalParams]
+  PorousFlowDictator = dictator
+[]
+
+[Variables]
+  [./porepressure]
+  [../]
+  [./tracer_concentration]
+  [../]
+[]
+
+[PorousFlowFullySaturated]
+  porepressure = porepressure
+  coupling_type = Hydro
+  gravity = &#x27;0 0 0&#x27;
+  fp = the_simple_fluid
+  mass_fraction_vars = tracer_concentration
+  number_aqueous_kinetic = 1
+  temperature = 283.0
+[]
+
+[AuxVariables]
+  [./eqm_k]
+    initial_condition = 0.1
+  [../]
+  [./mineral_conc]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./initial_and_reference_conc]
+    initial_condition = 0
+  [../]
+  [./porosity]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+  [./permeability]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+[]
+
+[AuxKernels]
+  [./mineral_conc]
+    type = PorousFlowPropertyAux
+    property = mineral_concentration
+    mineral_species = 0
+    variable = mineral_conc
+  [../]
+  [./porosity]
+    type = PorousFlowPropertyAux
+    property = porosity
+    variable = porosity
+  [../]
+  [./permeability]
+    type = PorousFlowPropertyAux
+    property = permeability
+    column = 0
+    row = 0
+    variable = permeability
+  [../]
+[]
+
+[Kernels]
+  [./precipitation_dissolution]
+    type = PorousFlowPreDis
+    mineral_density = 1000.0
+    stoichiometry = 1
+    variable = tracer_concentration
+  [../]
+[]
+
+[BCs]
+  [./constant_injection_of_tracer]
+    type = PorousFlowSink
+    variable = tracer_concentration
+    flux_function = -5E-3
+    boundary = injection_area
+  [../]
+  [./constant_outer_porepressure]
+    type = DirichletBC
+    variable = porepressure
+    value = 0
+    boundary = rmax
+  [../]
+[]
+
+[Modules]
+  [./FluidProperties]
+    [./the_simple_fluid]
+      type = SimpleFluidProperties
+      bulk_modulus = 2E9
+      viscosity = 1.0E-3
+      density0 = 1000.0
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./porosity]
+    type = PorousFlowPorosity
+    porosity_zero = 0.1
+    chemical = true
+    initial_mineral_concentrations = initial_and_reference_conc
+    reference_chemistry = initial_and_reference_conc
+  [../]
+  [./permeability_aquifer]
+    type = PorousFlowPermeabilityKozenyCarman
+    block = aquifer
+    k0 = 1E-14
+    m = 2
+    n = 3
+    phi0 = 0.1
+    poroperm_function = kozeny_carman_phi0
+  [../]
+  [./permeability_caps]
+    type = PorousFlowPermeabilityKozenyCarman
+    block = caps
+    k0 = 1E-15
+    k_anisotropy = &#x27;1 0 0  0 1 0  0 0 0.1&#x27;
+    m = 2
+    n = 3
+    phi0 = 0.1
+    poroperm_function = kozeny_carman_phi0
+  [../]
+  [./precipitation_dissolution]
+    type = PorousFlowAqueousPreDisChemistry
+    reference_temperature = 283.0
+    activation_energy = 1 # irrelevant because T=Tref
+    equilibrium_constants = eqm_k # equilibrium tracer concentration
+    kinetic_rate_constant = 1E-8
+    molar_volume = 1
+    num_reactions = 1
+    primary_activity_coefficients = 1
+    primary_concentrations = tracer_concentration
+    reactions = 1
+    specific_reactive_surface_area = 1
+  [../]
+  [./mineral_concentration]
+    type = PorousFlowAqueousPreDisMineral
+  [../]
+[]
+
+[Preconditioning]
+  active = basic
+  [./basic]
+    type = SMP
+    full = true
+    petsc_options = &#x27;-ksp_diagonal_scale -ksp_diagonal_scale_fix&#x27;
+    petsc_options_iname = &#x27;-pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap&#x27;
+    petsc_options_value = &#x27; asm      lu           NONZERO                   2&#x27;
+  [../]
+  [./preferred_but_might_not_be_installed]
+    type = SMP
+    full = true
+    petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+    petsc_options_value = &#x27; lu       mumps&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  end_time = 1E6
+  dt = 1E5
+  nl_abs_tol = 1E-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p></p></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#25e94a43-7319-477b-89ff-1a2695632d3b" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#a59b26d6-b671-4b8e-851e-7f5bfb1b5f2a" class="tooltipped" data-position="left" data-tooltip="Input Files">Input Files</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

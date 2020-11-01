@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-10-28 18:57:21</td>
+            <td class="headerValue">2020-11-01 10:10:31</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">1</td>
@@ -165,13 +165,13 @@
 <a name="95"><span class="lineNum">      95 </span>            :    * Method to inflate a bounding box that should be moved elsewhere at some point. It already</a>
 <a name="96"><span class="lineNum">      96 </span>            :    * exists in SpatiallyClaim</a>
 <a name="97"><span class="lineNum">      97 </span>            :    */</a>
-<a name="98"><span class="lineNum">      98 </span><span class="lineCov">        396 :   static BoundingBox inflateBoundingBox(BoundingBox bbox, Real multiplier = 0.01)</span></a>
+<a name="98"><span class="lineNum">      98 </span><span class="lineCov">        468 :   static BoundingBox inflateBoundingBox(BoundingBox bbox, Real multiplier = 0.01)</span></a>
 <a name="99"><span class="lineNum">      99 </span>            :   {</a>
-<a name="100"><span class="lineNum">     100 </span><span class="lineCov">        396 :     Real amount = multiplier * (bbox.max() - bbox.min()).norm();</span></a>
-<a name="101"><span class="lineNum">     101 </span><span class="lineCov">        396 :     Point inflation(amount, amount, amount);</span></a>
-<a name="102"><span class="lineNum">     102 </span><span class="lineCov">        396 :     bbox.first -= inflation;</span></a>
-<a name="103"><span class="lineNum">     103 </span><span class="lineCov">        396 :     bbox.second += inflation;</span></a>
-<a name="104"><span class="lineNum">     104 </span><span class="lineCov">        396 :     return bbox;</span></a>
+<a name="100"><span class="lineNum">     100 </span><span class="lineCov">        468 :     Real amount = multiplier * (bbox.max() - bbox.min()).norm();</span></a>
+<a name="101"><span class="lineNum">     101 </span><span class="lineCov">        468 :     Point inflation(amount, amount, amount);</span></a>
+<a name="102"><span class="lineNum">     102 </span><span class="lineCov">        468 :     bbox.first -= inflation;</span></a>
+<a name="103"><span class="lineNum">     103 </span><span class="lineCov">        468 :     bbox.second += inflation;</span></a>
+<a name="104"><span class="lineNum">     104 </span><span class="lineCov">        468 :     return bbox;</span></a>
 <a name="105"><span class="lineNum">     105 </span>            :   }</a>
 <a name="106"><span class="lineNum">     106 </span>            : </a>
 <a name="107"><span class="lineNum">     107 </span>            :   /**</a>
@@ -209,21 +209,18 @@
 <a name="139"><span class="lineNum">     139 </span>            :   /// The first variable index in _sys for the Ray's aux data  (if any)</a>
 <a name="140"><span class="lineNum">     140 </span>            :   unsigned int _aux_data_start_var;</a>
 <a name="141"><span class="lineNum">     141 </span>            : </a>
-<a name="142"><span class="lineNum">     142 </span>            :   /// The cached traces from the RayTracingStudy</a>
-<a name="143"><span class="lineNum">     143 </span>            :   std::shared_ptr&lt;std::vector&lt;TraceData&gt;&gt; _cached_traces;</a>
-<a name="144"><span class="lineNum">     144 </span>            : </a>
-<a name="145"><span class="lineNum">     145 </span>            :   /// The bounding box for this processor</a>
-<a name="146"><span class="lineNum">     146 </span>            :   BoundingBox _bbox;</a>
-<a name="147"><span class="lineNum">     147 </span>            :   /// The inflaed bounding boxes for all processors</a>
-<a name="148"><span class="lineNum">     148 </span>            :   std::vector&lt;BoundingBox&gt; _inflated_bboxes;</a>
-<a name="149"><span class="lineNum">     149 </span>            :   /// Inflated bounding boxes that are neighboring to this processor (pid : bbox for each entry)</a>
-<a name="150"><span class="lineNum">     150 </span>            :   std::vector&lt;std::pair&lt;processor_id_type, BoundingBox&gt;&gt; _inflated_neighbor_bboxes;</a>
-<a name="151"><span class="lineNum">     151 </span>            : </a>
-<a name="152"><span class="lineNum">     152 </span>            :   /// The map from RayID to the starting element and node ID of the mesh element for said Ray</a>
-<a name="153"><span class="lineNum">     153 </span>            :   std::unordered_map&lt;RayID, std::pair&lt;dof_id_type, dof_id_type&gt;&gt; _ray_starting_id_map;</a>
-<a name="154"><span class="lineNum">     154 </span>            :   /// The max node ID for the ray tracing mesh for creating unique elem IDs</a>
-<a name="155"><span class="lineNum">     155 </span>            :   dof_id_type _max_node_id;</a>
-<a name="156"><span class="lineNum">     156 </span>            : };</a>
+<a name="142"><span class="lineNum">     142 </span>            :   /// The bounding box for this processor</a>
+<a name="143"><span class="lineNum">     143 </span>            :   BoundingBox _bbox;</a>
+<a name="144"><span class="lineNum">     144 </span>            :   /// The inflaed bounding boxes for all processors</a>
+<a name="145"><span class="lineNum">     145 </span>            :   std::vector&lt;BoundingBox&gt; _inflated_bboxes;</a>
+<a name="146"><span class="lineNum">     146 </span>            :   /// Inflated bounding boxes that are neighboring to this processor (pid : bbox for each entry)</a>
+<a name="147"><span class="lineNum">     147 </span>            :   std::vector&lt;std::pair&lt;processor_id_type, BoundingBox&gt;&gt; _inflated_neighbor_bboxes;</a>
+<a name="148"><span class="lineNum">     148 </span>            : </a>
+<a name="149"><span class="lineNum">     149 </span>            :   /// The map from RayID to the starting element and node ID of the mesh element for said Ray</a>
+<a name="150"><span class="lineNum">     150 </span>            :   std::unordered_map&lt;RayID, std::pair&lt;dof_id_type, dof_id_type&gt;&gt; _ray_starting_id_map;</a>
+<a name="151"><span class="lineNum">     151 </span>            :   /// The max node ID for the ray tracing mesh for creating unique elem IDs</a>
+<a name="152"><span class="lineNum">     152 </span>            :   dof_id_type _max_node_id;</a>
+<a name="153"><span class="lineNum">     153 </span>            : };</a>
 </pre>
       </td>
     </tr>

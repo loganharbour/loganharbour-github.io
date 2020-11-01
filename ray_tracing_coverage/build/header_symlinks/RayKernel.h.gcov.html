@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-10-28 18:57:21</td>
+            <td class="headerValue">2020-11-01 10:10:31</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">4</td>
@@ -125,20 +125,20 @@
 <a name="55"><span class="lineNum">      55 </span>            :    * Compute this RayKernel's contribution to the off diagonal jacobian for the variable numbered</a>
 <a name="56"><span class="lineNum">      56 </span>            :    * jvar_num.</a>
 <a name="57"><span class="lineNum">      57 </span>            :    */</a>
-<a name="58"><span class="lineNum">      58 </span><span class="lineCov">   12805632 :   virtual Real computeQpOffDiagJacobian(const unsigned int /* jvar_num */) { return 0; }</span></a>
+<a name="58"><span class="lineNum">      58 </span><span class="lineCov">    8251200 :   virtual Real computeQpOffDiagJacobian(const unsigned int /* jvar_num */) { return 0; }</span></a>
 <a name="59"><span class="lineNum">      59 </span>            : </a>
 <a name="60"><span class="lineNum">      60 </span>            :   /**</a>
 <a name="61"><span class="lineNum">      61 </span>            :    * Insertion point for calculation before the residual contribution</a>
 <a name="62"><span class="lineNum">      62 </span>            :    */</a>
-<a name="63"><span class="lineNum">      63 </span><span class="lineCov">     994806 :   virtual void precalculateResidual(){};</span></a>
+<a name="63"><span class="lineNum">      63 </span><span class="lineCov">     638388 :   virtual void precalculateResidual(){};</span></a>
 <a name="64"><span class="lineNum">      64 </span>            :   /**</a>
 <a name="65"><span class="lineNum">      65 </span>            :    * Insertion point for calculation before the Jacobian contribution</a>
 <a name="66"><span class="lineNum">      66 </span>            :    */</a>
-<a name="67"><span class="lineNum">      67 </span><span class="lineCov">     285642 :   virtual void precalculateJacobian(){};</span></a>
+<a name="67"><span class="lineNum">      67 </span><span class="lineCov">     185706 :   virtual void precalculateJacobian(){};</span></a>
 <a name="68"><span class="lineNum">      68 </span>            :   /**</a>
 <a name="69"><span class="lineNum">      69 </span>            :    * Insertion point for calculation before an off-diagonal Jacobian contribution</a>
 <a name="70"><span class="lineNum">      70 </span>            :    */</a>
-<a name="71"><span class="lineNum">      71 </span><span class="lineCov">        693 :   virtual void precalculateOffDiagJacobian(unsigned int /* jvar_num */){};</span></a>
+<a name="71"><span class="lineNum">      71 </span><span class="lineCov">        891 :   virtual void precalculateOffDiagJacobian(unsigned int /* jvar_num */){};</span></a>
 <a name="72"><span class="lineNum">      72 </span>            : </a>
 <a name="73"><span class="lineNum">      73 </span>            :   /// This is a regular kernel so we cast to a regular MooseVariable</a>
 <a name="74"><span class="lineNum">      74 </span>            :   MooseVariableFE&lt;T&gt; &amp; _var;</a>

@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-01 10:10:31</td>
+            <td class="headerValue">2020-11-12 16:20:26</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">7</td>
@@ -127,203 +127,205 @@
 <a name="57"><span class="lineNum">      57 </span>            :   /**</a>
 <a name="58"><span class="lineNum">      58 </span>            :    * Whether or not messges are currently being sent</a>
 <a name="59"><span class="lineNum">      59 </span>            :    */</a>
-<a name="60"><span class="lineNum">      60 </span><span class="lineCov">       4757 :   bool currentlySending() const { return _requests.size(); }</span></a>
+<a name="60"><span class="lineNum">      60 </span><span class="lineCov">       4317 :   bool currentlySending() const { return _requests.size(); }</span></a>
 <a name="61"><span class="lineNum">      61 </span>            :   /**</a>
 <a name="62"><span class="lineNum">      62 </span>            :    * Whether or not objects are currently waiting to be sent</a>
 <a name="63"><span class="lineNum">      63 </span>            :    */</a>
-<a name="64"><span class="lineNum">      64 </span><span class="lineCov">       4757 :   bool currentlyBuffered() const { return _buffer.size(); }</span></a>
+<a name="64"><span class="lineNum">      64 </span><span class="lineCov">       4317 :   bool currentlyBuffered() const { return _buffer.size(); }</span></a>
 <a name="65"><span class="lineNum">      65 </span>            : </a>
 <a name="66"><span class="lineNum">      66 </span>            :   /**</a>
-<a name="67"><span class="lineNum">      67 </span>            :    * Add a object to the buffer.  May cause the buffer to be communicated.</a>
-<a name="68"><span class="lineNum">      68 </span>            :    */</a>
-<a name="69"><span class="lineNum">      69 </span>            :   void addObject(std::shared_ptr&lt;Object&gt; &amp; object);</a>
-<a name="70"><span class="lineNum">      70 </span>            : </a>
-<a name="71"><span class="lineNum">      71 </span>            :   /**</a>
-<a name="72"><span class="lineNum">      72 </span>            :    * Forces a Send for all currently buffered objects</a>
-<a name="73"><span class="lineNum">      73 </span>            :    */</a>
-<a name="74"><span class="lineNum">      74 </span>            :   void forceSend(const bool shrink_current_buffer_size = true);</a>
-<a name="75"><span class="lineNum">      75 </span>            : </a>
-<a name="76"><span class="lineNum">      76 </span>            :   /**</a>
-<a name="77"><span class="lineNum">      77 </span>            :    * Wait for all requests to finish</a>
-<a name="78"><span class="lineNum">      78 </span>            :    */</a>
-<a name="79"><span class="lineNum">      79 </span>            :   void waitAll();</a>
-<a name="80"><span class="lineNum">      80 </span>            : </a>
-<a name="81"><span class="lineNum">      81 </span>            :   /**</a>
-<a name="82"><span class="lineNum">      82 </span>            :    * Clear all existing data</a>
-<a name="83"><span class="lineNum">      83 </span>            :    */</a>
-<a name="84"><span class="lineNum">      84 </span>            :   void clear();</a>
-<a name="85"><span class="lineNum">      85 </span>            : </a>
-<a name="86"><span class="lineNum">      86 </span>            :   /**</a>
-<a name="87"><span class="lineNum">      87 </span>            :    * Checks to see if any Requests can be finished</a>
-<a name="88"><span class="lineNum">      88 </span>            :    */</a>
-<a name="89"><span class="lineNum">      89 </span>            :   void cleanupRequests();</a>
-<a name="90"><span class="lineNum">      90 </span>            : </a>
-<a name="91"><span class="lineNum">      91 </span>            : private:</a>
-<a name="92"><span class="lineNum">      92 </span>            :   /// The context</a>
-<a name="93"><span class="lineNum">      93 </span>            :   const Context &amp; _context;</a>
-<a name="94"><span class="lineNum">      94 </span>            :   /// The processor ID this buffer will send to</a>
-<a name="95"><span class="lineNum">      95 </span>            :   const processor_id_type _pid;</a>
-<a name="96"><span class="lineNum">      96 </span>            : </a>
-<a name="97"><span class="lineNum">      97 </span>            :   const ParallelStudyMethod &amp; _method;</a>
+<a name="67"><span class="lineNum">      67 </span>            :    * Move a object to the buffer.  May cause the buffer to be communicated.</a>
+<a name="68"><span class="lineNum">      68 </span>            :    *</a>
+<a name="69"><span class="lineNum">      69 </span>            :    * This DOES call std::move on the object</a>
+<a name="70"><span class="lineNum">      70 </span>            :    */</a>
+<a name="71"><span class="lineNum">      71 </span>            :   void moveObject(std::shared_ptr&lt;Object&gt; &amp; object);</a>
+<a name="72"><span class="lineNum">      72 </span>            : </a>
+<a name="73"><span class="lineNum">      73 </span>            :   /**</a>
+<a name="74"><span class="lineNum">      74 </span>            :    * Forces a Send for all currently buffered objects</a>
+<a name="75"><span class="lineNum">      75 </span>            :    */</a>
+<a name="76"><span class="lineNum">      76 </span>            :   void forceSend(const bool shrink_current_buffer_size = true);</a>
+<a name="77"><span class="lineNum">      77 </span>            : </a>
+<a name="78"><span class="lineNum">      78 </span>            :   /**</a>
+<a name="79"><span class="lineNum">      79 </span>            :    * Wait for all requests to finish</a>
+<a name="80"><span class="lineNum">      80 </span>            :    */</a>
+<a name="81"><span class="lineNum">      81 </span>            :   void waitAll();</a>
+<a name="82"><span class="lineNum">      82 </span>            : </a>
+<a name="83"><span class="lineNum">      83 </span>            :   /**</a>
+<a name="84"><span class="lineNum">      84 </span>            :    * Clear all existing data</a>
+<a name="85"><span class="lineNum">      85 </span>            :    */</a>
+<a name="86"><span class="lineNum">      86 </span>            :   void clear();</a>
+<a name="87"><span class="lineNum">      87 </span>            : </a>
+<a name="88"><span class="lineNum">      88 </span>            :   /**</a>
+<a name="89"><span class="lineNum">      89 </span>            :    * Checks to see if any Requests can be finished</a>
+<a name="90"><span class="lineNum">      90 </span>            :    */</a>
+<a name="91"><span class="lineNum">      91 </span>            :   void cleanupRequests();</a>
+<a name="92"><span class="lineNum">      92 </span>            : </a>
+<a name="93"><span class="lineNum">      93 </span>            : private:</a>
+<a name="94"><span class="lineNum">      94 </span>            :   /// The context</a>
+<a name="95"><span class="lineNum">      95 </span>            :   const Context &amp; _context;</a>
+<a name="96"><span class="lineNum">      96 </span>            :   /// The processor ID this buffer will send to</a>
+<a name="97"><span class="lineNum">      97 </span>            :   const processor_id_type _pid;</a>
 <a name="98"><span class="lineNum">      98 </span>            : </a>
-<a name="99"><span class="lineNum">      99 </span>            :   /// Minimum size of the buffer (in objects)</a>
-<a name="100"><span class="lineNum">     100 </span>            :   const unsigned int _min_buffer_size;</a>
-<a name="101"><span class="lineNum">     101 </span>            :   /// Maximum size of the buffer (in objects)</a>
-<a name="102"><span class="lineNum">     102 </span>            :   const unsigned int _max_buffer_size;</a>
-<a name="103"><span class="lineNum">     103 </span>            : </a>
-<a name="104"><span class="lineNum">     104 </span>            :   /// Multiplier for the buffer size for growin4g the buffer</a>
-<a name="105"><span class="lineNum">     105 </span>            :   const Real _buffer_growth_multiplier;</a>
-<a name="106"><span class="lineNum">     106 </span>            :   /// Multiplier for the buffer size for shrinking the buffer</a>
-<a name="107"><span class="lineNum">     107 </span>            :   const Real _buffer_shrink_multiplier;</a>
-<a name="108"><span class="lineNum">     108 </span>            : </a>
-<a name="109"><span class="lineNum">     109 </span>            :   /// MessageTag for sending objects</a>
-<a name="110"><span class="lineNum">     110 </span>            :   const Parallel::MessageTag _object_buffer_tag;</a>
-<a name="111"><span class="lineNum">     111 </span>            : </a>
-<a name="112"><span class="lineNum">     112 </span>            :   /// Current size of the buffer (in objects)</a>
-<a name="113"><span class="lineNum">     113 </span>            :   unsigned int _current_buffer_size;</a>
-<a name="114"><span class="lineNum">     114 </span>            :   /// Running buffer size</a>
-<a name="115"><span class="lineNum">     115 </span>            :   Real _current_buffer_size_real;</a>
-<a name="116"><span class="lineNum">     116 </span>            : </a>
-<a name="117"><span class="lineNum">     117 </span>            :   /// The buffer</a>
-<a name="118"><span class="lineNum">     118 </span>            :   std::vector&lt;std::shared_ptr&lt;Object&gt;&gt; _buffer;</a>
-<a name="119"><span class="lineNum">     119 </span>            : </a>
-<a name="120"><span class="lineNum">     120 </span>            :   /// List of Requests</a>
-<a name="121"><span class="lineNum">     121 </span>            :   std::list&lt;std::shared_ptr&lt;Parallel::Request&gt;&gt; _requests;</a>
-<a name="122"><span class="lineNum">     122 </span>            : </a>
-<a name="123"><span class="lineNum">     123 </span>            :   /// Shared pool of buffers</a>
-<a name="124"><span class="lineNum">     124 </span>            :   MooseUtils::SharedPool&lt;</a>
-<a name="125"><span class="lineNum">     125 </span>            :       std::vector&lt;typename Parallel::Packing&lt;std::shared_ptr&lt;Object&gt;&gt;::buffer_type&gt;&gt;</a>
-<a name="126"><span class="lineNum">     126 </span>            :       _buffer_pool;</a>
-<a name="127"><span class="lineNum">     127 </span>            : </a>
-<a name="128"><span class="lineNum">     128 </span>            :   /// Counter for objects sent</a>
-<a name="129"><span class="lineNum">     129 </span>            :   unsigned long int _objects_sent;</a>
-<a name="130"><span class="lineNum">     130 </span>            :   /// Counter for buffers sent</a>
-<a name="131"><span class="lineNum">     131 </span>            :   unsigned long int _buffers_sent;</a>
-<a name="132"><span class="lineNum">     132 </span>            : };</a>
-<a name="133"><span class="lineNum">     133 </span>            : </a>
-<a name="134"><span class="lineNum">     134 </span>            : template &lt;typename Object, typename Context&gt;</a>
-<a name="135"><span class="lineNum">     135 </span><span class="lineCov">       3472 : SendBuffer&lt;Object, Context&gt;::SendBuffer(const libMesh::Parallel::Communicator &amp; comm,</span></a>
-<a name="136"><span class="lineNum">     136 </span>            :                                         const Context &amp; context,</a>
-<a name="137"><span class="lineNum">     137 </span>            :                                         const processor_id_type pid,</a>
-<a name="138"><span class="lineNum">     138 </span>            :                                         const ParallelStudyMethod &amp; method,</a>
-<a name="139"><span class="lineNum">     139 </span>            :                                         const unsigned int min_buffer_size,</a>
-<a name="140"><span class="lineNum">     140 </span>            :                                         const unsigned int max_buffer_size,</a>
-<a name="141"><span class="lineNum">     141 </span>            :                                         const Real buffer_growth_multiplier,</a>
-<a name="142"><span class="lineNum">     142 </span>            :                                         const Real buffer_shrink_multiplier,</a>
-<a name="143"><span class="lineNum">     143 </span>            :                                         const Parallel::MessageTag object_buffer_tag)</a>
-<a name="144"><span class="lineNum">     144 </span>            :   : ParallelObject(comm),</a>
-<a name="145"><span class="lineNum">     145 </span>            :     _context(context),</a>
-<a name="146"><span class="lineNum">     146 </span>            :     _pid(pid),</a>
-<a name="147"><span class="lineNum">     147 </span>            :     _method(method),</a>
-<a name="148"><span class="lineNum">     148 </span>            :     _min_buffer_size(min_buffer_size),</a>
-<a name="149"><span class="lineNum">     149 </span>            :     _max_buffer_size(max_buffer_size),</a>
-<a name="150"><span class="lineNum">     150 </span>            :     _buffer_growth_multiplier(buffer_growth_multiplier),</a>
-<a name="151"><span class="lineNum">     151 </span>            :     _buffer_shrink_multiplier(buffer_shrink_multiplier),</a>
-<a name="152"><span class="lineNum">     152 </span>            :     _object_buffer_tag(object_buffer_tag),</a>
-<a name="153"><span class="lineNum">     153 </span><span class="lineCov">       3472 :     _current_buffer_size(_min_buffer_size),</span></a>
-<a name="154"><span class="lineNum">     154 </span>            :     _current_buffer_size_real(_min_buffer_size),</a>
-<a name="155"><span class="lineNum">     155 </span>            :     _objects_sent(0),</a>
-<a name="156"><span class="lineNum">     156 </span><span class="lineCov">       3472 :     _buffers_sent(0)</span></a>
-<a name="157"><span class="lineNum">     157 </span>            : {</a>
-<a name="158"><span class="lineNum">     158 </span><span class="lineCov">       3472 :   _buffer.reserve(max_buffer_size);</span></a>
-<a name="159"><span class="lineNum">     159 </span><span class="lineCov">       3472 : }</span></a>
-<a name="160"><span class="lineNum">     160 </span>            : </a>
-<a name="161"><span class="lineNum">     161 </span>            : template &lt;typename Object, typename Context&gt;</a>
-<a name="162"><span class="lineNum">     162 </span><span class="lineCov">       6944 : SendBuffer&lt;Object, Context&gt;::~SendBuffer()</span></a>
-<a name="163"><span class="lineNum">     163 </span>            : {</a>
-<a name="164"><span class="lineNum">     164 </span><span class="lineCov">       3472 :   waitAll();</span></a>
-<a name="165"><span class="lineNum">     165 </span><span class="lineCov">       3472 :   cleanupRequests();</span></a>
-<a name="166"><span class="lineNum">     166 </span><span class="lineCov">       6944 : }</span></a>
-<a name="167"><span class="lineNum">     167 </span>            : </a>
-<a name="168"><span class="lineNum">     168 </span>            : template &lt;typename Object, typename Context&gt;</a>
-<a name="169"><span class="lineNum">     169 </span>            : void</a>
-<a name="170"><span class="lineNum">     170 </span><span class="lineCov">    2458765 : SendBuffer&lt;Object, Context&gt;::addObject(std::shared_ptr&lt;Object&gt; &amp; object)</span></a>
-<a name="171"><span class="lineNum">     171 </span>            : {</a>
-<a name="172"><span class="lineNum">     172 </span><span class="lineCov">    2458765 :   _buffer.push_back(object);</span></a>
-<a name="173"><span class="lineNum">     173 </span>            : </a>
-<a name="174"><span class="lineNum">     174 </span>            :   // 2000 is a safety net to try to stay below 1MB</a>
-<a name="175"><span class="lineNum">     175 </span><span class="lineCov">    2456101 :   if ((_method == ParallelStudyMethod::SMART &amp;&amp;</span></a>
-<a name="176"><span class="lineNum">     176 </span><span class="lineCov">    2458765 :        (_buffer.size() &gt;= _current_buffer_size || _buffer.size() == _max_buffer_size)) ||</span></a>
-<a name="177"><span class="lineNum">     177 </span><span class="lineCov">    2435771 :       (_buffer.size() &gt; 200000))</span></a>
-<a name="178"><span class="lineNum">     178 </span>            :   {</a>
-<a name="179"><span class="lineNum">     179 </span><span class="lineCov">      22994 :     _current_buffer_size_real =</span></a>
-<a name="180"><span class="lineNum">     180 </span><span class="lineCov">      22994 :         std::min(_buffer_growth_multiplier * _current_buffer_size_real, (Real)_max_buffer_size);</span></a>
-<a name="181"><span class="lineNum">     181 </span>            : </a>
-<a name="182"><span class="lineNum">     182 </span><span class="lineCov">      22994 :     if (_current_buffer_size != (unsigned int)_current_buffer_size_real)</span></a>
-<a name="183"><span class="lineNum">     183 </span><span class="lineNoCov">          0 :       _current_buffer_size = _current_buffer_size_real;</span></a>
-<a name="184"><span class="lineNum">     184 </span>            : </a>
-<a name="185"><span class="lineNum">     185 </span><span class="lineCov">      22994 :     forceSend(false);</span></a>
-<a name="186"><span class="lineNum">     186 </span>            :   }</a>
-<a name="187"><span class="lineNum">     187 </span><span class="lineCov">    2458765 : }</span></a>
-<a name="188"><span class="lineNum">     188 </span>            : </a>
-<a name="189"><span class="lineNum">     189 </span>            : template &lt;typename Object, typename Context&gt;</a>
-<a name="190"><span class="lineNum">     190 </span>            : void</a>
-<a name="191"><span class="lineNum">     191 </span><span class="lineCov">   15492038 : SendBuffer&lt;Object, Context&gt;::forceSend(const bool shrink_current_buffer_size)</span></a>
-<a name="192"><span class="lineNum">     192 </span>            : {</a>
-<a name="193"><span class="lineNum">     193 </span><span class="lineCov">   15492038 :   if (!_buffer.empty())</span></a>
-<a name="194"><span class="lineNum">     194 </span>            :   {</a>
-<a name="195"><span class="lineNum">     195 </span><span class="lineCov">      28805 :     auto req = std::make_shared&lt;Parallel::Request&gt;();</span></a>
-<a name="196"><span class="lineNum">     196 </span>            : </a>
-<a name="197"><span class="lineNum">     197 </span><span class="lineCov">      28805 :     _requests.push_back(req);</span></a>
+<a name="99"><span class="lineNum">      99 </span>            :   const ParallelStudyMethod &amp; _method;</a>
+<a name="100"><span class="lineNum">     100 </span>            : </a>
+<a name="101"><span class="lineNum">     101 </span>            :   /// Minimum size of the buffer (in objects)</a>
+<a name="102"><span class="lineNum">     102 </span>            :   const unsigned int _min_buffer_size;</a>
+<a name="103"><span class="lineNum">     103 </span>            :   /// Maximum size of the buffer (in objects)</a>
+<a name="104"><span class="lineNum">     104 </span>            :   const unsigned int _max_buffer_size;</a>
+<a name="105"><span class="lineNum">     105 </span>            : </a>
+<a name="106"><span class="lineNum">     106 </span>            :   /// Multiplier for the buffer size for growin4g the buffer</a>
+<a name="107"><span class="lineNum">     107 </span>            :   const Real _buffer_growth_multiplier;</a>
+<a name="108"><span class="lineNum">     108 </span>            :   /// Multiplier for the buffer size for shrinking the buffer</a>
+<a name="109"><span class="lineNum">     109 </span>            :   const Real _buffer_shrink_multiplier;</a>
+<a name="110"><span class="lineNum">     110 </span>            : </a>
+<a name="111"><span class="lineNum">     111 </span>            :   /// MessageTag for sending objects</a>
+<a name="112"><span class="lineNum">     112 </span>            :   const Parallel::MessageTag _object_buffer_tag;</a>
+<a name="113"><span class="lineNum">     113 </span>            : </a>
+<a name="114"><span class="lineNum">     114 </span>            :   /// Current size of the buffer (in objects)</a>
+<a name="115"><span class="lineNum">     115 </span>            :   unsigned int _current_buffer_size;</a>
+<a name="116"><span class="lineNum">     116 </span>            :   /// Running buffer size</a>
+<a name="117"><span class="lineNum">     117 </span>            :   Real _current_buffer_size_real;</a>
+<a name="118"><span class="lineNum">     118 </span>            : </a>
+<a name="119"><span class="lineNum">     119 </span>            :   /// The buffer</a>
+<a name="120"><span class="lineNum">     120 </span>            :   std::vector&lt;std::shared_ptr&lt;Object&gt;&gt; _buffer;</a>
+<a name="121"><span class="lineNum">     121 </span>            : </a>
+<a name="122"><span class="lineNum">     122 </span>            :   /// List of Requests</a>
+<a name="123"><span class="lineNum">     123 </span>            :   std::list&lt;std::shared_ptr&lt;Parallel::Request&gt;&gt; _requests;</a>
+<a name="124"><span class="lineNum">     124 </span>            : </a>
+<a name="125"><span class="lineNum">     125 </span>            :   /// Shared pool of buffers</a>
+<a name="126"><span class="lineNum">     126 </span>            :   MooseUtils::SharedPool&lt;</a>
+<a name="127"><span class="lineNum">     127 </span>            :       std::vector&lt;typename Parallel::Packing&lt;std::shared_ptr&lt;Object&gt;&gt;::buffer_type&gt;&gt;</a>
+<a name="128"><span class="lineNum">     128 </span>            :       _buffer_pool;</a>
+<a name="129"><span class="lineNum">     129 </span>            : </a>
+<a name="130"><span class="lineNum">     130 </span>            :   /// Counter for objects sent</a>
+<a name="131"><span class="lineNum">     131 </span>            :   unsigned long int _objects_sent;</a>
+<a name="132"><span class="lineNum">     132 </span>            :   /// Counter for buffers sent</a>
+<a name="133"><span class="lineNum">     133 </span>            :   unsigned long int _buffers_sent;</a>
+<a name="134"><span class="lineNum">     134 </span>            : };</a>
+<a name="135"><span class="lineNum">     135 </span>            : </a>
+<a name="136"><span class="lineNum">     136 </span>            : template &lt;typename Object, typename Context&gt;</a>
+<a name="137"><span class="lineNum">     137 </span><span class="lineCov">       3387 : SendBuffer&lt;Object, Context&gt;::SendBuffer(const libMesh::Parallel::Communicator &amp; comm,</span></a>
+<a name="138"><span class="lineNum">     138 </span>            :                                         const Context &amp; context,</a>
+<a name="139"><span class="lineNum">     139 </span>            :                                         const processor_id_type pid,</a>
+<a name="140"><span class="lineNum">     140 </span>            :                                         const ParallelStudyMethod &amp; method,</a>
+<a name="141"><span class="lineNum">     141 </span>            :                                         const unsigned int min_buffer_size,</a>
+<a name="142"><span class="lineNum">     142 </span>            :                                         const unsigned int max_buffer_size,</a>
+<a name="143"><span class="lineNum">     143 </span>            :                                         const Real buffer_growth_multiplier,</a>
+<a name="144"><span class="lineNum">     144 </span>            :                                         const Real buffer_shrink_multiplier,</a>
+<a name="145"><span class="lineNum">     145 </span>            :                                         const Parallel::MessageTag object_buffer_tag)</a>
+<a name="146"><span class="lineNum">     146 </span>            :   : ParallelObject(comm),</a>
+<a name="147"><span class="lineNum">     147 </span>            :     _context(context),</a>
+<a name="148"><span class="lineNum">     148 </span>            :     _pid(pid),</a>
+<a name="149"><span class="lineNum">     149 </span>            :     _method(method),</a>
+<a name="150"><span class="lineNum">     150 </span>            :     _min_buffer_size(min_buffer_size),</a>
+<a name="151"><span class="lineNum">     151 </span>            :     _max_buffer_size(max_buffer_size),</a>
+<a name="152"><span class="lineNum">     152 </span>            :     _buffer_growth_multiplier(buffer_growth_multiplier),</a>
+<a name="153"><span class="lineNum">     153 </span>            :     _buffer_shrink_multiplier(buffer_shrink_multiplier),</a>
+<a name="154"><span class="lineNum">     154 </span>            :     _object_buffer_tag(object_buffer_tag),</a>
+<a name="155"><span class="lineNum">     155 </span><span class="lineCov">       3387 :     _current_buffer_size(_min_buffer_size),</span></a>
+<a name="156"><span class="lineNum">     156 </span>            :     _current_buffer_size_real(_min_buffer_size),</a>
+<a name="157"><span class="lineNum">     157 </span>            :     _objects_sent(0),</a>
+<a name="158"><span class="lineNum">     158 </span><span class="lineCov">       3387 :     _buffers_sent(0)</span></a>
+<a name="159"><span class="lineNum">     159 </span>            : {</a>
+<a name="160"><span class="lineNum">     160 </span><span class="lineCov">       3387 :   _buffer.reserve(max_buffer_size);</span></a>
+<a name="161"><span class="lineNum">     161 </span><span class="lineCov">       3387 : }</span></a>
+<a name="162"><span class="lineNum">     162 </span>            : </a>
+<a name="163"><span class="lineNum">     163 </span>            : template &lt;typename Object, typename Context&gt;</a>
+<a name="164"><span class="lineNum">     164 </span><span class="lineCov">       6774 : SendBuffer&lt;Object, Context&gt;::~SendBuffer()</span></a>
+<a name="165"><span class="lineNum">     165 </span>            : {</a>
+<a name="166"><span class="lineNum">     166 </span><span class="lineCov">       3387 :   waitAll();</span></a>
+<a name="167"><span class="lineNum">     167 </span><span class="lineCov">       3387 :   cleanupRequests();</span></a>
+<a name="168"><span class="lineNum">     168 </span><span class="lineCov">       6774 : }</span></a>
+<a name="169"><span class="lineNum">     169 </span>            : </a>
+<a name="170"><span class="lineNum">     170 </span>            : template &lt;typename Object, typename Context&gt;</a>
+<a name="171"><span class="lineNum">     171 </span>            : void</a>
+<a name="172"><span class="lineNum">     172 </span><span class="lineCov">    2574532 : SendBuffer&lt;Object, Context&gt;::moveObject(std::shared_ptr&lt;Object&gt; &amp; object)</span></a>
+<a name="173"><span class="lineNum">     173 </span>            : {</a>
+<a name="174"><span class="lineNum">     174 </span><span class="lineCov">    2574532 :   _buffer.emplace_back(std::move(object));</span></a>
+<a name="175"><span class="lineNum">     175 </span>            : </a>
+<a name="176"><span class="lineNum">     176 </span>            :   // 2000 is a safety net to try to stay below 1MB</a>
+<a name="177"><span class="lineNum">     177 </span><span class="lineCov">    2571868 :   if ((_method == ParallelStudyMethod::SMART &amp;&amp;</span></a>
+<a name="178"><span class="lineNum">     178 </span><span class="lineCov">    2574532 :        (_buffer.size() &gt;= _current_buffer_size || _buffer.size() == _max_buffer_size)) ||</span></a>
+<a name="179"><span class="lineNum">     179 </span><span class="lineCov">    2550274 :       (_buffer.size() &gt; 200000))</span></a>
+<a name="180"><span class="lineNum">     180 </span>            :   {</a>
+<a name="181"><span class="lineNum">     181 </span><span class="lineCov">      24258 :     _current_buffer_size_real =</span></a>
+<a name="182"><span class="lineNum">     182 </span><span class="lineCov">      24258 :         std::min(_buffer_growth_multiplier * _current_buffer_size_real, (Real)_max_buffer_size);</span></a>
+<a name="183"><span class="lineNum">     183 </span>            : </a>
+<a name="184"><span class="lineNum">     184 </span><span class="lineCov">      24258 :     if (_current_buffer_size != (unsigned int)_current_buffer_size_real)</span></a>
+<a name="185"><span class="lineNum">     185 </span><span class="lineNoCov">          0 :       _current_buffer_size = _current_buffer_size_real;</span></a>
+<a name="186"><span class="lineNum">     186 </span>            : </a>
+<a name="187"><span class="lineNum">     187 </span><span class="lineCov">      24258 :     forceSend(false);</span></a>
+<a name="188"><span class="lineNum">     188 </span>            :   }</a>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">    2574532 : }</span></a>
+<a name="190"><span class="lineNum">     190 </span>            : </a>
+<a name="191"><span class="lineNum">     191 </span>            : template &lt;typename Object, typename Context&gt;</a>
+<a name="192"><span class="lineNum">     192 </span>            : void</a>
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">   12247670 : SendBuffer&lt;Object, Context&gt;::forceSend(const bool shrink_current_buffer_size)</span></a>
+<a name="194"><span class="lineNum">     194 </span>            : {</a>
+<a name="195"><span class="lineNum">     195 </span><span class="lineCov">   12247670 :   if (!_buffer.empty())</span></a>
+<a name="196"><span class="lineNum">     196 </span>            :   {</a>
+<a name="197"><span class="lineNum">     197 </span><span class="lineCov">      29857 :     auto req = std::make_shared&lt;Parallel::Request&gt;();</span></a>
 <a name="198"><span class="lineNum">     198 </span>            : </a>
-<a name="199"><span class="lineNum">     199 </span><span class="lineCov">      28805 :     _objects_sent += _buffer.size();</span></a>
-<a name="200"><span class="lineNum">     200 </span><span class="lineCov">      28805 :     _buffers_sent++;</span></a>
-<a name="201"><span class="lineNum">     201 </span>            : </a>
-<a name="202"><span class="lineNum">     202 </span>            :     std::shared_ptr&lt;std::vector&lt;typename Parallel::Packing&lt;std::shared_ptr&lt;Object&gt;&gt;::buffer_type&gt;&gt;</a>
-<a name="203"><span class="lineNum">     203 </span><span class="lineCov">      86415 :         buffer = _buffer_pool.acquire();</span></a>
-<a name="204"><span class="lineNum">     204 </span>            : </a>
-<a name="205"><span class="lineNum">     205 </span><span class="lineCov">      28805 :     comm().nonblocking_send_packed_range(</span></a>
-<a name="206"><span class="lineNum">     206 </span><span class="lineCov">      28805 :         _pid, &amp;_context, _buffer.begin(), _buffer.end(), *req, buffer, _object_buffer_tag);</span></a>
-<a name="207"><span class="lineNum">     207 </span>            : </a>
-<a name="208"><span class="lineNum">     208 </span><span class="lineCov">      28805 :     _buffer.clear();</span></a>
-<a name="209"><span class="lineNum">     209 </span><span class="lineCov">      28805 :     _buffer.reserve(_max_buffer_size);</span></a>
-<a name="210"><span class="lineNum">     210 </span>            : </a>
-<a name="211"><span class="lineNum">     211 </span><span class="lineCov">      28805 :     if (_method == ParallelStudyMethod::SMART &amp;&amp; shrink_current_buffer_size)</span></a>
-<a name="212"><span class="lineNum">     212 </span>            :     {</a>
-<a name="213"><span class="lineNum">     213 </span><span class="lineCov">       5775 :       _current_buffer_size_real =</span></a>
-<a name="214"><span class="lineNum">     214 </span><span class="lineCov">       5775 :           std::max((Real)_min_buffer_size, _current_buffer_size_real * _buffer_shrink_multiplier);</span></a>
-<a name="215"><span class="lineNum">     215 </span>            : </a>
-<a name="216"><span class="lineNum">     216 </span><span class="lineCov">       5775 :       if (_current_buffer_size != (unsigned int)_current_buffer_size_real)</span></a>
-<a name="217"><span class="lineNum">     217 </span><span class="lineNoCov">          0 :         _current_buffer_size = _current_buffer_size_real;</span></a>
-<a name="218"><span class="lineNum">     218 </span>            :     }</a>
-<a name="219"><span class="lineNum">     219 </span>            :   }</a>
-<a name="220"><span class="lineNum">     220 </span>            : </a>
-<a name="221"><span class="lineNum">     221 </span><span class="lineCov">   15492038 :   cleanupRequests();</span></a>
-<a name="222"><span class="lineNum">     222 </span><span class="lineCov">   15492038 : }</span></a>
-<a name="223"><span class="lineNum">     223 </span>            : </a>
-<a name="224"><span class="lineNum">     224 </span>            : template &lt;typename Object, typename Context&gt;</a>
-<a name="225"><span class="lineNum">     225 </span>            : void</a>
-<a name="226"><span class="lineNum">     226 </span><span class="lineCov">        949 : SendBuffer&lt;Object, Context&gt;::clear()</span></a>
-<a name="227"><span class="lineNum">     227 </span>            : {</a>
-<a name="228"><span class="lineNum">     228 </span><span class="lineCov">        949 :   _buffer.clear();</span></a>
-<a name="229"><span class="lineNum">     229 </span><span class="lineCov">        949 :   _requests.clear();</span></a>
-<a name="230"><span class="lineNum">     230 </span>            : </a>
-<a name="231"><span class="lineNum">     231 </span><span class="lineCov">        949 :   _objects_sent = 0;</span></a>
-<a name="232"><span class="lineNum">     232 </span><span class="lineCov">        949 :   _buffers_sent = 0;</span></a>
-<a name="233"><span class="lineNum">     233 </span><span class="lineCov">        949 : }</span></a>
-<a name="234"><span class="lineNum">     234 </span>            : </a>
-<a name="235"><span class="lineNum">     235 </span>            : template &lt;typename Object, typename Context&gt;</a>
-<a name="236"><span class="lineNum">     236 </span>            : void</a>
-<a name="237"><span class="lineNum">     237 </span>            : SendBuffer&lt;Object, Context&gt;::cleanupRequests()</a>
-<a name="238"><span class="lineNum">     238 </span>            : {</a>
-<a name="239"><span class="lineNum">     239 </span><span class="lineCov">   15524306 :   _requests.remove_if([](std::shared_ptr&lt;Parallel::Request&gt; &amp; req) {</span></a>
-<a name="240"><span class="lineNum">     240 </span><span class="lineCov">      28805 :     if (req-&gt;test())</span></a>
-<a name="241"><span class="lineNum">     241 </span>            :     {</a>
-<a name="242"><span class="lineNum">     242 </span><span class="lineCov">      28805 :       req-&gt;wait(); // MUST call wait() to do post_wait_work</span></a>
-<a name="243"><span class="lineNum">     243 </span><span class="lineCov">      28805 :       return true;</span></a>
-<a name="244"><span class="lineNum">     244 </span>            :     }</a>
-<a name="245"><span class="lineNum">     245 </span>            :     else</a>
-<a name="246"><span class="lineNum">     246 </span>            :       return false;</a>
-<a name="247"><span class="lineNum">     247 </span>            :   });</a>
-<a name="248"><span class="lineNum">     248 </span>            : }</a>
-<a name="249"><span class="lineNum">     249 </span>            : </a>
-<a name="250"><span class="lineNum">     250 </span>            : template &lt;typename Object, typename Context&gt;</a>
-<a name="251"><span class="lineNum">     251 </span>            : void</a>
-<a name="252"><span class="lineNum">     252 </span>            : SendBuffer&lt;Object, Context&gt;::waitAll()</a>
-<a name="253"><span class="lineNum">     253 </span>            : {</a>
-<a name="254"><span class="lineNum">     254 </span><span class="lineCov">       3472 :   for (auto &amp; request : _requests)</span></a>
-<a name="255"><span class="lineNum">     255 </span><span class="lineNoCov">          0 :     request-&gt;wait();</span></a>
-<a name="256"><span class="lineNum">     256 </span>            : }</a>
+<a name="199"><span class="lineNum">     199 </span><span class="lineCov">      29857 :     _requests.push_back(req);</span></a>
+<a name="200"><span class="lineNum">     200 </span>            : </a>
+<a name="201"><span class="lineNum">     201 </span><span class="lineCov">      29857 :     _objects_sent += _buffer.size();</span></a>
+<a name="202"><span class="lineNum">     202 </span><span class="lineCov">      29857 :     _buffers_sent++;</span></a>
+<a name="203"><span class="lineNum">     203 </span>            : </a>
+<a name="204"><span class="lineNum">     204 </span>            :     std::shared_ptr&lt;std::vector&lt;typename Parallel::Packing&lt;std::shared_ptr&lt;Object&gt;&gt;::buffer_type&gt;&gt;</a>
+<a name="205"><span class="lineNum">     205 </span><span class="lineCov">      89571 :         buffer = _buffer_pool.acquire();</span></a>
+<a name="206"><span class="lineNum">     206 </span>            : </a>
+<a name="207"><span class="lineNum">     207 </span><span class="lineCov">      29857 :     comm().nonblocking_send_packed_range(</span></a>
+<a name="208"><span class="lineNum">     208 </span><span class="lineCov">      29857 :         _pid, &amp;_context, _buffer.begin(), _buffer.end(), *req, buffer, _object_buffer_tag);</span></a>
+<a name="209"><span class="lineNum">     209 </span>            : </a>
+<a name="210"><span class="lineNum">     210 </span><span class="lineCov">      29857 :     _buffer.clear();</span></a>
+<a name="211"><span class="lineNum">     211 </span><span class="lineCov">      29857 :     _buffer.reserve(_max_buffer_size);</span></a>
+<a name="212"><span class="lineNum">     212 </span>            : </a>
+<a name="213"><span class="lineNum">     213 </span><span class="lineCov">      29857 :     if (_method == ParallelStudyMethod::SMART &amp;&amp; shrink_current_buffer_size)</span></a>
+<a name="214"><span class="lineNum">     214 </span>            :     {</a>
+<a name="215"><span class="lineNum">     215 </span><span class="lineCov">       5563 :       _current_buffer_size_real =</span></a>
+<a name="216"><span class="lineNum">     216 </span><span class="lineCov">       5563 :           std::max((Real)_min_buffer_size, _current_buffer_size_real * _buffer_shrink_multiplier);</span></a>
+<a name="217"><span class="lineNum">     217 </span>            : </a>
+<a name="218"><span class="lineNum">     218 </span><span class="lineCov">       5563 :       if (_current_buffer_size != (unsigned int)_current_buffer_size_real)</span></a>
+<a name="219"><span class="lineNum">     219 </span><span class="lineNoCov">          0 :         _current_buffer_size = _current_buffer_size_real;</span></a>
+<a name="220"><span class="lineNum">     220 </span>            :     }</a>
+<a name="221"><span class="lineNum">     221 </span>            :   }</a>
+<a name="222"><span class="lineNum">     222 </span>            : </a>
+<a name="223"><span class="lineNum">     223 </span><span class="lineCov">   12247670 :   cleanupRequests();</span></a>
+<a name="224"><span class="lineNum">     224 </span><span class="lineCov">   12247670 : }</span></a>
+<a name="225"><span class="lineNum">     225 </span>            : </a>
+<a name="226"><span class="lineNum">     226 </span>            : template &lt;typename Object, typename Context&gt;</a>
+<a name="227"><span class="lineNum">     227 </span>            : void</a>
+<a name="228"><span class="lineNum">     228 </span><span class="lineCov">        864 : SendBuffer&lt;Object, Context&gt;::clear()</span></a>
+<a name="229"><span class="lineNum">     229 </span>            : {</a>
+<a name="230"><span class="lineNum">     230 </span><span class="lineCov">        864 :   _buffer.clear();</span></a>
+<a name="231"><span class="lineNum">     231 </span><span class="lineCov">        864 :   _requests.clear();</span></a>
+<a name="232"><span class="lineNum">     232 </span>            : </a>
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">        864 :   _objects_sent = 0;</span></a>
+<a name="234"><span class="lineNum">     234 </span><span class="lineCov">        864 :   _buffers_sent = 0;</span></a>
+<a name="235"><span class="lineNum">     235 </span><span class="lineCov">        864 : }</span></a>
+<a name="236"><span class="lineNum">     236 </span>            : </a>
+<a name="237"><span class="lineNum">     237 </span>            : template &lt;typename Object, typename Context&gt;</a>
+<a name="238"><span class="lineNum">     238 </span>            : void</a>
+<a name="239"><span class="lineNum">     239 </span>            : SendBuffer&lt;Object, Context&gt;::cleanupRequests()</a>
+<a name="240"><span class="lineNum">     240 </span>            : {</a>
+<a name="241"><span class="lineNum">     241 </span><span class="lineCov">   12280902 :   _requests.remove_if([](std::shared_ptr&lt;Parallel::Request&gt; &amp; req) {</span></a>
+<a name="242"><span class="lineNum">     242 </span><span class="lineCov">      29857 :     if (req-&gt;test())</span></a>
+<a name="243"><span class="lineNum">     243 </span>            :     {</a>
+<a name="244"><span class="lineNum">     244 </span><span class="lineCov">      29857 :       req-&gt;wait(); // MUST call wait() to do post_wait_work</span></a>
+<a name="245"><span class="lineNum">     245 </span><span class="lineCov">      29857 :       return true;</span></a>
+<a name="246"><span class="lineNum">     246 </span>            :     }</a>
+<a name="247"><span class="lineNum">     247 </span>            :     else</a>
+<a name="248"><span class="lineNum">     248 </span>            :       return false;</a>
+<a name="249"><span class="lineNum">     249 </span>            :   });</a>
+<a name="250"><span class="lineNum">     250 </span>            : }</a>
+<a name="251"><span class="lineNum">     251 </span>            : </a>
+<a name="252"><span class="lineNum">     252 </span>            : template &lt;typename Object, typename Context&gt;</a>
+<a name="253"><span class="lineNum">     253 </span>            : void</a>
+<a name="254"><span class="lineNum">     254 </span>            : SendBuffer&lt;Object, Context&gt;::waitAll()</a>
+<a name="255"><span class="lineNum">     255 </span>            : {</a>
+<a name="256"><span class="lineNum">     256 </span><span class="lineCov">       3387 :   for (auto &amp; request : _requests)</span></a>
+<a name="257"><span class="lineNum">     257 </span><span class="lineNoCov">          0 :     request-&gt;wait();</span></a>
+<a name="258"><span class="lineNum">     258 </span>            : }</a>
 </pre>
       </td>
     </tr>

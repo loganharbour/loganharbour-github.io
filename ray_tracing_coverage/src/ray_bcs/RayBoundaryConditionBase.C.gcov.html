@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-01 10:10:31</td>
+            <td class="headerValue">2020-11-12 16:20:26</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">6</td>
@@ -87,95 +87,95 @@
 <a name="17"><span class="lineNum">      17 </span>            : #include &quot;Assembly.h&quot;</a>
 <a name="18"><span class="lineNum">      18 </span>            : </a>
 <a name="19"><span class="lineNum">      19 </span>            : InputParameters</a>
-<a name="20"><span class="lineNum">      20 </span><span class="lineCov">      13212 : RayBoundaryConditionBase::validParams()</span></a>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">      11584 : RayBoundaryConditionBase::validParams()</span></a>
 <a name="21"><span class="lineNum">      21 </span>            : {</a>
-<a name="22"><span class="lineNum">      22 </span><span class="lineCov">      13212 :   auto params = RayTracingObject::validParams();</span></a>
-<a name="23"><span class="lineNum">      23 </span><span class="lineCov">      13212 :   params += BoundaryRestrictableRequired::validParams();</span></a>
+<a name="22"><span class="lineNum">      22 </span><span class="lineCov">      11584 :   auto params = RayTracingObject::validParams();</span></a>
+<a name="23"><span class="lineNum">      23 </span><span class="lineCov">      11584 :   params += BoundaryRestrictableRequired::validParams();</span></a>
 <a name="24"><span class="lineNum">      24 </span>            : </a>
-<a name="25"><span class="lineNum">      25 </span><span class="lineCov">      26424 :   params.addParam&lt;std::vector&lt;std::string&gt;&gt;(&quot;depends_on&quot;,</span></a>
+<a name="25"><span class="lineNum">      25 </span><span class="lineCov">      23168 :   params.addParam&lt;std::vector&lt;std::string&gt;&gt;(&quot;depends_on&quot;,</span></a>
 <a name="26"><span class="lineNum">      26 </span>            :                                             &quot;Other RayBCs that this RayBC depends on&quot;);</a>
 <a name="27"><span class="lineNum">      27 </span>            : </a>
-<a name="28"><span class="lineNum">      28 </span><span class="lineCov">      13212 :   params.registerBase(&quot;RayBoundaryCondition&quot;);</span></a>
-<a name="29"><span class="lineNum">      29 </span><span class="lineCov">      13212 :   params.registerSystemAttributeName(&quot;RayBoundaryCondition&quot;);</span></a>
+<a name="28"><span class="lineNum">      28 </span><span class="lineCov">      11584 :   params.registerBase(&quot;RayBoundaryCondition&quot;);</span></a>
+<a name="29"><span class="lineNum">      29 </span><span class="lineCov">      11584 :   params.registerSystemAttributeName(&quot;RayBoundaryCondition&quot;);</span></a>
 <a name="30"><span class="lineNum">      30 </span>            : </a>
 <a name="31"><span class="lineNum">      31 </span>            :   // We don't currently allow reinits on RayBCs just yet</a>
-<a name="32"><span class="lineNum">      32 </span><span class="lineCov">      13212 :   params.suppressParameter&lt;bool&gt;(&quot;implicit&quot;);</span></a>
+<a name="32"><span class="lineNum">      32 </span><span class="lineCov">      11584 :   params.suppressParameter&lt;bool&gt;(&quot;implicit&quot;);</span></a>
 <a name="33"><span class="lineNum">      33 </span>            : </a>
-<a name="34"><span class="lineNum">      34 </span><span class="lineCov">      13212 :   return params;</span></a>
+<a name="34"><span class="lineNum">      34 </span><span class="lineCov">      11584 :   return params;</span></a>
 <a name="35"><span class="lineNum">      35 </span>            : }</a>
 <a name="36"><span class="lineNum">      36 </span>            : </a>
-<a name="37"><span class="lineNum">      37 </span><span class="lineCov">       6966 : RayBoundaryConditionBase::RayBoundaryConditionBase(const InputParameters &amp; params)</span></a>
+<a name="37"><span class="lineNum">      37 </span><span class="lineCov">       6154 : RayBoundaryConditionBase::RayBoundaryConditionBase(const InputParameters &amp; params)</span></a>
 <a name="38"><span class="lineNum">      38 </span>            :   : RayTracingObject(params),</a>
 <a name="39"><span class="lineNum">      39 </span>            :     Restartable(this, &quot;RayBoundaryConditions&quot;),</a>
 <a name="40"><span class="lineNum">      40 </span>            :     BoundaryRestrictableRequired(this, false), // false for sidesets</a>
-<a name="41"><span class="lineNum">      41 </span><span class="lineCov">       6966 :     _current_intersection_point(_study.traceRay(_tid).currentIntersectionPoint()),</span></a>
-<a name="42"><span class="lineNum">      42 </span><span class="lineCov">      13932 :     _current_bnd_id(_study.traceRay(_tid).currentBoundaryID())</span></a>
+<a name="41"><span class="lineNum">      41 </span><span class="lineCov">       6154 :     _current_intersection_point(_study.traceRay(_tid).currentIntersectionPoint()),</span></a>
+<a name="42"><span class="lineNum">      42 </span><span class="lineCov">      12308 :     _current_bnd_id(_study.traceRay(_tid).currentBoundaryID())</span></a>
 <a name="43"><span class="lineNum">      43 </span>            : {</a>
 <a name="44"><span class="lineNum">      44 </span>            :   // Add dependencies</a>
-<a name="45"><span class="lineNum">      45 </span><span class="lineCov">       6966 :   if (params.isParamSetByUser(&quot;depends_on&quot;))</span></a>
-<a name="46"><span class="lineNum">      46 </span><span class="lineCov">        240 :     for (const auto &amp; name : getParam&lt;std::vector&lt;std::string&gt;&gt;(&quot;depends_on&quot;))</span></a>
-<a name="47"><span class="lineNum">      47 </span><span class="lineCov">        240 :       dependsOn(name);</span></a>
-<a name="48"><span class="lineNum">      48 </span><span class="lineCov">       6966 : }</span></a>
+<a name="45"><span class="lineNum">      45 </span><span class="lineCov">       6154 :   if (params.isParamSetByUser(&quot;depends_on&quot;))</span></a>
+<a name="46"><span class="lineNum">      46 </span><span class="lineCov">        204 :     for (const auto &amp; name : getParam&lt;std::vector&lt;std::string&gt;&gt;(&quot;depends_on&quot;))</span></a>
+<a name="47"><span class="lineNum">      47 </span><span class="lineCov">        204 :       dependsOn(name);</span></a>
+<a name="48"><span class="lineNum">      48 </span><span class="lineCov">       6154 : }</span></a>
 <a name="49"><span class="lineNum">      49 </span>            : </a>
-<a name="50"><span class="lineNum">      50 </span><span class="lineCov">       6966 : RayBoundaryConditionBase::~RayBoundaryConditionBase() {}</span></a>
+<a name="50"><span class="lineNum">      50 </span><span class="lineCov">       6154 : RayBoundaryConditionBase::~RayBoundaryConditionBase() {}</span></a>
 <a name="51"><span class="lineNum">      51 </span>            : </a>
 <a name="52"><span class="lineNum">      52 </span>            : void</a>
-<a name="53"><span class="lineNum">      53 </span><span class="lineCov">      23062 : RayBoundaryConditionBase::changeRayDirection(const Point &amp; direction, const bool skip_changed_check)</span></a>
+<a name="53"><span class="lineNum">      53 </span><span class="lineCov">      18090 : RayBoundaryConditionBase::changeRayDirection(const Point &amp; direction, const bool skip_changed_check)</span></a>
 <a name="54"><span class="lineNum">      54 </span>            : {</a>
-<a name="55"><span class="lineNum">      55 </span><span class="lineCov">      23062 :   auto &amp; ray = currentRay();</span></a>
+<a name="55"><span class="lineNum">      55 </span><span class="lineCov">      18090 :   auto &amp; ray = currentRay();</span></a>
 <a name="56"><span class="lineNum">      56 </span>            : </a>
-<a name="57"><span class="lineNum">      57 </span><span class="lineCov">      23062 :   if (!ray-&gt;shouldContinue())</span></a>
+<a name="57"><span class="lineNum">      57 </span><span class="lineCov">      18090 :   if (!ray-&gt;shouldContinue())</span></a>
 <a name="58"><span class="lineNum">      58 </span><span class="lineNoCov">          0 :     mooseError(_error_prefix,</span></a>
 <a name="59"><span class="lineNum">      59 </span>            :                &quot;: Cannot changeRayDirection() for a Ray that should not continue\n\n&quot;,</a>
 <a name="60"><span class="lineNum">      60 </span><span class="lineNoCov">          0 :                ray-&gt;getInfo(&amp;_study));</span></a>
 <a name="61"><span class="lineNum">      61 </span>            : </a>
-<a name="62"><span class="lineNum">      62 </span><span class="lineCov">      23062 :   if (!ray-&gt;intersections())</span></a>
+<a name="62"><span class="lineNum">      62 </span><span class="lineCov">      18090 :   if (!ray-&gt;intersections())</span></a>
 <a name="63"><span class="lineNum">      63 </span><span class="lineNoCov">          0 :     mooseError(_error_prefix,</span></a>
 <a name="64"><span class="lineNum">      64 </span>            :                &quot;: Cannot change direction for Ray that has not moved\n\n&quot;,</a>
 <a name="65"><span class="lineNum">      65 </span><span class="lineNoCov">          0 :                ray-&gt;getInfo(&amp;_study));</span></a>
 <a name="66"><span class="lineNum">      66 </span>            : </a>
-<a name="67"><span class="lineNum">      67 </span><span class="lineCov">      23062 :   if (!skip_changed_check &amp;&amp; ray-&gt;trajectoryChanged())</span></a>
+<a name="67"><span class="lineNum">      67 </span><span class="lineCov">      18090 :   if (!skip_changed_check &amp;&amp; ray-&gt;trajectoryChanged())</span></a>
 <a name="68"><span class="lineNum">      68 </span><span class="lineNoCov">          0 :     mooseError(</span></a>
 <a name="69"><span class="lineNum">      69 </span><span class="lineNoCov">          0 :         _error_prefix,</span></a>
 <a name="70"><span class="lineNum">      70 </span>            :         &quot; is trying to change a Ray's direction, but its direction has already been changed\n\n&quot;,</a>
 <a name="71"><span class="lineNum">      71 </span><span class="lineNoCov">          0 :         ray-&gt;getInfo(&amp;_study));</span></a>
 <a name="72"><span class="lineNum">      72 </span>            : </a>
-<a name="73"><span class="lineNum">      73 </span><span class="lineCov">      23062 :   if (ray-&gt;endSet())</span></a>
+<a name="73"><span class="lineNum">      73 </span><span class="lineCov">      18090 :   if (ray-&gt;endSet())</span></a>
 <a name="74"><span class="lineNum">      74 </span><span class="lineNoCov">          0 :     mooseError(_error_prefix,</span></a>
 <a name="75"><span class="lineNum">      75 </span>            :                &quot; is trying to change the direction of a Ray that&quot;</a>
 <a name="76"><span class="lineNum">      76 </span>            :                &quot;\nhad its end point set upon generation (via setStartEnd()).&quot;</a>
 <a name="77"><span class="lineNum">      77 </span>            :                &quot;\n\nThis is not currently supported.\n\n&quot;,</a>
 <a name="78"><span class="lineNum">      78 </span><span class="lineNoCov">          0 :                ray-&gt;getInfo(&amp;_study));</span></a>
 <a name="79"><span class="lineNum">      79 </span>            : </a>
-<a name="80"><span class="lineNum">      80 </span><span class="lineCov">      23062 :   ray-&gt;changeDirection(direction, {});</span></a>
-<a name="81"><span class="lineNum">      81 </span><span class="lineCov">      23062 : }</span></a>
+<a name="80"><span class="lineNum">      80 </span><span class="lineCov">      18090 :   ray-&gt;changeDirection(direction, {});</span></a>
+<a name="81"><span class="lineNum">      81 </span><span class="lineCov">      18090 : }</span></a>
 <a name="82"><span class="lineNum">      82 </span>            : </a>
 <a name="83"><span class="lineNum">      83 </span>            : std::shared_ptr&lt;Ray&gt;</a>
-<a name="84"><span class="lineNum">      84 </span><span class="lineCov">      41256 : RayBoundaryConditionBase::acquireRay(const Point &amp; direction)</span></a>
+<a name="84"><span class="lineNum">      84 </span><span class="lineCov">      32088 : RayBoundaryConditionBase::acquireRay(const Point &amp; direction)</span></a>
 <a name="85"><span class="lineNum">      85 </span>            : {</a>
-<a name="86"><span class="lineNum">      86 </span><span class="lineCov">      41256 :   mooseAssert(_study.currentlyPropagating(), &quot;Should not be getting a Ray while not propagating&quot;);</span></a>
+<a name="86"><span class="lineNum">      86 </span><span class="lineCov">      32088 :   mooseAssert(_study.currentlyPropagating(), &quot;Should not be getting a Ray while not propagating&quot;);</span></a>
 <a name="87"><span class="lineNum">      87 </span>            : </a>
 <a name="88"><span class="lineNum">      88 </span>            :   // Acquire a Ray with the proper sizes</a>
-<a name="89"><span class="lineNum">      89 </span><span class="lineCov">      41256 :   std::shared_ptr&lt;Ray&gt; ray = _study.acquireRay(_tid, _study.rayDataSize(), _study.rayAuxDataSize());</span></a>
+<a name="89"><span class="lineNum">      89 </span><span class="lineCov">      32088 :   std::shared_ptr&lt;Ray&gt; ray = _study.acquireRay(_tid, _study.rayDataSize(), _study.rayAuxDataSize());</span></a>
 <a name="90"><span class="lineNum">      90 </span>            :   // Set the starting element to the one that we're currently in</a>
-<a name="91"><span class="lineNum">      91 </span><span class="lineCov">      41256 :   ray-&gt;setStartingElem(_current_elem);</span></a>
+<a name="91"><span class="lineNum">      91 </span><span class="lineCov">      32088 :   ray-&gt;setStartingElem(_current_elem);</span></a>
 <a name="92"><span class="lineNum">      92 </span>            :   // Set the incoming side to the side that we're currently on</a>
-<a name="93"><span class="lineNum">      93 </span><span class="lineCov">      41256 :   ray-&gt;setStartingIncomingSide(_current_intersected_side);</span></a>
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">      32088 :   ray-&gt;setStartingIncomingSide(_current_intersected_side);</span></a>
 <a name="94"><span class="lineNum">      94 </span>            :   // Set the start and direction with the current intersection and user specified direction</a>
-<a name="95"><span class="lineNum">      95 </span><span class="lineCov">      41256 :   ray-&gt;setStartDirection(_current_intersection_point, direction);</span></a>
+<a name="95"><span class="lineNum">      95 </span><span class="lineCov">      32088 :   ray-&gt;setStartDirection(_current_intersection_point, direction);</span></a>
 <a name="96"><span class="lineNum">      96 </span>            :   // And give it a reasonable ID</a>
-<a name="97"><span class="lineNum">      97 </span><span class="lineCov">      41256 :   ray-&gt;setID(_study.generateUniqueRayID(_tid));</span></a>
+<a name="97"><span class="lineNum">      97 </span><span class="lineCov">      32088 :   ray-&gt;setID(_study.generateUniqueRayID(_tid));</span></a>
 <a name="98"><span class="lineNum">      98 </span>            : </a>
-<a name="99"><span class="lineNum">      99 </span><span class="lineCov">      41256 :   return ray;</span></a>
+<a name="99"><span class="lineNum">      99 </span><span class="lineCov">      32088 :   return ray;</span></a>
 <a name="100"><span class="lineNum">     100 </span>            : }</a>
 <a name="101"><span class="lineNum">     101 </span>            : </a>
 <a name="102"><span class="lineNum">     102 </span>            : void</a>
-<a name="103"><span class="lineNum">     103 </span><span class="lineCov">      41256 : RayBoundaryConditionBase::moveRayToBuffer(std::shared_ptr&lt;Ray&gt; &amp; ray)</span></a>
+<a name="103"><span class="lineNum">     103 </span><span class="lineCov">      32088 : RayBoundaryConditionBase::moveRayToBuffer(std::shared_ptr&lt;Ray&gt; &amp; ray)</span></a>
 <a name="104"><span class="lineNum">     104 </span>            : {</a>
-<a name="105"><span class="lineNum">     105 </span><span class="lineCov">      41256 :   mooseAssert(_study.currentlyPropagating(),</span></a>
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">      32088 :   mooseAssert(_study.currentlyPropagating(),</span></a>
 <a name="106"><span class="lineNum">     106 </span>            :               &quot;Should not move Rays into buffer while not propagating&quot;);</a>
 <a name="107"><span class="lineNum">     107 </span>            : </a>
-<a name="108"><span class="lineNum">     108 </span><span class="lineCov">      41256 :   if (_current_elem != ray-&gt;startingElem())</span></a>
+<a name="108"><span class="lineNum">     108 </span><span class="lineCov">      32088 :   if (_current_elem != ray-&gt;startingElem())</span></a>
 <a name="109"><span class="lineNum">     109 </span><span class="lineNoCov">          0 :     mooseError(_error_prefix,</span></a>
 <a name="110"><span class="lineNum">     110 </span>            :                &quot;: A Ray was added to the buffer mid-trace that does not\n&quot;,</a>
 <a name="111"><span class="lineNum">     111 </span>            :                &quot;start in the same Elem as the &quot;,</a>
@@ -183,7 +183,7 @@
 <a name="113"><span class="lineNum">     113 </span>            :                &quot; that created it\n\n&quot;,</a>
 <a name="114"><span class="lineNum">     114 </span><span class="lineNoCov">          0 :                currentRay()-&gt;getInfo(&amp;_study));</span></a>
 <a name="115"><span class="lineNum">     115 </span>            : </a>
-<a name="116"><span class="lineNum">     116 </span><span class="lineCov">      41256 :   if (ray-&gt;startingIncomingSide() != _current_intersected_side)</span></a>
+<a name="116"><span class="lineNum">     116 </span><span class="lineCov">      32088 :   if (ray-&gt;startingIncomingSide() != _current_intersected_side)</span></a>
 <a name="117"><span class="lineNum">     117 </span><span class="lineNoCov">          0 :     mooseError(</span></a>
 <a name="118"><span class="lineNum">     118 </span><span class="lineNoCov">          0 :         _error_prefix,</span></a>
 <a name="119"><span class="lineNum">     119 </span>            :         &quot; is trying to add a Ray to the buffer during tracing,\n&quot;,</a>
@@ -192,8 +192,8 @@
 <a name="122"><span class="lineNum">     122 </span>            :         &quot; that created it\n\n&quot;,</a>
 <a name="123"><span class="lineNum">     123 </span><span class="lineNoCov">          0 :         ray-&gt;getInfo(&amp;_study));</span></a>
 <a name="124"><span class="lineNum">     124 </span>            : </a>
-<a name="125"><span class="lineNum">     125 </span><span class="lineCov">      41256 :   _study.moveRayToBuffer(ray, _tid, _move_ray_error_prefix);</span></a>
-<a name="126"><span class="lineNum">     126 </span><span class="lineCov">      41256 : }</span></a>
+<a name="125"><span class="lineNum">     125 </span><span class="lineCov">      32088 :   _study.moveRayToBuffer(ray, _tid, _move_ray_error_prefix);</span></a>
+<a name="126"><span class="lineNum">     126 </span><span class="lineCov">      32088 : }</span></a>
 </pre>
       </td>
     </tr>

@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-12 16:20:26</td>
+            <td class="headerValue">2020-11-24 15:50:37</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -86,16 +86,16 @@
 <a name="16"><span class="lineNum">      16 </span><span class="lineNoCov">          0 : class GenericRayKernel : public RayKernel</span></a>
 <a name="17"><span class="lineNum">      17 </span>            : {</a>
 <a name="18"><span class="lineNum">      18 </span>            : public:</a>
-<a name="19"><span class="lineNum">      19 </span><span class="lineCov">         64 :   static InputParameters validParams() { return RayKernel::validParams(); };</span></a>
-<a name="20"><span class="lineNum">      20 </span><span class="lineCov">         34 :   GenericRayKernel(const InputParameters &amp; parameters) : RayKernel(parameters) {}</span></a>
+<a name="19"><span class="lineNum">      19 </span><span class="lineCov">        512 :   static InputParameters validParams() { return RayKernel::validParams(); };</span></a>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">        272 :   GenericRayKernel(const InputParameters &amp; parameters) : RayKernel(parameters) {}</span></a>
 <a name="21"><span class="lineNum">      21 </span>            : };</a>
 <a name="22"><span class="lineNum">      22 </span>            : </a>
 <a name="23"><span class="lineNum">      23 </span>            : template &lt;&gt;</a>
 <a name="24"><span class="lineNum">      24 </span><span class="lineNoCov">          0 : class GenericRayKernel&lt;true&gt; : public ADRayKernel</span></a>
 <a name="25"><span class="lineNum">      25 </span>            : {</a>
 <a name="26"><span class="lineNum">      26 </span>            : public:</a>
-<a name="27"><span class="lineNum">      27 </span><span class="lineCov">         64 :   static InputParameters validParams() { return ADRayKernel::validParams(); };</span></a>
-<a name="28"><span class="lineNum">      28 </span><span class="lineCov">         34 :   GenericRayKernel(const InputParameters &amp; parameters) : ADRayKernel(parameters) {}</span></a>
+<a name="27"><span class="lineNum">      27 </span><span class="lineCov">        128 :   static InputParameters validParams() { return ADRayKernel::validParams(); };</span></a>
+<a name="28"><span class="lineNum">      28 </span><span class="lineCov">         68 :   GenericRayKernel(const InputParameters &amp; parameters) : ADRayKernel(parameters) {}</span></a>
 <a name="29"><span class="lineNum">      29 </span>            : </a>
 <a name="30"><span class="lineNum">      30 </span>            : protected:</a>
 <a name="31"><span class="lineNum">      31 </span>            :   /**</a>
@@ -121,28 +121,24 @@
 <a name="51"><span class="lineNum">      51 </span>            :    * override precalculateOffDiagJacobian() for the non-AD case.</a>
 <a name="52"><span class="lineNum">      52 </span>            :    */</a>
 <a name="53"><span class="lineNum">      53 </span><span class="lineNoCov">          0 :   virtual void precalculateOffDiagJacobian(const unsigned int) {}</span></a>
-<a name="54"><span class="lineNum">      54 </span>            : </a>
-<a name="55"><span class="lineNum">      55 </span>            : #define usingGenericRayKernelMembers                                                               \</a>
-<a name="56"><span class="lineNum">      56 </span>            :   usingFunctionInterfaceMembers;                                                                   \</a>
-<a name="57"><span class="lineNum">      57 </span>            :   usingPostprocessorInterfaceMembers;                                                              \</a>
-<a name="58"><span class="lineNum">      58 </span>            :   usingMooseObjectMembers;                                                                         \</a>
-<a name="59"><span class="lineNum">      59 </span>            :   usingTransientInterfaceMembers;                                                                  \</a>
-<a name="60"><span class="lineNum">      60 </span>            :   usingTaggingInterfaceMembers;                                                                    \</a>
-<a name="61"><span class="lineNum">      61 </span>            :   usingBlockRestrictableMembers;                                                                   \</a>
-<a name="62"><span class="lineNum">      62 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_qp;                                                              \</a>
-<a name="63"><span class="lineNum">      63 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_i;                                                               \</a>
-<a name="64"><span class="lineNum">      64 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_j;                                                               \</a>
-<a name="65"><span class="lineNum">      65 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_u;                                                               \</a>
-<a name="66"><span class="lineNum">      66 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_phi;                                                             \</a>
-<a name="67"><span class="lineNum">      67 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_test;                                                            \</a>
-<a name="68"><span class="lineNum">      68 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_q_point;                                                         \</a>
-<a name="69"><span class="lineNum">      69 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_var;                                                             \</a>
-<a name="70"><span class="lineNum">      70 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_name;                                                            \</a>
-<a name="71"><span class="lineNum">      71 </span>            :   using GenericRayKernel&lt;is_ad&gt;::getVar;                                                           \</a>
-<a name="72"><span class="lineNum">      72 </span>            :   using Coupleable::coupled;                                                                       \</a>
-<a name="73"><span class="lineNum">      73 </span>            :   using Coupleable::coupledComponents;                                                             \</a>
-<a name="74"><span class="lineNum">      74 </span>            :   using Coupleable::coupledGenericValue</a>
-<a name="75"><span class="lineNum">      75 </span>            : };</a>
+<a name="54"><span class="lineNum">      54 </span>            : };</a>
+<a name="55"><span class="lineNum">      55 </span>            : </a>
+<a name="56"><span class="lineNum">      56 </span>            : #define usingGenericRayKernelMembers                                                               \</a>
+<a name="57"><span class="lineNum">      57 </span>            :   usingRayKernelBaseMembers;                                                                       \</a>
+<a name="58"><span class="lineNum">      58 </span>            :   usingTaggingInterfaceMembers;                                                                    \</a>
+<a name="59"><span class="lineNum">      59 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_qp;                                                              \</a>
+<a name="60"><span class="lineNum">      60 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_i;                                                               \</a>
+<a name="61"><span class="lineNum">      61 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_j;                                                               \</a>
+<a name="62"><span class="lineNum">      62 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_u;                                                               \</a>
+<a name="63"><span class="lineNum">      63 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_phi;                                                             \</a>
+<a name="64"><span class="lineNum">      64 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_test;                                                            \</a>
+<a name="65"><span class="lineNum">      65 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_q_point;                                                         \</a>
+<a name="66"><span class="lineNum">      66 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_var;                                                             \</a>
+<a name="67"><span class="lineNum">      67 </span>            :   using GenericRayKernel&lt;is_ad&gt;::_name;                                                            \</a>
+<a name="68"><span class="lineNum">      68 </span>            :   using GenericRayKernel&lt;is_ad&gt;::getVar;                                                           \</a>
+<a name="69"><span class="lineNum">      69 </span>            :   using Coupleable::coupled;                                                                       \</a>
+<a name="70"><span class="lineNum">      70 </span>            :   using Coupleable::coupledComponents;                                                             \</a>
+<a name="71"><span class="lineNum">      71 </span>            :   using Coupleable::coupledGenericValue</a>
 </pre>
       </td>
     </tr>

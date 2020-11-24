@@ -31,13 +31,13 @@
             <td class="headerValue">ray_tracing Test Coverage</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">56</td>
-            <td class="headerCovTableEntry">66</td>
-            <td class="headerCovTableEntryMed">84.8 %</td>
+            <td class="headerCovTableEntry">54</td>
+            <td class="headerCovTableEntry">64</td>
+            <td class="headerCovTableEntryMed">84.4 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-12 16:20:26</td>
+            <td class="headerValue">2020-11-24 15:50:37</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">3</td>
@@ -202,30 +202,24 @@
 <a name="132"><span class="lineNum">     132 </span><span class="lineCov">      32640 :           RayTracingAngularQuadrature::getDirection(l, rotation_matrix, angles, _mesh.dimension());</span></a>
 <a name="133"><span class="lineNum">     133 </span>            : </a>
 <a name="134"><span class="lineNum">     134 </span>            :       // Get a Ray from the study to initialize</a>
-<a name="135"><span class="lineNum">     135 </span><span class="lineCov">      32640 :       std::shared_ptr&lt;Ray&gt; ray = acquireRay(/* tid = */ 0);</span></a>
+<a name="135"><span class="lineNum">     135 </span><span class="lineCov">      32640 :       std::shared_ptr&lt;Ray&gt; ray = acquireReplicatedRay();</span></a>
 <a name="136"><span class="lineNum">     136 </span>            : </a>
 <a name="137"><span class="lineNum">     137 </span>            :       // Start from our cone point in the rotated angular quadrature direction</a>
 <a name="138"><span class="lineNum">     138 </span>            :       // Note here that we do not need to set the starting element - all Rays</a>
 <a name="139"><span class="lineNum">     139 </span>            :       // at this point are replicated across all processors and will be</a>
 <a name="140"><span class="lineNum">     140 </span>            :       // properly claimed (moved to the starting proc with the correct starting elem)</a>
-<a name="141"><span class="lineNum">     141 </span><span class="lineCov">      16320 :       ray-&gt;setStartDirection(_start_points[i], direction);</span></a>
-<a name="142"><span class="lineNum">     142 </span>            : </a>
-<a name="143"><span class="lineNum">     143 </span>            :       // Unique ID (but replicated across all processors) for this point/direction combo</a>
-<a name="144"><span class="lineNum">     144 </span><span class="lineCov">      16320 :       ray-&gt;setID(i * angles.size() + l);</span></a>
-<a name="145"><span class="lineNum">     145 </span>            : </a>
-<a name="146"><span class="lineNum">     146 </span>            :       // Size and zero all of the data</a>
-<a name="147"><span class="lineNum">     147 </span><span class="lineCov">      16320 :       ray-&gt;data().resize(rayDataSize(), 0);</span></a>
-<a name="148"><span class="lineNum">     148 </span><span class="lineCov">      16320 :       ray-&gt;auxData().resize(rayAuxDataSize(), 0);</span></a>
-<a name="149"><span class="lineNum">     149 </span>            : </a>
-<a name="150"><span class="lineNum">     150 </span>            :       // Add the angular quadrature weight and scaling factor as data on the Ray for weighting</a>
-<a name="151"><span class="lineNum">     151 </span>            :       // The weights currently sum to 2 * half_cone_rad - we want them to sum to 1</a>
-<a name="152"><span class="lineNum">     152 </span><span class="lineCov">      16320 :       ray-&gt;data(_ray_data_index) = _scaling_factors[i] * weights[l] / (2 * half_cone_rad);</span></a>
-<a name="153"><span class="lineNum">     153 </span>            : </a>
-<a name="154"><span class="lineNum">     154 </span>            :       // Done with this Ray - move it to be traced later on</a>
-<a name="155"><span class="lineNum">     155 </span><span class="lineCov">      16320 :       _rays.emplace_back(std::move(ray));</span></a>
-<a name="156"><span class="lineNum">     156 </span>            :     }</a>
-<a name="157"><span class="lineNum">     157 </span>            :   }</a>
-<a name="158"><span class="lineNum">     158 </span><span class="lineCov">         60 : }</span></a>
+<a name="141"><span class="lineNum">     141 </span><span class="lineCov">      16320 :       ray-&gt;setStart(_start_points[i]);</span></a>
+<a name="142"><span class="lineNum">     142 </span><span class="lineCov">      16320 :       ray-&gt;setStartingDirection(direction);</span></a>
+<a name="143"><span class="lineNum">     143 </span>            : </a>
+<a name="144"><span class="lineNum">     144 </span>            :       // Add the angular quadrature weight and scaling factor as data on the Ray for weighting</a>
+<a name="145"><span class="lineNum">     145 </span>            :       // The weights currently sum to 2 * half_cone_rad - we want them to sum to 1</a>
+<a name="146"><span class="lineNum">     146 </span><span class="lineCov">      16320 :       ray-&gt;data(_ray_data_index) = _scaling_factors[i] * weights[l] / (2 * half_cone_rad);</span></a>
+<a name="147"><span class="lineNum">     147 </span>            : </a>
+<a name="148"><span class="lineNum">     148 </span>            :       // Done with this Ray - move it to be traced later on</a>
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">      16320 :       _rays.emplace_back(std::move(ray));</span></a>
+<a name="150"><span class="lineNum">     150 </span>            :     }</a>
+<a name="151"><span class="lineNum">     151 </span>            :   }</a>
+<a name="152"><span class="lineNum">     152 </span><span class="lineCov">         60 : }</span></a>
 </pre>
       </td>
     </tr>

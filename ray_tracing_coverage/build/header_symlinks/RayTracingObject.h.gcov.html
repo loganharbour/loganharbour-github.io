@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-12 16:20:26</td>
+            <td class="headerValue">2020-11-24 15:50:37</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">4</td>
@@ -95,7 +95,7 @@
 <a name="25"><span class="lineNum">      25 </span>            : // Local includes</a>
 <a name="26"><span class="lineNum">      26 </span>            : #include &quot;ElemExtrema.h&quot;</a>
 <a name="27"><span class="lineNum">      27 </span>            : </a>
-<a name="28"><span class="lineNum">      28 </span>            : // Forward decalarations</a>
+<a name="28"><span class="lineNum">      28 </span>            : // Forward declarations</a>
 <a name="29"><span class="lineNum">      29 </span>            : class AuxiliarySystem;</a>
 <a name="30"><span class="lineNum">      30 </span>            : class NonlinearSystemBase;</a>
 <a name="31"><span class="lineNum">      31 </span>            : </a>
@@ -117,8 +117,8 @@
 <a name="47"><span class="lineNum">      47 </span>            : </a>
 <a name="48"><span class="lineNum">      48 </span>            :   static InputParameters validParams();</a>
 <a name="49"><span class="lineNum">      49 </span>            : </a>
-<a name="50"><span class="lineNum">      50 </span><span class="lineCov">      75485 :   const std::set&lt;std::string&gt; &amp; getRequestedItems() override { return _depend_names; }</span></a>
-<a name="51"><span class="lineNum">      51 </span><span class="lineCov">      38028 :   const std::set&lt;std::string&gt; &amp; getSuppliedItems() override { return _supplied_names; }</span></a>
+<a name="50"><span class="lineNum">      50 </span><span class="lineCov">      76060 :   const std::set&lt;std::string&gt; &amp; getRequestedItems() override { return _depend_names; }</span></a>
+<a name="51"><span class="lineNum">      51 </span><span class="lineCov">      38046 :   const std::set&lt;std::string&gt; &amp; getSuppliedItems() override { return _supplied_names; }</span></a>
 <a name="52"><span class="lineNum">      52 </span>            : </a>
 <a name="53"><span class="lineNum">      53 </span>            :   /**</a>
 <a name="54"><span class="lineNum">      54 </span>            :    * The RayTracingStudy associated with this object</a>
@@ -127,16 +127,16 @@
 <a name="57"><span class="lineNum">      57 </span>            :   /**</a>
 <a name="58"><span class="lineNum">      58 </span>            :    * The RayTracingStudy associated with this object</a>
 <a name="59"><span class="lineNum">      59 </span>            :    */</a>
-<a name="60"><span class="lineNum">      60 </span><span class="lineCov">      11358 :   const RayTracingStudy &amp; study() const { return _study; }</span></a>
+<a name="60"><span class="lineNum">      60 </span><span class="lineCov">      11520 :   const RayTracingStudy &amp; study() const { return _study; }</span></a>
 <a name="61"><span class="lineNum">      61 </span>            : </a>
 <a name="62"><span class="lineNum">      62 </span>            :   /**</a>
 <a name="63"><span class="lineNum">      63 </span>            :    * Insertion point called immediately before executing the RayTracingStudy.</a>
 <a name="64"><span class="lineNum">      64 </span>            :    */</a>
-<a name="65"><span class="lineNum">      65 </span><span class="lineCov">      17112 :   virtual void preExecuteStudy(){};</span></a>
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">      12360 :   virtual void preExecuteStudy(){};</span></a>
 <a name="66"><span class="lineNum">      66 </span>            :   /**</a>
 <a name="67"><span class="lineNum">      67 </span>            :    * Insertion point called immediately after executing the RayTracingStudy.</a>
 <a name="68"><span class="lineNum">      68 </span>            :    */</a>
-<a name="69"><span class="lineNum">      69 </span><span class="lineCov">      17112 :   virtual void postExecuteStudy(){};</span></a>
+<a name="69"><span class="lineNum">      69 </span><span class="lineCov">      17724 :   virtual void postExecuteStudy(){};</span></a>
 <a name="70"><span class="lineNum">      70 </span>            : </a>
 <a name="71"><span class="lineNum">      71 </span>            :   /**</a>
 <a name="72"><span class="lineNum">      72 </span>            :    * Gets the error prefix (type() + &quot; '&quot; + name() &quot;'&quot;)</a>
@@ -147,7 +147,7 @@
 <a name="77"><span class="lineNum">      77 </span>            :   /**</a>
 <a name="78"><span class="lineNum">      78 </span>            :    * Gets the current Ray that this is working on</a>
 <a name="79"><span class="lineNum">      79 </span>            :    */</a>
-<a name="80"><span class="lineNum">      80 </span><span class="lineCov">    1277604 :   const std::shared_ptr&lt;Ray&gt; &amp; currentRay() const { return *_current_ray; }</span></a>
+<a name="80"><span class="lineNum">      80 </span><span class="lineCov">    7538182 :   const std::shared_ptr&lt;Ray&gt; &amp; currentRay() const { return *_current_ray; }</span></a>
 <a name="81"><span class="lineNum">      81 </span>            : </a>
 <a name="82"><span class="lineNum">      82 </span>            :   /**</a>
 <a name="83"><span class="lineNum">      83 </span>            :    * Add an object of this classes base type that this class depends on.</a>
@@ -173,27 +173,33 @@
 <a name="103"><span class="lineNum">     103 </span>            : </a>
 <a name="104"><span class="lineNum">     104 </span>            :   /// Prefix used in errors (type() 'name()')</a>
 <a name="105"><span class="lineNum">     105 </span>            :   const std::string _error_prefix;</a>
-<a name="106"><span class="lineNum">     106 </span>            :   /// Error prefix to pass when adding a Ray to the buffer mid trace</a>
-<a name="107"><span class="lineNum">     107 </span>            :   const std::string _move_ray_error_prefix;</a>
-<a name="108"><span class="lineNum">     108 </span>            : </a>
-<a name="109"><span class="lineNum">     109 </span>            :   /// The current Elem that _current_ray is tracing through</a>
-<a name="110"><span class="lineNum">     110 </span>            :   const Elem * const &amp; _current_elem;</a>
-<a name="111"><span class="lineNum">     111 </span>            :   /// The subdomain ID of the _current_elem that the ray is tracing through</a>
-<a name="112"><span class="lineNum">     112 </span>            :   const SubdomainID &amp; _current_subdomain_id;</a>
-<a name="113"><span class="lineNum">     113 </span>            :   /// The side that _current_ray intersects (if any)</a>
-<a name="114"><span class="lineNum">     114 </span>            :   const unsigned short &amp; _current_intersected_side;</a>
-<a name="115"><span class="lineNum">     115 </span>            :   /// The elem extrema (vertex/edge) that _current_ray intersects (if any)</a>
-<a name="116"><span class="lineNum">     116 </span>            :   const ElemExtrema &amp; _current_intersected_extrema;</a>
-<a name="117"><span class="lineNum">     117 </span>            : </a>
-<a name="118"><span class="lineNum">     118 </span>            : private:</a>
-<a name="119"><span class="lineNum">     119 </span>            :   /// The names of the objects this depends on</a>
-<a name="120"><span class="lineNum">     120 </span>            :   std::set&lt;std::string&gt; _depend_names;</a>
-<a name="121"><span class="lineNum">     121 </span>            :   /// The names of the supplied objects: just this one</a>
-<a name="122"><span class="lineNum">     122 </span>            :   std::set&lt;std::string&gt; _supplied_names;</a>
-<a name="123"><span class="lineNum">     123 </span>            : </a>
-<a name="124"><span class="lineNum">     124 </span>            :   /// The current Ray that the action is being applied to</a>
-<a name="125"><span class="lineNum">     125 </span>            :   const std::shared_ptr&lt;Ray&gt; * const &amp; _current_ray;</a>
-<a name="126"><span class="lineNum">     126 </span>            : };</a>
+<a name="106"><span class="lineNum">     106 </span>            : </a>
+<a name="107"><span class="lineNum">     107 </span>            :   /// The current Elem that _current_ray is tracing through</a>
+<a name="108"><span class="lineNum">     108 </span>            :   const Elem * const &amp; _current_elem;</a>
+<a name="109"><span class="lineNum">     109 </span>            :   /// The subdomain ID of the _current_elem that the ray is tracing through</a>
+<a name="110"><span class="lineNum">     110 </span>            :   const SubdomainID &amp; _current_subdomain_id;</a>
+<a name="111"><span class="lineNum">     111 </span>            :   /// The side that _current_ray intersects (if any)</a>
+<a name="112"><span class="lineNum">     112 </span>            :   const unsigned short &amp; _current_intersected_side;</a>
+<a name="113"><span class="lineNum">     113 </span>            :   /// The elem extrema (vertex/edge) that _current_ray intersects (if any)</a>
+<a name="114"><span class="lineNum">     114 </span>            :   const ElemExtrema &amp; _current_intersected_extrema;</a>
+<a name="115"><span class="lineNum">     115 </span>            : </a>
+<a name="116"><span class="lineNum">     116 </span>            : private:</a>
+<a name="117"><span class="lineNum">     117 </span>            :   /// The names of the objects this depends on</a>
+<a name="118"><span class="lineNum">     118 </span>            :   std::set&lt;std::string&gt; _depend_names;</a>
+<a name="119"><span class="lineNum">     119 </span>            :   /// The names of the supplied objects: just this one</a>
+<a name="120"><span class="lineNum">     120 </span>            :   std::set&lt;std::string&gt; _supplied_names;</a>
+<a name="121"><span class="lineNum">     121 </span>            : </a>
+<a name="122"><span class="lineNum">     122 </span>            :   /// The current Ray that the action is being applied to</a>
+<a name="123"><span class="lineNum">     123 </span>            :   const std::shared_ptr&lt;Ray&gt; * const &amp; _current_ray;</a>
+<a name="124"><span class="lineNum">     124 </span>            : };</a>
+<a name="125"><span class="lineNum">     125 </span>            : </a>
+<a name="126"><span class="lineNum">     126 </span>            : #define usingRayTracingObjectMembers                                                               \</a>
+<a name="127"><span class="lineNum">     127 </span>            :   usingMooseObjectMembers;                                                                         \</a>
+<a name="128"><span class="lineNum">     128 </span>            :   usingFunctionInterfaceMembers;                                                                   \</a>
+<a name="129"><span class="lineNum">     129 </span>            :   usingPostprocessorInterfaceMembers;                                                              \</a>
+<a name="130"><span class="lineNum">     130 </span>            :   usingTransientInterfaceMembers;                                                                  \</a>
+<a name="131"><span class="lineNum">     131 </span>            :   using RayTracingObject::currentRay;                                                              \</a>
+<a name="132"><span class="lineNum">     132 </span>            :   using RayTracingObject::errorPrefix</a>
 </pre>
       </td>
     </tr>

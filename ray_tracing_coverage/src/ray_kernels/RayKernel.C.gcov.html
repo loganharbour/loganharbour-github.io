@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-12 16:20:26</td>
+            <td class="headerValue">2020-11-24 15:50:37</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">5</td>
@@ -117,7 +117,7 @@
 <a name="47"><span class="lineNum">      47 </span><span class="lineCov">        272 :     _phi(_assembly.phi(_var)),</span></a>
 <a name="48"><span class="lineNum">      48 </span><span class="lineCov">       1088 :     _grad_phi(_assembly.gradPhi(_var))</span></a>
 <a name="49"><span class="lineNum">      49 </span>            : {</a>
-<a name="50"><span class="lineNum">      50 </span>            :   // We do not allow RZ/RSPHEICAL because in the context of these coord</a>
+<a name="50"><span class="lineNum">      50 </span>            :   // We do not allow RZ/RSPHERICAL because in the context of these coord</a>
 <a name="51"><span class="lineNum">      51 </span>            :   // systems there is no way to represent a line source - we would end up</a>
 <a name="52"><span class="lineNum">      52 </span>            :   // with a plane/surface source or a volumetric source, respectively.</a>
 <a name="53"><span class="lineNum">      53 </span>            :   // This is also why we do not multiply by _coord[_qp] in any of the</a>
@@ -131,16 +131,16 @@
 <a name="61"><span class="lineNum">      61 </span>            : </a>
 <a name="62"><span class="lineNum">      62 </span>            : template &lt;typename T&gt;</a>
 <a name="63"><span class="lineNum">      63 </span>            : void</a>
-<a name="64"><span class="lineNum">      64 </span><span class="lineCov">     573930 : RayKernelTempl&lt;T&gt;::computeIntegral()</span></a>
+<a name="64"><span class="lineNum">      64 </span><span class="lineCov">     573930 : RayKernelTempl&lt;T&gt;::onSegment()</span></a>
 <a name="65"><span class="lineNum">      65 </span>            : {</a>
 <a name="66"><span class="lineNum">      66 </span><span class="lineCov">     573930 :   mooseAssert(_current_subdomain_id == _assembly.currentSubdomainID(), &quot;Subdomain IDs not in sync&quot;);</span></a>
 <a name="67"><span class="lineNum">      67 </span>            : </a>
-<a name="68"><span class="lineNum">      68 </span><span class="lineCov">     573930 :   if (_study.computingJacobian())</span></a>
+<a name="68"><span class="lineNum">      68 </span><span class="lineCov">     573930 :   if (_fe_problem.currentlyComputingJacobian())</span></a>
 <a name="69"><span class="lineNum">      69 </span><span class="lineCov">      72219 :     computeJacobian();</span></a>
-<a name="70"><span class="lineNum">      70 </span><span class="lineCov">     501711 :   else if (_study.computingResidual())</span></a>
+<a name="70"><span class="lineNum">      70 </span><span class="lineCov">     501711 :   else if (_fe_problem.currentlyComputingResidual())</span></a>
 <a name="71"><span class="lineNum">      71 </span><span class="lineCov">     501711 :     computeResidual();</span></a>
 <a name="72"><span class="lineNum">      72 </span>            :   else</a>
-<a name="73"><span class="lineNum">      73 </span><span class="lineNoCov">          0 :     mooseError(_error_prefix, &quot; Should not be computing outside of residual/Jacobian&quot;);</span></a>
+<a name="73"><span class="lineNum">      73 </span><span class="lineNoCov">          0 :     mooseError(_error_prefix, &quot;: Should not be computing outside of residual/Jacobian&quot;);</span></a>
 <a name="74"><span class="lineNum">      74 </span><span class="lineCov">     573930 : }</span></a>
 <a name="75"><span class="lineNum">      75 </span>            : </a>
 <a name="76"><span class="lineNum">      76 </span>            : template &lt;typename T&gt;</a>

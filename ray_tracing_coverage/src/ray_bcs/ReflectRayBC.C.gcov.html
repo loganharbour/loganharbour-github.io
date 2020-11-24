@@ -31,13 +31,13 @@
             <td class="headerValue">ray_tracing Test Coverage</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">15</td>
-            <td class="headerCovTableEntry">19</td>
-            <td class="headerCovTableEntryMed">78.9 %</td>
+            <td class="headerCovTableEntry">17</td>
+            <td class="headerCovTableEntry">21</td>
+            <td class="headerCovTableEntryMed">81.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-12 16:20:26</td>
+            <td class="headerValue">2020-11-24 15:50:37</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">4</td>
@@ -106,7 +106,7 @@
 <a name="36"><span class="lineNum">      36 </span>            :                  &quot;To disable this warning, set UserObjects/&quot;,</a>
 <a name="37"><span class="lineNum">      37 </span><span class="lineNoCov">          0 :                  _study.name(),</span></a>
 <a name="38"><span class="lineNum">      38 </span>            :                  &quot;/warn_non_planar=false.\n\n&quot;,</a>
-<a name="39"><span class="lineNum">      39 </span><span class="lineNoCov">          0 :                  currentRay()-&gt;getInfo(&amp;_study));</span></a>
+<a name="39"><span class="lineNum">      39 </span><span class="lineNoCov">          0 :                  currentRay()-&gt;getInfo());</span></a>
 <a name="40"><span class="lineNum">      40 </span>            : </a>
 <a name="41"><span class="lineNum">      41 </span>            :   // No need to do anything if the Ray's gonna die anyway</a>
 <a name="42"><span class="lineNum">      42 </span><span class="lineCov">      18090 :   if (!currentRay()-&gt;shouldContinue())</span></a>
@@ -128,10 +128,13 @@
 <a name="58"><span class="lineNum">      58 </span>            : Point</a>
 <a name="59"><span class="lineNum">      59 </span><span class="lineCov">      18090 : ReflectRayBC::reflectedDirection(const Point &amp; direction, const Point &amp; normal)</span></a>
 <a name="60"><span class="lineNum">      60 </span>            : {</a>
-<a name="61"><span class="lineNum">      61 </span><span class="lineCov">      18090 :   Point reflected_direction = direction;</span></a>
-<a name="62"><span class="lineNum">      62 </span><span class="lineCov">      18090 :   reflected_direction -= 2.0 * (reflected_direction * normal) * normal;</span></a>
-<a name="63"><span class="lineNum">      63 </span><span class="lineCov">      18090 :   return reflected_direction;</span></a>
-<a name="64"><span class="lineNum">      64 </span>            : }</a>
+<a name="61"><span class="lineNum">      61 </span><span class="lineCov">      18090 :   mooseAssert(MooseUtils::absoluteFuzzyEqual(direction.norm(), 1.), &quot;Direction not normalized&quot;);</span></a>
+<a name="62"><span class="lineNum">      62 </span><span class="lineCov">      18090 :   mooseAssert(MooseUtils::absoluteFuzzyEqual(normal.norm(), 1.), &quot;Normal not normalized&quot;);</span></a>
+<a name="63"><span class="lineNum">      63 </span>            : </a>
+<a name="64"><span class="lineNum">      64 </span><span class="lineCov">      36180 :   Point reflected_direction = direction;</span></a>
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">      72360 :   reflected_direction -= 2.0 * (reflected_direction * normal) * normal;</span></a>
+<a name="66"><span class="lineNum">      66 </span><span class="lineCov">      18090 :   return reflected_direction / reflected_direction.norm();</span></a>
+<a name="67"><span class="lineNum">      67 </span>            : }</a>
 </pre>
       </td>
     </tr>

@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-12 16:20:26</td>
+            <td class="headerValue">2020-11-24 15:50:37</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">1</td>
@@ -108,12 +108,15 @@
 <a name="38"><span class="lineNum">      38 </span>            :   /// Whether or not to get auxiliary data (if false, get standard data)</a>
 <a name="39"><span class="lineNum">      39 </span>            :   const bool _aux;</a>
 <a name="40"><span class="lineNum">      40 </span>            : </a>
-<a name="41"><span class="lineNum">      41 </span>            : private:</a>
-<a name="42"><span class="lineNum">      42 </span>            :   /// The index into the Ray's data that the desired RayVariable is at</a>
-<a name="43"><span class="lineNum">      43 </span>            :   unsigned int _ray_data_index;</a>
-<a name="44"><span class="lineNum">      44 </span>            :   /// The ID of the Ray that we seek the value from</a>
-<a name="45"><span class="lineNum">      45 </span>            :   RayID _ray_id;</a>
-<a name="46"><span class="lineNum">      46 </span>            : };</a>
+<a name="41"><span class="lineNum">      41 </span>            :   /// The provided Ray name (if any)</a>
+<a name="42"><span class="lineNum">      42 </span>            :   const std::string * const _ray_name;</a>
+<a name="43"><span class="lineNum">      43 </span>            :   /// The provided Ray ID (if any)</a>
+<a name="44"><span class="lineNum">      44 </span>            :   const RayID * const _ray_id;</a>
+<a name="45"><span class="lineNum">      45 </span>            : </a>
+<a name="46"><span class="lineNum">      46 </span>            : private:</a>
+<a name="47"><span class="lineNum">      47 </span>            :   /// The index into the Ray's data that the desired RayVariable is at</a>
+<a name="48"><span class="lineNum">      48 </span>            :   unsigned int _ray_data_index;</a>
+<a name="49"><span class="lineNum">      49 </span>            : };</a>
 </pre>
       </td>
     </tr>

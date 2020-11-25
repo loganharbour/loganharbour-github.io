@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-24 15:50:37</td>
+            <td class="headerValue">2020-11-24 16:55:50</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">11</td>
@@ -124,7 +124,7 @@
 <a name="54"><span class="lineNum">      54 </span>            :   {</a>
 <a name="55"><span class="lineNum">      55 </span>            :     friend class Parallel::Packing&lt;std::shared_ptr&lt;Ray&gt;&gt;;</a>
 <a name="56"><span class="lineNum">      56 </span>            :     friend void dataLoad(std::istream &amp; stream, std::shared_ptr&lt;Ray&gt; &amp; ray, void * context);</a>
-<a name="57"><span class="lineNum">      57 </span><span class="lineCov">    2590353 :     AcquireRayInternalKey() {}</span></a>
+<a name="57"><span class="lineNum">      57 </span><span class="lineCov">    2675905 :     AcquireRayInternalKey() {}</span></a>
 <a name="58"><span class="lineNum">      58 </span>            :     AcquireRayInternalKey(const AcquireRayInternalKey &amp;) {}</a>
 <a name="59"><span class="lineNum">      59 </span>            :   };</a>
 <a name="60"><span class="lineNum">      60 </span>            : </a>
@@ -136,7 +136,7 @@
 <a name="66"><span class="lineNum">      66 </span>            :   {</a>
 <a name="67"><span class="lineNum">      67 </span>            :     friend class RayBoundaryConditionBase;</a>
 <a name="68"><span class="lineNum">      68 </span>            :     friend class RayKernelBase;</a>
-<a name="69"><span class="lineNum">      69 </span><span class="lineCov">     384720 :     AcquireMoveDuringTraceKey() {}</span></a>
+<a name="69"><span class="lineNum">      69 </span><span class="lineCov">    1044240 :     AcquireMoveDuringTraceKey() {}</span></a>
 <a name="70"><span class="lineNum">      70 </span>            :     AcquireMoveDuringTraceKey(const AcquireMoveDuringTraceKey &amp;) {}</a>
 <a name="71"><span class="lineNum">      71 </span>            :   };</a>
 <a name="72"><span class="lineNum">      72 </span>            : </a>
@@ -147,8 +147,8 @@
 <a name="77"><span class="lineNum">      77 </span>            :   virtual void jacobianSetup() override;</a>
 <a name="78"><span class="lineNum">      78 </span>            :   virtual void meshChanged() override;</a>
 <a name="79"><span class="lineNum">      79 </span>            :   virtual void timestepSetup() override;</a>
-<a name="80"><span class="lineNum">      80 </span><span class="lineCov">       7584 :   virtual void initialize() override {}</span></a>
-<a name="81"><span class="lineNum">      81 </span><span class="lineCov">       4620 :   virtual void finalize() override {}</span></a>
+<a name="80"><span class="lineNum">      80 </span><span class="lineCov">       8184 :   virtual void initialize() override {}</span></a>
+<a name="81"><span class="lineNum">      81 </span><span class="lineCov">       5220 :   virtual void finalize() override {}</span></a>
 <a name="82"><span class="lineNum">      82 </span>            : </a>
 <a name="83"><span class="lineNum">      83 </span>            :   /**</a>
 <a name="84"><span class="lineNum">      84 </span>            :    * Executes the study (generates and propagates Rays)</a>
@@ -231,19 +231,19 @@
 <a name="161"><span class="lineNum">     161 </span>            :   /**</a>
 <a name="162"><span class="lineNum">     162 </span>            :    * Total distance traveled by all Rays</a>
 <a name="163"><span class="lineNum">     163 </span>            :    */</a>
-<a name="164"><span class="lineNum">     164 </span><span class="lineCov">       3780 :   Real totalDistance() const { return _total_distance; }</span></a>
+<a name="164"><span class="lineNum">     164 </span><span class="lineCov">      11304 :   Real totalDistance() const { return _total_distance; }</span></a>
 <a name="165"><span class="lineNum">     165 </span>            : </a>
-<a name="166"><span class="lineNum">     166 </span><span class="lineCov">        420 :   unsigned long long int localTraceRayResult(const int result) const</span></a>
+<a name="166"><span class="lineNum">     166 </span><span class="lineCov">       1176 :   unsigned long long int localTraceRayResult(const int result) const</span></a>
 <a name="167"><span class="lineNum">     167 </span>            :   {</a>
-<a name="168"><span class="lineNum">     168 </span><span class="lineCov">        420 :     return _local_trace_ray_results[result];</span></a>
+<a name="168"><span class="lineNum">     168 </span><span class="lineCov">       1176 :     return _local_trace_ray_results[result];</span></a>
 <a name="169"><span class="lineNum">     169 </span>            :   }</a>
 <a name="170"><span class="lineNum">     170 </span>            : </a>
-<a name="171"><span class="lineNum">     171 </span><span class="lineCov">        840 :   const ParallelRayStudy &amp; parallelRayStudy() const { return *_parallel_ray_study; }</span></a>
+<a name="171"><span class="lineNum">     171 </span><span class="lineCov">       2352 :   const ParallelRayStudy &amp; parallelRayStudy() const { return *_parallel_ray_study; }</span></a>
 <a name="172"><span class="lineNum">     172 </span>            : </a>
 <a name="173"><span class="lineNum">     173 </span>            :   /**</a>
 <a name="174"><span class="lineNum">     174 </span>            :    * Max distance any Ray can travel</a>
 <a name="175"><span class="lineNum">     175 </span>            :    */</a>
-<a name="176"><span class="lineNum">     176 </span><span class="lineCov">   95923980 :   Real rayMaxDistance() const { return _ray_max_distance; }</span></a>
+<a name="176"><span class="lineNum">     176 </span><span class="lineCov">   97210020 :   Real rayMaxDistance() const { return _ray_max_distance; }</span></a>
 <a name="177"><span class="lineNum">     177 </span>            : </a>
 <a name="178"><span class="lineNum">     178 </span>            :   /**</a>
 <a name="179"><span class="lineNum">     179 </span>            :    * Duration for execute() in seconds</a>
@@ -259,11 +259,11 @@
 <a name="189"><span class="lineNum">     189 </span>            :   /**</a>
 <a name="190"><span class="lineNum">     190 </span>            :    * Duration for creation of all Rays in seconds</a>
 <a name="191"><span class="lineNum">     191 </span>            :    */</a>
-<a name="192"><span class="lineNum">     192 </span><span class="lineCov">         30 :   Real generationTime() const { return std::chrono::duration&lt;Real&gt;(_generation_time).count(); }</span></a>
+<a name="192"><span class="lineNum">     192 </span><span class="lineCov">         84 :   Real generationTime() const { return std::chrono::duration&lt;Real&gt;(_generation_time).count(); }</span></a>
 <a name="193"><span class="lineNum">     193 </span>            :   /**</a>
 <a name="194"><span class="lineNum">     194 </span>            :    * Duration for creation of all Rays in seconds</a>
 <a name="195"><span class="lineNum">     195 </span>            :    */</a>
-<a name="196"><span class="lineNum">     196 </span><span class="lineCov">         30 :   Real propagationTime() const { return std::chrono::duration&lt;Real&gt;(_propagation_time).count(); }</span></a>
+<a name="196"><span class="lineNum">     196 </span><span class="lineCov">         84 :   Real propagationTime() const { return std::chrono::duration&lt;Real&gt;(_propagation_time).count(); }</span></a>
 <a name="197"><span class="lineNum">     197 </span>            : </a>
 <a name="198"><span class="lineNum">     198 </span>            :   /**</a>
 <a name="199"><span class="lineNum">     199 </span>            :    * Whether or not to tolerate failure</a>
@@ -273,12 +273,12 @@
 <a name="203"><span class="lineNum">     203 </span>            :   /**</a>
 <a name="204"><span class="lineNum">     204 </span>            :    * Whether or not to bank Rays on completion</a>
 <a name="205"><span class="lineNum">     205 </span>            :    */</a>
-<a name="206"><span class="lineNum">     206 </span><span class="lineCov">       1110 :   bool bankRaysOnCompletion() const { return _bank_rays_on_completion; }</span></a>
+<a name="206"><span class="lineNum">     206 </span><span class="lineCov">       3108 :   bool bankRaysOnCompletion() const { return _bank_rays_on_completion; }</span></a>
 <a name="207"><span class="lineNum">     207 </span>            : </a>
 <a name="208"><span class="lineNum">     208 </span>            :   /**</a>
 <a name="209"><span class="lineNum">     209 </span>            :    * Whether or not to use Ray dependent subdomain setup</a>
 <a name="210"><span class="lineNum">     210 </span>            :    */</a>
-<a name="211"><span class="lineNum">     211 </span><span class="lineCov">   16171052 :   bool rayDependentSubdomainSetup() const { return _ray_dependent_subdomain_setup; }</span></a>
+<a name="211"><span class="lineNum">     211 </span><span class="lineCov">   16400472 :   bool rayDependentSubdomainSetup() const { return _ray_dependent_subdomain_setup; }</span></a>
 <a name="212"><span class="lineNum">     212 </span>            : </a>
 <a name="213"><span class="lineNum">     213 </span>            :   /**</a>
 <a name="214"><span class="lineNum">     214 </span>            :    * Register a value to be filled in the data on a Ray with a given name.</a>
@@ -331,15 +331,15 @@
 <a name="261"><span class="lineNum">     261 </span>            :   /**</a>
 <a name="262"><span class="lineNum">     262 </span>            :    * The registered size of values in the Ray data.</a>
 <a name="263"><span class="lineNum">     263 </span>            :    */</a>
-<a name="264"><span class="lineNum">     264 </span><span class="lineCov">   28206874 :   std::size_t rayDataSize() const { return _ray_data_names.size(); }</span></a>
+<a name="264"><span class="lineNum">     264 </span><span class="lineCov">   42790147 :   std::size_t rayDataSize() const { return _ray_data_names.size(); }</span></a>
 <a name="265"><span class="lineNum">     265 </span>            :   /**</a>
 <a name="266"><span class="lineNum">     266 </span>            :    * Whether or not any Ray data are registered</a>
 <a name="267"><span class="lineNum">     267 </span>            :    */</a>
-<a name="268"><span class="lineNum">     268 </span><span class="lineCov">       1551 :   bool hasRayData() const { return _ray_data_names.size(); }</span></a>
+<a name="268"><span class="lineNum">     268 </span><span class="lineCov">       4233 :   bool hasRayData() const { return _ray_data_names.size(); }</span></a>
 <a name="269"><span class="lineNum">     269 </span>            :   /**</a>
 <a name="270"><span class="lineNum">     270 </span>            :    * The Ray data names</a>
 <a name="271"><span class="lineNum">     271 </span>            :    */</a>
-<a name="272"><span class="lineNum">     272 </span><span class="lineCov">      16188 :   const std::vector&lt;std::string&gt; &amp; rayDataNames() const { return _ray_data_names; }</span></a>
+<a name="272"><span class="lineNum">     272 </span><span class="lineCov">      16296 :   const std::vector&lt;std::string&gt; &amp; rayDataNames() const { return _ray_data_names; }</span></a>
 <a name="273"><span class="lineNum">     273 </span>            : </a>
 <a name="274"><span class="lineNum">     274 </span>            :   /**</a>
 <a name="275"><span class="lineNum">     275 </span>            :    * Register a value to be filled in the aux data on a Ray with a given name.</a>
@@ -391,7 +391,7 @@
 <a name="321"><span class="lineNum">     321 </span>            :   /**</a>
 <a name="322"><span class="lineNum">     322 </span>            :    * The registered size of values in the Ray aux data.</a>
 <a name="323"><span class="lineNum">     323 </span>            :    */</a>
-<a name="324"><span class="lineNum">     324 </span><span class="lineCov">   23865356 :   std::size_t rayAuxDataSize() const { return _ray_aux_data_names.size(); }</span></a>
+<a name="324"><span class="lineNum">     324 </span><span class="lineCov">   36768970 :   std::size_t rayAuxDataSize() const { return _ray_aux_data_names.size(); }</span></a>
 <a name="325"><span class="lineNum">     325 </span>            :   /**</a>
 <a name="326"><span class="lineNum">     326 </span>            :    * Whether or not any Ray aux data are registered</a>
 <a name="327"><span class="lineNum">     327 </span>            :    */</a>
@@ -413,15 +413,15 @@
 <a name="343"><span class="lineNum">     343 </span>            :    * Fills the active RayKernels associated with this study into result</a>
 <a name="344"><span class="lineNum">     344 </span>            :    */</a>
 <a name="345"><span class="lineNum">     345 </span>            :   template &lt;typename T&gt;</a>
-<a name="346"><span class="lineNum">     346 </span><span class="lineCov">      29048 :   void getRayKernels(std::vector&lt;T *&gt; &amp; result, THREAD_ID tid)</span></a>
+<a name="346"><span class="lineNum">     346 </span><span class="lineCov">      30688 :   void getRayKernels(std::vector&lt;T *&gt; &amp; result, THREAD_ID tid)</span></a>
 <a name="347"><span class="lineNum">     347 </span>            :   {</a>
-<a name="348"><span class="lineNum">     348 </span><span class="lineCov">      58096 :     _fe_problem.theWarehouse()</span></a>
+<a name="348"><span class="lineNum">     348 </span><span class="lineCov">      61376 :     _fe_problem.theWarehouse()</span></a>
 <a name="349"><span class="lineNum">     349 </span>            :         .query()</a>
-<a name="350"><span class="lineNum">     350 </span><span class="lineCov">      58096 :         .condition&lt;AttribRayTracingStudy&gt;(this)</span></a>
-<a name="351"><span class="lineNum">     351 </span><span class="lineCov">      29048 :         .condition&lt;AttribSystem&gt;(&quot;RayKernel&quot;)</span></a>
-<a name="352"><span class="lineNum">     352 </span><span class="lineCov">      29048 :         .condition&lt;AttribThread&gt;(tid)</span></a>
+<a name="350"><span class="lineNum">     350 </span><span class="lineCov">      61376 :         .condition&lt;AttribRayTracingStudy&gt;(this)</span></a>
+<a name="351"><span class="lineNum">     351 </span><span class="lineCov">      30688 :         .condition&lt;AttribSystem&gt;(&quot;RayKernel&quot;)</span></a>
+<a name="352"><span class="lineNum">     352 </span><span class="lineCov">      30688 :         .condition&lt;AttribThread&gt;(tid)</span></a>
 <a name="353"><span class="lineNum">     353 </span>            :         .queryInto(result);</a>
-<a name="354"><span class="lineNum">     354 </span><span class="lineCov">      29048 :   }</span></a>
+<a name="354"><span class="lineNum">     354 </span><span class="lineCov">      30688 :   }</span></a>
 <a name="355"><span class="lineNum">     355 </span>            :   /**</a>
 <a name="356"><span class="lineNum">     356 </span>            :    * Fills the active RayKernels associeted with this study, block, and potentially Ray into result</a>
 <a name="357"><span class="lineNum">     357 </span>            :    */</a>
@@ -435,29 +435,29 @@
 <a name="365"><span class="lineNum">     365 </span>            :    * Fills the active RayBCs associated with this study and boundaries result</a>
 <a name="366"><span class="lineNum">     366 </span>            :    */</a>
 <a name="367"><span class="lineNum">     367 </span>            :   template &lt;typename T&gt;</a>
-<a name="368"><span class="lineNum">     368 </span><span class="lineCov">     360192 :   void getRayBCs(std::vector&lt;T *&gt; &amp; result, const std::vector&lt;BoundaryID&gt; &amp; ids, THREAD_ID tid)</span></a>
+<a name="368"><span class="lineNum">     368 </span><span class="lineCov">     366912 :   void getRayBCs(std::vector&lt;T *&gt; &amp; result, const std::vector&lt;BoundaryID&gt; &amp; ids, THREAD_ID tid)</span></a>
 <a name="369"><span class="lineNum">     369 </span>            :   {</a>
-<a name="370"><span class="lineNum">     370 </span><span class="lineCov">     720384 :     _fe_problem.theWarehouse()</span></a>
+<a name="370"><span class="lineNum">     370 </span><span class="lineCov">     733824 :     _fe_problem.theWarehouse()</span></a>
 <a name="371"><span class="lineNum">     371 </span>            :         .query()</a>
-<a name="372"><span class="lineNum">     372 </span><span class="lineCov">     720384 :         .condition&lt;AttribRayTracingStudy&gt;(this)</span></a>
-<a name="373"><span class="lineNum">     373 </span><span class="lineCov">     360192 :         .condition&lt;AttribSystem&gt;(&quot;RayBoundaryCondition&quot;)</span></a>
-<a name="374"><span class="lineNum">     374 </span><span class="lineCov">     360192 :         .condition&lt;AttribBoundaries&gt;(ids)</span></a>
-<a name="375"><span class="lineNum">     375 </span><span class="lineCov">     360192 :         .condition&lt;AttribThread&gt;(tid)</span></a>
+<a name="372"><span class="lineNum">     372 </span><span class="lineCov">     733824 :         .condition&lt;AttribRayTracingStudy&gt;(this)</span></a>
+<a name="373"><span class="lineNum">     373 </span><span class="lineCov">     366912 :         .condition&lt;AttribSystem&gt;(&quot;RayBoundaryCondition&quot;)</span></a>
+<a name="374"><span class="lineNum">     374 </span><span class="lineCov">     366912 :         .condition&lt;AttribBoundaries&gt;(ids)</span></a>
+<a name="375"><span class="lineNum">     375 </span><span class="lineCov">     366912 :         .condition&lt;AttribThread&gt;(tid)</span></a>
 <a name="376"><span class="lineNum">     376 </span>            :         .queryInto(result);</a>
-<a name="377"><span class="lineNum">     377 </span><span class="lineCov">     360192 :   }</span></a>
+<a name="377"><span class="lineNum">     377 </span><span class="lineCov">     366912 :   }</span></a>
 <a name="378"><span class="lineNum">     378 </span>            :   /**</a>
 <a name="379"><span class="lineNum">     379 </span>            :    * Fills the active RayBCs associated with this study into result</a>
 <a name="380"><span class="lineNum">     380 </span>            :    */</a>
 <a name="381"><span class="lineNum">     381 </span>            :   template &lt;typename T&gt;</a>
-<a name="382"><span class="lineNum">     382 </span><span class="lineCov">       4590 :   void getRayBCs(std::vector&lt;T *&gt; &amp; result, THREAD_ID tid)</span></a>
+<a name="382"><span class="lineNum">     382 </span><span class="lineCov">       4710 :   void getRayBCs(std::vector&lt;T *&gt; &amp; result, THREAD_ID tid)</span></a>
 <a name="383"><span class="lineNum">     383 </span>            :   {</a>
-<a name="384"><span class="lineNum">     384 </span><span class="lineCov">       9180 :     _fe_problem.theWarehouse()</span></a>
+<a name="384"><span class="lineNum">     384 </span><span class="lineCov">       9420 :     _fe_problem.theWarehouse()</span></a>
 <a name="385"><span class="lineNum">     385 </span>            :         .query()</a>
-<a name="386"><span class="lineNum">     386 </span><span class="lineCov">       9180 :         .condition&lt;AttribRayTracingStudy&gt;(this)</span></a>
-<a name="387"><span class="lineNum">     387 </span><span class="lineCov">       4590 :         .condition&lt;AttribSystem&gt;(&quot;RayBoundaryCondition&quot;)</span></a>
-<a name="388"><span class="lineNum">     388 </span><span class="lineCov">       4590 :         .condition&lt;AttribThread&gt;(tid)</span></a>
+<a name="386"><span class="lineNum">     386 </span><span class="lineCov">       9420 :         .condition&lt;AttribRayTracingStudy&gt;(this)</span></a>
+<a name="387"><span class="lineNum">     387 </span><span class="lineCov">       4710 :         .condition&lt;AttribSystem&gt;(&quot;RayBoundaryCondition&quot;)</span></a>
+<a name="388"><span class="lineNum">     388 </span><span class="lineCov">       4710 :         .condition&lt;AttribThread&gt;(tid)</span></a>
 <a name="389"><span class="lineNum">     389 </span>            :         .queryInto(result);</a>
-<a name="390"><span class="lineNum">     390 </span><span class="lineCov">       4590 :   }</span></a>
+<a name="390"><span class="lineNum">     390 </span><span class="lineCov">       4710 :   }</span></a>
 <a name="391"><span class="lineNum">     391 </span>            :   /**</a>
 <a name="392"><span class="lineNum">     392 </span>            :    * Fills the active RayBCs associated with thie study, boundary elements, and potentially Ray into</a>
 <a name="393"><span class="lineNum">     393 </span>            :    * result.</a>
@@ -473,30 +473,30 @@
 <a name="403"><span class="lineNum">     403 </span>            :   /**</a>
 <a name="404"><span class="lineNum">     404 </span>            :    * Gets the current RayKernels for a thread, which are set in segmentSubdomainSetup()</a>
 <a name="405"><span class="lineNum">     405 </span>            :    */</a>
-<a name="406"><span class="lineNum">     406 </span><span class="lineCov">  293263190 :   const std::vector&lt;RayKernelBase *&gt; &amp; currentRayKernels(THREAD_ID tid) const</span></a>
+<a name="406"><span class="lineNum">     406 </span><span class="lineCov">  297351420 :   const std::vector&lt;RayKernelBase *&gt; &amp; currentRayKernels(THREAD_ID tid) const</span></a>
 <a name="407"><span class="lineNum">     407 </span>            :   {</a>
-<a name="408"><span class="lineNum">     408 </span><span class="lineCov">  293263190 :     return _threaded_current_ray_kernels[tid];</span></a>
+<a name="408"><span class="lineNum">     408 </span><span class="lineCov">  297351420 :     return _threaded_current_ray_kernels[tid];</span></a>
 <a name="409"><span class="lineNum">     409 </span>            :   }</a>
 <a name="410"><span class="lineNum">     410 </span>            : </a>
 <a name="411"><span class="lineNum">     411 </span>            :   /**</a>
 <a name="412"><span class="lineNum">     412 </span>            :    * Get the nodal bounding box for the domain</a>
 <a name="413"><span class="lineNum">     413 </span>            :    */</a>
-<a name="414"><span class="lineNum">     414 </span><span class="lineCov">   12126840 :   const BoundingBox &amp; boundingBox() const { return _b_box; }</span></a>
+<a name="414"><span class="lineNum">     414 </span><span class="lineCov">   13019818 :   const BoundingBox &amp; boundingBox() const { return _b_box; }</span></a>
 <a name="415"><span class="lineNum">     415 </span>            :   /**</a>
 <a name="416"><span class="lineNum">     416 </span>            :    * Get the loose nodal bounding box for the domain</a>
 <a name="417"><span class="lineNum">     417 </span>            :    *</a>
 <a name="418"><span class="lineNum">     418 </span>            :    * BoundingBox::contains_point does not have a tolerance, so we need to stretch the</a>
 <a name="419"><span class="lineNum">     419 </span>            :    * box a little bit for some contains_point checks.</a>
 <a name="420"><span class="lineNum">     420 </span>            :    */</a>
-<a name="421"><span class="lineNum">     421 </span><span class="lineCov">   37308740 :   const BoundingBox &amp; looseBoundingBox() const { return _loose_b_box; }</span></a>
+<a name="421"><span class="lineNum">     421 </span><span class="lineCov">   37839640 :   const BoundingBox &amp; looseBoundingBox() const { return _loose_b_box; }</span></a>
 <a name="422"><span class="lineNum">     422 </span>            :   /**</a>
 <a name="423"><span class="lineNum">     423 </span>            :    * Get the inflated maximum length across the domain</a>
 <a name="424"><span class="lineNum">     424 </span>            :    */</a>
-<a name="425"><span class="lineNum">     425 </span><span class="lineCov">  496025700 :   Real domainMaxLength() const { return _domain_max_length; }</span></a>
+<a name="425"><span class="lineNum">     425 </span><span class="lineCov">  502156100 :   Real domainMaxLength() const { return _domain_max_length; }</span></a>
 <a name="426"><span class="lineNum">     426 </span>            :   /**</a>
 <a name="427"><span class="lineNum">     427 </span>            :    * Get the current total volume of the domain</a>
 <a name="428"><span class="lineNum">     428 </span>            :    */</a>
-<a name="429"><span class="lineNum">     429 </span><span class="lineCov">      11474 :   Real totalVolume() const { return _total_volume; }</span></a>
+<a name="429"><span class="lineNum">     429 </span><span class="lineCov">      12154 :   Real totalVolume() const { return _total_volume; }</span></a>
 <a name="430"><span class="lineNum">     430 </span>            :   /**</a>
 <a name="431"><span class="lineNum">     431 </span>            :    * Whether or not the domain is rectangular (if it is prefectly encompassed by its bounding box)</a>
 <a name="432"><span class="lineNum">     432 </span>            :    */</a>
@@ -508,7 +508,7 @@
 <a name="438"><span class="lineNum">     438 </span>            :    * NOTE: if useInternalSidesets() == false, this will be false even if the mesh does</a>
 <a name="439"><span class="lineNum">     439 </span>            :    * have internal sidesets</a>
 <a name="440"><span class="lineNum">     440 </span>            :    */</a>
-<a name="441"><span class="lineNum">     441 </span><span class="lineCov">   82344226 :   bool hasInternalSidesets() const { return _internal_sidesets.size(); }</span></a>
+<a name="441"><span class="lineNum">     441 </span><span class="lineCov">   83445346 :   bool hasInternalSidesets() const { return _internal_sidesets.size(); }</span></a>
 <a name="442"><span class="lineNum">     442 </span>            :   /**</a>
 <a name="443"><span class="lineNum">     443 </span>            :    * Get the internal sidesets (that have RayBC(s)) for each side for a given element</a>
 <a name="444"><span class="lineNum">     444 </span>            :    *</a>
@@ -524,9 +524,9 @@
 <a name="454"><span class="lineNum">     454 </span>            :    *</a>
 <a name="455"><span class="lineNum">     455 </span>            :    * This is cached because checking whether or not a face is planar is costly</a>
 <a name="456"><span class="lineNum">     456 </span>            :    */</a>
-<a name="457"><span class="lineNum">     457 </span><span class="lineCov">  448584190 :   bool sideIsNonPlanar(const Elem * elem, const unsigned short s) const</span></a>
+<a name="457"><span class="lineNum">     457 </span><span class="lineCov">  456616466 :   bool sideIsNonPlanar(const Elem * elem, const unsigned short s) const</span></a>
 <a name="458"><span class="lineNum">     458 </span>            :   {</a>
-<a name="459"><span class="lineNum">     459 </span><span class="lineCov">  448584190 :     return _has_non_planar_sides &amp;&amp; _non_planar_sides[_elem_index_helper.getIndex(elem)][s] == 1;</span></a>
+<a name="459"><span class="lineNum">     459 </span><span class="lineCov">  456616466 :     return _has_non_planar_sides &amp;&amp; _non_planar_sides[_elem_index_helper.getIndex(elem)][s] == 1;</span></a>
 <a name="460"><span class="lineNum">     460 </span>            :   }</a>
 <a name="461"><span class="lineNum">     461 </span>            :   /**</a>
 <a name="462"><span class="lineNum">     462 </span>            :    * Whether or not the mesh has active elements of the same level</a>
@@ -534,7 +534,7 @@
 <a name="464"><span class="lineNum">     464 </span>            :    * Use this over sameLevelActiveElems(), which is for internally setting</a>
 <a name="465"><span class="lineNum">     465 </span>            :    * _has_same_level_active_elems</a>
 <a name="466"><span class="lineNum">     466 </span>            :    */</a>
-<a name="467"><span class="lineNum">     467 </span><span class="lineCov">  172995980 :   bool hasSameLevelActiveElems() const { return _has_same_level_active_elems; }</span></a>
+<a name="467"><span class="lineNum">     467 </span><span class="lineCov">  175248980 :   bool hasSameLevelActiveElems() const { return _has_same_level_active_elems; }</span></a>
 <a name="468"><span class="lineNum">     468 </span>            : </a>
 <a name="469"><span class="lineNum">     469 </span>            :   /**</a>
 <a name="470"><span class="lineNum">     470 </span>            :    * INTERNAL methods for acquiring a Ray during a trace in RayKernels and RayBCs.</a>
@@ -548,14 +548,14 @@
 <a name="478"><span class="lineNum">     478 </span>            :   ///@{</a>
 <a name="479"><span class="lineNum">     479 </span>            :   std::shared_ptr&lt;Ray&gt; acquireRayDuringTrace(const THREAD_ID tid,</a>
 <a name="480"><span class="lineNum">     480 </span>            :                                              const AcquireMoveDuringTraceKey &amp;);</a>
-<a name="481"><span class="lineNum">     481 </span><span class="lineCov">    2590353 :   std::shared_ptr&lt;Ray&gt; acquireRayInternal(const RayID id,</span></a>
+<a name="481"><span class="lineNum">     481 </span><span class="lineCov">    2675905 :   std::shared_ptr&lt;Ray&gt; acquireRayInternal(const RayID id,</span></a>
 <a name="482"><span class="lineNum">     482 </span>            :                                           const std::size_t data_size,</a>
 <a name="483"><span class="lineNum">     483 </span>            :                                           const std::size_t aux_data_size,</a>
 <a name="484"><span class="lineNum">     484 </span>            :                                           const bool reset,</a>
 <a name="485"><span class="lineNum">     485 </span>            :                                           const AcquireRayInternalKey &amp;)</a>
 <a name="486"><span class="lineNum">     486 </span>            :   {</a>
-<a name="487"><span class="lineNum">     487 </span><span class="lineCov">    2590353 :     return _parallel_ray_study-&gt;acquireParallelData(</span></a>
-<a name="488"><span class="lineNum">     488 </span><span class="lineCov">    2590353 :         0, this, id, data_size, aux_data_size, reset, Ray::ConstructRayKey());</span></a>
+<a name="487"><span class="lineNum">     487 </span><span class="lineCov">    2675905 :     return _parallel_ray_study-&gt;acquireParallelData(</span></a>
+<a name="488"><span class="lineNum">     488 </span><span class="lineCov">    2675905 :         0, this, id, data_size, aux_data_size, reset, Ray::ConstructRayKey());</span></a>
 <a name="489"><span class="lineNum">     489 </span>            :   }</a>
 <a name="490"><span class="lineNum">     490 </span>            :   ///@}</a>
 <a name="491"><span class="lineNum">     491 </span>            : </a>
@@ -574,7 +574,7 @@
 <a name="504"><span class="lineNum">     504 </span>            :    *</a>
 <a name="505"><span class="lineNum">     505 </span>            :    * This is needed for unpack routines for a Ray, which has a context of this study.</a>
 <a name="506"><span class="lineNum">     506 </span>            :    */</a>
-<a name="507"><span class="lineNum">     507 </span><span class="lineCov">   32031100 :   MeshBase &amp; meshBase() const { return _mesh; }</span></a>
+<a name="507"><span class="lineNum">     507 </span><span class="lineCov">   32571820 :   MeshBase &amp; meshBase() const { return _mesh; }</span></a>
 <a name="508"><span class="lineNum">     508 </span>            : </a>
 <a name="509"><span class="lineNum">     509 </span>            :   /**</a>
 <a name="510"><span class="lineNum">     510 </span>            :    * Get the outward normal for a given element side.</a>
@@ -618,12 +618,12 @@
 <a name="548"><span class="lineNum">     548 </span>            :   /**</a>
 <a name="549"><span class="lineNum">     549 </span>            :    * Whether or not ray registration is being used</a>
 <a name="550"><span class="lineNum">     550 </span>            :    */</a>
-<a name="551"><span class="lineNum">     551 </span><span class="lineCov">      17118 :   bool useRayRegistration() const { return _use_ray_registration; }</span></a>
+<a name="551"><span class="lineNum">     551 </span><span class="lineCov">      18900 :   bool useRayRegistration() const { return _use_ray_registration; }</span></a>
 <a name="552"><span class="lineNum">     552 </span>            : </a>
 <a name="553"><span class="lineNum">     553 </span>            :   /**</a>
 <a name="554"><span class="lineNum">     554 </span>            :    * Whether or not to store the Ray data on the cached Ray traces</a>
 <a name="555"><span class="lineNum">     555 </span>            :    */</a>
-<a name="556"><span class="lineNum">     556 </span><span class="lineCov">     760302 :   bool dataOnCacheTraces() const { return _data_on_cache_traces; }</span></a>
+<a name="556"><span class="lineNum">     556 </span><span class="lineCov">     760410 :   bool dataOnCacheTraces() const { return _data_on_cache_traces; }</span></a>
 <a name="557"><span class="lineNum">     557 </span>            :   /**</a>
 <a name="558"><span class="lineNum">     558 </span>            :    * Whether or not to store the Ray aux data on the cached Ray traces</a>
 <a name="559"><span class="lineNum">     559 </span>            :    */</a>
@@ -631,15 +631,15 @@
 <a name="561"><span class="lineNum">     561 </span>            :   /**</a>
 <a name="562"><span class="lineNum">     562 </span>            :    *  Whether or not to cache individual element segments when _cache_traces = true</a>
 <a name="563"><span class="lineNum">     563 </span>            :    */</a>
-<a name="564"><span class="lineNum">     564 </span><span class="lineCov">     453024 :   bool segmentsOnCacheTraces() const { return _segments_on_cache_traces; }</span></a>
+<a name="564"><span class="lineNum">     564 </span><span class="lineCov">     549678 :   bool segmentsOnCacheTraces() const { return _segments_on_cache_traces; }</span></a>
 <a name="565"><span class="lineNum">     565 </span>            : </a>
 <a name="566"><span class="lineNum">     566 </span>            :   /**</a>
 <a name="567"><span class="lineNum">     567 </span>            :    * Virtual that allows for selection in if a Ray should be cached or not (only used when</a>
 <a name="568"><span class="lineNum">     568 </span>            :    * _cache_traces).</a>
 <a name="569"><span class="lineNum">     569 </span>            :    */</a>
-<a name="570"><span class="lineNum">     570 </span><span class="lineCov">   16370320 :   virtual bool shouldCacheTrace(const std::shared_ptr&lt;Ray&gt; &amp; /* ray */) const</span></a>
+<a name="570"><span class="lineNum">     570 </span><span class="lineCov">   16600400 :   virtual bool shouldCacheTrace(const std::shared_ptr&lt;Ray&gt; &amp; /* ray */) const</span></a>
 <a name="571"><span class="lineNum">     571 </span>            :   {</a>
-<a name="572"><span class="lineNum">     572 </span><span class="lineCov">   16370320 :     return _always_cache_traces;</span></a>
+<a name="572"><span class="lineNum">     572 </span><span class="lineCov">   16600400 :     return _always_cache_traces;</span></a>
 <a name="573"><span class="lineNum">     573 </span>            :   }</a>
 <a name="574"><span class="lineNum">     574 </span>            : </a>
 <a name="575"><span class="lineNum">     575 </span>            :   /**</a>
@@ -649,7 +649,7 @@
 <a name="579"><span class="lineNum">     579 </span>            :   /**</a>
 <a name="580"><span class="lineNum">     580 </span>            :    * Get the cached trace data structure</a>
 <a name="581"><span class="lineNum">     581 </span>            :    */</a>
-<a name="582"><span class="lineNum">     582 </span><span class="lineCov">       2184 :   const std::vector&lt;TraceData&gt; &amp; getCachedTraces() const { return _cached_traces; }</span></a>
+<a name="582"><span class="lineNum">     582 </span><span class="lineCov">       6162 :   const std::vector&lt;TraceData&gt; &amp; getCachedTraces() const { return _cached_traces; }</span></a>
 <a name="583"><span class="lineNum">     583 </span>            : </a>
 <a name="584"><span class="lineNum">     584 </span>            :   /**</a>
 <a name="585"><span class="lineNum">     585 </span>            :    * Get the cached hmax for all elements in a subdomain</a>
@@ -691,11 +691,11 @@
 <a name="621"><span class="lineNum">     621 </span>            :   /**</a>
 <a name="622"><span class="lineNum">     622 </span>            :    * Whether or not the study is propagating (tracing Rays)</a>
 <a name="623"><span class="lineNum">     623 </span>            :    */</a>
-<a name="624"><span class="lineNum">     624 </span><span class="lineCov">  212555252 :   bool currentlyPropagating() const { return _parallel_ray_study-&gt;currentlyExecuting(); }</span></a>
+<a name="624"><span class="lineNum">     624 </span><span class="lineCov">  216204644 :   bool currentlyPropagating() const { return _parallel_ray_study-&gt;currentlyExecuting(); }</span></a>
 <a name="625"><span class="lineNum">     625 </span>            :   /**</a>
 <a name="626"><span class="lineNum">     626 </span>            :    * Whether or not the study is generating</a>
 <a name="627"><span class="lineNum">     627 </span>            :    */</a>
-<a name="628"><span class="lineNum">     628 </span><span class="lineCov">   40061410 :   bool currentlyGenerating() const { return _parallel_ray_study-&gt;currentlyPreExecuting(); }</span></a>
+<a name="628"><span class="lineNum">     628 </span><span class="lineCov">   40468790 :   bool currentlyGenerating() const { return _parallel_ray_study-&gt;currentlyPreExecuting(); }</span></a>
 <a name="629"><span class="lineNum">     629 </span>            : </a>
 <a name="630"><span class="lineNum">     630 </span>            :   /**</a>
 <a name="631"><span class="lineNum">     631 </span>            :    * Casts the RayTracingStudy found in the given input parameters to a study of type T</a>
@@ -705,32 +705,32 @@
 <a name="635"><span class="lineNum">     635 </span>            :    * (RayKernels, RayBCs, etc)</a>
 <a name="636"><span class="lineNum">     636 </span>            :    */</a>
 <a name="637"><span class="lineNum">     637 </span>            :   template &lt;typename T&gt;</a>
-<a name="638"><span class="lineNum">     638 </span><span class="lineCov">        136 :   static T &amp; castFromStudy(const InputParameters &amp; params)</span></a>
+<a name="638"><span class="lineNum">     638 </span><span class="lineCov">        272 :   static T &amp; castFromStudy(const InputParameters &amp; params)</span></a>
 <a name="639"><span class="lineNum">     639 </span>            :   {</a>
 <a name="640"><span class="lineNum">     640 </span>            :     static_assert(std::is_base_of&lt;RayTracingStudy, T&gt;::value, &quot;Not derived from a RayTracingStudy&quot;);</a>
 <a name="641"><span class="lineNum">     641 </span>            : </a>
 <a name="642"><span class="lineNum">     642 </span>            :     RayTracingStudy * study =</a>
-<a name="643"><span class="lineNum">     643 </span><span class="lineCov">        272 :         params.getCheckedPointerParam&lt;RayTracingStudy *&gt;(&quot;_ray_tracing_study&quot;);</span></a>
+<a name="643"><span class="lineNum">     643 </span><span class="lineCov">        544 :         params.getCheckedPointerParam&lt;RayTracingStudy *&gt;(&quot;_ray_tracing_study&quot;);</span></a>
 <a name="644"><span class="lineNum">     644 </span>            : </a>
-<a name="645"><span class="lineNum">     645 </span><span class="lineCov">        136 :     T * other_study = dynamic_cast&lt;T *&gt;(study);</span></a>
-<a name="646"><span class="lineNum">     646 </span><span class="lineCov">        136 :     if (!other_study)</span></a>
+<a name="645"><span class="lineNum">     645 </span><span class="lineCov">        272 :     T * other_study = dynamic_cast&lt;T *&gt;(study);</span></a>
+<a name="646"><span class="lineNum">     646 </span><span class="lineCov">        272 :     if (!other_study)</span></a>
 <a name="647"><span class="lineNum">     647 </span><span class="lineNoCov">          0 :       ::mooseError(params.get&lt;std::string&gt;(&quot;_type&quot;),</span></a>
 <a name="648"><span class="lineNum">     648 </span>            :                    &quot; '&quot;,</a>
 <a name="649"><span class="lineNum">     649 </span>            :                    params.get&lt;std::string&gt;(&quot;_object_name&quot;),</a>
 <a name="650"><span class="lineNum">     650 </span>            :                    &quot;' must be paired with a &quot;,</a>
 <a name="651"><span class="lineNum">     651 </span><span class="lineNoCov">          0 :                    typeid(T).name());</span></a>
-<a name="652"><span class="lineNum">     652 </span><span class="lineCov">        136 :     return *other_study;</span></a>
+<a name="652"><span class="lineNum">     652 </span><span class="lineCov">        272 :     return *other_study;</span></a>
 <a name="653"><span class="lineNum">     653 </span>            :   }</a>
 <a name="654"><span class="lineNum">     654 </span>            : </a>
 <a name="655"><span class="lineNum">     655 </span>            :   /**</a>
 <a name="656"><span class="lineNum">     656 </span>            :    * Gets the threaded TraceRay object for \p tid.</a>
 <a name="657"><span class="lineNum">     657 </span>            :    */</a>
-<a name="658"><span class="lineNum">     658 </span><span class="lineCov">      21420 :   const TraceRay &amp; traceRay(const THREAD_ID tid) const { return *_threaded_trace_ray[tid]; }</span></a>
+<a name="658"><span class="lineNum">     658 </span><span class="lineCov">      67324 :   const TraceRay &amp; traceRay(const THREAD_ID tid) const { return *_threaded_trace_ray[tid]; }</span></a>
 <a name="659"><span class="lineNum">     659 </span>            : </a>
 <a name="660"><span class="lineNum">     660 </span>            :   /**</a>
 <a name="661"><span class="lineNum">     661 </span>            :    * Whether or not Ray verification is enabled in opt mode</a>
 <a name="662"><span class="lineNum">     662 </span>            :    */</a>
-<a name="663"><span class="lineNum">     663 </span><span class="lineCov">   53491730 :   bool verifyRays() const { return _verify_rays; }</span></a>
+<a name="663"><span class="lineNum">     663 </span><span class="lineCov">   54252660 :   bool verifyRays() const { return _verify_rays; }</span></a>
 <a name="664"><span class="lineNum">     664 </span>            : </a>
 <a name="665"><span class="lineNum">     665 </span>            :   /**</a>
 <a name="666"><span class="lineNum">     666 </span>            :    * Whether or not \p side is incoming on element \p elem in direction \p direction.</a>
@@ -743,7 +743,7 @@
 <a name="673"><span class="lineNum">     673 </span>            :   /**</a>
 <a name="674"><span class="lineNum">     674 </span>            :    * Whether or not to produce a warning when interacting with a non-planar mesh.</a>
 <a name="675"><span class="lineNum">     675 </span>            :    */</a>
-<a name="676"><span class="lineNum">     676 </span><span class="lineCov">      18090 :   bool warnNonPlanar() const { return _warn_non_planar; }</span></a>
+<a name="676"><span class="lineNum">     676 </span><span class="lineCov">      49266 :   bool warnNonPlanar() const { return _warn_non_planar; }</span></a>
 <a name="677"><span class="lineNum">     677 </span>            : </a>
 <a name="678"><span class="lineNum">     678 </span>            : protected:</a>
 <a name="679"><span class="lineNum">     679 </span>            :   /**</a>
@@ -756,7 +756,7 @@
 <a name="686"><span class="lineNum">     686 </span>            :   /**</a>
 <a name="687"><span class="lineNum">     687 </span>            :    * Entry point before study execution</a>
 <a name="688"><span class="lineNum">     688 </span>            :    */</a>
-<a name="689"><span class="lineNum">     689 </span><span class="lineCov">       7584 :   virtual void preExecuteStudy() {}</span></a>
+<a name="689"><span class="lineNum">     689 </span><span class="lineCov">       8184 :   virtual void preExecuteStudy() {}</span></a>
 <a name="690"><span class="lineNum">     690 </span>            :   /**</a>
 <a name="691"><span class="lineNum">     691 </span>            :    * Entry point after study execution</a>
 <a name="692"><span class="lineNum">     692 </span>            :    */</a>

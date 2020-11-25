@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-24 15:50:37</td>
+            <td class="headerValue">2020-11-24 16:55:50</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">3</td>
@@ -83,24 +83,24 @@
 <a name="13"><span class="lineNum">      13 </span>            : #include &quot;RayTracingObject.h&quot;</a>
 <a name="14"><span class="lineNum">      14 </span>            : </a>
 <a name="15"><span class="lineNum">      15 </span>            : void</a>
-<a name="16"><span class="lineNum">      16 </span><span class="lineCov">      26282 : AttribRayTracingStudy::initFrom(const MooseObject * obj)</span></a>
+<a name="16"><span class="lineNum">      16 </span><span class="lineCov">      77710 : AttribRayTracingStudy::initFrom(const MooseObject * obj)</span></a>
 <a name="17"><span class="lineNum">      17 </span>            : {</a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineCov">      26282 :   const RayTracingObject * rto = dynamic_cast&lt;const RayTracingObject *&gt;(obj);</span></a>
-<a name="19"><span class="lineNum">      19 </span><span class="lineCov">      26282 :   if (rto)</span></a>
-<a name="20"><span class="lineNum">      20 </span><span class="lineCov">      10710 :     _val = &amp;rto-&gt;study();</span></a>
-<a name="21"><span class="lineNum">      21 </span><span class="lineCov">      26282 : }</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">      77710 :   const RayTracingObject * rto = dynamic_cast&lt;const RayTracingObject *&gt;(obj);</span></a>
+<a name="19"><span class="lineNum">      19 </span><span class="lineCov">      77710 :   if (rto)</span></a>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">      33662 :     _val = &amp;rto-&gt;study();</span></a>
+<a name="21"><span class="lineNum">      21 </span><span class="lineCov">      77710 : }</span></a>
 <a name="22"><span class="lineNum">      22 </span>            : </a>
 <a name="23"><span class="lineNum">      23 </span>            : bool</a>
-<a name="24"><span class="lineNum">      24 </span><span class="lineCov">     741981 : AttribRayTracingStudy::isMatch(const Attribute &amp; other) const</span></a>
+<a name="24"><span class="lineNum">      24 </span><span class="lineCov">    2218634 : AttribRayTracingStudy::isMatch(const Attribute &amp; other) const</span></a>
 <a name="25"><span class="lineNum">      25 </span>            : {</a>
-<a name="26"><span class="lineNum">      26 </span><span class="lineCov">     741981 :   auto a = dynamic_cast&lt;const AttribRayTracingStudy *&gt;(&amp;other);</span></a>
-<a name="27"><span class="lineNum">      27 </span><span class="lineCov">     741981 :   return a &amp;&amp; (a-&gt;_val == _val);</span></a>
+<a name="26"><span class="lineNum">      26 </span><span class="lineCov">    2218634 :   auto a = dynamic_cast&lt;const AttribRayTracingStudy *&gt;(&amp;other);</span></a>
+<a name="27"><span class="lineNum">      27 </span><span class="lineCov">    2218634 :   return a &amp;&amp; (a-&gt;_val == _val);</span></a>
 <a name="28"><span class="lineNum">      28 </span>            : }</a>
 <a name="29"><span class="lineNum">      29 </span>            : </a>
 <a name="30"><span class="lineNum">      30 </span>            : bool</a>
-<a name="31"><span class="lineNum">      31 </span><span class="lineCov">     386296 : AttribRayTracingStudy::isEqual(const Attribute &amp; other) const</span></a>
+<a name="31"><span class="lineNum">      31 </span><span class="lineCov">    1057283 : AttribRayTracingStudy::isEqual(const Attribute &amp; other) const</span></a>
 <a name="32"><span class="lineNum">      32 </span>            : {</a>
-<a name="33"><span class="lineNum">      33 </span><span class="lineCov">     386296 :   return isMatch(other);</span></a>
+<a name="33"><span class="lineNum">      33 </span><span class="lineCov">    1057283 :   return isMatch(other);</span></a>
 <a name="34"><span class="lineNum">      34 </span>            : }</a>
 </pre>
       </td>

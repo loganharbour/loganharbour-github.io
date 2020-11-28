@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-27 22:14:28</td>
+            <td class="headerValue">2020-11-28 10:00:16</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">3</td>
@@ -127,15 +127,15 @@
 <a name="57"><span class="lineNum">      57 </span>            :   /**</a>
 <a name="58"><span class="lineNum">      58 </span>            :    * Entry point before claim()</a>
 <a name="59"><span class="lineNum">      59 </span>            :    */</a>
-<a name="60"><span class="lineNum">      60 </span><span class="lineCov">       1740 :   virtual void preClaim() {}</span></a>
+<a name="60"><span class="lineNum">      60 </span><span class="lineCov">       2204 :   virtual void preClaim() {}</span></a>
 <a name="61"><span class="lineNum">      61 </span>            :   /**</a>
 <a name="62"><span class="lineNum">      62 </span>            :    * Entry point after claim()</a>
 <a name="63"><span class="lineNum">      63 </span>            :    */</a>
-<a name="64"><span class="lineNum">      64 </span><span class="lineCov">       1740 :   virtual void postClaim() {}</span></a>
+<a name="64"><span class="lineNum">      64 </span><span class="lineCov">       2204 :   virtual void postClaim() {}</span></a>
 <a name="65"><span class="lineNum">      65 </span>            :   /**</a>
 <a name="66"><span class="lineNum">      66 </span>            :    * Entry point before possibly claiming a Ray</a>
 <a name="67"><span class="lineNum">      67 </span>            :    */</a>
-<a name="68"><span class="lineNum">      68 </span><span class="lineCov">     222084 :   virtual void prePossiblyClaimRay(const std::shared_ptr&lt;Ray&gt; &amp; /* ray */) {}</span></a>
+<a name="68"><span class="lineNum">      68 </span><span class="lineCov">     277348 :   virtual void prePossiblyClaimRay(const std::shared_ptr&lt;Ray&gt; &amp; /* ray */) {}</span></a>
 <a name="69"><span class="lineNum">      69 </span>            :   /**</a>
 <a name="70"><span class="lineNum">      70 </span>            :    * Entry point for acting on a Ray after it is claimed</a>
 <a name="71"><span class="lineNum">      71 </span>            :    */</a>
@@ -191,31 +191,26 @@
 <a name="121"><span class="lineNum">     121 </span>            :    */</a>
 <a name="122"><span class="lineNum">     122 </span>            :   const Elem * claimPoint(const Point &amp; point, const RayID id, const Elem * elem);</a>
 <a name="123"><span class="lineNum">     123 </span>            : </a>
-<a name="124"><span class="lineNum">     124 </span>            :   /**</a>
-<a name="125"><span class="lineNum">     125 </span>            :    * Creates an inflated bounding box.</a>
-<a name="126"><span class="lineNum">     126 </span>            :    */</a>
-<a name="127"><span class="lineNum">     127 </span>            :   BoundingBox inflateBoundingBox(const BoundingBox &amp; bbox, const Real multiplier = 0.01);</a>
+<a name="124"><span class="lineNum">     124 </span>            :   /// The Rays that need to be searched to possibly claimed</a>
+<a name="125"><span class="lineNum">     125 </span>            :   const std::vector&lt;std::shared_ptr&lt;Ray&gt;&gt; &amp; _rays;</a>
+<a name="126"><span class="lineNum">     126 </span>            :   /// The local Rays that are claimed</a>
+<a name="127"><span class="lineNum">     127 </span>            :   std::vector&lt;std::shared_ptr&lt;Ray&gt;&gt; &amp; _local_rays;</a>
 <a name="128"><span class="lineNum">     128 </span>            : </a>
-<a name="129"><span class="lineNum">     129 </span>            :   /// The Rays that need to be searched to possibly claimed</a>
-<a name="130"><span class="lineNum">     130 </span>            :   const std::vector&lt;std::shared_ptr&lt;Ray&gt;&gt; &amp; _rays;</a>
-<a name="131"><span class="lineNum">     131 </span>            :   /// The local Rays that are claimed</a>
-<a name="132"><span class="lineNum">     132 </span>            :   std::vector&lt;std::shared_ptr&lt;Ray&gt;&gt; &amp; _local_rays;</a>
-<a name="133"><span class="lineNum">     133 </span>            : </a>
-<a name="134"><span class="lineNum">     134 </span>            :   /// The point locator</a>
-<a name="135"><span class="lineNum">     135 </span>            :   std::unique_ptr&lt;PointLocatorBase&gt; _point_locator = nullptr;</a>
-<a name="136"><span class="lineNum">     136 </span>            : </a>
-<a name="137"><span class="lineNum">     137 </span>            :   /// The bounding box for this processor</a>
-<a name="138"><span class="lineNum">     138 </span>            :   BoundingBox _bbox;</a>
-<a name="139"><span class="lineNum">     139 </span>            :   /// The global bounding box</a>
-<a name="140"><span class="lineNum">     140 </span>            :   BoundingBox _global_bbox;</a>
-<a name="141"><span class="lineNum">     141 </span>            :   /// The inflaed bounding boxes for all processors</a>
-<a name="142"><span class="lineNum">     142 </span>            :   std::vector&lt;BoundingBox&gt; _inflated_bboxes;</a>
-<a name="143"><span class="lineNum">     143 </span>            :   /// Inflated bounding boxes that are neighboring to this processor (pid : bbox for each entry)</a>
-<a name="144"><span class="lineNum">     144 </span>            :   std::vector&lt;std::pair&lt;processor_id_type, BoundingBox&gt;&gt; _inflated_neighbor_bboxes;</a>
-<a name="145"><span class="lineNum">     145 </span>            : </a>
-<a name="146"><span class="lineNum">     146 </span>            :   /// Map of point neighbors for each element</a>
-<a name="147"><span class="lineNum">     147 </span>            :   std::unordered_map&lt;dof_id_type, std::vector&lt;const Elem *&gt;&gt; _elem_point_neighbors;</a>
-<a name="148"><span class="lineNum">     148 </span>            : };</a>
+<a name="129"><span class="lineNum">     129 </span>            :   /// The point locator</a>
+<a name="130"><span class="lineNum">     130 </span>            :   std::unique_ptr&lt;PointLocatorBase&gt; _point_locator = nullptr;</a>
+<a name="131"><span class="lineNum">     131 </span>            : </a>
+<a name="132"><span class="lineNum">     132 </span>            :   /// The bounding box for this processor</a>
+<a name="133"><span class="lineNum">     133 </span>            :   BoundingBox _bbox;</a>
+<a name="134"><span class="lineNum">     134 </span>            :   /// The global bounding box</a>
+<a name="135"><span class="lineNum">     135 </span>            :   BoundingBox _global_bbox;</a>
+<a name="136"><span class="lineNum">     136 </span>            :   /// The inflaed bounding boxes for all processors</a>
+<a name="137"><span class="lineNum">     137 </span>            :   std::vector&lt;BoundingBox&gt; _inflated_bboxes;</a>
+<a name="138"><span class="lineNum">     138 </span>            :   /// Inflated bounding boxes that are neighboring to this processor (pid : bbox for each entry)</a>
+<a name="139"><span class="lineNum">     139 </span>            :   std::vector&lt;std::pair&lt;processor_id_type, BoundingBox&gt;&gt; _inflated_neighbor_bboxes;</a>
+<a name="140"><span class="lineNum">     140 </span>            : </a>
+<a name="141"><span class="lineNum">     141 </span>            :   /// Map of point neighbors for each element</a>
+<a name="142"><span class="lineNum">     142 </span>            :   std::unordered_map&lt;dof_id_type, std::vector&lt;const Elem *&gt;&gt; _elem_point_neighbors;</a>
+<a name="143"><span class="lineNum">     143 </span>            : };</a>
 </pre>
       </td>
     </tr>

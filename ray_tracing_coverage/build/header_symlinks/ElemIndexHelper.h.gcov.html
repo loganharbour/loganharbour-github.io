@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-27 22:14:28</td>
+            <td class="headerValue">2020-11-28 10:00:16</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">2</td>
@@ -117,21 +117,21 @@
 <a name="47"><span class="lineNum">      47 </span>            :   /**</a>
 <a name="48"><span class="lineNum">      48 </span>            :    * Whether or not the element \p elem has an index set for it using this object.</a>
 <a name="49"><span class="lineNum">      49 </span>            :    */</a>
-<a name="50"><span class="lineNum">      50 </span><span class="lineCov">   16048923 :   bool hasIndex(const Elem * elem) const</span></a>
+<a name="50"><span class="lineNum">      50 </span><span class="lineCov">   19846100 :   bool hasIndex(const Elem * elem) const</span></a>
 <a name="51"><span class="lineNum">      51 </span>            :   {</a>
-<a name="52"><span class="lineNum">      52 </span><span class="lineCov">   16048923 :     mooseAssert(elem, &quot;Null elem&quot;);</span></a>
-<a name="53"><span class="lineNum">      53 </span><span class="lineCov">   16048923 :     mooseAssert(_initialized, &quot;Not initialized&quot;);</span></a>
-<a name="54"><span class="lineNum">      54 </span><span class="lineCov">   16048923 :     mooseAssert(_mesh.query_elem_ptr(elem-&gt;id()), &quot;Not an elem of the mesh&quot;);</span></a>
-<a name="55"><span class="lineNum">      55 </span><span class="lineCov">   16048923 :     return elem-&gt;get_extra_integer(_extra_integer) != DofObject::invalid_id;</span></a>
+<a name="52"><span class="lineNum">      52 </span><span class="lineCov">   19846100 :     mooseAssert(elem, &quot;Null elem&quot;);</span></a>
+<a name="53"><span class="lineNum">      53 </span><span class="lineCov">   19846100 :     mooseAssert(_initialized, &quot;Not initialized&quot;);</span></a>
+<a name="54"><span class="lineNum">      54 </span><span class="lineCov">   19846100 :     mooseAssert(_mesh.query_elem_ptr(elem-&gt;id()), &quot;Not an elem of the mesh&quot;);</span></a>
+<a name="55"><span class="lineNum">      55 </span><span class="lineCov">   19846100 :     return elem-&gt;get_extra_integer(_extra_integer) != DofObject::invalid_id;</span></a>
 <a name="56"><span class="lineNum">      56 </span>            :   }</a>
 <a name="57"><span class="lineNum">      57 </span>            : </a>
 <a name="58"><span class="lineNum">      58 </span>            :   /**</a>
 <a name="59"><span class="lineNum">      59 </span>            :    * Get the index associated with the element \p elem.</a>
 <a name="60"><span class="lineNum">      60 </span>            :    */</a>
-<a name="61"><span class="lineNum">      61 </span><span class="lineCov">   16048923 :   dof_id_type getIndex(const Elem * elem) const</span></a>
+<a name="61"><span class="lineNum">      61 </span><span class="lineCov">   19846100 :   dof_id_type getIndex(const Elem * elem) const</span></a>
 <a name="62"><span class="lineNum">      62 </span>            :   {</a>
-<a name="63"><span class="lineNum">      63 </span><span class="lineCov">   16048923 :     mooseAssert(hasIndex(elem), &quot;Elem not in indexed range&quot;);</span></a>
-<a name="64"><span class="lineNum">      64 </span><span class="lineCov">   16048923 :     return elem-&gt;get_extra_integer(_extra_integer);</span></a>
+<a name="63"><span class="lineNum">      63 </span><span class="lineCov">   19846100 :     mooseAssert(hasIndex(elem), &quot;Elem not in indexed range&quot;);</span></a>
+<a name="64"><span class="lineNum">      64 </span><span class="lineCov">   19846100 :     return elem-&gt;get_extra_integer(_extra_integer);</span></a>
 <a name="65"><span class="lineNum">      65 </span>            :   }</a>
 <a name="66"><span class="lineNum">      66 </span>            : </a>
 <a name="67"><span class="lineNum">      67 </span>            :   /**</a>
@@ -140,7 +140,7 @@
 <a name="70"><span class="lineNum">      70 </span>            :    * Useful for initializing data structures that will be indexed</a>
 <a name="71"><span class="lineNum">      71 </span>            :    * using the indices provided by this object.</a>
 <a name="72"><span class="lineNum">      72 </span>            :    */</a>
-<a name="73"><span class="lineNum">      73 </span><span class="lineCov">       7860 :   dof_id_type maxIndex() const { return _max_index; }</span></a>
+<a name="73"><span class="lineNum">      73 </span><span class="lineCov">       9732 :   dof_id_type maxIndex() const { return _max_index; }</span></a>
 <a name="74"><span class="lineNum">      74 </span>            : </a>
 <a name="75"><span class="lineNum">      75 </span>            : private:</a>
 <a name="76"><span class="lineNum">      76 </span>            :   // The mesh</a>

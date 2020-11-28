@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-27 22:14:28</td>
+            <td class="headerValue">2020-11-28 10:00:16</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -132,7 +132,7 @@
 <a name="62"><span class="lineNum">      62 </span>            :   class ChangeDirectionKey</a>
 <a name="63"><span class="lineNum">      63 </span>            :   {</a>
 <a name="64"><span class="lineNum">      64 </span>            :     friend class RayBoundaryConditionBase;</a>
-<a name="65"><span class="lineNum">      65 </span><span class="lineCov">      18090 :     ChangeDirectionKey() {}</span></a>
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">      22452 :     ChangeDirectionKey() {}</span></a>
 <a name="66"><span class="lineNum">      66 </span>            :     ChangeDirectionKey(const ChangeDirectionKey &amp;) {}</a>
 <a name="67"><span class="lineNum">      67 </span>            :   };</a>
 <a name="68"><span class="lineNum">      68 </span>            : </a>
@@ -143,7 +143,7 @@
 <a name="73"><span class="lineNum">      73 </span>            :   class ChangeStartDirectionKey</a>
 <a name="74"><span class="lineNum">      74 </span>            :   {</a>
 <a name="75"><span class="lineNum">      75 </span>            :     friend class RayKernelBase;</a>
-<a name="76"><span class="lineNum">      76 </span><span class="lineCov">       1512 :     ChangeStartDirectionKey() {}</span></a>
+<a name="76"><span class="lineNum">      76 </span><span class="lineCov">       1872 :     ChangeStartDirectionKey() {}</span></a>
 <a name="77"><span class="lineNum">      77 </span>            :     ChangeStartDirectionKey(const ChangeStartDirectionKey &amp;) {}</a>
 <a name="78"><span class="lineNum">      78 </span>            :   };</a>
 <a name="79"><span class="lineNum">      79 </span>            : </a>
@@ -157,8 +157,8 @@
 <a name="87"><span class="lineNum">      87 </span>            :   {</a>
 <a name="88"><span class="lineNum">      88 </span>            :     friend class RayTracingStudy;</a>
 <a name="89"><span class="lineNum">      89 </span>            :     friend class MooseUtils::SharedPool&lt;Ray&gt;;</a>
-<a name="90"><span class="lineNum">      90 </span><span class="lineCov">   29770453 :     ConstructRayKey() {}</span></a>
-<a name="91"><span class="lineNum">      91 </span><span class="lineCov">    2873443 :     ConstructRayKey(const ConstructRayKey &amp;) {}</span></a>
+<a name="90"><span class="lineNum">      90 </span><span class="lineCov">   35553784 :     ConstructRayKey() {}</span></a>
+<a name="91"><span class="lineNum">      91 </span><span class="lineCov">    3518111 :     ConstructRayKey(const ConstructRayKey &amp;) {}</span></a>
 <a name="92"><span class="lineNum">      92 </span>            :   };</a>
 <a name="93"><span class="lineNum">      93 </span>            : </a>
 <a name="94"><span class="lineNum">      94 </span>            :   /**</a>
@@ -272,11 +272,11 @@
 <a name="202"><span class="lineNum">     202 </span>            :   /**</a>
 <a name="203"><span class="lineNum">     203 </span>            :    * Gets the Ray's ID</a>
 <a name="204"><span class="lineNum">     204 </span>            :    */</a>
-<a name="205"><span class="lineNum">     205 </span><span class="lineCov">   53962570 :   RayID id() const { return _id; }</span></a>
+<a name="205"><span class="lineNum">     205 </span><span class="lineCov">   64466020 :   RayID id() const { return _id; }</span></a>
 <a name="206"><span class="lineNum">     206 </span>            :   /**</a>
 <a name="207"><span class="lineNum">     207 </span>            :    * Whether or not the Ray's ID is invalid</a>
 <a name="208"><span class="lineNum">     208 </span>            :    */</a>
-<a name="209"><span class="lineNum">     209 </span><span class="lineCov">      16128 :   bool invalidID() const { return _id == INVALID_RAY_ID; }</span></a>
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">      19968 :   bool invalidID() const { return _id == INVALID_RAY_ID; }</span></a>
 <a name="210"><span class="lineNum">     210 </span>            : </a>
 <a name="211"><span class="lineNum">     211 </span>            :   /**</a>
 <a name="212"><span class="lineNum">     212 </span>            :    * Gets the point that the Ray is currently at.</a>
@@ -286,11 +286,11 @@
 <a name="216"><span class="lineNum">     216 </span>            :    * has travelled. During RayKernel execution, this is the end of the segment.</a>
 <a name="217"><span class="lineNum">     217 </span>            :    * After a Ray has been traced, this is the point where the Ray was killed.</a>
 <a name="218"><span class="lineNum">     218 </span>            :    */</a>
-<a name="219"><span class="lineNum">     219 </span><span class="lineCov">  131026204 :   const Point &amp; currentPoint() const { return _current_point; }</span></a>
+<a name="219"><span class="lineNum">     219 </span><span class="lineCov">  154477534 :   const Point &amp; currentPoint() const { return _current_point; }</span></a>
 <a name="220"><span class="lineNum">     220 </span>            :   /**</a>
 <a name="221"><span class="lineNum">     221 </span>            :    * Whether or not the point that the Ray is currently at is valid.</a>
 <a name="222"><span class="lineNum">     222 </span>            :    */</a>
-<a name="223"><span class="lineNum">     223 </span><span class="lineCov">  132738130 :   bool invalidCurrentPoint() const { return _current_point == RayTracingCommon::invalid_point; }</span></a>
+<a name="223"><span class="lineNum">     223 </span><span class="lineCov">  158097700 :   bool invalidCurrentPoint() const { return _current_point == RayTracingCommon::invalid_point; }</span></a>
 <a name="224"><span class="lineNum">     224 </span>            : </a>
 <a name="225"><span class="lineNum">     225 </span>            :   /**</a>
 <a name="226"><span class="lineNum">     226 </span>            :    * This method is for internal use only. It is intended to be called only by</a>
@@ -320,11 +320,11 @@
 <a name="250"><span class="lineNum">     250 </span>            :   /**</a>
 <a name="251"><span class="lineNum">     251 </span>            :    * Gets the Ray's direction</a>
 <a name="252"><span class="lineNum">     252 </span>            :    */</a>
-<a name="253"><span class="lineNum">     253 </span><span class="lineCov">  492527892 :   const Point &amp; direction() const { return _direction; }</span></a>
+<a name="253"><span class="lineNum">     253 </span><span class="lineCov">  579617904 :   const Point &amp; direction() const { return _direction; }</span></a>
 <a name="254"><span class="lineNum">     254 </span>            :   /**</a>
 <a name="255"><span class="lineNum">     255 </span>            :    * Whether or not the Ray's direction is set to invalid.</a>
 <a name="256"><span class="lineNum">     256 </span>            :    */</a>
-<a name="257"><span class="lineNum">     257 </span><span class="lineCov">   83659230 :   bool invalidDirection() const { return _direction == RayTracingCommon::invalid_point; }</span></a>
+<a name="257"><span class="lineNum">     257 </span><span class="lineCov">   99561800 :   bool invalidDirection() const { return _direction == RayTracingCommon::invalid_point; }</span></a>
 <a name="258"><span class="lineNum">     258 </span>            : </a>
 <a name="259"><span class="lineNum">     259 </span>            :   /**</a>
 <a name="260"><span class="lineNum">     260 </span>            :    * Gets a writeable reference to the Ray's data.</a>
@@ -474,7 +474,7 @@
 <a name="404"><span class="lineNum">     404 </span>            :    *   applied to multiple elements when hitting a vertex or edge.</a>
 <a name="405"><span class="lineNum">     405 </span>            :    *   Therefore, this will be only one of said elements.</a>
 <a name="406"><span class="lineNum">     406 </span>            :    */</a>
-<a name="407"><span class="lineNum">     407 </span><span class="lineCov">  131314700 :   const Elem * currentElem() const { return _current_elem; }</span></a>
+<a name="407"><span class="lineNum">     407 </span><span class="lineCov">  154786324 :   const Elem * currentElem() const { return _current_elem; }</span></a>
 <a name="408"><span class="lineNum">     408 </span>            : </a>
 <a name="409"><span class="lineNum">     409 </span>            :   /**</a>
 <a name="410"><span class="lineNum">     410 </span>            :    * Get a Ray's current incoming side</a>
@@ -484,7 +484,7 @@
 <a name="414"><span class="lineNum">     414 </span>            :    * During and after tracing, this is ONLY guaranteed to be valid</a>
 <a name="415"><span class="lineNum">     415 </span>            :    * while executing RayKernels!</a>
 <a name="416"><span class="lineNum">     416 </span>            :    */</a>
-<a name="417"><span class="lineNum">     417 </span><span class="lineCov">  112017028 :   unsigned short currentIncomingSide() const { return _current_incoming_side; }</span></a>
+<a name="417"><span class="lineNum">     417 </span><span class="lineCov">  131619028 :   unsigned short currentIncomingSide() const { return _current_incoming_side; }</span></a>
 <a name="418"><span class="lineNum">     418 </span>            :   /**</a>
 <a name="419"><span class="lineNum">     419 </span>            :    * Whether or not the Ray's current incoming side is invalid</a>
 <a name="420"><span class="lineNum">     420 </span>            :    *</a>
@@ -493,9 +493,9 @@
 <a name="423"><span class="lineNum">     423 </span>            :    * During and after tracing, this is ONLY guaranteed to be valid</a>
 <a name="424"><span class="lineNum">     424 </span>            :    * while executing RayKernels!</a>
 <a name="425"><span class="lineNum">     425 </span>            :    */</a>
-<a name="426"><span class="lineNum">     426 </span><span class="lineCov">   43938380 :   bool invalidCurrentIncomingSide() const</span></a>
+<a name="426"><span class="lineNum">     426 </span><span class="lineCov">   52458934 :   bool invalidCurrentIncomingSide() const</span></a>
 <a name="427"><span class="lineNum">     427 </span>            :   {</a>
-<a name="428"><span class="lineNum">     428 </span><span class="lineCov">   43938380 :     return _current_incoming_side == RayTracingCommon::invalid_side;</span></a>
+<a name="428"><span class="lineNum">     428 </span><span class="lineCov">   52458934 :     return _current_incoming_side == RayTracingCommon::invalid_side;</span></a>
 <a name="429"><span class="lineNum">     429 </span>            :   }</a>
 <a name="430"><span class="lineNum">     430 </span>            : </a>
 <a name="431"><span class="lineNum">     431 </span>            :   /**</a>
@@ -503,7 +503,7 @@
 <a name="433"><span class="lineNum">     433 </span>            :    *</a>
 <a name="434"><span class="lineNum">     434 </span>            :    * This is done by limiting the distance of the Ray in its set direction.</a>
 <a name="435"><span class="lineNum">     435 </span>            :    */</a>
-<a name="436"><span class="lineNum">     436 </span><span class="lineCov">      51858 :   bool endSet() const { return _end_set; }</span></a>
+<a name="436"><span class="lineNum">     436 </span><span class="lineCov">      64260 :   bool endSet() const { return _end_set; }</span></a>
 <a name="437"><span class="lineNum">     437 </span>            :   /**</a>
 <a name="438"><span class="lineNum">     438 </span>            :    * Whether or not the Ray is at the user-defined end point.</a>
 <a name="439"><span class="lineNum">     439 </span>            :    *</a>
@@ -527,46 +527,46 @@
 <a name="457"><span class="lineNum">     457 </span>            :   /**</a>
 <a name="458"><span class="lineNum">     458 </span>            :    * Gets the number of times this Ray has crossed a processor</a>
 <a name="459"><span class="lineNum">     459 </span>            :    */</a>
-<a name="460"><span class="lineNum">     460 </span><span class="lineCov">   14012431 :   unsigned int processorCrossings() const { return _processor_crossings; }</span></a>
+<a name="460"><span class="lineNum">     460 </span><span class="lineCov">   16718608 :   unsigned int processorCrossings() const { return _processor_crossings; }</span></a>
 <a name="461"><span class="lineNum">     461 </span>            : </a>
 <a name="462"><span class="lineNum">     462 </span>            :   /**</a>
 <a name="463"><span class="lineNum">     463 </span>            :    * Gets the number of intersections this Ray has done</a>
 <a name="464"><span class="lineNum">     464 </span>            :    */</a>
-<a name="465"><span class="lineNum">     465 </span><span class="lineCov">   14032033 :   unsigned int intersections() const { return _intersections; }</span></a>
+<a name="465"><span class="lineNum">     465 </span><span class="lineCov">   16742932 :   unsigned int intersections() const { return _intersections; }</span></a>
 <a name="466"><span class="lineNum">     466 </span>            : </a>
 <a name="467"><span class="lineNum">     467 </span>            :   /**</a>
 <a name="468"><span class="lineNum">     468 </span>            :    * Gets the distance this Ray has traveled</a>
 <a name="469"><span class="lineNum">     469 </span>            :    */</a>
-<a name="470"><span class="lineNum">     470 </span><span class="lineCov">  111941904 :   Real distance() const { return _distance; }</span></a>
+<a name="470"><span class="lineNum">     470 </span><span class="lineCov">  131620240 :   Real distance() const { return _distance; }</span></a>
 <a name="471"><span class="lineNum">     471 </span>            :   /**</a>
 <a name="472"><span class="lineNum">     472 </span>            :    * Gets the max distance this Ray is allowed to travel</a>
 <a name="473"><span class="lineNum">     473 </span>            :    *</a>
 <a name="474"><span class="lineNum">     474 </span>            :    * This may be set internally to || end - start || in the case that</a>
 <a name="475"><span class="lineNum">     475 </span>            :    * the user initialized the Ray with setStartingEndPoint().</a>
 <a name="476"><span class="lineNum">     476 </span>            :    */</a>
-<a name="477"><span class="lineNum">     477 </span><span class="lineCov">   97310560 :   Real maxDistance() const { return _max_distance; }</span></a>
+<a name="477"><span class="lineNum">     477 </span><span class="lineCov">  114136700 :   Real maxDistance() const { return _max_distance; }</span></a>
 <a name="478"><span class="lineNum">     478 </span>            :   /**</a>
 <a name="479"><span class="lineNum">     479 </span>            :    * Whether or not the distance has been set via setStartingMaxDistance()</a>
 <a name="480"><span class="lineNum">     480 </span>            :    */</a>
-<a name="481"><span class="lineNum">     481 </span><span class="lineCov">   18862427 :   bool maxDistanceSet() const { return _max_distance != std::numeric_limits&lt;Real&gt;::max(); }</span></a>
+<a name="481"><span class="lineNum">     481 </span><span class="lineCov">   22435070 :   bool maxDistanceSet() const { return _max_distance != std::numeric_limits&lt;Real&gt;::max(); }</span></a>
 <a name="482"><span class="lineNum">     482 </span>            : </a>
 <a name="483"><span class="lineNum">     483 </span>            :   /**</a>
 <a name="484"><span class="lineNum">     484 </span>            :    * Whether or not this Ray should continue</a>
 <a name="485"><span class="lineNum">     485 </span>            :    */</a>
-<a name="486"><span class="lineNum">     486 </span><span class="lineCov">  356662616 :   bool shouldContinue() const { return _should_continue; }</span></a>
+<a name="486"><span class="lineNum">     486 </span><span class="lineCov">  419537096 :   bool shouldContinue() const { return _should_continue; }</span></a>
 <a name="487"><span class="lineNum">     487 </span>            :   /**</a>
 <a name="488"><span class="lineNum">     488 </span>            :    * Sets whether or not this Ray should continue</a>
 <a name="489"><span class="lineNum">     489 </span>            :    */</a>
-<a name="490"><span class="lineNum">     490 </span><span class="lineCov">   14191678 :   void setShouldContinue(const bool should_continue) { _should_continue = should_continue; }</span></a>
+<a name="490"><span class="lineNum">     490 </span><span class="lineCov">   16932840 :   void setShouldContinue(const bool should_continue) { _should_continue = should_continue; }</span></a>
 <a name="491"><span class="lineNum">     491 </span>            : </a>
 <a name="492"><span class="lineNum">     492 </span>            :   /**</a>
 <a name="493"><span class="lineNum">     493 </span>            :    * Whether or not this Ray has had its trajectory changed</a>
 <a name="494"><span class="lineNum">     494 </span>            :    */</a>
-<a name="495"><span class="lineNum">     495 </span><span class="lineCov">  115284525 :   bool trajectoryChanged() const { return _trajectory_changed; }</span></a>
+<a name="495"><span class="lineNum">     495 </span><span class="lineCov">  135408122 :   bool trajectoryChanged() const { return _trajectory_changed; }</span></a>
 <a name="496"><span class="lineNum">     496 </span>            :   /**</a>
 <a name="497"><span class="lineNum">     497 </span>            :    * Gets the number of trajectory changes this Ray has had</a>
 <a name="498"><span class="lineNum">     498 </span>            :    */</a>
-<a name="499"><span class="lineNum">     499 </span><span class="lineCov">   14012431 :   unsigned int trajectoryChanges() const { return _trajectory_changes; }</span></a>
+<a name="499"><span class="lineNum">     499 </span><span class="lineCov">   16718608 :   unsigned int trajectoryChanges() const { return _trajectory_changes; }</span></a>
 <a name="500"><span class="lineNum">     500 </span>            : </a>
 <a name="501"><span class="lineNum">     501 </span>            :   /**</a>
 <a name="502"><span class="lineNum">     502 </span>            :    * Helper function for getting information about the Ray</a>
@@ -587,15 +587,15 @@
 <a name="517"><span class="lineNum">     517 </span>            :   /**</a>
 <a name="518"><span class="lineNum">     518 </span>            :    * Whether or not a Ray has begun tracing</a>
 <a name="519"><span class="lineNum">     519 </span>            :    */</a>
-<a name="520"><span class="lineNum">     520 </span><span class="lineCov">   89945340 :   bool hasTraced() const</span></a>
+<a name="520"><span class="lineNum">     520 </span><span class="lineCov">  107056000 :   bool hasTraced() const</span></a>
 <a name="521"><span class="lineNum">     521 </span>            :   {</a>
-<a name="522"><span class="lineNum">     522 </span><span class="lineCov">   89945340 :     return (bool)_distance || (bool)_processor_crossings || (bool)_intersections;</span></a>
+<a name="522"><span class="lineNum">     522 </span><span class="lineCov">  107056000 :     return (bool)_distance || (bool)_processor_crossings || (bool)_intersections;</span></a>
 <a name="523"><span class="lineNum">     523 </span>            :   }</a>
 <a name="524"><span class="lineNum">     524 </span>            : </a>
 <a name="525"><span class="lineNum">     525 </span>            :   /**</a>
 <a name="526"><span class="lineNum">     526 </span>            :    * Get the RayTracingStudy associated with this Ray</a>
 <a name="527"><span class="lineNum">     527 </span>            :    */</a>
-<a name="528"><span class="lineNum">     528 </span><span class="lineCov">    2699063 :   const RayTracingStudy &amp; study() const { return _study; }</span></a>
+<a name="528"><span class="lineNum">     528 </span><span class="lineCov">    3299664 :   const RayTracingStudy &amp; study() const { return _study; }</span></a>
 <a name="529"><span class="lineNum">     529 </span>            : </a>
 <a name="530"><span class="lineNum">     530 </span>            : private:</a>
 <a name="531"><span class="lineNum">     531 </span>            :   /**</a>
@@ -606,16 +606,16 @@
 <a name="536"><span class="lineNum">     536 </span>            :   /**</a>
 <a name="537"><span class="lineNum">     537 </span>            :    * Invalidates the Ray's current element</a>
 <a name="538"><span class="lineNum">     538 </span>            :    */</a>
-<a name="539"><span class="lineNum">     539 </span><span class="lineCov">     365568 :   void invalidateCurrentElem() { _current_elem = nullptr; }</span></a>
+<a name="539"><span class="lineNum">     539 </span><span class="lineCov">     452608 :   void invalidateCurrentElem() { _current_elem = nullptr; }</span></a>
 <a name="540"><span class="lineNum">     540 </span>            : </a>
 <a name="541"><span class="lineNum">     541 </span>            :   /**</a>
 <a name="542"><span class="lineNum">     542 </span>            :    * Sets the Ray's current point</a>
 <a name="543"><span class="lineNum">     543 </span>            :    */</a>
-<a name="544"><span class="lineNum">     544 </span><span class="lineCov">  103110800 :   void setCurrentPoint(const Point &amp; current_point) { _current_point = current_point; }</span></a>
+<a name="544"><span class="lineNum">     544 </span><span class="lineCov">  121042200 :   void setCurrentPoint(const Point &amp; current_point) { _current_point = current_point; }</span></a>
 <a name="545"><span class="lineNum">     545 </span>            :   /**</a>
 <a name="546"><span class="lineNum">     546 </span>            :    * Invalidates the Ray's current point</a>
 <a name="547"><span class="lineNum">     547 </span>            :    */</a>
-<a name="548"><span class="lineNum">     548 </span><span class="lineCov">     340370 :   void invalidateCurrentPoint() { _current_point = RayTracingCommon::invalid_point; }</span></a>
+<a name="548"><span class="lineNum">     548 </span><span class="lineCov">     421170 :   void invalidateCurrentPoint() { _current_point = RayTracingCommon::invalid_point; }</span></a>
 <a name="549"><span class="lineNum">     549 </span>            : </a>
 <a name="550"><span class="lineNum">     550 </span>            :   /**</a>
 <a name="551"><span class="lineNum">     551 </span>            :    * Sets the Ray's direction</a>
@@ -624,52 +624,52 @@
 <a name="554"><span class="lineNum">     554 </span>            :   /**</a>
 <a name="555"><span class="lineNum">     555 </span>            :    * Invalidates the Ray's current direction</a>
 <a name="556"><span class="lineNum">     556 </span>            :    */</a>
-<a name="557"><span class="lineNum">     557 </span><span class="lineCov">     340370 :   void invalidateDirection() { _direction = RayTracingCommon::invalid_point; }</span></a>
+<a name="557"><span class="lineNum">     557 </span><span class="lineCov">     421170 :   void invalidateDirection() { _direction = RayTracingCommon::invalid_point; }</span></a>
 <a name="558"><span class="lineNum">     558 </span>            : </a>
 <a name="559"><span class="lineNum">     559 </span>            :   /**</a>
 <a name="560"><span class="lineNum">     560 </span>            :    * Change a Ray's current elem</a>
 <a name="561"><span class="lineNum">     561 </span>            :    */</a>
-<a name="562"><span class="lineNum">     562 </span><span class="lineCov">   95826680 :   void setCurrentElem(const Elem * current_elem) { _current_elem = current_elem; }</span></a>
+<a name="562"><span class="lineNum">     562 </span><span class="lineCov">  112298300 :   void setCurrentElem(const Elem * current_elem) { _current_elem = current_elem; }</span></a>
 <a name="563"><span class="lineNum">     563 </span>            : </a>
 <a name="564"><span class="lineNum">     564 </span>            :   /**</a>
 <a name="565"><span class="lineNum">     565 </span>            :    * Change a Ray's incoming side</a>
 <a name="566"><span class="lineNum">     566 </span>            :    */</a>
-<a name="567"><span class="lineNum">     567 </span><span class="lineCov">   94654520 :   void setCurrentIncomingSide(const unsigned short current_incoming_side)</span></a>
+<a name="567"><span class="lineNum">     567 </span><span class="lineCov">  110887400 :   void setCurrentIncomingSide(const unsigned short current_incoming_side)</span></a>
 <a name="568"><span class="lineNum">     568 </span>            :   {</a>
-<a name="569"><span class="lineNum">     569 </span><span class="lineCov">   94653580 :     _current_incoming_side = current_incoming_side;</span></a>
-<a name="570"><span class="lineNum">     570 </span><span class="lineCov">        966 :   }</span></a>
+<a name="569"><span class="lineNum">     569 </span><span class="lineCov">  110886300 :     _current_incoming_side = current_incoming_side;</span></a>
+<a name="570"><span class="lineNum">     570 </span><span class="lineCov">       1196 :   }</span></a>
 <a name="571"><span class="lineNum">     571 </span>            :   /**</a>
 <a name="572"><span class="lineNum">     572 </span>            :    * Invalidates the Ray's current incoming side</a>
 <a name="573"><span class="lineNum">     573 </span>            :    */</a>
-<a name="574"><span class="lineNum">     574 </span><span class="lineCov">     365568 :   void invalidateCurrentIncomingSide() { _current_incoming_side = RayTracingCommon::invalid_side; }</span></a>
+<a name="574"><span class="lineNum">     574 </span><span class="lineCov">     452608 :   void invalidateCurrentIncomingSide() { _current_incoming_side = RayTracingCommon::invalid_side; }</span></a>
 <a name="575"><span class="lineNum">     575 </span>            : </a>
 <a name="576"><span class="lineNum">     576 </span>            :   /**</a>
 <a name="577"><span class="lineNum">     577 </span>            :    * Set whether or not this Ray has had its trajectory changed</a>
 <a name="578"><span class="lineNum">     578 </span>            :    */</a>
-<a name="579"><span class="lineNum">     579 </span><span class="lineCov">      18699 :   void setTrajectoryChanged(const bool trajectory_changed)</span></a>
+<a name="579"><span class="lineNum">     579 </span><span class="lineCov">      23206 :   void setTrajectoryChanged(const bool trajectory_changed)</span></a>
 <a name="580"><span class="lineNum">     580 </span>            :   {</a>
-<a name="581"><span class="lineNum">     581 </span><span class="lineCov">      18699 :     _trajectory_changed = trajectory_changed;</span></a>
+<a name="581"><span class="lineNum">     581 </span><span class="lineCov">      23206 :     _trajectory_changed = trajectory_changed;</span></a>
 <a name="582"><span class="lineNum">     582 </span>            :   }</a>
 <a name="583"><span class="lineNum">     583 </span>            : </a>
 <a name="584"><span class="lineNum">     584 </span>            :   /**</a>
 <a name="585"><span class="lineNum">     585 </span>            :    * Increment the Ray's processor crossing counter</a>
 <a name="586"><span class="lineNum">     586 </span>            :    */</a>
-<a name="587"><span class="lineNum">     587 </span><span class="lineCov">    2627429 :   void addProcessorCrossing() { ++_processor_crossings; }</span></a>
+<a name="587"><span class="lineNum">     587 </span><span class="lineCov">    3205912 :   void addProcessorCrossing() { ++_processor_crossings; }</span></a>
 <a name="588"><span class="lineNum">     588 </span>            : </a>
 <a name="589"><span class="lineNum">     589 </span>            :   /**</a>
 <a name="590"><span class="lineNum">     590 </span>            :    * Increment the Ray's intersection counter</a>
 <a name="591"><span class="lineNum">     591 </span>            :    */</a>
-<a name="592"><span class="lineNum">     592 </span><span class="lineCov">   97294470 :   void addIntersection() { ++_intersections; }</span></a>
+<a name="592"><span class="lineNum">     592 </span><span class="lineCov">  114116800 :   void addIntersection() { ++_intersections; }</span></a>
 <a name="593"><span class="lineNum">     593 </span>            : </a>
 <a name="594"><span class="lineNum">     594 </span>            :   /**</a>
 <a name="595"><span class="lineNum">     595 </span>            :    * Increment the Ray's trajectory change counter</a>
 <a name="596"><span class="lineNum">     596 </span>            :    */</a>
-<a name="597"><span class="lineNum">     597 </span><span class="lineCov">      18699 :   void addTrajectoryChange() { ++_trajectory_changes; }</span></a>
+<a name="597"><span class="lineNum">     597 </span><span class="lineCov">      23206 :   void addTrajectoryChange() { ++_trajectory_changes; }</span></a>
 <a name="598"><span class="lineNum">     598 </span>            : </a>
 <a name="599"><span class="lineNum">     599 </span>            :   /**</a>
 <a name="600"><span class="lineNum">     600 </span>            :    * Adds to the distance this Ray has traveled</a>
 <a name="601"><span class="lineNum">     601 </span>            :    */</a>
-<a name="602"><span class="lineNum">     602 </span><span class="lineCov">  102605710 :   void addDistance(const Real add_distance) { _distance += add_distance; }</span></a>
+<a name="602"><span class="lineNum">     602 </span><span class="lineCov">  120405600 :   void addDistance(const Real add_distance) { _distance += add_distance; }</span></a>
 <a name="603"><span class="lineNum">     603 </span>            :   /**</a>
 <a name="604"><span class="lineNum">     604 </span>            :    * Changes the Ray's max distance to be traveled</a>
 <a name="605"><span class="lineNum">     605 </span>            :    */</a>
@@ -677,7 +677,7 @@
 <a name="607"><span class="lineNum">     607 </span>            :   /**</a>
 <a name="608"><span class="lineNum">     608 </span>            :    * Invalidates the Ray's max distance</a>
 <a name="609"><span class="lineNum">     609 </span>            :    */</a>
-<a name="610"><span class="lineNum">     610 </span><span class="lineCov">     340370 :   void invalidateMaxDistance() { _max_distance = std::numeric_limits&lt;Real&gt;::max(); }</span></a>
+<a name="610"><span class="lineNum">     610 </span><span class="lineCov">     421170 :   void invalidateMaxDistance() { _max_distance = std::numeric_limits&lt;Real&gt;::max(); }</span></a>
 <a name="611"><span class="lineNum">     611 </span>            : </a>
 <a name="612"><span class="lineNum">     612 </span>            :   /**</a>
 <a name="613"><span class="lineNum">     613 </span>            :    * Produces a useful error if a Ray has started tracing</a>

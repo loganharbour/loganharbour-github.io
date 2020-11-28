@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-24 16:55:50</td>
+            <td class="headerValue">2020-11-27 22:14:28</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">19</td>
@@ -242,7 +242,7 @@
 <a name="172"><span class="lineNum">     172 </span>            :  */</a>
 <a name="173"><span class="lineNum">     173 </span>            : template &lt;typename KeepFunctor&gt;</a>
 <a name="174"><span class="lineNum">     174 </span>            : void</a>
-<a name="175"><span class="lineNum">     175 </span><span class="lineCov">     953568 : findNeighbors(</span></a>
+<a name="175"><span class="lineNum">     175 </span><span class="lineCov">     955626 : findNeighbors(</span></a>
 <a name="176"><span class="lineNum">     176 </span>            :     const Elem * const elem,</a>
 <a name="177"><span class="lineNum">     177 </span>            :     MooseUtils::StaticallyAllocatedSet&lt;const Elem *, MAX_POINT_NEIGHBORS&gt; &amp; neighbor_set,</a>
 <a name="178"><span class="lineNum">     178 </span>            :     MooseUtils::StaticallyAllocatedSet&lt;const Elem *, MAX_POINT_NEIGHBORS&gt; &amp; untested_set,</a>
@@ -250,54 +250,54 @@
 <a name="180"><span class="lineNum">     180 </span>            :     std::vector&lt;const Elem *&gt; active_neighbor_children,</a>
 <a name="181"><span class="lineNum">     181 </span>            :     KeepFunctor &amp; keep_functor)</a>
 <a name="182"><span class="lineNum">     182 </span>            : {</a>
-<a name="183"><span class="lineNum">     183 </span><span class="lineCov">     953568 :   mooseAssert(elem-&gt;active(), &quot;Inactive element&quot;);</span></a>
+<a name="183"><span class="lineNum">     183 </span><span class="lineCov">     955626 :   mooseAssert(elem-&gt;active(), &quot;Inactive element&quot;);</span></a>
 <a name="184"><span class="lineNum">     184 </span>            : </a>
-<a name="185"><span class="lineNum">     185 </span><span class="lineCov">     953568 :   neighbor_set.clear();</span></a>
-<a name="186"><span class="lineNum">     186 </span><span class="lineCov">     953568 :   untested_set.clear();</span></a>
-<a name="187"><span class="lineNum">     187 </span><span class="lineCov">     953568 :   next_untested_set.clear();</span></a>
+<a name="185"><span class="lineNum">     185 </span><span class="lineCov">     955626 :   neighbor_set.clear();</span></a>
+<a name="186"><span class="lineNum">     186 </span><span class="lineCov">     955626 :   untested_set.clear();</span></a>
+<a name="187"><span class="lineNum">     187 </span><span class="lineCov">     955626 :   next_untested_set.clear();</span></a>
 <a name="188"><span class="lineNum">     188 </span>            : </a>
-<a name="189"><span class="lineNum">     189 </span><span class="lineCov">     953568 :   neighbor_set.insert(elem);</span></a>
-<a name="190"><span class="lineNum">     190 </span><span class="lineCov">     953568 :   untested_set.insert(elem);</span></a>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">     955626 :   neighbor_set.insert(elem);</span></a>
+<a name="190"><span class="lineNum">     190 </span><span class="lineCov">     955626 :   untested_set.insert(elem);</span></a>
 <a name="191"><span class="lineNum">     191 </span>            : </a>
-<a name="192"><span class="lineNum">     192 </span><span class="lineCov">    3681731 :   while (!untested_set.empty())</span></a>
+<a name="192"><span class="lineNum">     192 </span><span class="lineCov">    3688682 :   while (!untested_set.empty())</span></a>
 <a name="193"><span class="lineNum">     193 </span>            :   {</a>
 <a name="194"><span class="lineNum">     194 </span>            :     // Loop over all the elements in the patch that haven't already been tested</a>
-<a name="195"><span class="lineNum">     195 </span><span class="lineCov">    6824923 :     for (const Elem * elem : untested_set)</span></a>
-<a name="196"><span class="lineNum">     196 </span><span class="lineCov">   24303813 :       for (auto current_neighbor : elem-&gt;neighbor_ptr_range())</span></a>
-<a name="197"><span class="lineNum">     197 </span><span class="lineCov">   20207068 :         if (current_neighbor &amp;&amp;</span></a>
-<a name="198"><span class="lineNum">     198 </span><span class="lineCov">   18282528 :             current_neighbor != remote_elem) // we have a real neighbor on elem side</span></a>
+<a name="195"><span class="lineNum">     195 </span><span class="lineCov">    6836229 :     for (const Elem * elem : untested_set)</span></a>
+<a name="196"><span class="lineNum">     196 </span><span class="lineCov">   24337041 :       for (auto current_neighbor : elem-&gt;neighbor_ptr_range())</span></a>
+<a name="197"><span class="lineNum">     197 </span><span class="lineCov">   20233866 :         if (current_neighbor &amp;&amp;</span></a>
+<a name="198"><span class="lineNum">     198 </span><span class="lineCov">   18305242 :             current_neighbor != remote_elem) // we have a real neighbor on elem side</span></a>
 <a name="199"><span class="lineNum">     199 </span>            :         {</a>
-<a name="200"><span class="lineNum">     200 </span><span class="lineCov">  106589830 :           if (current_neighbor-&gt;active()) // ... if it is active</span></a>
+<a name="200"><span class="lineNum">     200 </span><span class="lineCov">  106707470 :           if (current_neighbor-&gt;active()) // ... if it is active</span></a>
 <a name="201"><span class="lineNum">     201 </span>            :           {</a>
-<a name="202"><span class="lineNum">     202 </span><span class="lineCov">   18221956 :             if (!neighbor_set.contains(current_neighbor) &amp;&amp; keep_functor(current_neighbor))</span></a>
+<a name="202"><span class="lineNum">     202 </span><span class="lineCov">   18244640 :             if (!neighbor_set.contains(current_neighbor) &amp;&amp; keep_functor(current_neighbor))</span></a>
 <a name="203"><span class="lineNum">     203 </span>            :             {</a>
-<a name="204"><span class="lineNum">     204 </span><span class="lineCov">    3135412 :               next_untested_set.insert(current_neighbor);</span></a>
-<a name="205"><span class="lineNum">     205 </span><span class="lineCov">    3135412 :               neighbor_set.insert(current_neighbor);</span></a>
+<a name="204"><span class="lineNum">     204 </span><span class="lineCov">    3139760 :               next_untested_set.insert(current_neighbor);</span></a>
+<a name="205"><span class="lineNum">     205 </span><span class="lineCov">    3139760 :               neighbor_set.insert(current_neighbor);</span></a>
 <a name="206"><span class="lineNum">     206 </span>            :             }</a>
 <a name="207"><span class="lineNum">     207 </span>            :           }</a>
 <a name="208"><span class="lineNum">     208 </span>            : #ifdef LIBMESH_ENABLE_AMR</a>
 <a name="209"><span class="lineNum">     209 </span>            :           else // ... the neighbor is *not* active,</a>
 <a name="210"><span class="lineNum">     210 </span>            :           {    // ... so add *all* neighboring</a>
 <a name="211"><span class="lineNum">     211 </span>            :                // active children that touch p</a>
-<a name="212"><span class="lineNum">     212 </span><span class="lineCov">      33863 :             current_neighbor-&gt;active_family_tree_by_neighbor(active_neighbor_children, elem);</span></a>
+<a name="212"><span class="lineNum">     212 </span><span class="lineCov">      33780 :             current_neighbor-&gt;active_family_tree_by_neighbor(active_neighbor_children, elem);</span></a>
 <a name="213"><span class="lineNum">     213 </span>            : </a>
-<a name="214"><span class="lineNum">     214 </span><span class="lineCov">     125359 :             for (const Elem * current_child : active_neighbor_children)</span></a>
-<a name="215"><span class="lineNum">     215 </span><span class="lineCov">      91496 :               if (!neighbor_set.contains(current_child) &amp;&amp; keep_functor(current_child))</span></a>
+<a name="214"><span class="lineNum">     214 </span><span class="lineCov">     125011 :             for (const Elem * current_child : active_neighbor_children)</span></a>
+<a name="215"><span class="lineNum">     215 </span><span class="lineCov">      91231 :               if (!neighbor_set.contains(current_child) &amp;&amp; keep_functor(current_child))</span></a>
 <a name="216"><span class="lineNum">     216 </span>            :               {</a>
-<a name="217"><span class="lineNum">     217 </span><span class="lineCov">       7780 :                 next_untested_set.insert(current_child);</span></a>
-<a name="218"><span class="lineNum">     218 </span><span class="lineCov">       7780 :                 neighbor_set.insert(current_child);</span></a>
+<a name="217"><span class="lineNum">     217 </span><span class="lineCov">       7789 :                 next_untested_set.insert(current_child);</span></a>
+<a name="218"><span class="lineNum">     218 </span><span class="lineCov">       7789 :                 neighbor_set.insert(current_child);</span></a>
 <a name="219"><span class="lineNum">     219 </span>            :               }</a>
 <a name="220"><span class="lineNum">     220 </span>            :           }</a>
 <a name="221"><span class="lineNum">     221 </span>            : #endif // #ifdef LIBMESH_ENABLE_AMR</a>
 <a name="222"><span class="lineNum">     222 </span>            :         }</a>
-<a name="223"><span class="lineNum">     223 </span><span class="lineCov">    2728163 :     untested_set.swap(next_untested_set);</span></a>
-<a name="224"><span class="lineNum">     224 </span><span class="lineCov">    2728163 :     next_untested_set.clear();</span></a>
+<a name="223"><span class="lineNum">     223 </span><span class="lineCov">    2733056 :     untested_set.swap(next_untested_set);</span></a>
+<a name="224"><span class="lineNum">     224 </span><span class="lineCov">    2733056 :     next_untested_set.clear();</span></a>
 <a name="225"><span class="lineNum">     225 </span>            :   }</a>
-<a name="226"><span class="lineNum">     226 </span><span class="lineCov">     953568 : }</span></a>
+<a name="226"><span class="lineNum">     226 </span><span class="lineCov">     955626 : }</span></a>
 <a name="227"><span class="lineNum">     227 </span>            : </a>
 <a name="228"><span class="lineNum">     228 </span>            : template &lt;typename T&gt;</a>
 <a name="229"><span class="lineNum">     229 </span>            : bool</a>
-<a name="230"><span class="lineNum">     230 </span><span class="lineCov">    9703096 : findEdgeNeighborsWithinEdgeInternal(const Elem * const candidate,</span></a>
+<a name="230"><span class="lineNum">     230 </span><span class="lineCov">    9705300 : findEdgeNeighborsWithinEdgeInternal(const Elem * const candidate,</span></a>
 <a name="231"><span class="lineNum">     231 </span>            :                                     const Elem * const elem,</a>
 <a name="232"><span class="lineNum">     232 </span>            :                                     const Node * const vertex1,</a>
 <a name="233"><span class="lineNum">     233 </span>            :                                     const Node * const vertex2,</a>
@@ -306,89 +306,89 @@
 <a name="236"><span class="lineNum">     236 </span>            : {</a>
 <a name="237"><span class="lineNum">     237 </span>            :   // If we have the type already: use it so we can avoid all of the virtual</a>
 <a name="238"><span class="lineNum">     238 </span>            :   // calls that we would be making on Elem</a>
-<a name="239"><span class="lineNum">     239 </span><span class="lineCov">    9703096 :   mooseAssert(dynamic_cast&lt;const T *&gt;(candidate), &quot;Incorrect elem type&quot;);</span></a>
-<a name="240"><span class="lineNum">     240 </span><span class="lineCov">    9703096 :   const T * const T_candidate = static_cast&lt;const T *&gt;(candidate);</span></a>
+<a name="239"><span class="lineNum">     239 </span><span class="lineCov">    9705300 :   mooseAssert(dynamic_cast&lt;const T *&gt;(candidate), &quot;Incorrect elem type&quot;);</span></a>
+<a name="240"><span class="lineNum">     240 </span><span class="lineCov">    9705300 :   const T * const T_candidate = static_cast&lt;const T *&gt;(candidate);</span></a>
 <a name="241"><span class="lineNum">     241 </span>            : </a>
 <a name="242"><span class="lineNum">     242 </span>            :   // Local index of our two vertices of interest (if any)</a>
-<a name="243"><span class="lineNum">     243 </span><span class="lineCov">    9703096 :   auto v1 = T_candidate-&gt;get_node_index(vertex1);</span></a>
-<a name="244"><span class="lineNum">     244 </span><span class="lineCov">    9703096 :   auto v2 = T_candidate-&gt;get_node_index(vertex2);</span></a>
+<a name="243"><span class="lineNum">     243 </span><span class="lineCov">    9705300 :   auto v1 = T_candidate-&gt;get_node_index(vertex1);</span></a>
+<a name="244"><span class="lineNum">     244 </span><span class="lineCov">    9705300 :   auto v2 = T_candidate-&gt;get_node_index(vertex2);</span></a>
 <a name="245"><span class="lineNum">     245 </span>            :   // Whether or not we have said vertices</a>
-<a name="246"><span class="lineNum">     246 </span><span class="lineCov">    9703096 :   const bool has_v1 = v1 != invalid_uint;</span></a>
-<a name="247"><span class="lineNum">     247 </span><span class="lineCov">    9703096 :   const bool has_v2 = v2 != invalid_uint;</span></a>
+<a name="246"><span class="lineNum">     246 </span><span class="lineCov">    9705300 :   const bool has_v1 = v1 != invalid_uint;</span></a>
+<a name="247"><span class="lineNum">     247 </span><span class="lineCov">    9705300 :   const bool has_v2 = v2 != invalid_uint;</span></a>
 <a name="248"><span class="lineNum">     248 </span>            : </a>
 <a name="249"><span class="lineNum">     249 </span>            :   // If the candidate has both vertices, it shares the complete edge</a>
-<a name="250"><span class="lineNum">     250 </span><span class="lineCov">    9703096 :   if (has_v1 &amp;&amp; has_v2)</span></a>
+<a name="250"><span class="lineNum">     250 </span><span class="lineCov">    9705300 :   if (has_v1 &amp;&amp; has_v2)</span></a>
 <a name="251"><span class="lineNum">     251 </span>            :   {</a>
 <a name="252"><span class="lineNum">     252 </span>            :     // Add the sides that contain said edge</a>
-<a name="253"><span class="lineNum">     253 </span><span class="lineCov">   12822775 :     for (MooseIndex(T::num_edges) e = 0; e &lt; T::num_edges; ++e)</span></a>
-<a name="254"><span class="lineNum">     254 </span><span class="lineCov">   12822775 :       if (T_candidate-&gt;is_node_on_edge(v1, e) &amp;&amp; T_candidate-&gt;is_node_on_edge(v2, e))</span></a>
+<a name="253"><span class="lineNum">     253 </span><span class="lineCov">   12826404 :     for (MooseIndex(T::num_edges) e = 0; e &lt; T::num_edges; ++e)</span></a>
+<a name="254"><span class="lineNum">     254 </span><span class="lineCov">   12826404 :       if (T_candidate-&gt;is_node_on_edge(v1, e) &amp;&amp; T_candidate-&gt;is_node_on_edge(v2, e))</span></a>
 <a name="255"><span class="lineNum">     255 </span>            :       {</a>
-<a name="256"><span class="lineNum">     256 </span><span class="lineCov">    5221816 :         std::vector&lt;unsigned short&gt; sides(2);</span></a>
-<a name="257"><span class="lineNum">     257 </span><span class="lineCov">    2610908 :         sides[0] = T::edge_sides_map[e][0];</span></a>
-<a name="258"><span class="lineNum">     258 </span><span class="lineCov">    2610908 :         sides[1] = T::edge_sides_map[e][1];</span></a>
-<a name="259"><span class="lineNum">     259 </span><span class="lineCov">    2610908 :         info.emplace_back(candidate, std::move(sides), 0, 1);</span></a>
-<a name="260"><span class="lineNum">     260 </span><span class="lineCov">    2610908 :         return true;</span></a>
+<a name="256"><span class="lineNum">     256 </span><span class="lineCov">    5222904 :         std::vector&lt;unsigned short&gt; sides(2);</span></a>
+<a name="257"><span class="lineNum">     257 </span><span class="lineCov">    2611452 :         sides[0] = T::edge_sides_map[e][0];</span></a>
+<a name="258"><span class="lineNum">     258 </span><span class="lineCov">    2611452 :         sides[1] = T::edge_sides_map[e][1];</span></a>
+<a name="259"><span class="lineNum">     259 </span><span class="lineCov">    2611452 :         info.emplace_back(candidate, std::move(sides), 0, 1);</span></a>
+<a name="260"><span class="lineNum">     260 </span><span class="lineCov">    2611452 :         return true;</span></a>
 <a name="261"><span class="lineNum">     261 </span>            :       }</a>
 <a name="262"><span class="lineNum">     262 </span>            : </a>
 <a name="263"><span class="lineNum">     263 </span><span class="lineNoCov">          0 :     mooseError(&quot;Failed to find a side that the vertices are on&quot;);</span></a>
 <a name="264"><span class="lineNum">     264 </span>            :   }</a>
 <a name="265"><span class="lineNum">     265 </span>            : </a>
-<a name="266"><span class="lineNum">     266 </span><span class="lineCov">    7092188 :   const auto n_vertices = T_candidate-&gt;n_vertices();</span></a>
+<a name="266"><span class="lineNum">     266 </span><span class="lineCov">    7093848 :   const auto n_vertices = T_candidate-&gt;n_vertices();</span></a>
 <a name="267"><span class="lineNum">     267 </span>            : </a>
 <a name="268"><span class="lineNum">     268 </span>            :   // If we only have one of the vertices, we can still be contained within the edge if we have</a>
 <a name="269"><span class="lineNum">     269 </span>            :   // another vertex that is within the edge</a>
-<a name="270"><span class="lineNum">     270 </span><span class="lineCov">    7092188 :   if (has_v1 || has_v2)</span></a>
+<a name="270"><span class="lineNum">     270 </span><span class="lineCov">    7093848 :   if (has_v1 || has_v2)</span></a>
 <a name="271"><span class="lineNum">     271 </span>            :   {</a>
 <a name="272"><span class="lineNum">     272 </span>            :     // Local index of the vertex that the candidate and the target edge have in common</a>
-<a name="273"><span class="lineNum">     273 </span><span class="lineCov">    5466982 :     const auto common_v = has_v1 ? v1 : v2;</span></a>
+<a name="273"><span class="lineNum">     273 </span><span class="lineCov">    5468524 :     const auto common_v = has_v1 ? v1 : v2;</span></a>
 <a name="274"><span class="lineNum">     274 </span>            : </a>
 <a name="275"><span class="lineNum">     275 </span>            :     // See if another vertex that isn't the common node is contained</a>
 <a name="276"><span class="lineNum">     276 </span>            :     MooseIndex(n_vertices) other_v;</a>
-<a name="277"><span class="lineNum">     277 </span><span class="lineCov">   34723908 :     for (other_v = 0; other_v &lt; n_vertices; ++other_v)</span></a>
-<a name="278"><span class="lineNum">     278 </span><span class="lineCov">   53053811 :       if (other_v != common_v &amp;&amp;</span></a>
-<a name="279"><span class="lineNum">     279 </span><span class="lineCov">   23794116 :           isWithinSegment(*vertex1, *vertex2, edge_length, T_candidate-&gt;point(other_v)))</span></a>
+<a name="277"><span class="lineNum">     277 </span><span class="lineCov">   34733388 :     for (other_v = 0; other_v &lt; n_vertices; ++other_v)</span></a>
+<a name="278"><span class="lineNum">     278 </span><span class="lineCov">   53068140 :       if (other_v != common_v &amp;&amp;</span></a>
+<a name="279"><span class="lineNum">     279 </span><span class="lineCov">   23800508 :           isWithinSegment(*vertex1, *vertex2, edge_length, T_candidate-&gt;point(other_v)))</span></a>
 <a name="280"><span class="lineNum">     280 </span>            :         break;</a>
 <a name="281"><span class="lineNum">     281 </span>            : </a>
 <a name="282"><span class="lineNum">     282 </span>            :     // If we have the common vertex and another vertex within the target edge, use the sides</a>
 <a name="283"><span class="lineNum">     283 </span>            :     // that contain both of those vertices</a>
-<a name="284"><span class="lineNum">     284 </span><span class="lineCov">    5466982 :     if (other_v != n_vertices)</span></a>
+<a name="284"><span class="lineNum">     284 </span><span class="lineCov">    5468524 :     if (other_v != n_vertices)</span></a>
 <a name="285"><span class="lineNum">     285 </span>            :     {</a>
-<a name="286"><span class="lineNum">     286 </span><span class="lineCov">      18820 :       for (MooseIndex(T::num_edges) e = 0; e &lt; T::num_edges; ++e)</span></a>
-<a name="287"><span class="lineNum">     287 </span><span class="lineCov">      18820 :         if (T_candidate-&gt;is_node_on_edge(common_v, e) &amp;&amp; T_candidate-&gt;is_node_on_edge(other_v, e))</span></a>
+<a name="286"><span class="lineNum">     286 </span><span class="lineCov">      18772 :       for (MooseIndex(T::num_edges) e = 0; e &lt; T::num_edges; ++e)</span></a>
+<a name="287"><span class="lineNum">     287 </span><span class="lineCov">      18772 :         if (T_candidate-&gt;is_node_on_edge(common_v, e) &amp;&amp; T_candidate-&gt;is_node_on_edge(other_v, e))</span></a>
 <a name="288"><span class="lineNum">     288 </span>            :         {</a>
-<a name="289"><span class="lineNum">     289 </span><span class="lineCov">       5560 :           std::vector&lt;unsigned short&gt; sides(2);</span></a>
-<a name="290"><span class="lineNum">     290 </span><span class="lineCov">       2780 :           sides[0] = T::edge_sides_map[e][0];</span></a>
-<a name="291"><span class="lineNum">     291 </span><span class="lineCov">       2780 :           sides[1] = T::edge_sides_map[e][1];</span></a>
+<a name="289"><span class="lineNum">     289 </span><span class="lineCov">       5544 :           std::vector&lt;unsigned short&gt; sides(2);</span></a>
+<a name="290"><span class="lineNum">     290 </span><span class="lineCov">       2772 :           sides[0] = T::edge_sides_map[e][0];</span></a>
+<a name="291"><span class="lineNum">     291 </span><span class="lineCov">       2772 :           sides[1] = T::edge_sides_map[e][1];</span></a>
 <a name="292"><span class="lineNum">     292 </span>            : </a>
-<a name="293"><span class="lineNum">     293 </span><span class="lineCov">       2780 :           info.emplace_back(</span></a>
+<a name="293"><span class="lineNum">     293 </span><span class="lineCov">       2772 :           info.emplace_back(</span></a>
 <a name="294"><span class="lineNum">     294 </span>            :               candidate,</a>
-<a name="295"><span class="lineNum">     295 </span><span class="lineCov">       2780 :               std::move(sides),</span></a>
-<a name="296"><span class="lineNum">     296 </span><span class="lineCov">       2780 :               has_v1 ? 0 : (T_candidate-&gt;point(other_v) - (Point)*vertex1).norm() / edge_length,</span></a>
-<a name="297"><span class="lineNum">     297 </span><span class="lineCov">       2780 :               has_v1 ? (T_candidate-&gt;point(other_v) - (Point)*vertex1).norm() / edge_length : 1);</span></a>
-<a name="298"><span class="lineNum">     298 </span><span class="lineCov">       2780 :           return true;</span></a>
+<a name="295"><span class="lineNum">     295 </span><span class="lineCov">       2772 :               std::move(sides),</span></a>
+<a name="296"><span class="lineNum">     296 </span><span class="lineCov">       2772 :               has_v1 ? 0 : (T_candidate-&gt;point(other_v) - (Point)*vertex1).norm() / edge_length,</span></a>
+<a name="297"><span class="lineNum">     297 </span><span class="lineCov">       2772 :               has_v1 ? (T_candidate-&gt;point(other_v) - (Point)*vertex1).norm() / edge_length : 1);</span></a>
+<a name="298"><span class="lineNum">     298 </span><span class="lineCov">       2772 :           return true;</span></a>
 <a name="299"><span class="lineNum">     299 </span>            :         }</a>
 <a name="300"><span class="lineNum">     300 </span><span class="lineNoCov">          0 :       mooseError(&quot;Failed to find a side that the vertices are on&quot;);</span></a>
 <a name="301"><span class="lineNum">     301 </span>            :     }</a>
-<a name="302"><span class="lineNum">     302 </span><span class="lineCov">    5464202 :     else if (T_candidate-&gt;level() &lt; elem-&gt;level())</span></a>
+<a name="302"><span class="lineNum">     302 </span><span class="lineCov">    5465752 :     else if (T_candidate-&gt;level() &lt; elem-&gt;level())</span></a>
 <a name="303"><span class="lineNum">     303 </span>            :     {</a>
-<a name="304"><span class="lineNum">     304 </span><span class="lineCov">       6792 :       for (MooseIndex(T::num_edges) e = 0; e &lt; T::num_edges; ++e)</span></a>
-<a name="305"><span class="lineNum">     305 </span><span class="lineCov">       8206 :         if (T_candidate-&gt;is_node_on_edge(common_v, e) &amp;&amp;</span></a>
-<a name="306"><span class="lineNum">     306 </span><span class="lineCov">       3516 :             isWithinSegment(T_candidate-&gt;point(T::edge_nodes_map[e][0]),</span></a>
-<a name="307"><span class="lineNum">     307 </span><span class="lineCov">       1758 :                             T_candidate-&gt;point(T::edge_nodes_map[e][1]),</span></a>
+<a name="304"><span class="lineNum">     304 </span><span class="lineCov">       6753 :       for (MooseIndex(T::num_edges) e = 0; e &lt; T::num_edges; ++e)</span></a>
+<a name="305"><span class="lineNum">     305 </span><span class="lineCov">       8157 :         if (T_candidate-&gt;is_node_on_edge(common_v, e) &amp;&amp;</span></a>
+<a name="306"><span class="lineNum">     306 </span><span class="lineCov">       3492 :             isWithinSegment(T_candidate-&gt;point(T::edge_nodes_map[e][0]),</span></a>
+<a name="307"><span class="lineNum">     307 </span><span class="lineCov">       1746 :                             T_candidate-&gt;point(T::edge_nodes_map[e][1]),</span></a>
 <a name="308"><span class="lineNum">     308 </span>            :                             has_v1 ? *vertex2 : *vertex1))</a>
 <a name="309"><span class="lineNum">     309 </span>            :         {</a>
-<a name="310"><span class="lineNum">     310 </span><span class="lineCov">        518 :           other_v = T::edge_nodes_map[e][0] == common_v ? T::edge_nodes_map[e][1]</span></a>
+<a name="310"><span class="lineNum">     310 </span><span class="lineCov">        516 :           other_v = T::edge_nodes_map[e][0] == common_v ? T::edge_nodes_map[e][1]</span></a>
 <a name="311"><span class="lineNum">     311 </span>            :                                                         : T::edge_nodes_map[e][0];</a>
-<a name="312"><span class="lineNum">     312 </span><span class="lineCov">        688 :           std::vector&lt;unsigned short&gt; sides(2);</span></a>
-<a name="313"><span class="lineNum">     313 </span><span class="lineCov">        344 :           sides[0] = T::edge_sides_map[e][0];</span></a>
-<a name="314"><span class="lineNum">     314 </span><span class="lineCov">        344 :           sides[1] = T::edge_sides_map[e][1];</span></a>
+<a name="312"><span class="lineNum">     312 </span><span class="lineCov">        684 :           std::vector&lt;unsigned short&gt; sides(2);</span></a>
+<a name="313"><span class="lineNum">     313 </span><span class="lineCov">        342 :           sides[0] = T::edge_sides_map[e][0];</span></a>
+<a name="314"><span class="lineNum">     314 </span><span class="lineCov">        342 :           sides[1] = T::edge_sides_map[e][1];</span></a>
 <a name="315"><span class="lineNum">     315 </span>            : </a>
-<a name="316"><span class="lineNum">     316 </span><span class="lineCov">        344 :           info.emplace_back(</span></a>
+<a name="316"><span class="lineNum">     316 </span><span class="lineCov">        342 :           info.emplace_back(</span></a>
 <a name="317"><span class="lineNum">     317 </span>            :               candidate,</a>
-<a name="318"><span class="lineNum">     318 </span><span class="lineCov">        344 :               std::move(sides),</span></a>
-<a name="319"><span class="lineNum">     319 </span><span class="lineCov">        344 :               has_v1 ? 0 : (T_candidate-&gt;point(other_v) - (Point)*vertex1).norm() / edge_length,</span></a>
-<a name="320"><span class="lineNum">     320 </span><span class="lineCov">        344 :               has_v1 ? (T_candidate-&gt;point(other_v) - (Point)*vertex1).norm() / edge_length : 1);</span></a>
-<a name="321"><span class="lineNum">     321 </span><span class="lineCov">        344 :           return true;</span></a>
+<a name="318"><span class="lineNum">     318 </span><span class="lineCov">        342 :               std::move(sides),</span></a>
+<a name="319"><span class="lineNum">     319 </span><span class="lineCov">        342 :               has_v1 ? 0 : (T_candidate-&gt;point(other_v) - (Point)*vertex1).norm() / edge_length,</span></a>
+<a name="320"><span class="lineNum">     320 </span><span class="lineCov">        342 :               has_v1 ? (T_candidate-&gt;point(other_v) - (Point)*vertex1).norm() / edge_length : 1);</span></a>
+<a name="321"><span class="lineNum">     321 </span><span class="lineCov">        342 :           return true;</span></a>
 <a name="322"><span class="lineNum">     322 </span>            :         }</a>
 <a name="323"><span class="lineNum">     323 </span>            : </a>
 <a name="324"><span class="lineNum">     324 </span>            :       return false;</a>
@@ -396,30 +396,30 @@
 <a name="326"><span class="lineNum">     326 </span>            :   }</a>
 <a name="327"><span class="lineNum">     327 </span>            :   // When the candidate level is less, one of our vertices could be in a candidate's face and the</a>
 <a name="328"><span class="lineNum">     328 </span>            :   // other could be within one of the candidate's edges</a>
-<a name="329"><span class="lineNum">     329 </span><span class="lineCov">    1625206 :   else if (T_candidate-&gt;level() &lt; elem-&gt;level())</span></a>
+<a name="329"><span class="lineNum">     329 </span><span class="lineCov">    1625324 :   else if (T_candidate-&gt;level() &lt; elem-&gt;level())</span></a>
 <a name="330"><span class="lineNum">     330 </span>            :   {</a>
 <a name="331"><span class="lineNum">     331 </span>            :     auto v1_edge = RayTracingCommon::invalid_edge;</a>
 <a name="332"><span class="lineNum">     332 </span>            :     auto v2_edge = RayTracingCommon::invalid_edge;</a>
 <a name="333"><span class="lineNum">     333 </span>            : </a>
 <a name="334"><span class="lineNum">     334 </span>            :     // See if any of the edges contain one of the vertices</a>
-<a name="335"><span class="lineNum">     335 </span><span class="lineCov">     133666 :     for (MooseIndex(T::num_edges) e = 0; e &lt; T::num_edges; ++e)</span></a>
+<a name="335"><span class="lineNum">     335 </span><span class="lineCov">     133796 :     for (MooseIndex(T::num_edges) e = 0; e &lt; T::num_edges; ++e)</span></a>
 <a name="336"><span class="lineNum">     336 </span>            :     {</a>
-<a name="337"><span class="lineNum">     337 </span><span class="lineCov">     245604 :       if (v1_edge == RayTracingCommon::invalid_edge &amp;&amp;</span></a>
-<a name="338"><span class="lineNum">     338 </span><span class="lineCov">     122220 :           isWithinSegment(T_candidate-&gt;point(T::edge_nodes_map[e][0]),</span></a>
-<a name="339"><span class="lineNum">     339 </span><span class="lineCov">     122220 :                           T_candidate-&gt;point(T::edge_nodes_map[e][1]),</span></a>
+<a name="337"><span class="lineNum">     337 </span><span class="lineCov">     245844 :       if (v1_edge == RayTracingCommon::invalid_edge &amp;&amp;</span></a>
+<a name="338"><span class="lineNum">     338 </span><span class="lineCov">     122340 :           isWithinSegment(T_candidate-&gt;point(T::edge_nodes_map[e][0]),</span></a>
+<a name="339"><span class="lineNum">     339 </span><span class="lineCov">     122340 :                           T_candidate-&gt;point(T::edge_nodes_map[e][1]),</span></a>
 <a name="340"><span class="lineNum">     340 </span>            :                           *vertex1))</a>
 <a name="341"><span class="lineNum">     341 </span><span class="lineCov">        210 :         v1_edge = e;</span></a>
-<a name="342"><span class="lineNum">     342 </span><span class="lineCov">     239650 :       if (v2_edge == RayTracingCommon::invalid_edge &amp;&amp;</span></a>
-<a name="343"><span class="lineNum">     343 </span><span class="lineCov">     116266 :           isWithinSegment(T_candidate-&gt;point(T::edge_nodes_map[e][0]),</span></a>
-<a name="344"><span class="lineNum">     344 </span><span class="lineCov">     116266 :                           T_candidate-&gt;point(T::edge_nodes_map[e][1]),</span></a>
+<a name="342"><span class="lineNum">     342 </span><span class="lineCov">     239890 :       if (v2_edge == RayTracingCommon::invalid_edge &amp;&amp;</span></a>
+<a name="343"><span class="lineNum">     343 </span><span class="lineCov">     116386 :           isWithinSegment(T_candidate-&gt;point(T::edge_nodes_map[e][0]),</span></a>
+<a name="344"><span class="lineNum">     344 </span><span class="lineCov">     116386 :                           T_candidate-&gt;point(T::edge_nodes_map[e][1]),</span></a>
 <a name="345"><span class="lineNum">     345 </span>            :                           *vertex2))</a>
 <a name="346"><span class="lineNum">     346 </span><span class="lineCov">       1380 :         v2_edge = e;</span></a>
 <a name="347"><span class="lineNum">     347 </span>            :     }</a>
 <a name="348"><span class="lineNum">     348 </span>            : </a>
-<a name="349"><span class="lineNum">     349 </span><span class="lineCov">      10282 :     const auto v1_within = v1_edge != RayTracingCommon::invalid_edge;</span></a>
-<a name="350"><span class="lineNum">     350 </span><span class="lineCov">      10282 :     const auto v2_within = v2_edge != RayTracingCommon::invalid_edge;</span></a>
+<a name="349"><span class="lineNum">     349 </span><span class="lineCov">      10292 :     const auto v1_within = v1_edge != RayTracingCommon::invalid_edge;</span></a>
+<a name="350"><span class="lineNum">     350 </span><span class="lineCov">      10292 :     const auto v2_within = v2_edge != RayTracingCommon::invalid_edge;</span></a>
 <a name="351"><span class="lineNum">     351 </span>            : </a>
-<a name="352"><span class="lineNum">     352 </span><span class="lineCov">      10282 :     if (v1_within &amp;&amp; v2_within)</span></a>
+<a name="352"><span class="lineNum">     352 </span><span class="lineCov">      10292 :     if (v1_within &amp;&amp; v2_within)</span></a>
 <a name="353"><span class="lineNum">     353 </span>            :     {</a>
 <a name="354"><span class="lineNum">     354 </span><span class="lineNoCov">          0 :       mooseAssert(v1_edge == v2_edge, &quot;Vertices should be contained in same edge&quot;);</span></a>
 <a name="355"><span class="lineNum">     355 </span>            : </a>
@@ -429,7 +429,7 @@
 <a name="359"><span class="lineNum">     359 </span><span class="lineNoCov">          0 :       info.emplace_back(candidate, std::move(sides), 0, 1);</span></a>
 <a name="360"><span class="lineNum">     360 </span><span class="lineNoCov">          0 :       return true;</span></a>
 <a name="361"><span class="lineNum">     361 </span>            :     }</a>
-<a name="362"><span class="lineNum">     362 </span><span class="lineCov">      10282 :     else if (v1_within || v2_within)</span></a>
+<a name="362"><span class="lineNum">     362 </span><span class="lineCov">      10292 :     else if (v1_within || v2_within)</span></a>
 <a name="363"><span class="lineNum">     363 </span>            :     {</a>
 <a name="364"><span class="lineNum">     364 </span><span class="lineCov">       1590 :       const auto in_edge = v1_within ? v1_edge : v2_edge;</span></a>
 <a name="365"><span class="lineNum">     365 </span><span class="lineCov">       2970 :       const Point &amp; check_point = v1_within ? *vertex2 : *vertex1;</span></a>
@@ -461,8 +461,8 @@
 <a name="391"><span class="lineNum">     391 </span>            :   // vertex2], check for other vertices that are contained within the edge</a>
 <a name="392"><span class="lineNum">     392 </span>            :   else</a>
 <a name="393"><span class="lineNum">     393 </span>            :   {</a>
-<a name="394"><span class="lineNum">     394 </span><span class="lineCov">   12062410 :     for (v1 = 0; v1 &lt; n_vertices; ++v1)</span></a>
-<a name="395"><span class="lineNum">     395 </span><span class="lineCov">   10447486 :       if (isWithinSegment(*vertex1, *vertex2, edge_length, candidate-&gt;point(v1)))</span></a>
+<a name="394"><span class="lineNum">     394 </span><span class="lineCov">   12063356 :     for (v1 = 0; v1 &lt; n_vertices; ++v1)</span></a>
+<a name="395"><span class="lineNum">     395 </span><span class="lineCov">   10448320 :       if (isWithinSegment(*vertex1, *vertex2, edge_length, candidate-&gt;point(v1)))</span></a>
 <a name="396"><span class="lineNum">     396 </span>            :       {</a>
 <a name="397"><span class="lineNum">     397 </span><span class="lineNoCov">          0 :         for (v2 = v1 + 1; v2 &lt; n_vertices; ++v2)</span></a>
 <a name="398"><span class="lineNum">     398 </span><span class="lineNoCov">          0 :           if (isWithinSegment(*vertex1, *vertex2, edge_length, candidate-&gt;point(v2)))</span></a>
@@ -471,7 +471,7 @@
 <a name="401"><span class="lineNum">     401 </span>            :       }</a>
 <a name="402"><span class="lineNum">     402 </span>            : </a>
 <a name="403"><span class="lineNum">     403 </span>            :     // No vertices are contained within the edge</a>
-<a name="404"><span class="lineNum">     404 </span><span class="lineCov">    1614924 :     if (v1 == n_vertices)</span></a>
+<a name="404"><span class="lineNum">     404 </span><span class="lineCov">    1615032 :     if (v1 == n_vertices)</span></a>
 <a name="405"><span class="lineNum">     405 </span>            :       return false;</a>
 <a name="406"><span class="lineNum">     406 </span>            : </a>
 <a name="407"><span class="lineNum">     407 </span>            :     // Only one vertex contained: add the sides associated with that vertex</a>
@@ -627,7 +627,7 @@
 <a name="557"><span class="lineNum">     557 </span>            :  */</a>
 <a name="558"><span class="lineNum">     558 </span>            : template &lt;typename T&gt;</a>
 <a name="559"><span class="lineNum">     559 </span>            : typename std::enable_if&lt;std::is_base_of&lt;Face, T&gt;::value, bool&gt;::type</a>
-<a name="560"><span class="lineNum">     560 </span><span class="lineCov">   10931655 : sideIntersectedByLine(const Elem * elem,</span></a>
+<a name="560"><span class="lineNum">     560 </span><span class="lineCov">   11275819 : sideIntersectedByLine(const Elem * elem,</span></a>
 <a name="561"><span class="lineNum">     561 </span>            :                       const Point &amp; start_point,</a>
 <a name="562"><span class="lineNum">     562 </span>            :                       const Point &amp; direction,</a>
 <a name="563"><span class="lineNum">     563 </span>            :                       const unsigned short side,</a>
@@ -642,16 +642,16 @@
 <a name="572"><span class="lineNum">     572 </span>            : #endif</a>
 <a name="573"><span class="lineNum">     573 </span>            : )</a>
 <a name="574"><span class="lineNum">     574 </span>            : {</a>
-<a name="575"><span class="lineNum">     575 </span><span class="lineCov">   10931655 :   mooseAssert(intersection_point == RayTracingCommon::invalid_point, &quot;Point should be invalid&quot;);</span></a>
-<a name="576"><span class="lineNum">     576 </span><span class="lineCov">   10931655 :   mooseAssert(intersected_extrema.isInvalid(), &quot;Should be invalid&quot;);</span></a>
+<a name="575"><span class="lineNum">     575 </span><span class="lineCov">   11275819 :   mooseAssert(intersection_point == RayTracingCommon::invalid_point, &quot;Point should be invalid&quot;);</span></a>
+<a name="576"><span class="lineNum">     576 </span><span class="lineCov">   11275819 :   mooseAssert(intersected_extrema.isInvalid(), &quot;Should be invalid&quot;);</span></a>
 <a name="577"><span class="lineNum">     577 </span>            : </a>
-<a name="578"><span class="lineNum">     578 </span><span class="lineCov">   10931655 :   SegmentVertices segment_vertex = SEGMENT_VERTEX_NONE;</span></a>
+<a name="578"><span class="lineNum">     578 </span><span class="lineCov">   11275819 :   SegmentVertices segment_vertex = SEGMENT_VERTEX_NONE;</span></a>
 <a name="579"><span class="lineNum">     579 </span>            : </a>
-<a name="580"><span class="lineNum">     580 </span><span class="lineCov">   10931655 :   const bool intersected = lineLineIntersect2D(start_point,</span></a>
+<a name="580"><span class="lineNum">     580 </span><span class="lineCov">   11275819 :   const bool intersected = lineLineIntersect2D(start_point,</span></a>
 <a name="581"><span class="lineNum">     581 </span>            :                                                direction,</a>
 <a name="582"><span class="lineNum">     582 </span>            :                                                max_length,</a>
-<a name="583"><span class="lineNum">     583 </span><span class="lineCov">   10931655 :                                                elem-&gt;point(T::side_nodes_map[side][0]),</span></a>
-<a name="584"><span class="lineNum">     584 </span><span class="lineCov">   10931655 :                                                elem-&gt;point(T::side_nodes_map[side][1]),</span></a>
+<a name="583"><span class="lineNum">     583 </span><span class="lineCov">   11275819 :                                                elem-&gt;point(T::side_nodes_map[side][0]),</span></a>
+<a name="584"><span class="lineNum">     584 </span><span class="lineCov">   11275819 :                                                elem-&gt;point(T::side_nodes_map[side][1]),</span></a>
 <a name="585"><span class="lineNum">     585 </span>            :                                                intersection_point,</a>
 <a name="586"><span class="lineNum">     586 </span>            :                                                intersection_distance,</a>
 <a name="587"><span class="lineNum">     587 </span>            :                                                segment_vertex</a>
@@ -661,15 +661,15 @@
 <a name="591"><span class="lineNum">     591 </span>            : #endif</a>
 <a name="592"><span class="lineNum">     592 </span>            :   );</a>
 <a name="593"><span class="lineNum">     593 </span>            : </a>
-<a name="594"><span class="lineNum">     594 </span><span class="lineCov">   10931655 :   if (segment_vertex != SEGMENT_VERTEX_NONE)</span></a>
+<a name="594"><span class="lineNum">     594 </span><span class="lineCov">   11275819 :   if (segment_vertex != SEGMENT_VERTEX_NONE)</span></a>
 <a name="595"><span class="lineNum">     595 </span>            :   {</a>
-<a name="596"><span class="lineNum">     596 </span><span class="lineCov">    2387379 :     intersected_extrema.setVertex(T::side_nodes_map[side][segment_vertex]);</span></a>
-<a name="597"><span class="lineNum">     597 </span><span class="lineCov">    2387379 :     mooseAssert(intersected_extrema.vertexPoint(elem).absolute_fuzzy_equals(intersection_point,</span></a>
+<a name="596"><span class="lineNum">     596 </span><span class="lineCov">    2452869 :     intersected_extrema.setVertex(T::side_nodes_map[side][segment_vertex]);</span></a>
+<a name="597"><span class="lineNum">     597 </span><span class="lineCov">    2452869 :     mooseAssert(intersected_extrema.vertexPoint(elem).absolute_fuzzy_equals(intersection_point,</span></a>
 <a name="598"><span class="lineNum">     598 </span>            :                                                                             TRACE_TOLERANCE),</a>
 <a name="599"><span class="lineNum">     599 </span>            :                 &quot;Doesn't intersect vertex&quot;);</a>
 <a name="600"><span class="lineNum">     600 </span>            :   }</a>
 <a name="601"><span class="lineNum">     601 </span>            : </a>
-<a name="602"><span class="lineNum">     602 </span><span class="lineCov">   10931655 :   return intersected;</span></a>
+<a name="602"><span class="lineNum">     602 </span><span class="lineCov">   11275819 :   return intersected;</span></a>
 <a name="603"><span class="lineNum">     603 </span>            : }</a>
 <a name="604"><span class="lineNum">     604 </span>            : </a>
 <a name="605"><span class="lineNum">     605 </span>            : /**</a>
@@ -821,9 +821,9 @@
 <a name="751"><span class="lineNum">     751 </span><span class="lineCov">  119336420 :   const bool intersected = side &lt; 4 ? intersectTriangle(start_point,</span></a>
 <a name="752"><span class="lineNum">     752 </span>            :                                                         direction,</a>
 <a name="753"><span class="lineNum">     753 </span>            :                                                         elem,</a>
-<a name="754"><span class="lineNum">     754 </span><span class="lineCov">   98626090 :                                                         T::side_nodes_map[side][2],</span></a>
-<a name="755"><span class="lineNum">     755 </span><span class="lineCov">   98626090 :                                                         T::side_nodes_map[side][1],</span></a>
-<a name="756"><span class="lineNum">     756 </span><span class="lineCov">   98626090 :                                                         T::side_nodes_map[side][0],</span></a>
+<a name="754"><span class="lineNum">     754 </span><span class="lineCov">   98626190 :                                                         T::side_nodes_map[side][2],</span></a>
+<a name="755"><span class="lineNum">     755 </span><span class="lineCov">   98626190 :                                                         T::side_nodes_map[side][1],</span></a>
+<a name="756"><span class="lineNum">     756 </span><span class="lineCov">   98626190 :                                                         T::side_nodes_map[side][0],</span></a>
 <a name="757"><span class="lineNum">     757 </span>            :                                                         intersection_distance,</a>
 <a name="758"><span class="lineNum">     758 </span>            :                                                         intersected_extrema,</a>
 <a name="759"><span class="lineNum">     759 </span>            :                                                         hmax</a>
@@ -958,7 +958,7 @@
 <a name="888"><span class="lineNum">     888 </span>            : inline typename std::enable_if&lt;!std::is_base_of&lt;Pyramid, T&gt;::value &amp;&amp;</a>
 <a name="889"><span class="lineNum">     889 </span>            :                                    !std::is_base_of&lt;Prism, T&gt;::value,</a>
 <a name="890"><span class="lineNum">     890 </span>            :                                unsigned short&gt;::type</a>
-<a name="891"><span class="lineNum">     891 </span><span class="lineCov">   21541550 : nodesPerSide(const unsigned short)</span></a>
+<a name="891"><span class="lineNum">     891 </span><span class="lineCov">   21556010 : nodesPerSide(const unsigned short)</span></a>
 <a name="892"><span class="lineNum">     892 </span>            : {</a>
 <a name="893"><span class="lineNum">     893 </span>            :   return T::nodes_per_side;</a>
 <a name="894"><span class="lineNum">     894 </span>            : }</a>
@@ -968,9 +968,9 @@
 <a name="898"><span class="lineNum">     898 </span>            :  */</a>
 <a name="899"><span class="lineNum">     899 </span>            : template &lt;typename T&gt;</a>
 <a name="900"><span class="lineNum">     900 </span>            : inline typename std::enable_if&lt;std::is_base_of&lt;Pyramid, T&gt;::value, unsigned short&gt;::type</a>
-<a name="901"><span class="lineNum">     901 </span><span class="lineCov">    2537798 : nodesPerSide(const unsigned short side)</span></a>
+<a name="901"><span class="lineNum">     901 </span><span class="lineCov">    2537488 : nodesPerSide(const unsigned short side)</span></a>
 <a name="902"><span class="lineNum">     902 </span>            : {</a>
-<a name="903"><span class="lineNum">     903 </span><span class="lineCov">    6249336 :   return T::nodes_per_side - (side != 4);</span></a>
+<a name="903"><span class="lineNum">     903 </span><span class="lineCov">    6249286 :   return T::nodes_per_side - (side != 4);</span></a>
 <a name="904"><span class="lineNum">     904 </span>            : }</a>
 <a name="905"><span class="lineNum">     905 </span>            : </a>
 <a name="906"><span class="lineNum">     906 </span>            : /**</a>
@@ -978,9 +978,9 @@
 <a name="908"><span class="lineNum">     908 </span>            :  */</a>
 <a name="909"><span class="lineNum">     909 </span>            : template &lt;typename T&gt;</a>
 <a name="910"><span class="lineNum">     910 </span>            : inline typename std::enable_if&lt;std::is_base_of&lt;Prism, T&gt;::value, unsigned short&gt;::type</a>
-<a name="911"><span class="lineNum">     911 </span><span class="lineCov">    2290599 : nodesPerSide(const unsigned short side)</span></a>
+<a name="911"><span class="lineNum">     911 </span><span class="lineCov">    2290665 : nodesPerSide(const unsigned short side)</span></a>
 <a name="912"><span class="lineNum">     912 </span>            : {</a>
-<a name="913"><span class="lineNum">     913 </span><span class="lineCov">    7122468 :   return T::nodes_per_side - (side == 0 || side == 4);</span></a>
+<a name="913"><span class="lineNum">     913 </span><span class="lineCov">    7122738 :   return T::nodes_per_side - (side == 0 || side == 4);</span></a>
 <a name="914"><span class="lineNum">     914 </span>            : }</a>
 <a name="915"><span class="lineNum">     915 </span>            : </a>
 <a name="916"><span class="lineNum">     916 </span>            : /**</a>

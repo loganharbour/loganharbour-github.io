@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-28 10:00:16</td>
+            <td class="headerValue">2020-11-28 23:30:08</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">4</td>
@@ -85,19 +85,19 @@
 <a name="15"><span class="lineNum">      15 </span>            : registerMooseObject(&quot;RayTracingApp&quot;, ReflectRayBC);</a>
 <a name="16"><span class="lineNum">      16 </span>            : </a>
 <a name="17"><span class="lineNum">      17 </span>            : InputParameters</a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineCov">       1680 : ReflectRayBC::validParams()</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">       1785 : ReflectRayBC::validParams()</span></a>
 <a name="19"><span class="lineNum">      19 </span>            : {</a>
-<a name="20"><span class="lineNum">      20 </span><span class="lineCov">       1680 :   auto params = GeneralRayBC::validParams();</span></a>
-<a name="21"><span class="lineNum">      21 </span><span class="lineCov">       1680 :   params.addClassDescription(&quot;A RayBC that reflects a Ray in a specular manner on a boundary.&quot;);</span></a>
-<a name="22"><span class="lineNum">      22 </span><span class="lineCov">       1680 :   return params;</span></a>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">       1785 :   auto params = GeneralRayBC::validParams();</span></a>
+<a name="21"><span class="lineNum">      21 </span><span class="lineCov">       1785 :   params.addClassDescription(&quot;A RayBC that reflects a Ray in a specular manner on a boundary.&quot;);</span></a>
+<a name="22"><span class="lineNum">      22 </span><span class="lineCov">       1785 :   return params;</span></a>
 <a name="23"><span class="lineNum">      23 </span>            : }</a>
 <a name="24"><span class="lineNum">      24 </span>            : </a>
-<a name="25"><span class="lineNum">      25 </span><span class="lineCov">        882 : ReflectRayBC::ReflectRayBC(const InputParameters &amp; params) : GeneralRayBC(params) {}</span></a>
+<a name="25"><span class="lineNum">      25 </span><span class="lineCov">        966 : ReflectRayBC::ReflectRayBC(const InputParameters &amp; params) : GeneralRayBC(params) {}</span></a>
 <a name="26"><span class="lineNum">      26 </span>            : </a>
 <a name="27"><span class="lineNum">      27 </span>            : void</a>
-<a name="28"><span class="lineNum">      28 </span><span class="lineCov">      22452 : ReflectRayBC::onBoundary(const unsigned int num_applying)</span></a>
+<a name="28"><span class="lineNum">      28 </span><span class="lineCov">      23286 : ReflectRayBC::onBoundary(const unsigned int num_applying)</span></a>
 <a name="29"><span class="lineNum">      29 </span>            : {</a>
-<a name="30"><span class="lineNum">      30 </span><span class="lineCov">      22452 :   if (_study.warnNonPlanar() &amp;&amp; _study.sideIsNonPlanar(_current_elem, _current_intersected_side))</span></a>
+<a name="30"><span class="lineNum">      30 </span><span class="lineCov">      23286 :   if (_study.warnNonPlanar() &amp;&amp; _study.sideIsNonPlanar(_current_elem, _current_intersected_side))</span></a>
 <a name="31"><span class="lineNum">      31 </span><span class="lineNoCov">          0 :     mooseWarning(_error_prefix,</span></a>
 <a name="32"><span class="lineNum">      32 </span>            :                  &quot;: A Ray is being reflected on a non-planar side.\n\n&quot;,</a>
 <a name="33"><span class="lineNum">      33 </span>            :                  &quot;Ray tracing on elements with non-planar faces is an approximation.\n\n&quot;,</a>
@@ -109,12 +109,12 @@
 <a name="39"><span class="lineNum">      39 </span><span class="lineNoCov">          0 :                  currentRay()-&gt;getInfo());</span></a>
 <a name="40"><span class="lineNum">      40 </span>            : </a>
 <a name="41"><span class="lineNum">      41 </span>            :   // No need to do anything if the Ray's gonna die anyway</a>
-<a name="42"><span class="lineNum">      42 </span><span class="lineCov">      22452 :   if (!currentRay()-&gt;shouldContinue())</span></a>
+<a name="42"><span class="lineNum">      42 </span><span class="lineCov">      23286 :   if (!currentRay()-&gt;shouldContinue())</span></a>
 <a name="43"><span class="lineNum">      43 </span><span class="lineNoCov">          0 :     return;</span></a>
 <a name="44"><span class="lineNum">      44 </span>            : </a>
 <a name="45"><span class="lineNum">      45 </span>            :   // The direction this Ray reflects off this boundary</a>
-<a name="46"><span class="lineNum">      46 </span><span class="lineCov">      22452 :   const auto &amp; normal = _study.getSideNormal(_current_elem, _current_intersected_side, _tid);</span></a>
-<a name="47"><span class="lineNum">      47 </span><span class="lineCov">      44904 :   const auto reflected_direction = reflectedDirection(currentRay()-&gt;direction(), normal);</span></a>
+<a name="46"><span class="lineNum">      46 </span><span class="lineCov">      23286 :   const auto &amp; normal = _study.getSideNormal(_current_elem, _current_intersected_side, _tid);</span></a>
+<a name="47"><span class="lineNum">      47 </span><span class="lineCov">      46572 :   const auto reflected_direction = reflectedDirection(currentRay()-&gt;direction(), normal);</span></a>
 <a name="48"><span class="lineNum">      48 </span>            : </a>
 <a name="49"><span class="lineNum">      49 </span>            :   // Change it! Note here the usage of num_applying: if we are at a corner with a reflecting</a>
 <a name="50"><span class="lineNum">      50 </span>            :   // boundary condition on both sides, we want to allow both boundary conditions to reflect the Ray.</a>
@@ -122,18 +122,18 @@
 <a name="52"><span class="lineNum">      52 </span>            :   // applying multiple of the same ReflectRayBC at different boundaries at the same point to allow</a>
 <a name="53"><span class="lineNum">      53 </span>            :   // this. Note that this double (or triple in 3D) reflection will only be allowed when the same</a>
 <a name="54"><span class="lineNum">      54 </span>            :   // ReflectRayBC object is on both boundaries.</a>
-<a name="55"><span class="lineNum">      55 </span><span class="lineCov">      22452 :   changeRayDirection(reflected_direction, /* skip_changed_check = */ num_applying &gt; 1);</span></a>
+<a name="55"><span class="lineNum">      55 </span><span class="lineCov">      23286 :   changeRayDirection(reflected_direction, /* skip_changed_check = */ num_applying &gt; 1);</span></a>
 <a name="56"><span class="lineNum">      56 </span>            : }</a>
 <a name="57"><span class="lineNum">      57 </span>            : </a>
 <a name="58"><span class="lineNum">      58 </span>            : Point</a>
-<a name="59"><span class="lineNum">      59 </span><span class="lineCov">      22452 : ReflectRayBC::reflectedDirection(const Point &amp; direction, const Point &amp; normal)</span></a>
+<a name="59"><span class="lineNum">      59 </span><span class="lineCov">      23286 : ReflectRayBC::reflectedDirection(const Point &amp; direction, const Point &amp; normal)</span></a>
 <a name="60"><span class="lineNum">      60 </span>            : {</a>
-<a name="61"><span class="lineNum">      61 </span><span class="lineCov">      22452 :   mooseAssert(MooseUtils::absoluteFuzzyEqual(direction.norm(), 1.), &quot;Direction not normalized&quot;);</span></a>
-<a name="62"><span class="lineNum">      62 </span><span class="lineCov">      22452 :   mooseAssert(MooseUtils::absoluteFuzzyEqual(normal.norm(), 1.), &quot;Normal not normalized&quot;);</span></a>
+<a name="61"><span class="lineNum">      61 </span><span class="lineCov">      23286 :   mooseAssert(MooseUtils::absoluteFuzzyEqual(direction.norm(), 1.), &quot;Direction not normalized&quot;);</span></a>
+<a name="62"><span class="lineNum">      62 </span><span class="lineCov">      23286 :   mooseAssert(MooseUtils::absoluteFuzzyEqual(normal.norm(), 1.), &quot;Normal not normalized&quot;);</span></a>
 <a name="63"><span class="lineNum">      63 </span>            : </a>
-<a name="64"><span class="lineNum">      64 </span><span class="lineCov">      44904 :   Point reflected_direction = direction;</span></a>
-<a name="65"><span class="lineNum">      65 </span><span class="lineCov">      89808 :   reflected_direction -= 2.0 * (reflected_direction * normal) * normal;</span></a>
-<a name="66"><span class="lineNum">      66 </span><span class="lineCov">      22452 :   return reflected_direction / reflected_direction.norm();</span></a>
+<a name="64"><span class="lineNum">      64 </span><span class="lineCov">      46572 :   Point reflected_direction = direction;</span></a>
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">      93144 :   reflected_direction -= 2.0 * (reflected_direction * normal) * normal;</span></a>
+<a name="66"><span class="lineNum">      66 </span><span class="lineCov">      23286 :   return reflected_direction / reflected_direction.norm();</span></a>
 <a name="67"><span class="lineNum">      67 </span>            : }</a>
 </pre>
       </td>

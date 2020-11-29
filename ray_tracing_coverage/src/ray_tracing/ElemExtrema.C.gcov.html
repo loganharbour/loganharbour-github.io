@@ -31,18 +31,18 @@
             <td class="headerValue">ray_tracing Test Coverage</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">12</td>
+            <td class="headerCovTableEntry">20</td>
             <td class="headerCovTableEntry">24</td>
-            <td class="headerCovTableEntryLo">50.0 %</td>
+            <td class="headerCovTableEntryMed">83.3 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-28 10:00:16</td>
+            <td class="headerValue">2020-11-28 23:30:08</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">3</td>
             <td class="headerCovTableEntry">5</td>
-            <td class="headerCovTableEntryLo">60.0 %</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -83,52 +83,52 @@
 <a name="13"><span class="lineNum">      13 </span>            : #include &quot;libmesh/elem.h&quot;</a>
 <a name="14"><span class="lineNum">      14 </span>            : </a>
 <a name="15"><span class="lineNum">      15 </span>            : const Point &amp;</a>
-<a name="16"><span class="lineNum">      16 </span><span class="lineCov">    6275690 : ElemExtrema::vertexPoint(const libMesh::Elem * elem) const</span></a>
+<a name="16"><span class="lineNum">      16 </span><span class="lineCov">    6580028 : ElemExtrema::vertexPoint(const libMesh::Elem * elem) const</span></a>
 <a name="17"><span class="lineNum">      17 </span>            : {</a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineCov">    6275690 :   return elem-&gt;point(vertex());</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">    6580028 :   return elem-&gt;point(vertex());</span></a>
 <a name="19"><span class="lineNum">      19 </span>            : }</a>
 <a name="20"><span class="lineNum">      20 </span>            : </a>
 <a name="21"><span class="lineNum">      21 </span>            : std::unique_ptr&lt;const libMesh::Elem&gt;</a>
-<a name="22"><span class="lineNum">      22 </span><span class="lineCov">    9843240 : ElemExtrema::buildEdge(const libMesh::Elem * elem) const</span></a>
+<a name="22"><span class="lineNum">      22 </span><span class="lineCov">   10512096 : ElemExtrema::buildEdge(const libMesh::Elem * elem) const</span></a>
 <a name="23"><span class="lineNum">      23 </span>            : {</a>
-<a name="24"><span class="lineNum">      24 </span><span class="lineCov">    9843240 :   mooseAssert(atEdge(), &quot;Did not intersect edge&quot;);</span></a>
+<a name="24"><span class="lineNum">      24 </span><span class="lineCov">   10512096 :   mooseAssert(atEdge(), &quot;Did not intersect edge&quot;);</span></a>
 <a name="25"><span class="lineNum">      25 </span>            : </a>
-<a name="26"><span class="lineNum">      26 </span><span class="lineCov">   50336540 :   for (const auto e : elem-&gt;edge_index_range())</span></a>
-<a name="27"><span class="lineNum">      27 </span><span class="lineCov">   50336540 :     if (elem-&gt;is_node_on_edge(first, e) &amp;&amp; elem-&gt;is_node_on_edge(second, e))</span></a>
-<a name="28"><span class="lineNum">      28 </span><span class="lineCov">    9843240 :       return elem-&gt;build_edge_ptr(e);</span></a>
+<a name="26"><span class="lineNum">      26 </span><span class="lineCov">   53064440 :   for (const auto e : elem-&gt;edge_index_range())</span></a>
+<a name="27"><span class="lineNum">      27 </span><span class="lineCov">   53064440 :     if (elem-&gt;is_node_on_edge(first, e) &amp;&amp; elem-&gt;is_node_on_edge(second, e))</span></a>
+<a name="28"><span class="lineNum">      28 </span><span class="lineCov">   10512096 :       return elem-&gt;build_edge_ptr(e);</span></a>
 <a name="29"><span class="lineNum">      29 </span>            : </a>
 <a name="30"><span class="lineNum">      30 </span><span class="lineNoCov">          0 :   mooseError(&quot;Element does not contain vertices&quot;);</span></a>
 <a name="31"><span class="lineNum">      31 </span>            : }</a>
 <a name="32"><span class="lineNum">      32 </span>            : </a>
 <a name="33"><span class="lineNum">      33 </span>            : std::string</a>
-<a name="34"><span class="lineNum">      34 </span><span class="lineNoCov">          0 : ElemExtrema::print() const</span></a>
+<a name="34"><span class="lineNum">      34 </span><span class="lineCov">         27 : ElemExtrema::print() const</span></a>
 <a name="35"><span class="lineNum">      35 </span>            : {</a>
-<a name="36"><span class="lineNum">      36 </span><span class="lineNoCov">          0 :   std::stringstream oss;</span></a>
-<a name="37"><span class="lineNum">      37 </span><span class="lineNoCov">          0 :   if (atVertex())</span></a>
-<a name="38"><span class="lineNum">      38 </span><span class="lineNoCov">          0 :     oss &lt;&lt; &quot;at vertex &quot; &lt;&lt; vertex();</span></a>
+<a name="36"><span class="lineNum">      36 </span><span class="lineCov">         27 :   std::stringstream oss;</span></a>
+<a name="37"><span class="lineNum">      37 </span><span class="lineCov">         27 :   if (atVertex())</span></a>
+<a name="38"><span class="lineNum">      38 </span><span class="lineCov">         27 :     oss &lt;&lt; &quot;at vertex &quot; &lt;&lt; vertex();</span></a>
 <a name="39"><span class="lineNum">      39 </span><span class="lineNoCov">          0 :   else if (atEdge())</span></a>
 <a name="40"><span class="lineNum">      40 </span><span class="lineNoCov">          0 :     oss &lt;&lt; &quot;at edge with vertices &quot; &lt;&lt; first &lt;&lt; &quot; and &quot; &lt;&lt; second;</span></a>
 <a name="41"><span class="lineNum">      41 </span>            :   else</a>
 <a name="42"><span class="lineNum">      42 </span><span class="lineNoCov">          0 :     oss &lt;&lt; &quot;not at extrema (edge/vertex)&quot;;</span></a>
-<a name="43"><span class="lineNum">      43 </span><span class="lineNoCov">          0 :   return oss.str();</span></a>
+<a name="43"><span class="lineNum">      43 </span><span class="lineCov">         27 :   return oss.str();</span></a>
 <a name="44"><span class="lineNum">      44 </span>            : }</a>
 <a name="45"><span class="lineNum">      45 </span>            : </a>
 <a name="46"><span class="lineNum">      46 </span>            : bool</a>
-<a name="47"><span class="lineNum">      47 </span><span class="lineCov">   14509340 : ElemExtrema::isValid(const Elem * const elem, const Point &amp; point) const</span></a>
+<a name="47"><span class="lineNum">      47 </span><span class="lineCov">   15488639 : ElemExtrema::isValid(const Elem * const elem, const Point &amp; point) const</span></a>
 <a name="48"><span class="lineNum">      48 </span>            : {</a>
-<a name="49"><span class="lineNum">      49 </span><span class="lineCov">   14509340 :   if (atVertex())</span></a>
-<a name="50"><span class="lineNum">      50 </span><span class="lineCov">    3233780 :     return vertexPoint(elem).absolute_fuzzy_equals(point);</span></a>
-<a name="51"><span class="lineNum">      51 </span><span class="lineCov">   11275560 :   if (elem-&gt;dim() == 3 &amp;&amp; atEdge())</span></a>
-<a name="52"><span class="lineNum">      52 </span><span class="lineCov">    9407840 :     return buildEdge(elem)-&gt;contains_point(point);</span></a>
+<a name="49"><span class="lineNum">      49 </span><span class="lineCov">   15488639 :   if (atVertex())</span></a>
+<a name="50"><span class="lineNum">      50 </span><span class="lineCov">    3372678 :     return vertexPoint(elem).absolute_fuzzy_equals(point);</span></a>
+<a name="51"><span class="lineNum">      51 </span><span class="lineCov">   12115965 :   if (elem-&gt;dim() == 3 &amp;&amp; atEdge())</span></a>
+<a name="52"><span class="lineNum">      52 </span><span class="lineCov">    9986760 :     return buildEdge(elem)-&gt;contains_point(point);</span></a>
 <a name="53"><span class="lineNum">      53 </span>            : </a>
 <a name="54"><span class="lineNum">      54 </span>            :   return true;</a>
 <a name="55"><span class="lineNum">      55 </span>            : }</a>
 <a name="56"><span class="lineNum">      56 </span>            : </a>
 <a name="57"><span class="lineNum">      57 </span>            : std::ostream &amp;</a>
-<a name="58"><span class="lineNum">      58 </span><span class="lineNoCov">          0 : operator&lt;&lt;(std::ostream &amp; os, const ElemExtrema &amp; elem_extrema)</span></a>
+<a name="58"><span class="lineNum">      58 </span><span class="lineCov">         27 : operator&lt;&lt;(std::ostream &amp; os, const ElemExtrema &amp; elem_extrema)</span></a>
 <a name="59"><span class="lineNum">      59 </span>            : {</a>
-<a name="60"><span class="lineNum">      60 </span><span class="lineNoCov">          0 :   os &lt;&lt; elem_extrema.print();</span></a>
-<a name="61"><span class="lineNum">      61 </span><span class="lineNoCov">          0 :   return os;</span></a>
+<a name="60"><span class="lineNum">      60 </span><span class="lineCov">         27 :   os &lt;&lt; elem_extrema.print();</span></a>
+<a name="61"><span class="lineNum">      61 </span><span class="lineCov">         27 :   return os;</span></a>
 <a name="62"><span class="lineNum">      62 </span>            : }</a>
 </pre>
       </td>

@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-28 10:00:16</td>
+            <td class="headerValue">2020-11-28 23:30:08</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">4</td>
@@ -110,7 +110,7 @@
 <a name="40"><span class="lineNum">      40 </span>            :   /**</a>
 <a name="41"><span class="lineNum">      41 </span>            :    * The MooseVariable this RayKernel contributes to</a>
 <a name="42"><span class="lineNum">      42 </span>            :    */</a>
-<a name="43"><span class="lineNum">      43 </span><span class="lineCov">        336 :   MooseVariableFE&lt;T&gt; &amp; variable() { return _var; }</span></a>
+<a name="43"><span class="lineNum">      43 </span><span class="lineCov">        460 :   MooseVariableFE&lt;T&gt; &amp; variable() { return _var; }</span></a>
 <a name="44"><span class="lineNum">      44 </span>            : </a>
 <a name="45"><span class="lineNum">      45 </span>            :   void onSegment() override final;</a>
 <a name="46"><span class="lineNum">      46 </span>            : </a>
@@ -122,7 +122,7 @@
 <a name="52"><span class="lineNum">      52 </span>            :   /**</a>
 <a name="53"><span class="lineNum">      53 </span>            :    * Compute this RayKernel's contribution to the residual at _qp, _i, and _j</a>
 <a name="54"><span class="lineNum">      54 </span>            :    */</a>
-<a name="55"><span class="lineNum">      55 </span><span class="lineCov">    7973060 :   virtual Real computeQpJacobian() { return 0; }</span></a>
+<a name="55"><span class="lineNum">      55 </span><span class="lineCov">    8283164 :   virtual Real computeQpJacobian() { return 0; }</span></a>
 <a name="56"><span class="lineNum">      56 </span>            :   /**</a>
 <a name="57"><span class="lineNum">      57 </span>            :    * Compute this RayKernel's contribution to the off diagonal jacobian for the variable numbered</a>
 <a name="58"><span class="lineNum">      58 </span>            :    * jvar_num.</a>
@@ -132,15 +132,15 @@
 <a name="62"><span class="lineNum">      62 </span>            :   /**</a>
 <a name="63"><span class="lineNum">      63 </span>            :    * Insertion point for calculation before the residual contribution</a>
 <a name="64"><span class="lineNum">      64 </span>            :    */</a>
-<a name="65"><span class="lineNum">      65 </span><span class="lineCov">     623170 :   virtual void precalculateResidual(){};</span></a>
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">     646879 :   virtual void precalculateResidual(){};</span></a>
 <a name="66"><span class="lineNum">      66 </span>            :   /**</a>
 <a name="67"><span class="lineNum">      67 </span>            :    * Insertion point for calculation before the Jacobian contribution</a>
 <a name="68"><span class="lineNum">      68 </span>            :    */</a>
-<a name="69"><span class="lineNum">      69 </span><span class="lineCov">     178828 :   virtual void precalculateJacobian(){};</span></a>
+<a name="69"><span class="lineNum">      69 </span><span class="lineCov">     185922 :   virtual void precalculateJacobian(){};</span></a>
 <a name="70"><span class="lineNum">      70 </span>            :   /**</a>
 <a name="71"><span class="lineNum">      71 </span>            :    * Insertion point for calculation before an off-diagonal Jacobian contribution</a>
 <a name="72"><span class="lineNum">      72 </span>            :    */</a>
-<a name="73"><span class="lineNum">      73 </span><span class="lineCov">        858 :   virtual void precalculateOffDiagJacobian(unsigned int /* jvar_num */){};</span></a>
+<a name="73"><span class="lineNum">      73 </span><span class="lineCov">        891 :   virtual void precalculateOffDiagJacobian(unsigned int /* jvar_num */){};</span></a>
 <a name="74"><span class="lineNum">      74 </span>            : </a>
 <a name="75"><span class="lineNum">      75 </span>            :   /// This is a regular kernel so we cast to a regular MooseVariable</a>
 <a name="76"><span class="lineNum">      76 </span>            :   MooseVariableFE&lt;T&gt; &amp; _var;</a>

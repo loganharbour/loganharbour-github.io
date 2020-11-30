@@ -31,18 +31,18 @@
             <td class="headerValue">ray_tracing Test Coverage</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">764</td>
-            <td class="headerCovTableEntry">850</td>
-            <td class="headerCovTableEntryMed">89.9 %</td>
+            <td class="headerCovTableEntry">773</td>
+            <td class="headerCovTableEntry">843</td>
+            <td class="headerCovTableEntryHi">91.7 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-28 23:30:08</td>
+            <td class="headerValue">2020-11-29 21:22:53</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">76</td>
-            <td class="headerCovTableEntry">80</td>
-            <td class="headerCovTableEntryHi">95.0 %</td>
+            <td class="headerCovTableEntry">79</td>
+            <td class="headerCovTableEntry">79</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Legend:</td>
@@ -698,7 +698,7 @@
 <a name="628"><span class="lineNum">     628 </span>            : </a>
 <a name="629"><span class="lineNum">     629 </span>            :   // Get RayKernels and their dependencies and call subdomain setup</a>
 <a name="630"><span class="lineNum">     630 </span><span class="lineCov">   19630662 :   getRayKernels(_threaded_current_ray_kernels[tid], subdomain, tid, ray_id);</span></a>
-<a name="631"><span class="lineNum">     631 </span><span class="lineCov">   39475060 :   for (auto &amp; rkb : _threaded_current_ray_kernels[tid])</span></a>
+<a name="631"><span class="lineNum">     631 </span><span class="lineCov">   39475080 :   for (auto &amp; rkb : _threaded_current_ray_kernels[tid])</span></a>
 <a name="632"><span class="lineNum">     632 </span>            :   {</a>
 <a name="633"><span class="lineNum">     633 </span><span class="lineCov">   19844409 :     rkb-&gt;subdomainSetup();</span></a>
 <a name="634"><span class="lineNum">     634 </span>            : </a>
@@ -710,7 +710,7 @@
 <a name="640"><span class="lineNum">     640 </span>            :   }</a>
 <a name="641"><span class="lineNum">     641 </span>            : </a>
 <a name="642"><span class="lineNum">     642 </span>            :   // Prepare aux vars</a>
-<a name="643"><span class="lineNum">     643 </span><span class="lineCov">   19904265 :   for (auto &amp; var : needed_moose_vars)</span></a>
+<a name="643"><span class="lineNum">     643 </span><span class="lineCov">   19904285 :   for (auto &amp; var : needed_moose_vars)</span></a>
 <a name="644"><span class="lineNum">     644 </span><span class="lineCov">     273607 :     if (var-&gt;kind() == Moose::VarKindType::VAR_AUXILIARY)</span></a>
 <a name="645"><span class="lineNum">     645 </span><span class="lineCov">      22440 :       var-&gt;prepareAux();</span></a>
 <a name="646"><span class="lineNum">     646 </span>            : </a>
@@ -952,7 +952,7 @@
 <a name="882"><span class="lineNum">     882 </span>            : </a>
 <a name="883"><span class="lineNum">     883 </span>            :   // Clear the current RayKernels</a>
 <a name="884"><span class="lineNum">     884 </span><span class="lineCov">      24142 :   for (THREAD_ID tid = 0; tid &lt; libMesh::n_threads(); ++tid)</span></a>
-<a name="885"><span class="lineNum">     885 </span><span class="lineCov">      23297 :     _threaded_current_ray_kernels[tid].clear();</span></a>
+<a name="885"><span class="lineNum">     885 </span><span class="lineCov">      23287 :     _threaded_current_ray_kernels[tid].clear();</span></a>
 <a name="886"><span class="lineNum">     886 </span>            : </a>
 <a name="887"><span class="lineNum">     887 </span>            :   // Move the threaded cache trace information into the full cached trace vector</a>
 <a name="888"><span class="lineNum">     888 </span>            :   // Here, we only clear the cached vectors so that we might not have to</a>
@@ -966,21 +966,21 @@
 <a name="896"><span class="lineNum">     896 </span>            :   {</a>
 <a name="897"><span class="lineNum">     897 </span><span class="lineCov">     254723 :     for (const auto &amp; entry : _threaded_cached_traces[tid])</span></a>
 <a name="898"><span class="lineNum">     898 </span><span class="lineCov">     241659 :       _cached_traces.emplace_back(std::move(entry));</span></a>
-<a name="899"><span class="lineNum">     899 </span><span class="lineCov">      14799 :     _threaded_cached_traces[tid].clear();</span></a>
+<a name="899"><span class="lineNum">     899 </span><span class="lineCov">      14801 :     _threaded_cached_traces[tid].clear();</span></a>
 <a name="900"><span class="lineNum">     900 </span>            :   }</a>
 <a name="901"><span class="lineNum">     901 </span>            : </a>
 <a name="902"><span class="lineNum">     902 </span>            :   // Add any stragglers that contribute to the Jacobian or residual</a>
 <a name="903"><span class="lineNum">     903 </span><span class="lineCov">      24142 :   for (THREAD_ID tid = 0; tid &lt; libMesh::n_threads(); ++tid)</span></a>
 <a name="904"><span class="lineNum">     904 </span><span class="lineCov">      13064 :     if (_num_cached[tid] != 0)</span></a>
 <a name="905"><span class="lineNum">     905 </span>            :     {</a>
-<a name="906"><span class="lineNum">     906 </span><span class="lineCov">       3699 :       if (_fe_problem.currentlyComputingJacobian())</span></a>
-<a name="907"><span class="lineNum">     907 </span><span class="lineCov">        604 :         _fe_problem.addCachedJacobian(tid);</span></a>
-<a name="908"><span class="lineNum">     908 </span><span class="lineCov">       3095 :       else if (_fe_problem.currentlyComputingResidual())</span></a>
-<a name="909"><span class="lineNum">     909 </span><span class="lineCov">       3095 :         _fe_problem.addCachedResidual(tid);</span></a>
+<a name="906"><span class="lineNum">     906 </span><span class="lineCov">       3671 :       if (_fe_problem.currentlyComputingJacobian())</span></a>
+<a name="907"><span class="lineNum">     907 </span><span class="lineCov">        602 :         _fe_problem.addCachedJacobian(tid);</span></a>
+<a name="908"><span class="lineNum">     908 </span><span class="lineCov">       3069 :       else if (_fe_problem.currentlyComputingResidual())</span></a>
+<a name="909"><span class="lineNum">     909 </span><span class="lineCov">       3069 :         _fe_problem.addCachedResidual(tid);</span></a>
 <a name="910"><span class="lineNum">     910 </span>            :       else</a>
 <a name="911"><span class="lineNum">     911 </span><span class="lineNoCov">          0 :         mooseError(&quot;Should not have cached values without Jacobian/residual computation&quot;);</span></a>
 <a name="912"><span class="lineNum">     912 </span>            : </a>
-<a name="913"><span class="lineNum">     913 </span><span class="lineCov">       3699 :       _num_cached[tid] = 0;</span></a>
+<a name="913"><span class="lineNum">     913 </span><span class="lineCov">       3671 :       _num_cached[tid] = 0;</span></a>
 <a name="914"><span class="lineNum">     914 </span>            :     }</a>
 <a name="915"><span class="lineNum">     915 </span>            : </a>
 <a name="916"><span class="lineNum">     916 </span>            :   // AuxRayKernels may have modified AuxVariables</a>
@@ -1021,21 +1021,21 @@
 <a name="951"><span class="lineNum">     951 </span><span class="lineCov">   17775308 : }</span></a>
 <a name="952"><span class="lineNum">     952 </span>            : </a>
 <a name="953"><span class="lineNum">     953 </span>            : RayDataIndex</a>
-<a name="954"><span class="lineNum">     954 </span><span class="lineCov">       4760 : RayTracingStudy::registerRayDataInternal(const std::string &amp; name, const bool aux)</span></a>
+<a name="954"><span class="lineNum">     954 </span><span class="lineCov">       4838 : RayTracingStudy::registerRayDataInternal(const std::string &amp; name, const bool aux)</span></a>
 <a name="955"><span class="lineNum">     955 </span>            : {</a>
-<a name="956"><span class="lineNum">     956 </span><span class="lineCov">       9520 :   Threads::spin_mutex::scoped_lock lock(_spin_mutex);</span></a>
+<a name="956"><span class="lineNum">     956 </span><span class="lineCov">       9676 :   Threads::spin_mutex::scoped_lock lock(_spin_mutex);</span></a>
 <a name="957"><span class="lineNum">     957 </span>            : </a>
-<a name="958"><span class="lineNum">     958 </span><span class="lineCov">       4760 :   if (_called_initial_setup)</span></a>
+<a name="958"><span class="lineNum">     958 </span><span class="lineCov">       4838 :   if (_called_initial_setup)</span></a>
 <a name="959"><span class="lineNum">     959 </span><span class="lineNoCov">          0 :     mooseError(</span></a>
 <a name="960"><span class="lineNum">     960 </span><span class="lineNoCov">          0 :         _error_prefix, &quot;: Cannot register Ray &quot;, (aux ? &quot;aux&quot; : &quot;&quot;), &quot; data after initialSetup()&quot;);</span></a>
 <a name="961"><span class="lineNum">     961 </span>            : </a>
-<a name="962"><span class="lineNum">     962 </span><span class="lineCov">       4760 :   auto &amp; map = aux ? _ray_aux_data_map : _ray_data_map;</span></a>
-<a name="963"><span class="lineNum">     963 </span><span class="lineCov">       4760 :   const auto find = map.find(name);</span></a>
-<a name="964"><span class="lineNum">     964 </span><span class="lineCov">       4760 :   if (find != map.end())</span></a>
+<a name="962"><span class="lineNum">     962 </span><span class="lineCov">       4838 :   auto &amp; map = aux ? _ray_aux_data_map : _ray_data_map;</span></a>
+<a name="963"><span class="lineNum">     963 </span><span class="lineCov">       4838 :   const auto find = map.find(name);</span></a>
+<a name="964"><span class="lineNum">     964 </span><span class="lineCov">       4838 :   if (find != map.end())</span></a>
 <a name="965"><span class="lineNum">     965 </span><span class="lineCov">        119 :     return find-&gt;second;</span></a>
 <a name="966"><span class="lineNum">     966 </span>            : </a>
-<a name="967"><span class="lineNum">     967 </span><span class="lineCov">       4641 :   auto &amp; other_map = aux ? _ray_data_map : _ray_aux_data_map;</span></a>
-<a name="968"><span class="lineNum">     968 </span><span class="lineCov">       4641 :   if (other_map.find(name) != other_map.end())</span></a>
+<a name="967"><span class="lineNum">     967 </span><span class="lineCov">       4719 :   auto &amp; other_map = aux ? _ray_data_map : _ray_aux_data_map;</span></a>
+<a name="968"><span class="lineNum">     968 </span><span class="lineCov">       4719 :   if (other_map.find(name) != other_map.end())</span></a>
 <a name="969"><span class="lineNum">     969 </span><span class="lineNoCov">          0 :     mooseError(_error_prefix,</span></a>
 <a name="970"><span class="lineNum">     970 </span>            :                &quot;: Cannot register Ray aux data with name &quot;,</a>
 <a name="971"><span class="lineNum">     971 </span>            :                name,</a>
@@ -1044,13 +1044,13 @@
 <a name="974"><span class="lineNum">     974 </span>            :                &quot; data already exists with said name.&quot;);</a>
 <a name="975"><span class="lineNum">     975 </span>            : </a>
 <a name="976"><span class="lineNum">     976 </span>            :   // Add into the name -&gt; index map</a>
-<a name="977"><span class="lineNum">     977 </span><span class="lineCov">       4641 :   map.emplace(name, map.size());</span></a>
+<a name="977"><span class="lineNum">     977 </span><span class="lineCov">       4719 :   map.emplace(name, map.size());</span></a>
 <a name="978"><span class="lineNum">     978 </span>            : </a>
 <a name="979"><span class="lineNum">     979 </span>            :   // Add into the index -&gt; names vector</a>
-<a name="980"><span class="lineNum">     980 </span><span class="lineCov">       4641 :   auto &amp; vector = aux ? _ray_aux_data_names : _ray_data_names;</span></a>
-<a name="981"><span class="lineNum">     981 </span><span class="lineCov">       4641 :   vector.push_back(name);</span></a>
+<a name="980"><span class="lineNum">     980 </span><span class="lineCov">       4719 :   auto &amp; vector = aux ? _ray_aux_data_names : _ray_data_names;</span></a>
+<a name="981"><span class="lineNum">     981 </span><span class="lineCov">       4719 :   vector.push_back(name);</span></a>
 <a name="982"><span class="lineNum">     982 </span>            : </a>
-<a name="983"><span class="lineNum">     983 </span><span class="lineCov">       4641 :   return map.size() - 1;</span></a>
+<a name="983"><span class="lineNum">     983 </span><span class="lineCov">       4719 :   return map.size() - 1;</span></a>
 <a name="984"><span class="lineNum">     984 </span>            : }</a>
 <a name="985"><span class="lineNum">     985 </span>            : </a>
 <a name="986"><span class="lineNum">     986 </span>            : std::vector&lt;RayDataIndex&gt;</a>
@@ -1105,25 +1105,25 @@
 <a name="1035"><span class="lineNum">    1035 </span>            : }</a>
 <a name="1036"><span class="lineNum">    1036 </span>            : </a>
 <a name="1037"><span class="lineNum">    1037 </span>            : const std::string &amp;</a>
-<a name="1038"><span class="lineNum">    1038 </span><span class="lineNoCov">          0 : RayTracingStudy::getRayDataNameInternal(const RayDataIndex index, const bool aux) const</span></a>
+<a name="1038"><span class="lineNum">    1038 </span><span class="lineCov">      41472 : RayTracingStudy::getRayDataNameInternal(const RayDataIndex index, const bool aux) const</span></a>
 <a name="1039"><span class="lineNum">    1039 </span>            : {</a>
-<a name="1040"><span class="lineNum">    1040 </span><span class="lineNoCov">          0 :   Threads::spin_mutex::scoped_lock lock(_spin_mutex);</span></a>
+<a name="1040"><span class="lineNum">    1040 </span><span class="lineCov">      41472 :   Threads::spin_mutex::scoped_lock lock(_spin_mutex);</span></a>
 <a name="1041"><span class="lineNum">    1041 </span>            : </a>
-<a name="1042"><span class="lineNum">    1042 </span><span class="lineNoCov">          0 :   if (aux)</span></a>
+<a name="1042"><span class="lineNum">    1042 </span><span class="lineCov">      41472 :   if (aux)</span></a>
 <a name="1043"><span class="lineNum">    1043 </span>            :   {</a>
-<a name="1044"><span class="lineNum">    1044 </span><span class="lineNoCov">          0 :     if (rayAuxDataSize() &gt;= index)</span></a>
+<a name="1044"><span class="lineNum">    1044 </span><span class="lineCov">      20736 :     if (rayAuxDataSize() &lt; index)</span></a>
 <a name="1045"><span class="lineNum">    1045 </span><span class="lineNoCov">          0 :       mooseError(_error_prefix, &quot;: Unknown Ray aux data with index &quot;, index);</span></a>
 <a name="1046"><span class="lineNum">    1046 </span>            :   }</a>
-<a name="1047"><span class="lineNum">    1047 </span><span class="lineNoCov">          0 :   else if (rayDataSize() &gt;= index)</span></a>
+<a name="1047"><span class="lineNum">    1047 </span><span class="lineCov">      20736 :   else if (rayDataSize() &lt; index)</span></a>
 <a name="1048"><span class="lineNum">    1048 </span><span class="lineNoCov">          0 :     mooseError(_error_prefix, &quot;: Unknown Ray data with index &quot;, index);</span></a>
 <a name="1049"><span class="lineNum">    1049 </span>            : </a>
-<a name="1050"><span class="lineNum">    1050 </span><span class="lineNoCov">          0 :   return aux ? _ray_aux_data_names[index] : _ray_data_names[index];</span></a>
+<a name="1050"><span class="lineNum">    1050 </span><span class="lineCov">      41472 :   return aux ? _ray_aux_data_names[index] : _ray_data_names[index];</span></a>
 <a name="1051"><span class="lineNum">    1051 </span>            : }</a>
 <a name="1052"><span class="lineNum">    1052 </span>            : </a>
 <a name="1053"><span class="lineNum">    1053 </span>            : RayDataIndex</a>
-<a name="1054"><span class="lineNum">    1054 </span><span class="lineCov">       1690 : RayTracingStudy::registerRayData(const std::string &amp; name)</span></a>
+<a name="1054"><span class="lineNum">    1054 </span><span class="lineCov">       1729 : RayTracingStudy::registerRayData(const std::string &amp; name)</span></a>
 <a name="1055"><span class="lineNum">    1055 </span>            : {</a>
-<a name="1056"><span class="lineNum">    1056 </span><span class="lineCov">       1690 :   return registerRayDataInternal(name, /* aux = */ false);</span></a>
+<a name="1056"><span class="lineNum">    1056 </span><span class="lineCov">       1729 :   return registerRayDataInternal(name, /* aux = */ false);</span></a>
 <a name="1057"><span class="lineNum">    1057 </span>            : }</a>
 <a name="1058"><span class="lineNum">    1058 </span>            : </a>
 <a name="1059"><span class="lineNum">    1059 </span>            : std::vector&lt;RayDataIndex&gt;</a>
@@ -1146,15 +1146,15 @@
 <a name="1076"><span class="lineNum">    1076 </span>            : }</a>
 <a name="1077"><span class="lineNum">    1077 </span>            : </a>
 <a name="1078"><span class="lineNum">    1078 </span>            : const std::string &amp;</a>
-<a name="1079"><span class="lineNum">    1079 </span><span class="lineNoCov">          0 : RayTracingStudy::getRayDataName(const RayDataIndex index) const</span></a>
+<a name="1079"><span class="lineNum">    1079 </span><span class="lineCov">      20736 : RayTracingStudy::getRayDataName(const RayDataIndex index) const</span></a>
 <a name="1080"><span class="lineNum">    1080 </span>            : {</a>
-<a name="1081"><span class="lineNum">    1081 </span><span class="lineNoCov">          0 :   return getRayDataNameInternal(index, /* aux = */ false);</span></a>
+<a name="1081"><span class="lineNum">    1081 </span><span class="lineCov">      20736 :   return getRayDataNameInternal(index, /* aux = */ false);</span></a>
 <a name="1082"><span class="lineNum">    1082 </span>            : }</a>
 <a name="1083"><span class="lineNum">    1083 </span>            : </a>
 <a name="1084"><span class="lineNum">    1084 </span>            : RayDataIndex</a>
-<a name="1085"><span class="lineNum">    1085 </span><span class="lineCov">       2680 : RayTracingStudy::registerRayAuxData(const std::string &amp; name)</span></a>
+<a name="1085"><span class="lineNum">    1085 </span><span class="lineCov">       2719 : RayTracingStudy::registerRayAuxData(const std::string &amp; name)</span></a>
 <a name="1086"><span class="lineNum">    1086 </span>            : {</a>
-<a name="1087"><span class="lineNum">    1087 </span><span class="lineCov">       2680 :   return registerRayDataInternal(name, /* aux = */ true);</span></a>
+<a name="1087"><span class="lineNum">    1087 </span><span class="lineCov">       2719 :   return registerRayDataInternal(name, /* aux = */ true);</span></a>
 <a name="1088"><span class="lineNum">    1088 </span>            : }</a>
 <a name="1089"><span class="lineNum">    1089 </span>            : </a>
 <a name="1090"><span class="lineNum">    1090 </span>            : std::vector&lt;RayDataIndex&gt;</a>
@@ -1178,9 +1178,9 @@
 <a name="1108"><span class="lineNum">    1108 </span>            : }</a>
 <a name="1109"><span class="lineNum">    1109 </span>            : </a>
 <a name="1110"><span class="lineNum">    1110 </span>            : const std::string &amp;</a>
-<a name="1111"><span class="lineNum">    1111 </span><span class="lineNoCov">          0 : RayTracingStudy::getRayAuxDataName(const RayDataIndex index) const</span></a>
+<a name="1111"><span class="lineNum">    1111 </span><span class="lineCov">      20736 : RayTracingStudy::getRayAuxDataName(const RayDataIndex index) const</span></a>
 <a name="1112"><span class="lineNum">    1112 </span>            : {</a>
-<a name="1113"><span class="lineNum">    1113 </span><span class="lineNoCov">          0 :   return getRayDataNameInternal(index, /* aux = */ true);</span></a>
+<a name="1113"><span class="lineNum">    1113 </span><span class="lineCov">      20736 :   return getRayDataNameInternal(index, /* aux = */ true);</span></a>
 <a name="1114"><span class="lineNum">    1114 </span>            : }</a>
 <a name="1115"><span class="lineNum">    1115 </span>            : </a>
 <a name="1116"><span class="lineNum">    1116 </span>            : bool</a>
@@ -1198,15 +1198,15 @@
 <a name="1128"><span class="lineNum">    1128 </span>            :   // the conditions yet. We do this so that it can be generated on the fly on first use.</a>
 <a name="1129"><span class="lineNum">    1129 </span><span class="lineCov">   19630662 :   if (!_threaded_cache_ray_kernel[tid].numAttribs())</span></a>
 <a name="1130"><span class="lineNum">    1130 </span>            :   {</a>
-<a name="1131"><span class="lineNum">    1131 </span><span class="lineCov">       5914 :     if (!_called_initial_setup)</span></a>
+<a name="1131"><span class="lineNum">    1131 </span><span class="lineCov">       5912 :     if (!_called_initial_setup)</span></a>
 <a name="1132"><span class="lineNum">    1132 </span><span class="lineNoCov">          0 :       mooseError(_error_prefix, &quot;Should not call getRayKernels() before initialSetup()&quot;);</span></a>
 <a name="1133"><span class="lineNum">    1133 </span>            : </a>
-<a name="1134"><span class="lineNum">    1134 </span><span class="lineCov">       5914 :     auto query = _fe_problem.theWarehouse()</span></a>
-<a name="1135"><span class="lineNum">    1135 </span><span class="lineCov">      11828 :                      .query()</span></a>
-<a name="1136"><span class="lineNum">    1136 </span><span class="lineCov">      11828 :                      .condition&lt;AttribRayTracingStudy&gt;(this)</span></a>
-<a name="1137"><span class="lineNum">    1137 </span><span class="lineCov">       5914 :                      .condition&lt;AttribSystem&gt;(&quot;RayKernel&quot;)</span></a>
-<a name="1138"><span class="lineNum">    1138 </span><span class="lineCov">      11828 :                      .condition&lt;AttribThread&gt;(tid);</span></a>
-<a name="1139"><span class="lineNum">    1139 </span><span class="lineCov">      11828 :     _threaded_cache_ray_kernel[tid] = query.clone();</span></a>
+<a name="1134"><span class="lineNum">    1134 </span><span class="lineCov">       5912 :     auto query = _fe_problem.theWarehouse()</span></a>
+<a name="1135"><span class="lineNum">    1135 </span><span class="lineCov">      11824 :                      .query()</span></a>
+<a name="1136"><span class="lineNum">    1136 </span><span class="lineCov">      11824 :                      .condition&lt;AttribRayTracingStudy&gt;(this)</span></a>
+<a name="1137"><span class="lineNum">    1137 </span><span class="lineCov">       5912 :                      .condition&lt;AttribSystem&gt;(&quot;RayKernel&quot;)</span></a>
+<a name="1138"><span class="lineNum">    1138 </span><span class="lineCov">      11824 :                      .condition&lt;AttribThread&gt;(tid);</span></a>
+<a name="1139"><span class="lineNum">    1139 </span><span class="lineCov">      11824 :     _threaded_cache_ray_kernel[tid] = query.clone();</span></a>
 <a name="1140"><span class="lineNum">    1140 </span>            :   }</a>
 <a name="1141"><span class="lineNum">    1141 </span>            : </a>
 <a name="1142"><span class="lineNum">    1142 </span><span class="lineCov">   19630662 :   _threaded_cache_ray_kernel[tid].queryInto(result, id);</span></a>
@@ -1221,7 +1221,7 @@
 <a name="1151"><span class="lineNum">    1151 </span>            :   // No Ray registration: no need to sift through objects</a>
 <a name="1152"><span class="lineNum">    1152 </span><span class="lineCov">   19630662 :   if (!_use_ray_registration)</span></a>
 <a name="1153"><span class="lineNum">    1153 </span>            :   {</a>
-<a name="1154"><span class="lineNum">    1154 </span><span class="lineCov">   19623418 :     getRayKernels(result, id, tid);</span></a>
+<a name="1154"><span class="lineNum">    1154 </span><span class="lineCov">   19623438 :     getRayKernels(result, id, tid);</span></a>
 <a name="1155"><span class="lineNum">    1155 </span>            :   }</a>
 <a name="1156"><span class="lineNum">    1156 </span>            :   // Has Ray registration: only pick the objects associated with ray_id</a>
 <a name="1157"><span class="lineNum">    1157 </span>            :   else</a>
@@ -1250,15 +1250,15 @@
 <a name="1180"><span class="lineNum">    1180 </span>            :   // the conditions yet. We do this so that it can be generated on the fly on first use.</a>
 <a name="1181"><span class="lineNum">    1181 </span><span class="lineCov">   10418052 :   if (!_threaded_cache_ray_bc[tid].numAttribs())</span></a>
 <a name="1182"><span class="lineNum">    1182 </span>            :   {</a>
-<a name="1183"><span class="lineNum">    1183 </span><span class="lineCov">       5824 :     if (!_called_initial_setup)</span></a>
+<a name="1183"><span class="lineNum">    1183 </span><span class="lineCov">       5813 :     if (!_called_initial_setup)</span></a>
 <a name="1184"><span class="lineNum">    1184 </span><span class="lineNoCov">          0 :       mooseError(_error_prefix, &quot;Should not call getRayBCs() before initialSetup()&quot;);</span></a>
 <a name="1185"><span class="lineNum">    1185 </span>            : </a>
-<a name="1186"><span class="lineNum">    1186 </span><span class="lineCov">       5824 :     auto query = _fe_problem.theWarehouse()</span></a>
-<a name="1187"><span class="lineNum">    1187 </span><span class="lineCov">      11648 :                      .query()</span></a>
-<a name="1188"><span class="lineNum">    1188 </span><span class="lineCov">      11648 :                      .condition&lt;AttribRayTracingStudy&gt;(this)</span></a>
-<a name="1189"><span class="lineNum">    1189 </span><span class="lineCov">       5824 :                      .condition&lt;AttribSystem&gt;(&quot;RayBoundaryCondition&quot;)</span></a>
-<a name="1190"><span class="lineNum">    1190 </span><span class="lineCov">      11648 :                      .condition&lt;AttribThread&gt;(tid);</span></a>
-<a name="1191"><span class="lineNum">    1191 </span><span class="lineCov">      11648 :     _threaded_cache_ray_bc[tid] = query.clone();</span></a>
+<a name="1186"><span class="lineNum">    1186 </span><span class="lineCov">       5813 :     auto query = _fe_problem.theWarehouse()</span></a>
+<a name="1187"><span class="lineNum">    1187 </span><span class="lineCov">      11626 :                      .query()</span></a>
+<a name="1188"><span class="lineNum">    1188 </span><span class="lineCov">      11626 :                      .condition&lt;AttribRayTracingStudy&gt;(this)</span></a>
+<a name="1189"><span class="lineNum">    1189 </span><span class="lineCov">       5813 :                      .condition&lt;AttribSystem&gt;(&quot;RayBoundaryCondition&quot;)</span></a>
+<a name="1190"><span class="lineNum">    1190 </span><span class="lineCov">      11626 :                      .condition&lt;AttribThread&gt;(tid);</span></a>
+<a name="1191"><span class="lineNum">    1191 </span><span class="lineCov">      11626 :     _threaded_cache_ray_bc[tid] = query.clone();</span></a>
 <a name="1192"><span class="lineNum">    1192 </span>            :   }</a>
 <a name="1193"><span class="lineNum">    1193 </span>            : </a>
 <a name="1194"><span class="lineNum">    1194 </span><span class="lineCov">   10418052 :   _threaded_cache_ray_bc[tid].queryInto(result, std::make_tuple(id, false));</span></a>
@@ -1500,353 +1500,347 @@
 <a name="1430"><span class="lineNum">    1430 </span>            :                                     const bool global,</a>
 <a name="1431"><span class="lineNum">    1431 </span>            :                                     const std::string &amp; error_suffix) const</a>
 <a name="1432"><span class="lineNum">    1432 </span>            : {</a>
-<a name="1433"><span class="lineNum">    1433 </span><span class="lineCov">      23560 :   auto print_id = [](const RayID id) {</span></a>
-<a name="1434"><span class="lineNum">    1434 </span><span class="lineNoCov">          0 :     const std::string s = id == Ray::INVALID_RAY_ID ? &quot;INVALID_RAY_ID&quot; : std::to_string(id);</span></a>
-<a name="1435"><span class="lineNum">    1435 </span><span class="lineNoCov">          0 :     return s;</span></a>
-<a name="1436"><span class="lineNum">    1436 </span>            :   };</a>
-<a name="1437"><span class="lineNum">    1437 </span>            : </a>
-<a name="1438"><span class="lineNum">    1438 </span>            :   // Check our local Rays first</a>
-<a name="1439"><span class="lineNum">    1439 </span><span class="lineCov">      23560 :   std::unordered_map&lt;RayID, const Ray *&gt; my_id_map;</span></a>
-<a name="1440"><span class="lineNum">    1440 </span><span class="lineCov">   35353620 :   for (auto it = begin; it != end; ++it)</span></a>
-<a name="1441"><span class="lineNum">    1441 </span>            :   {</a>
-<a name="1442"><span class="lineNum">    1442 </span><span class="lineCov">   35330060 :     const std::shared_ptr&lt;Ray&gt; &amp; ray = *it;</span></a>
-<a name="1443"><span class="lineNum">    1443 </span><span class="lineCov">   35330060 :     if (!ray)</span></a>
-<a name="1444"><span class="lineNum">    1444 </span><span class="lineNoCov">          0 :       continue;</span></a>
-<a name="1445"><span class="lineNum">    1445 </span>            : </a>
-<a name="1446"><span class="lineNum">    1446 </span><span class="lineCov">   35330060 :     const auto emplace = my_id_map.emplace(ray-&gt;id(), ray.get());</span></a>
-<a name="1447"><span class="lineNum">    1447 </span><span class="lineCov">   35330060 :     const bool found = !emplace.second;</span></a>
-<a name="1448"><span class="lineNum">    1448 </span>            : </a>
-<a name="1449"><span class="lineNum">    1449 </span><span class="lineCov">   35330060 :     if (found)</span></a>
-<a name="1450"><span class="lineNum">    1450 </span>            :     {</a>
-<a name="1451"><span class="lineNum">    1451 </span><span class="lineNoCov">          0 :       const Ray * other_ray = emplace.first-&gt;second;</span></a>
-<a name="1452"><span class="lineNum">    1452 </span><span class="lineNoCov">          0 :       mooseError(_error_prefix,</span></a>
-<a name="1453"><span class="lineNum">    1453 </span>            :                  &quot;:\nMultiple Rays exist with ID &quot;,</a>
-<a name="1454"><span class="lineNum">    1454 </span><span class="lineNoCov">          0 :                  print_id(ray-&gt;id()),</span></a>
-<a name="1455"><span class="lineNum">    1455 </span>            :                  &quot; on processor &quot;,</a>
-<a name="1456"><span class="lineNum">    1456 </span><span class="lineNoCov">          0 :                  _pid,</span></a>
-<a name="1457"><span class="lineNum">    1457 </span>            :                  &quot; &quot;,</a>
-<a name="1458"><span class="lineNum">    1458 </span>            :                  error_suffix,</a>
-<a name="1459"><span class="lineNum">    1459 </span>            :                  &quot;\n\nOffending Ray information:\n\n&quot;,</a>
-<a name="1460"><span class="lineNum">    1460 </span><span class="lineNoCov">          0 :                  ray-&gt;getInfo(),</span></a>
-<a name="1461"><span class="lineNum">    1461 </span>            :                  &quot;\n&quot;,</a>
-<a name="1462"><span class="lineNum">    1462 </span><span class="lineNoCov">          0 :                  other_ray-&gt;getInfo());</span></a>
-<a name="1463"><span class="lineNum">    1463 </span>            :     }</a>
-<a name="1464"><span class="lineNum">    1464 </span>            :   }</a>
-<a name="1465"><span class="lineNum">    1465 </span>            : </a>
-<a name="1466"><span class="lineNum">    1466 </span><span class="lineCov">      23560 :   if (global)</span></a>
-<a name="1467"><span class="lineNum">    1467 </span>            :   {</a>
-<a name="1468"><span class="lineNum">    1468 </span>            :     // Package our IDs to send to all processors</a>
-<a name="1469"><span class="lineNum">    1469 </span><span class="lineCov">      44312 :     std::vector&lt;RayID&gt; my_ids;</span></a>
-<a name="1470"><span class="lineNum">    1470 </span><span class="lineCov">      22156 :     my_ids.reserve(my_id_map.size());</span></a>
-<a name="1471"><span class="lineNum">    1471 </span><span class="lineCov">   35325460 :     for (const auto &amp; id_ray_pair : my_id_map)</span></a>
-<a name="1472"><span class="lineNum">    1472 </span><span class="lineCov">   35303300 :       my_ids.push_back(id_ray_pair.first);</span></a>
-<a name="1473"><span class="lineNum">    1473 </span><span class="lineCov">      44312 :     std::map&lt;processor_id_type, std::vector&lt;RayID&gt;&gt; send_ids;</span></a>
-<a name="1474"><span class="lineNum">    1474 </span><span class="lineCov">      58008 :     for (processor_id_type pid = 0; pid &lt; n_processors(); ++pid)</span></a>
-<a name="1475"><span class="lineNum">    1475 </span><span class="lineCov">      35852 :       if (pid != _pid)</span></a>
-<a name="1476"><span class="lineNum">    1476 </span><span class="lineCov">      35852 :         send_ids.emplace(pid, my_ids);</span></a>
-<a name="1477"><span class="lineNum">    1477 </span>            : </a>
-<a name="1478"><span class="lineNum">    1478 </span>            :     // Verify other processor's Rays against ours</a>
-<a name="1479"><span class="lineNum">    1479 </span><span class="lineCov">      35852 :     const auto check_ids = [this, &amp;my_id_map, &amp;error_suffix, &amp;print_id](</span></a>
-<a name="1480"><span class="lineNum">    1480 </span><span class="lineCov">   15698080 :                                processor_id_type pid, const std::vector&lt;RayID&gt; &amp; ids) {</span></a>
-<a name="1481"><span class="lineNum">    1481 </span><span class="lineCov">   15711760 :       for (const RayID id : ids)</span></a>
-<a name="1482"><span class="lineNum">    1482 </span>            :       {</a>
-<a name="1483"><span class="lineNum">    1483 </span><span class="lineCov">   15698080 :         const auto find = my_id_map.find(id);</span></a>
-<a name="1484"><span class="lineNum">    1484 </span><span class="lineCov">   15698080 :         if (find != my_id_map.end())</span></a>
-<a name="1485"><span class="lineNum">    1485 </span>            :         {</a>
-<a name="1486"><span class="lineNum">    1486 </span><span class="lineNoCov">          0 :           const Ray * ray = find-&gt;second;</span></a>
-<a name="1487"><span class="lineNum">    1487 </span><span class="lineNoCov">          0 :           mooseError(_error_prefix,</span></a>
-<a name="1488"><span class="lineNum">    1488 </span>            :                      &quot;:\nA Ray with ID &quot;,</a>
-<a name="1489"><span class="lineNum">    1489 </span><span class="lineNoCov">          0 :                      print_id(id),</span></a>
-<a name="1490"><span class="lineNum">    1490 </span>            :                      &quot; exists on processors &quot;,</a>
-<a name="1491"><span class="lineNum">    1491 </span>            :                      pid,</a>
-<a name="1492"><span class="lineNum">    1492 </span>            :                      &quot; and &quot;,</a>
-<a name="1493"><span class="lineNum">    1493 </span><span class="lineNoCov">          0 :                      _pid,</span></a>
-<a name="1494"><span class="lineNum">    1494 </span>            :                      &quot; &quot;,</a>
-<a name="1495"><span class="lineNum">    1495 </span>            :                      error_suffix,</a>
-<a name="1496"><span class="lineNum">    1496 </span>            :                      &quot;\n\nLocal offending Ray information:\n&quot;,</a>
-<a name="1497"><span class="lineNum">    1497 </span><span class="lineNoCov">          0 :                      ray-&gt;getInfo());</span></a>
-<a name="1498"><span class="lineNum">    1498 </span>            :         }</a>
-<a name="1499"><span class="lineNum">    1499 </span>            :       }</a>
-<a name="1500"><span class="lineNum">    1500 </span><span class="lineCov">      13696 :     };</span></a>
-<a name="1501"><span class="lineNum">    1501 </span><span class="lineCov">      22156 :     Parallel::push_parallel_vector_data(_communicator, send_ids, check_ids);</span></a>
-<a name="1502"><span class="lineNum">    1502 </span>            :   }</a>
-<a name="1503"><span class="lineNum">    1503 </span><span class="lineCov">      23560 : }</span></a>
-<a name="1504"><span class="lineNum">    1504 </span>            : </a>
-<a name="1505"><span class="lineNum">    1505 </span>            : void</a>
-<a name="1506"><span class="lineNum">    1506 </span><span class="lineCov">      22156 : RayTracingStudy::verifyUniqueRays(const std::vector&lt;std::shared_ptr&lt;Ray&gt;&gt;::const_iterator begin,</span></a>
-<a name="1507"><span class="lineNum">    1507 </span>            :                                   const std::vector&lt;std::shared_ptr&lt;Ray&gt;&gt;::const_iterator end,</a>
-<a name="1508"><span class="lineNum">    1508 </span>            :                                   const std::string &amp; error_suffix)</a>
-<a name="1509"><span class="lineNum">    1509 </span>            : {</a>
-<a name="1510"><span class="lineNum">    1510 </span><span class="lineCov">      22156 :   std::set&lt;const Ray *&gt; rays;</span></a>
-<a name="1511"><span class="lineNum">    1511 </span><span class="lineCov">   17550152 :   for (auto it = begin; it != end; ++it)</span></a>
-<a name="1512"><span class="lineNum">    1512 </span>            :   {</a>
-<a name="1513"><span class="lineNum">    1513 </span><span class="lineCov">   17527988 :     const std::shared_ptr&lt;Ray&gt; &amp; ray = *it;</span></a>
-<a name="1514"><span class="lineNum">    1514 </span>            : </a>
-<a name="1515"><span class="lineNum">    1515 </span><span class="lineCov">   17527988 :     if (!rays.insert(ray.get()).second) // false if not inserted into rays</span></a>
-<a name="1516"><span class="lineNum">    1516 </span><span class="lineNoCov">          0 :       mooseError(_error_prefix,</span></a>
-<a name="1517"><span class="lineNum">    1517 </span>            :                  &quot;:\nMultiple shared_ptrs were found that point to the same Ray &quot;,</a>
-<a name="1518"><span class="lineNum">    1518 </span>            :                  error_suffix,</a>
-<a name="1519"><span class="lineNum">    1519 </span>            :                  &quot;\n\nOffending Ray:\n&quot;,</a>
-<a name="1520"><span class="lineNum">    1520 </span><span class="lineNoCov">          0 :                  ray-&gt;getInfo());</span></a>
-<a name="1521"><span class="lineNum">    1521 </span>            :   }</a>
-<a name="1522"><span class="lineNum">    1522 </span><span class="lineCov">      22156 : }</span></a>
-<a name="1523"><span class="lineNum">    1523 </span>            : </a>
-<a name="1524"><span class="lineNum">    1524 </span>            : void</a>
-<a name="1525"><span class="lineNum">    1525 </span><span class="lineCov">   17527448 : RayTracingStudy::moveRayToBuffer(std::shared_ptr&lt;Ray&gt; &amp; ray)</span></a>
-<a name="1526"><span class="lineNum">    1526 </span>            : {</a>
-<a name="1527"><span class="lineNum">    1527 </span><span class="lineCov">   17527448 :   mooseAssert(currentlyGenerating(), &quot;Can only use while generating&quot;);</span></a>
-<a name="1528"><span class="lineNum">    1528 </span><span class="lineCov">   17527448 :   mooseAssert(ray, &quot;Null ray&quot;);</span></a>
-<a name="1529"><span class="lineNum">    1529 </span><span class="lineCov">   17527448 :   mooseAssert(ray-&gt;shouldContinue(), &quot;Ray is not continuing&quot;);</span></a>
-<a name="1530"><span class="lineNum">    1530 </span>            : </a>
-<a name="1531"><span class="lineNum">    1531 </span><span class="lineCov">   17527448 :   _parallel_ray_study-&gt;moveWorkToBuffer(ray, /* tid = */ 0);</span></a>
-<a name="1532"><span class="lineNum">    1532 </span><span class="lineCov">   17527448 : }</span></a>
-<a name="1533"><span class="lineNum">    1533 </span>            : </a>
-<a name="1534"><span class="lineNum">    1534 </span>            : void</a>
-<a name="1535"><span class="lineNum">    1535 </span><span class="lineCov">         78 : RayTracingStudy::moveRaysToBuffer(std::vector&lt;std::shared_ptr&lt;Ray&gt;&gt; &amp; rays)</span></a>
-<a name="1536"><span class="lineNum">    1536 </span>            : {</a>
-<a name="1537"><span class="lineNum">    1537 </span><span class="lineCov">         78 :   mooseAssert(currentlyGenerating(), &quot;Can only use while generating&quot;);</span></a>
-<a name="1538"><span class="lineNum">    1538 </span>            : #ifndef NDEBUG</a>
-<a name="1539"><span class="lineNum">    1539 </span><span class="lineCov">        618 :   for (const std::shared_ptr&lt;Ray&gt; &amp; ray : rays)</span></a>
-<a name="1540"><span class="lineNum">    1540 </span>            :   {</a>
-<a name="1541"><span class="lineNum">    1541 </span><span class="lineCov">        540 :     mooseAssert(ray, &quot;Null ray&quot;);</span></a>
-<a name="1542"><span class="lineNum">    1542 </span><span class="lineCov">        540 :     mooseAssert(ray-&gt;shouldContinue(), &quot;Ray is not continuing&quot;);</span></a>
-<a name="1543"><span class="lineNum">    1543 </span>            :   }</a>
-<a name="1544"><span class="lineNum">    1544 </span>            : #endif</a>
-<a name="1545"><span class="lineNum">    1545 </span>            : </a>
-<a name="1546"><span class="lineNum">    1546 </span><span class="lineCov">         78 :   _parallel_ray_study-&gt;moveWorkToBuffer(rays, /* tid = */ 0);</span></a>
-<a name="1547"><span class="lineNum">    1547 </span><span class="lineCov">         78 : }</span></a>
-<a name="1548"><span class="lineNum">    1548 </span>            : </a>
-<a name="1549"><span class="lineNum">    1549 </span>            : void</a>
-<a name="1550"><span class="lineNum">    1550 </span><span class="lineCov">     247320 : RayTracingStudy::moveRayToBufferDuringTrace(std::shared_ptr&lt;Ray&gt; &amp; ray,</span></a>
-<a name="1551"><span class="lineNum">    1551 </span>            :                                             const THREAD_ID tid,</a>
-<a name="1552"><span class="lineNum">    1552 </span>            :                                             const AcquireMoveDuringTraceKey &amp;)</a>
-<a name="1553"><span class="lineNum">    1553 </span>            : {</a>
-<a name="1554"><span class="lineNum">    1554 </span><span class="lineCov">     247320 :   mooseAssert(ray, &quot;Null ray&quot;);</span></a>
-<a name="1555"><span class="lineNum">    1555 </span><span class="lineCov">     247320 :   mooseAssert(currentlyPropagating(), &quot;Can only use while tracing&quot;);</span></a>
-<a name="1556"><span class="lineNum">    1556 </span>            : </a>
-<a name="1557"><span class="lineNum">    1557 </span><span class="lineCov">     247320 :   _parallel_ray_study-&gt;moveWorkToBuffer(ray, tid);</span></a>
-<a name="1558"><span class="lineNum">    1558 </span><span class="lineCov">     247320 : }</span></a>
+<a name="1433"><span class="lineNum">    1433 </span>            :   // Check our local Rays first</a>
+<a name="1434"><span class="lineNum">    1434 </span><span class="lineCov">      23560 :   std::unordered_map&lt;RayID, const Ray *&gt; my_id_map;</span></a>
+<a name="1435"><span class="lineNum">    1435 </span><span class="lineCov">   35353620 :   for (auto it = begin; it != end; ++it)</span></a>
+<a name="1436"><span class="lineNum">    1436 </span>            :   {</a>
+<a name="1437"><span class="lineNum">    1437 </span><span class="lineCov">   35330060 :     const std::shared_ptr&lt;Ray&gt; &amp; ray = *it;</span></a>
+<a name="1438"><span class="lineNum">    1438 </span><span class="lineCov">   35330060 :     mooseAssert(ray, &quot;Null ray&quot;);</span></a>
+<a name="1439"><span class="lineNum">    1439 </span>            : </a>
+<a name="1440"><span class="lineNum">    1440 </span><span class="lineCov">   35330060 :     const auto emplace = my_id_map.emplace(ray-&gt;id(), ray.get());</span></a>
+<a name="1441"><span class="lineNum">    1441 </span><span class="lineCov">   35330060 :     const bool found = !emplace.second;</span></a>
+<a name="1442"><span class="lineNum">    1442 </span>            : </a>
+<a name="1443"><span class="lineNum">    1443 </span><span class="lineCov">   35330060 :     if (found)</span></a>
+<a name="1444"><span class="lineNum">    1444 </span>            :     {</a>
+<a name="1445"><span class="lineNum">    1445 </span><span class="lineNoCov">          0 :       const Ray * other_ray = emplace.first-&gt;second;</span></a>
+<a name="1446"><span class="lineNum">    1446 </span><span class="lineNoCov">          0 :       mooseError(_error_prefix,</span></a>
+<a name="1447"><span class="lineNum">    1447 </span>            :                  &quot;:\nMultiple Rays exist with ID &quot;,</a>
+<a name="1448"><span class="lineNum">    1448 </span><span class="lineNoCov">          0 :                  ray-&gt;id(),</span></a>
+<a name="1449"><span class="lineNum">    1449 </span>            :                  &quot; on processor &quot;,</a>
+<a name="1450"><span class="lineNum">    1450 </span><span class="lineNoCov">          0 :                  _pid,</span></a>
+<a name="1451"><span class="lineNum">    1451 </span>            :                  &quot; &quot;,</a>
+<a name="1452"><span class="lineNum">    1452 </span>            :                  error_suffix,</a>
+<a name="1453"><span class="lineNum">    1453 </span>            :                  &quot;\n\nOffending Ray information:\n\n&quot;,</a>
+<a name="1454"><span class="lineNum">    1454 </span><span class="lineNoCov">          0 :                  ray-&gt;getInfo(),</span></a>
+<a name="1455"><span class="lineNum">    1455 </span>            :                  &quot;\n&quot;,</a>
+<a name="1456"><span class="lineNum">    1456 </span><span class="lineNoCov">          0 :                  other_ray-&gt;getInfo());</span></a>
+<a name="1457"><span class="lineNum">    1457 </span>            :     }</a>
+<a name="1458"><span class="lineNum">    1458 </span>            :   }</a>
+<a name="1459"><span class="lineNum">    1459 </span>            : </a>
+<a name="1460"><span class="lineNum">    1460 </span><span class="lineCov">      23560 :   if (global)</span></a>
+<a name="1461"><span class="lineNum">    1461 </span>            :   {</a>
+<a name="1462"><span class="lineNum">    1462 </span>            :     // Package our IDs to send to all processors</a>
+<a name="1463"><span class="lineNum">    1463 </span><span class="lineCov">      44312 :     std::vector&lt;RayID&gt; my_ids;</span></a>
+<a name="1464"><span class="lineNum">    1464 </span><span class="lineCov">      22156 :     my_ids.reserve(my_id_map.size());</span></a>
+<a name="1465"><span class="lineNum">    1465 </span><span class="lineCov">   35325460 :     for (const auto &amp; id_ray_pair : my_id_map)</span></a>
+<a name="1466"><span class="lineNum">    1466 </span><span class="lineCov">   35303300 :       my_ids.push_back(id_ray_pair.first);</span></a>
+<a name="1467"><span class="lineNum">    1467 </span><span class="lineCov">      44312 :     std::map&lt;processor_id_type, std::vector&lt;RayID&gt;&gt; send_ids;</span></a>
+<a name="1468"><span class="lineNum">    1468 </span><span class="lineCov">      58008 :     for (processor_id_type pid = 0; pid &lt; n_processors(); ++pid)</span></a>
+<a name="1469"><span class="lineNum">    1469 </span><span class="lineCov">      35852 :       if (pid != _pid)</span></a>
+<a name="1470"><span class="lineNum">    1470 </span><span class="lineCov">      35852 :         send_ids.emplace(pid, my_ids);</span></a>
+<a name="1471"><span class="lineNum">    1471 </span>            : </a>
+<a name="1472"><span class="lineNum">    1472 </span>            :     // Verify other processor's Rays against ours</a>
+<a name="1473"><span class="lineNum">    1473 </span><span class="lineCov">      35852 :     const auto check_ids = [this, &amp;my_id_map, &amp;error_suffix](processor_id_type pid,</span></a>
+<a name="1474"><span class="lineNum">    1474 </span><span class="lineCov">   15698080 :                                                              const std::vector&lt;RayID&gt; &amp; ids) {</span></a>
+<a name="1475"><span class="lineNum">    1475 </span><span class="lineCov">   15711760 :       for (const RayID id : ids)</span></a>
+<a name="1476"><span class="lineNum">    1476 </span>            :       {</a>
+<a name="1477"><span class="lineNum">    1477 </span><span class="lineCov">   15698080 :         const auto find = my_id_map.find(id);</span></a>
+<a name="1478"><span class="lineNum">    1478 </span><span class="lineCov">   15698080 :         if (find != my_id_map.end())</span></a>
+<a name="1479"><span class="lineNum">    1479 </span>            :         {</a>
+<a name="1480"><span class="lineNum">    1480 </span><span class="lineNoCov">          0 :           const Ray * ray = find-&gt;second;</span></a>
+<a name="1481"><span class="lineNum">    1481 </span><span class="lineNoCov">          0 :           mooseError(_error_prefix,</span></a>
+<a name="1482"><span class="lineNum">    1482 </span>            :                      &quot;:\nA Ray with ID &quot;,</a>
+<a name="1483"><span class="lineNum">    1483 </span>            :                      id,</a>
+<a name="1484"><span class="lineNum">    1484 </span>            :                      &quot; exists on processors &quot;,</a>
+<a name="1485"><span class="lineNum">    1485 </span>            :                      pid,</a>
+<a name="1486"><span class="lineNum">    1486 </span>            :                      &quot; and &quot;,</a>
+<a name="1487"><span class="lineNum">    1487 </span><span class="lineNoCov">          0 :                      _pid,</span></a>
+<a name="1488"><span class="lineNum">    1488 </span>            :                      &quot; &quot;,</a>
+<a name="1489"><span class="lineNum">    1489 </span>            :                      error_suffix,</a>
+<a name="1490"><span class="lineNum">    1490 </span>            :                      &quot;\n\nLocal offending Ray information:\n&quot;,</a>
+<a name="1491"><span class="lineNum">    1491 </span><span class="lineNoCov">          0 :                      ray-&gt;getInfo());</span></a>
+<a name="1492"><span class="lineNum">    1492 </span>            :         }</a>
+<a name="1493"><span class="lineNum">    1493 </span>            :       }</a>
+<a name="1494"><span class="lineNum">    1494 </span><span class="lineCov">      13696 :     };</span></a>
+<a name="1495"><span class="lineNum">    1495 </span><span class="lineCov">      22156 :     Parallel::push_parallel_vector_data(_communicator, send_ids, check_ids);</span></a>
+<a name="1496"><span class="lineNum">    1496 </span>            :   }</a>
+<a name="1497"><span class="lineNum">    1497 </span><span class="lineCov">      23560 : }</span></a>
+<a name="1498"><span class="lineNum">    1498 </span>            : </a>
+<a name="1499"><span class="lineNum">    1499 </span>            : void</a>
+<a name="1500"><span class="lineNum">    1500 </span><span class="lineCov">      22156 : RayTracingStudy::verifyUniqueRays(const std::vector&lt;std::shared_ptr&lt;Ray&gt;&gt;::const_iterator begin,</span></a>
+<a name="1501"><span class="lineNum">    1501 </span>            :                                   const std::vector&lt;std::shared_ptr&lt;Ray&gt;&gt;::const_iterator end,</a>
+<a name="1502"><span class="lineNum">    1502 </span>            :                                   const std::string &amp; error_suffix)</a>
+<a name="1503"><span class="lineNum">    1503 </span>            : {</a>
+<a name="1504"><span class="lineNum">    1504 </span><span class="lineCov">      22156 :   std::set&lt;const Ray *&gt; rays;</span></a>
+<a name="1505"><span class="lineNum">    1505 </span><span class="lineCov">   17550152 :   for (auto it = begin; it != end; ++it)</span></a>
+<a name="1506"><span class="lineNum">    1506 </span>            :   {</a>
+<a name="1507"><span class="lineNum">    1507 </span><span class="lineCov">   17527988 :     const std::shared_ptr&lt;Ray&gt; &amp; ray = *it;</span></a>
+<a name="1508"><span class="lineNum">    1508 </span>            : </a>
+<a name="1509"><span class="lineNum">    1509 </span><span class="lineCov">   17527988 :     if (!rays.insert(ray.get()).second) // false if not inserted into rays</span></a>
+<a name="1510"><span class="lineNum">    1510 </span><span class="lineNoCov">          0 :       mooseError(_error_prefix,</span></a>
+<a name="1511"><span class="lineNum">    1511 </span>            :                  &quot;:\nMultiple shared_ptrs were found that point to the same Ray &quot;,</a>
+<a name="1512"><span class="lineNum">    1512 </span>            :                  error_suffix,</a>
+<a name="1513"><span class="lineNum">    1513 </span>            :                  &quot;\n\nOffending Ray:\n&quot;,</a>
+<a name="1514"><span class="lineNum">    1514 </span><span class="lineNoCov">          0 :                  ray-&gt;getInfo());</span></a>
+<a name="1515"><span class="lineNum">    1515 </span>            :   }</a>
+<a name="1516"><span class="lineNum">    1516 </span><span class="lineCov">      22156 : }</span></a>
+<a name="1517"><span class="lineNum">    1517 </span>            : </a>
+<a name="1518"><span class="lineNum">    1518 </span>            : void</a>
+<a name="1519"><span class="lineNum">    1519 </span><span class="lineCov">   17527448 : RayTracingStudy::moveRayToBuffer(std::shared_ptr&lt;Ray&gt; &amp; ray)</span></a>
+<a name="1520"><span class="lineNum">    1520 </span>            : {</a>
+<a name="1521"><span class="lineNum">    1521 </span><span class="lineCov">   17527448 :   mooseAssert(currentlyGenerating(), &quot;Can only use while generating&quot;);</span></a>
+<a name="1522"><span class="lineNum">    1522 </span><span class="lineCov">   17527448 :   mooseAssert(ray, &quot;Null ray&quot;);</span></a>
+<a name="1523"><span class="lineNum">    1523 </span><span class="lineCov">   17527448 :   mooseAssert(ray-&gt;shouldContinue(), &quot;Ray is not continuing&quot;);</span></a>
+<a name="1524"><span class="lineNum">    1524 </span>            : </a>
+<a name="1525"><span class="lineNum">    1525 </span><span class="lineCov">   17527448 :   _parallel_ray_study-&gt;moveWorkToBuffer(ray, /* tid = */ 0);</span></a>
+<a name="1526"><span class="lineNum">    1526 </span><span class="lineCov">   17527448 : }</span></a>
+<a name="1527"><span class="lineNum">    1527 </span>            : </a>
+<a name="1528"><span class="lineNum">    1528 </span>            : void</a>
+<a name="1529"><span class="lineNum">    1529 </span><span class="lineCov">         78 : RayTracingStudy::moveRaysToBuffer(std::vector&lt;std::shared_ptr&lt;Ray&gt;&gt; &amp; rays)</span></a>
+<a name="1530"><span class="lineNum">    1530 </span>            : {</a>
+<a name="1531"><span class="lineNum">    1531 </span><span class="lineCov">         78 :   mooseAssert(currentlyGenerating(), &quot;Can only use while generating&quot;);</span></a>
+<a name="1532"><span class="lineNum">    1532 </span>            : #ifndef NDEBUG</a>
+<a name="1533"><span class="lineNum">    1533 </span><span class="lineCov">        618 :   for (const std::shared_ptr&lt;Ray&gt; &amp; ray : rays)</span></a>
+<a name="1534"><span class="lineNum">    1534 </span>            :   {</a>
+<a name="1535"><span class="lineNum">    1535 </span><span class="lineCov">        540 :     mooseAssert(ray, &quot;Null ray&quot;);</span></a>
+<a name="1536"><span class="lineNum">    1536 </span><span class="lineCov">        540 :     mooseAssert(ray-&gt;shouldContinue(), &quot;Ray is not continuing&quot;);</span></a>
+<a name="1537"><span class="lineNum">    1537 </span>            :   }</a>
+<a name="1538"><span class="lineNum">    1538 </span>            : #endif</a>
+<a name="1539"><span class="lineNum">    1539 </span>            : </a>
+<a name="1540"><span class="lineNum">    1540 </span><span class="lineCov">         78 :   _parallel_ray_study-&gt;moveWorkToBuffer(rays, /* tid = */ 0);</span></a>
+<a name="1541"><span class="lineNum">    1541 </span><span class="lineCov">         78 : }</span></a>
+<a name="1542"><span class="lineNum">    1542 </span>            : </a>
+<a name="1543"><span class="lineNum">    1543 </span>            : void</a>
+<a name="1544"><span class="lineNum">    1544 </span><span class="lineCov">     247320 : RayTracingStudy::moveRayToBufferDuringTrace(std::shared_ptr&lt;Ray&gt; &amp; ray,</span></a>
+<a name="1545"><span class="lineNum">    1545 </span>            :                                             const THREAD_ID tid,</a>
+<a name="1546"><span class="lineNum">    1546 </span>            :                                             const AcquireMoveDuringTraceKey &amp;)</a>
+<a name="1547"><span class="lineNum">    1547 </span>            : {</a>
+<a name="1548"><span class="lineNum">    1548 </span><span class="lineCov">     247320 :   mooseAssert(ray, &quot;Null ray&quot;);</span></a>
+<a name="1549"><span class="lineNum">    1549 </span><span class="lineCov">     247320 :   mooseAssert(currentlyPropagating(), &quot;Can only use while tracing&quot;);</span></a>
+<a name="1550"><span class="lineNum">    1550 </span>            : </a>
+<a name="1551"><span class="lineNum">    1551 </span><span class="lineCov">     247320 :   _parallel_ray_study-&gt;moveWorkToBuffer(ray, tid);</span></a>
+<a name="1552"><span class="lineNum">    1552 </span><span class="lineCov">     247320 : }</span></a>
+<a name="1553"><span class="lineNum">    1553 </span>            : </a>
+<a name="1554"><span class="lineNum">    1554 </span>            : void</a>
+<a name="1555"><span class="lineNum">    1555 </span><span class="lineCov">      10961 : RayTracingStudy::reserveRayBuffer(const std::size_t size)</span></a>
+<a name="1556"><span class="lineNum">    1556 </span>            : {</a>
+<a name="1557"><span class="lineNum">    1557 </span><span class="lineCov">      10961 :   if (!currentlyGenerating())</span></a>
+<a name="1558"><span class="lineNum">    1558 </span><span class="lineNoCov">          0 :     mooseError(_error_prefix, &quot;: Can only reserve in Ray buffer during generateRays()&quot;);</span></a>
 <a name="1559"><span class="lineNum">    1559 </span>            : </a>
-<a name="1560"><span class="lineNum">    1560 </span>            : void</a>
-<a name="1561"><span class="lineNum">    1561 </span><span class="lineCov">      10961 : RayTracingStudy::reserveRayBuffer(const std::size_t size)</span></a>
-<a name="1562"><span class="lineNum">    1562 </span>            : {</a>
-<a name="1563"><span class="lineNum">    1563 </span><span class="lineCov">      10961 :   if (!currentlyGenerating())</span></a>
-<a name="1564"><span class="lineNum">    1564 </span><span class="lineNoCov">          0 :     mooseError(_error_prefix, &quot;: Can only reserve in Ray buffer during generateRays()&quot;);</span></a>
-<a name="1565"><span class="lineNum">    1565 </span>            : </a>
-<a name="1566"><span class="lineNum">    1566 </span><span class="lineCov">      10961 :   _parallel_ray_study-&gt;reserveBuffer(size);</span></a>
-<a name="1567"><span class="lineNum">    1567 </span><span class="lineCov">      10961 : }</span></a>
+<a name="1560"><span class="lineNum">    1560 </span><span class="lineCov">      10961 :   _parallel_ray_study-&gt;reserveBuffer(size);</span></a>
+<a name="1561"><span class="lineNum">    1561 </span><span class="lineCov">      10961 : }</span></a>
+<a name="1562"><span class="lineNum">    1562 </span>            : </a>
+<a name="1563"><span class="lineNum">    1563 </span>            : const Point &amp;</a>
+<a name="1564"><span class="lineNum">    1564 </span><span class="lineCov">  388169700 : RayTracingStudy::getSideNormal(const Elem * elem, unsigned short side, const THREAD_ID tid)</span></a>
+<a name="1565"><span class="lineNum">    1565 </span>            : {</a>
+<a name="1566"><span class="lineNum">    1566 </span><span class="lineCov">  388169700 :   std::unordered_map&lt;std::pair&lt;const Elem *, unsigned short&gt;, Point&gt; &amp; cache =</span></a>
+<a name="1567"><span class="lineNum">    1567 </span><span class="lineCov">  388169700 :       _threaded_cached_normals[tid];</span></a>
 <a name="1568"><span class="lineNum">    1568 </span>            : </a>
-<a name="1569"><span class="lineNum">    1569 </span>            : const Point &amp;</a>
-<a name="1570"><span class="lineNum">    1570 </span><span class="lineCov">  388170200 : RayTracingStudy::getSideNormal(const Elem * elem, unsigned short side, const THREAD_ID tid)</span></a>
-<a name="1571"><span class="lineNum">    1571 </span>            : {</a>
-<a name="1572"><span class="lineNum">    1572 </span><span class="lineCov">  388170200 :   std::unordered_map&lt;std::pair&lt;const Elem *, unsigned short&gt;, Point&gt; &amp; cache =</span></a>
-<a name="1573"><span class="lineNum">    1573 </span><span class="lineCov">  388170200 :       _threaded_cached_normals[tid];</span></a>
-<a name="1574"><span class="lineNum">    1574 </span>            : </a>
-<a name="1575"><span class="lineNum">    1575 </span>            :   // See if we've already cached this side normal</a>
-<a name="1576"><span class="lineNum">    1576 </span><span class="lineCov">  388170200 :   const auto elem_side_pair = std::make_pair(elem, side);</span></a>
-<a name="1577"><span class="lineNum">    1577 </span><span class="lineCov">  388170200 :   const auto search = cache.find(elem_side_pair);</span></a>
-<a name="1578"><span class="lineNum">    1578 </span>            : </a>
-<a name="1579"><span class="lineNum">    1579 </span>            :   // Haven't cached this side normal: compute it and then cache it</a>
-<a name="1580"><span class="lineNum">    1580 </span><span class="lineCov">  388170200 :   if (search == cache.end())</span></a>
-<a name="1581"><span class="lineNum">    1581 </span>            :   {</a>
-<a name="1582"><span class="lineNum">    1582 </span><span class="lineCov">    5308580 :     _threaded_fe_face[tid]-&gt;reinit(elem, side);</span></a>
-<a name="1583"><span class="lineNum">    1583 </span><span class="lineCov">    5308580 :     const auto &amp; normal = _threaded_fe_face[tid]-&gt;get_normals()[0];</span></a>
-<a name="1584"><span class="lineNum">    1584 </span><span class="lineCov">    5308580 :     cache.emplace(elem_side_pair, normal);</span></a>
-<a name="1585"><span class="lineNum">    1585 </span><span class="lineCov">    5308580 :     return normal;</span></a>
-<a name="1586"><span class="lineNum">    1586 </span>            :   }</a>
-<a name="1587"><span class="lineNum">    1587 </span>            : </a>
-<a name="1588"><span class="lineNum">    1588 </span>            :   // Have cached this side normal: simply return it</a>
-<a name="1589"><span class="lineNum">    1589 </span><span class="lineCov">  382861700 :   return search-&gt;second;</span></a>
-<a name="1590"><span class="lineNum">    1590 </span>            : }</a>
+<a name="1569"><span class="lineNum">    1569 </span>            :   // See if we've already cached this side normal</a>
+<a name="1570"><span class="lineNum">    1570 </span><span class="lineCov">  388169700 :   const auto elem_side_pair = std::make_pair(elem, side);</span></a>
+<a name="1571"><span class="lineNum">    1571 </span><span class="lineCov">  388169700 :   const auto search = cache.find(elem_side_pair);</span></a>
+<a name="1572"><span class="lineNum">    1572 </span>            : </a>
+<a name="1573"><span class="lineNum">    1573 </span>            :   // Haven't cached this side normal: compute it and then cache it</a>
+<a name="1574"><span class="lineNum">    1574 </span><span class="lineCov">  388169700 :   if (search == cache.end())</span></a>
+<a name="1575"><span class="lineNum">    1575 </span>            :   {</a>
+<a name="1576"><span class="lineNum">    1576 </span><span class="lineCov">    5306430 :     _threaded_fe_face[tid]-&gt;reinit(elem, side);</span></a>
+<a name="1577"><span class="lineNum">    1577 </span><span class="lineCov">    5306430 :     const auto &amp; normal = _threaded_fe_face[tid]-&gt;get_normals()[0];</span></a>
+<a name="1578"><span class="lineNum">    1578 </span><span class="lineCov">    5306430 :     cache.emplace(elem_side_pair, normal);</span></a>
+<a name="1579"><span class="lineNum">    1579 </span><span class="lineCov">    5306430 :     return normal;</span></a>
+<a name="1580"><span class="lineNum">    1580 </span>            :   }</a>
+<a name="1581"><span class="lineNum">    1581 </span>            : </a>
+<a name="1582"><span class="lineNum">    1582 </span>            :   // Have cached this side normal: simply return it</a>
+<a name="1583"><span class="lineNum">    1583 </span><span class="lineCov">  382863300 :   return search-&gt;second;</span></a>
+<a name="1584"><span class="lineNum">    1584 </span>            : }</a>
+<a name="1585"><span class="lineNum">    1585 </span>            : </a>
+<a name="1586"><span class="lineNum">    1586 </span>            : bool</a>
+<a name="1587"><span class="lineNum">    1587 </span><span class="lineCov">       7410 : RayTracingStudy::sameLevelActiveElems() const</span></a>
+<a name="1588"><span class="lineNum">    1588 </span>            : {</a>
+<a name="1589"><span class="lineNum">    1589 </span><span class="lineCov">       7410 :   unsigned int min_level = std::numeric_limits&lt;unsigned int&gt;::max();</span></a>
+<a name="1590"><span class="lineNum">    1590 </span><span class="lineCov">       7410 :   unsigned int max_level = std::numeric_limits&lt;unsigned int&gt;::min();</span></a>
 <a name="1591"><span class="lineNum">    1591 </span>            : </a>
-<a name="1592"><span class="lineNum">    1592 </span>            : bool</a>
-<a name="1593"><span class="lineNum">    1593 </span><span class="lineCov">       7410 : RayTracingStudy::sameLevelActiveElems() const</span></a>
-<a name="1594"><span class="lineNum">    1594 </span>            : {</a>
-<a name="1595"><span class="lineNum">    1595 </span><span class="lineCov">       7410 :   unsigned int min_level = std::numeric_limits&lt;unsigned int&gt;::max();</span></a>
-<a name="1596"><span class="lineNum">    1596 </span><span class="lineCov">       7410 :   unsigned int max_level = std::numeric_limits&lt;unsigned int&gt;::min();</span></a>
-<a name="1597"><span class="lineNum">    1597 </span>            : </a>
-<a name="1598"><span class="lineNum">    1598 </span><span class="lineCov">     969015 :   for (const auto &amp; elem : *_mesh.getActiveLocalElementRange())</span></a>
-<a name="1599"><span class="lineNum">    1599 </span>            :   {</a>
-<a name="1600"><span class="lineNum">    1600 </span><span class="lineCov">     961605 :     const auto level = elem-&gt;level();</span></a>
-<a name="1601"><span class="lineNum">    1601 </span><span class="lineCov">     961605 :     min_level = std::min(level, min_level);</span></a>
-<a name="1602"><span class="lineNum">    1602 </span><span class="lineCov">     961733 :     max_level = std::max(level, max_level);</span></a>
-<a name="1603"><span class="lineNum">    1603 </span>            :   }</a>
+<a name="1592"><span class="lineNum">    1592 </span><span class="lineCov">     969015 :   for (const auto &amp; elem : *_mesh.getActiveLocalElementRange())</span></a>
+<a name="1593"><span class="lineNum">    1593 </span>            :   {</a>
+<a name="1594"><span class="lineNum">    1594 </span><span class="lineCov">     961605 :     const auto level = elem-&gt;level();</span></a>
+<a name="1595"><span class="lineNum">    1595 </span><span class="lineCov">     961605 :     min_level = std::min(level, min_level);</span></a>
+<a name="1596"><span class="lineNum">    1596 </span><span class="lineCov">     961733 :     max_level = std::max(level, max_level);</span></a>
+<a name="1597"><span class="lineNum">    1597 </span>            :   }</a>
+<a name="1598"><span class="lineNum">    1598 </span>            : </a>
+<a name="1599"><span class="lineNum">    1599 </span><span class="lineCov">       7410 :   _communicator.min(min_level);</span></a>
+<a name="1600"><span class="lineNum">    1600 </span><span class="lineCov">       7410 :   _communicator.max(max_level);</span></a>
+<a name="1601"><span class="lineNum">    1601 </span>            : </a>
+<a name="1602"><span class="lineNum">    1602 </span><span class="lineCov">       7410 :   return min_level == max_level;</span></a>
+<a name="1603"><span class="lineNum">    1603 </span>            : }</a>
 <a name="1604"><span class="lineNum">    1604 </span>            : </a>
-<a name="1605"><span class="lineNum">    1605 </span><span class="lineCov">       7410 :   _communicator.min(min_level);</span></a>
-<a name="1606"><span class="lineNum">    1606 </span><span class="lineCov">       7410 :   _communicator.max(max_level);</span></a>
-<a name="1607"><span class="lineNum">    1607 </span>            : </a>
-<a name="1608"><span class="lineNum">    1608 </span><span class="lineCov">       7410 :   return min_level == max_level;</span></a>
-<a name="1609"><span class="lineNum">    1609 </span>            : }</a>
-<a name="1610"><span class="lineNum">    1610 </span>            : </a>
-<a name="1611"><span class="lineNum">    1611 </span>            : Real</a>
-<a name="1612"><span class="lineNum">    1612 </span><span class="lineCov">   22260051 : RayTracingStudy::subdomainHmax(const SubdomainID subdomain_id) const</span></a>
-<a name="1613"><span class="lineNum">    1613 </span>            : {</a>
-<a name="1614"><span class="lineNum">    1614 </span><span class="lineCov">   22260051 :   const auto find = _subdomain_hmax.find(subdomain_id);</span></a>
-<a name="1615"><span class="lineNum">    1615 </span><span class="lineCov">   22260051 :   if (find == _subdomain_hmax.end())</span></a>
-<a name="1616"><span class="lineNum">    1616 </span><span class="lineNoCov">          0 :     mooseError(_error_prefix, &quot;: Subdomain &quot;, subdomain_id, &quot; not found in subdomain hmax map&quot;);</span></a>
-<a name="1617"><span class="lineNum">    1617 </span><span class="lineCov">   22260051 :   return find-&gt;second;</span></a>
-<a name="1618"><span class="lineNum">    1618 </span>            : }</a>
-<a name="1619"><span class="lineNum">    1619 </span>            : </a>
-<a name="1620"><span class="lineNum">    1620 </span>            : bool</a>
-<a name="1621"><span class="lineNum">    1621 </span><span class="lineCov">      16964 : RayTracingStudy::isRectangularDomain() const</span></a>
-<a name="1622"><span class="lineNum">    1622 </span>            : {</a>
-<a name="1623"><span class="lineNum">    1623 </span><span class="lineCov">      16964 :   Real bbox_volume = 1;</span></a>
-<a name="1624"><span class="lineNum">    1624 </span><span class="lineCov">      56905 :   for (unsigned int d = 0; d &lt; _mesh.dimension(); ++d)</span></a>
-<a name="1625"><span class="lineNum">    1625 </span><span class="lineCov">      39941 :     bbox_volume *= std::abs(_b_box.max()(d) - _b_box.min()(d));</span></a>
-<a name="1626"><span class="lineNum">    1626 </span>            : </a>
-<a name="1627"><span class="lineNum">    1627 </span><span class="lineCov">      16964 :   return MooseUtils::absoluteFuzzyEqual(bbox_volume, totalVolume(), TOLERANCE);</span></a>
-<a name="1628"><span class="lineNum">    1628 </span>            : }</a>
-<a name="1629"><span class="lineNum">    1629 </span>            : </a>
-<a name="1630"><span class="lineNum">    1630 </span>            : void</a>
-<a name="1631"><span class="lineNum">    1631 </span><span class="lineCov">       6474 : RayTracingStudy::resetUniqueRayIDs()</span></a>
-<a name="1632"><span class="lineNum">    1632 </span>            : {</a>
-<a name="1633"><span class="lineNum">    1633 </span><span class="lineCov">      12948 :   libmesh_parallel_only(comm());</span></a>
-<a name="1634"><span class="lineNum">    1634 </span>            : </a>
-<a name="1635"><span class="lineNum">    1635 </span><span class="lineCov">       6474 :   Threads::spin_mutex::scoped_lock lock(_spin_mutex);</span></a>
-<a name="1636"><span class="lineNum">    1636 </span>            : </a>
-<a name="1637"><span class="lineNum">    1637 </span><span class="lineCov">       6474 :   if (currentlyGenerating() || currentlyPropagating())</span></a>
-<a name="1638"><span class="lineNum">    1638 </span><span class="lineNoCov">          0 :     mooseError(&quot;Cannot reset unique Ray IDs during Ray generation or propagation&quot;);</span></a>
-<a name="1639"><span class="lineNum">    1639 </span>            : </a>
-<a name="1640"><span class="lineNum">    1640 </span><span class="lineCov">      14110 :   for (THREAD_ID tid = 0; tid &lt; libMesh::n_threads(); ++tid)</span></a>
-<a name="1641"><span class="lineNum">    1641 </span><span class="lineCov">       7636 :     _threaded_next_ray_id[tid] = (RayID)_pid * (RayID)libMesh::n_threads() + (RayID)tid;</span></a>
-<a name="1642"><span class="lineNum">    1642 </span><span class="lineCov">       6474 : }</span></a>
+<a name="1605"><span class="lineNum">    1605 </span>            : Real</a>
+<a name="1606"><span class="lineNum">    1606 </span><span class="lineCov">   22260071 : RayTracingStudy::subdomainHmax(const SubdomainID subdomain_id) const</span></a>
+<a name="1607"><span class="lineNum">    1607 </span>            : {</a>
+<a name="1608"><span class="lineNum">    1608 </span><span class="lineCov">   22260071 :   const auto find = _subdomain_hmax.find(subdomain_id);</span></a>
+<a name="1609"><span class="lineNum">    1609 </span><span class="lineCov">   22260071 :   if (find == _subdomain_hmax.end())</span></a>
+<a name="1610"><span class="lineNum">    1610 </span><span class="lineNoCov">          0 :     mooseError(_error_prefix, &quot;: Subdomain &quot;, subdomain_id, &quot; not found in subdomain hmax map&quot;);</span></a>
+<a name="1611"><span class="lineNum">    1611 </span><span class="lineCov">   22260071 :   return find-&gt;second;</span></a>
+<a name="1612"><span class="lineNum">    1612 </span>            : }</a>
+<a name="1613"><span class="lineNum">    1613 </span>            : </a>
+<a name="1614"><span class="lineNum">    1614 </span>            : bool</a>
+<a name="1615"><span class="lineNum">    1615 </span><span class="lineCov">      16964 : RayTracingStudy::isRectangularDomain() const</span></a>
+<a name="1616"><span class="lineNum">    1616 </span>            : {</a>
+<a name="1617"><span class="lineNum">    1617 </span><span class="lineCov">      16964 :   Real bbox_volume = 1;</span></a>
+<a name="1618"><span class="lineNum">    1618 </span><span class="lineCov">      56905 :   for (unsigned int d = 0; d &lt; _mesh.dimension(); ++d)</span></a>
+<a name="1619"><span class="lineNum">    1619 </span><span class="lineCov">      39941 :     bbox_volume *= std::abs(_b_box.max()(d) - _b_box.min()(d));</span></a>
+<a name="1620"><span class="lineNum">    1620 </span>            : </a>
+<a name="1621"><span class="lineNum">    1621 </span><span class="lineCov">      16964 :   return MooseUtils::absoluteFuzzyEqual(bbox_volume, totalVolume(), TOLERANCE);</span></a>
+<a name="1622"><span class="lineNum">    1622 </span>            : }</a>
+<a name="1623"><span class="lineNum">    1623 </span>            : </a>
+<a name="1624"><span class="lineNum">    1624 </span>            : void</a>
+<a name="1625"><span class="lineNum">    1625 </span><span class="lineCov">       6474 : RayTracingStudy::resetUniqueRayIDs()</span></a>
+<a name="1626"><span class="lineNum">    1626 </span>            : {</a>
+<a name="1627"><span class="lineNum">    1627 </span><span class="lineCov">      12948 :   libmesh_parallel_only(comm());</span></a>
+<a name="1628"><span class="lineNum">    1628 </span>            : </a>
+<a name="1629"><span class="lineNum">    1629 </span><span class="lineCov">       6474 :   Threads::spin_mutex::scoped_lock lock(_spin_mutex);</span></a>
+<a name="1630"><span class="lineNum">    1630 </span>            : </a>
+<a name="1631"><span class="lineNum">    1631 </span><span class="lineCov">       6474 :   mooseAssert(!currentlyGenerating() &amp;&amp; !currentlyPropagating(),</span></a>
+<a name="1632"><span class="lineNum">    1632 </span>            :               &quot;Cannot be reset during generation or propagation&quot;);</a>
+<a name="1633"><span class="lineNum">    1633 </span>            : </a>
+<a name="1634"><span class="lineNum">    1634 </span><span class="lineCov">      14110 :   for (THREAD_ID tid = 0; tid &lt; libMesh::n_threads(); ++tid)</span></a>
+<a name="1635"><span class="lineNum">    1635 </span><span class="lineCov">       7636 :     _threaded_next_ray_id[tid] = (RayID)_pid * (RayID)libMesh::n_threads() + (RayID)tid;</span></a>
+<a name="1636"><span class="lineNum">    1636 </span><span class="lineCov">       6474 : }</span></a>
+<a name="1637"><span class="lineNum">    1637 </span>            : </a>
+<a name="1638"><span class="lineNum">    1638 </span>            : RayID</a>
+<a name="1639"><span class="lineNum">    1639 </span><span class="lineCov">   17291880 : RayTracingStudy::generateUniqueRayID(const THREAD_ID tid)</span></a>
+<a name="1640"><span class="lineNum">    1640 </span>            : {</a>
+<a name="1641"><span class="lineNum">    1641 </span>            :   // Get the current ID to return</a>
+<a name="1642"><span class="lineNum">    1642 </span><span class="lineCov">   17291880 :   const auto id = _threaded_next_ray_id[tid];</span></a>
 <a name="1643"><span class="lineNum">    1643 </span>            : </a>
-<a name="1644"><span class="lineNum">    1644 </span>            : RayID</a>
-<a name="1645"><span class="lineNum">    1645 </span><span class="lineCov">   17291921 : RayTracingStudy::generateUniqueRayID(const THREAD_ID tid)</span></a>
-<a name="1646"><span class="lineNum">    1646 </span>            : {</a>
-<a name="1647"><span class="lineNum">    1647 </span>            :   // Get the current ID to return</a>
-<a name="1648"><span class="lineNum">    1648 </span><span class="lineCov">   17291921 :   const auto id = _threaded_next_ray_id[tid];</span></a>
+<a name="1644"><span class="lineNum">    1644 </span>            :   // Advance so that the next call has the correct ID</a>
+<a name="1645"><span class="lineNum">    1645 </span><span class="lineCov">   17291880 :   _threaded_next_ray_id[tid] += (RayID)n_processors() * (RayID)libMesh::n_threads();</span></a>
+<a name="1646"><span class="lineNum">    1646 </span>            : </a>
+<a name="1647"><span class="lineNum">    1647 </span><span class="lineCov">   17291880 :   return id;</span></a>
+<a name="1648"><span class="lineNum">    1648 </span>            : }</a>
 <a name="1649"><span class="lineNum">    1649 </span>            : </a>
-<a name="1650"><span class="lineNum">    1650 </span>            :   // Advance so that the next call has the correct ID</a>
-<a name="1651"><span class="lineNum">    1651 </span><span class="lineCov">   17291921 :   _threaded_next_ray_id[tid] += (RayID)n_processors() * (RayID)libMesh::n_threads();</span></a>
-<a name="1652"><span class="lineNum">    1652 </span>            : </a>
-<a name="1653"><span class="lineNum">    1653 </span><span class="lineCov">   17291921 :   return id;</span></a>
-<a name="1654"><span class="lineNum">    1654 </span>            : }</a>
-<a name="1655"><span class="lineNum">    1655 </span>            : </a>
-<a name="1656"><span class="lineNum">    1656 </span>            : void</a>
-<a name="1657"><span class="lineNum">    1657 </span><span class="lineCov">       6474 : RayTracingStudy::resetReplicatedRayIDs()</span></a>
-<a name="1658"><span class="lineNum">    1658 </span>            : {</a>
-<a name="1659"><span class="lineNum">    1659 </span><span class="lineCov">      12948 :   libmesh_parallel_only(comm());</span></a>
-<a name="1660"><span class="lineNum">    1660 </span>            : </a>
-<a name="1661"><span class="lineNum">    1661 </span><span class="lineCov">       6474 :   Threads::spin_mutex::scoped_lock lock(_spin_mutex);</span></a>
+<a name="1650"><span class="lineNum">    1650 </span>            : void</a>
+<a name="1651"><span class="lineNum">    1651 </span><span class="lineCov">       6474 : RayTracingStudy::resetReplicatedRayIDs()</span></a>
+<a name="1652"><span class="lineNum">    1652 </span>            : {</a>
+<a name="1653"><span class="lineNum">    1653 </span><span class="lineCov">      12948 :   libmesh_parallel_only(comm());</span></a>
+<a name="1654"><span class="lineNum">    1654 </span>            : </a>
+<a name="1655"><span class="lineNum">    1655 </span><span class="lineCov">       6474 :   Threads::spin_mutex::scoped_lock lock(_spin_mutex);</span></a>
+<a name="1656"><span class="lineNum">    1656 </span>            : </a>
+<a name="1657"><span class="lineNum">    1657 </span><span class="lineCov">       6474 :   mooseAssert(!currentlyGenerating() &amp;&amp; !currentlyPropagating(),</span></a>
+<a name="1658"><span class="lineNum">    1658 </span>            :               &quot;Cannot be reset during generation or propagation&quot;);</a>
+<a name="1659"><span class="lineNum">    1659 </span>            : </a>
+<a name="1660"><span class="lineNum">    1660 </span><span class="lineCov">       6474 :   _replicated_next_ray_id = 0;</span></a>
+<a name="1661"><span class="lineNum">    1661 </span><span class="lineCov">       6474 : }</span></a>
 <a name="1662"><span class="lineNum">    1662 </span>            : </a>
-<a name="1663"><span class="lineNum">    1663 </span><span class="lineCov">       6474 :   if (currentlyGenerating() || currentlyPropagating())</span></a>
-<a name="1664"><span class="lineNum">    1664 </span><span class="lineNoCov">          0 :     mooseError(&quot;Cannot reset replicated Ray IDs during Ray generation or propagation&quot;);</span></a>
-<a name="1665"><span class="lineNum">    1665 </span>            : </a>
-<a name="1666"><span class="lineNum">    1666 </span><span class="lineCov">       6474 :   _replicated_next_ray_id = 0;</span></a>
-<a name="1667"><span class="lineNum">    1667 </span><span class="lineCov">       6474 : }</span></a>
+<a name="1663"><span class="lineNum">    1663 </span>            : RayID</a>
+<a name="1664"><span class="lineNum">    1664 </span><span class="lineCov">      21216 : RayTracingStudy::generateReplicatedRayID()</span></a>
+<a name="1665"><span class="lineNum">    1665 </span>            : {</a>
+<a name="1666"><span class="lineNum">    1666 </span><span class="lineCov">      21216 :   return _replicated_next_ray_id++;</span></a>
+<a name="1667"><span class="lineNum">    1667 </span>            : }</a>
 <a name="1668"><span class="lineNum">    1668 </span>            : </a>
-<a name="1669"><span class="lineNum">    1669 </span>            : RayID</a>
-<a name="1670"><span class="lineNum">    1670 </span><span class="lineCov">      21216 : RayTracingStudy::generateReplicatedRayID()</span></a>
-<a name="1671"><span class="lineNum">    1671 </span>            : {</a>
-<a name="1672"><span class="lineNum">    1672 </span><span class="lineCov">      21216 :   return _replicated_next_ray_id++;</span></a>
-<a name="1673"><span class="lineNum">    1673 </span>            : }</a>
-<a name="1674"><span class="lineNum">    1674 </span>            : </a>
-<a name="1675"><span class="lineNum">    1675 </span>            : bool</a>
-<a name="1676"><span class="lineNum">    1676 </span><span class="lineCov">  375329800 : RayTracingStudy::sideIsIncoming(const Elem * const elem,</span></a>
-<a name="1677"><span class="lineNum">    1677 </span>            :                                 const unsigned short side,</a>
-<a name="1678"><span class="lineNum">    1678 </span>            :                                 const Point &amp; direction,</a>
-<a name="1679"><span class="lineNum">    1679 </span>            :                                 const THREAD_ID tid)</a>
-<a name="1680"><span class="lineNum">    1680 </span>            : {</a>
-<a name="1681"><span class="lineNum">    1681 </span><span class="lineCov">  375329800 :   const auto &amp; normal = getSideNormal(elem, side, tid);</span></a>
-<a name="1682"><span class="lineNum">    1682 </span><span class="lineCov">  375329800 :   const auto dot = normal * direction;</span></a>
-<a name="1683"><span class="lineNum">    1683 </span><span class="lineCov">  375329800 :   return dot &lt; TraceRayTools::TRACE_TOLERANCE;</span></a>
-<a name="1684"><span class="lineNum">    1684 </span>            : }</a>
-<a name="1685"><span class="lineNum">    1685 </span>            : </a>
-<a name="1686"><span class="lineNum">    1686 </span>            : std::shared_ptr&lt;Ray&gt;</a>
-<a name="1687"><span class="lineNum">    1687 </span><span class="lineCov">   16997040 : RayTracingStudy::acquireRay()</span></a>
-<a name="1688"><span class="lineNum">    1688 </span>            : {</a>
-<a name="1689"><span class="lineNum">    1689 </span><span class="lineCov">   16997040 :   mooseAssert(currentlyGenerating(), &quot;Can only use during generateRays()&quot;);</span></a>
-<a name="1690"><span class="lineNum">    1690 </span>            : </a>
-<a name="1691"><span class="lineNum">    1691 </span><span class="lineCov">   33994080 :   std::shared_ptr&lt;Ray&gt; ray = _parallel_ray_study-&gt;acquireParallelData(</span></a>
-<a name="1692"><span class="lineNum">    1692 </span>            :       /* tid = */ 0,</a>
-<a name="1693"><span class="lineNum">    1693 </span>            :       this,</a>
-<a name="1694"><span class="lineNum">    1694 </span><span class="lineCov">   16997040 :       generateUniqueRayID(/* tid = */ 0),</span></a>
-<a name="1695"><span class="lineNum">    1695 </span><span class="lineCov">   16997040 :       rayDataSize(),</span></a>
-<a name="1696"><span class="lineNum">    1696 </span><span class="lineCov">   16997040 :       rayAuxDataSize(),</span></a>
-<a name="1697"><span class="lineNum">    1697 </span><span class="lineCov">   16997040 :       /* reset = */ true,</span></a>
-<a name="1698"><span class="lineNum">    1698 </span><span class="lineCov">   16997040 :       Ray::ConstructRayKey());</span></a>
-<a name="1699"><span class="lineNum">    1699 </span>            : </a>
-<a name="1700"><span class="lineNum">    1700 </span><span class="lineCov">   16997040 :   return ray;</span></a>
-<a name="1701"><span class="lineNum">    1701 </span>            : }</a>
-<a name="1702"><span class="lineNum">    1702 </span>            : </a>
-<a name="1703"><span class="lineNum">    1703 </span>            : std::shared_ptr&lt;Ray&gt;</a>
-<a name="1704"><span class="lineNum">    1704 </span><span class="lineCov">      47559 : RayTracingStudy::acquireUnsizedRay()</span></a>
-<a name="1705"><span class="lineNum">    1705 </span>            : {</a>
-<a name="1706"><span class="lineNum">    1706 </span><span class="lineCov">      47559 :   mooseAssert(currentlyGenerating(), &quot;Can only use during generateRays()&quot;);</span></a>
-<a name="1707"><span class="lineNum">    1707 </span>            : </a>
-<a name="1708"><span class="lineNum">    1708 </span><span class="lineCov">      47559 :   std::shared_ptr&lt;Ray&gt; ray =</span></a>
-<a name="1709"><span class="lineNum">    1709 </span><span class="lineCov">      95118 :       _parallel_ray_study-&gt;acquireParallelData(/* tid = */ 0,</span></a>
-<a name="1710"><span class="lineNum">    1710 </span>            :                                                this,</a>
-<a name="1711"><span class="lineNum">    1711 </span><span class="lineCov">      47559 :                                                generateUniqueRayID(/* tid = */ 0),</span></a>
-<a name="1712"><span class="lineNum">    1712 </span><span class="lineCov">      95118 :                                                /* data_size = */ 0,</span></a>
-<a name="1713"><span class="lineNum">    1713 </span><span class="lineCov">      95118 :                                                /* aux_data_size = */ 0,</span></a>
-<a name="1714"><span class="lineNum">    1714 </span><span class="lineCov">      47559 :                                                /* reset = */ true,</span></a>
-<a name="1715"><span class="lineNum">    1715 </span><span class="lineCov">      47559 :                                                Ray::ConstructRayKey());</span></a>
-<a name="1716"><span class="lineNum">    1716 </span>            : </a>
-<a name="1717"><span class="lineNum">    1717 </span><span class="lineCov">      47559 :   return ray;</span></a>
-<a name="1718"><span class="lineNum">    1718 </span>            : }</a>
+<a name="1669"><span class="lineNum">    1669 </span>            : bool</a>
+<a name="1670"><span class="lineNum">    1670 </span><span class="lineCov">  375330000 : RayTracingStudy::sideIsIncoming(const Elem * const elem,</span></a>
+<a name="1671"><span class="lineNum">    1671 </span>            :                                 const unsigned short side,</a>
+<a name="1672"><span class="lineNum">    1672 </span>            :                                 const Point &amp; direction,</a>
+<a name="1673"><span class="lineNum">    1673 </span>            :                                 const THREAD_ID tid)</a>
+<a name="1674"><span class="lineNum">    1674 </span>            : {</a>
+<a name="1675"><span class="lineNum">    1675 </span><span class="lineCov">  375330000 :   const auto &amp; normal = getSideNormal(elem, side, tid);</span></a>
+<a name="1676"><span class="lineNum">    1676 </span><span class="lineCov">  375330000 :   const auto dot = normal * direction;</span></a>
+<a name="1677"><span class="lineNum">    1677 </span><span class="lineCov">  375330000 :   return dot &lt; TraceRayTools::TRACE_TOLERANCE;</span></a>
+<a name="1678"><span class="lineNum">    1678 </span>            : }</a>
+<a name="1679"><span class="lineNum">    1679 </span>            : </a>
+<a name="1680"><span class="lineNum">    1680 </span>            : std::shared_ptr&lt;Ray&gt;</a>
+<a name="1681"><span class="lineNum">    1681 </span><span class="lineCov">   16997040 : RayTracingStudy::acquireRay()</span></a>
+<a name="1682"><span class="lineNum">    1682 </span>            : {</a>
+<a name="1683"><span class="lineNum">    1683 </span><span class="lineCov">   16997040 :   mooseAssert(currentlyGenerating(), &quot;Can only use during generateRays()&quot;);</span></a>
+<a name="1684"><span class="lineNum">    1684 </span>            : </a>
+<a name="1685"><span class="lineNum">    1685 </span><span class="lineCov">   33994080 :   std::shared_ptr&lt;Ray&gt; ray = _parallel_ray_study-&gt;acquireParallelData(</span></a>
+<a name="1686"><span class="lineNum">    1686 </span>            :       /* tid = */ 0,</a>
+<a name="1687"><span class="lineNum">    1687 </span>            :       this,</a>
+<a name="1688"><span class="lineNum">    1688 </span><span class="lineCov">   16997040 :       generateUniqueRayID(/* tid = */ 0),</span></a>
+<a name="1689"><span class="lineNum">    1689 </span><span class="lineCov">   16997040 :       rayDataSize(),</span></a>
+<a name="1690"><span class="lineNum">    1690 </span><span class="lineCov">   16997040 :       rayAuxDataSize(),</span></a>
+<a name="1691"><span class="lineNum">    1691 </span><span class="lineCov">   16997040 :       /* reset = */ true,</span></a>
+<a name="1692"><span class="lineNum">    1692 </span><span class="lineCov">   16997040 :       Ray::ConstructRayKey());</span></a>
+<a name="1693"><span class="lineNum">    1693 </span>            : </a>
+<a name="1694"><span class="lineNum">    1694 </span><span class="lineCov">   16997040 :   return ray;</span></a>
+<a name="1695"><span class="lineNum">    1695 </span>            : }</a>
+<a name="1696"><span class="lineNum">    1696 </span>            : </a>
+<a name="1697"><span class="lineNum">    1697 </span>            : std::shared_ptr&lt;Ray&gt;</a>
+<a name="1698"><span class="lineNum">    1698 </span><span class="lineCov">      47520 : RayTracingStudy::acquireUnsizedRay()</span></a>
+<a name="1699"><span class="lineNum">    1699 </span>            : {</a>
+<a name="1700"><span class="lineNum">    1700 </span><span class="lineCov">      47520 :   mooseAssert(currentlyGenerating(), &quot;Can only use during generateRays()&quot;);</span></a>
+<a name="1701"><span class="lineNum">    1701 </span>            : </a>
+<a name="1702"><span class="lineNum">    1702 </span><span class="lineCov">      47520 :   std::shared_ptr&lt;Ray&gt; ray =</span></a>
+<a name="1703"><span class="lineNum">    1703 </span><span class="lineCov">      95040 :       _parallel_ray_study-&gt;acquireParallelData(/* tid = */ 0,</span></a>
+<a name="1704"><span class="lineNum">    1704 </span>            :                                                this,</a>
+<a name="1705"><span class="lineNum">    1705 </span><span class="lineCov">      47520 :                                                generateUniqueRayID(/* tid = */ 0),</span></a>
+<a name="1706"><span class="lineNum">    1706 </span><span class="lineCov">      95040 :                                                /* data_size = */ 0,</span></a>
+<a name="1707"><span class="lineNum">    1707 </span><span class="lineCov">      95040 :                                                /* aux_data_size = */ 0,</span></a>
+<a name="1708"><span class="lineNum">    1708 </span><span class="lineCov">      47520 :                                                /* reset = */ true,</span></a>
+<a name="1709"><span class="lineNum">    1709 </span><span class="lineCov">      47520 :                                                Ray::ConstructRayKey());</span></a>
+<a name="1710"><span class="lineNum">    1710 </span>            : </a>
+<a name="1711"><span class="lineNum">    1711 </span><span class="lineCov">      47520 :   return ray;</span></a>
+<a name="1712"><span class="lineNum">    1712 </span>            : }</a>
+<a name="1713"><span class="lineNum">    1713 </span>            : </a>
+<a name="1714"><span class="lineNum">    1714 </span>            : std::shared_ptr&lt;Ray&gt;</a>
+<a name="1715"><span class="lineNum">    1715 </span><span class="lineCov">      21216 : RayTracingStudy::acquireReplicatedRay()</span></a>
+<a name="1716"><span class="lineNum">    1716 </span>            : {</a>
+<a name="1717"><span class="lineNum">    1717 </span><span class="lineCov">      21216 :   mooseAssert(currentlyGenerating(), &quot;Can only use during generateRays()&quot;);</span></a>
+<a name="1718"><span class="lineNum">    1718 </span><span class="lineCov">      42432 :   libmesh_parallel_only(comm());</span></a>
 <a name="1719"><span class="lineNum">    1719 </span>            : </a>
-<a name="1720"><span class="lineNum">    1720 </span>            : std::shared_ptr&lt;Ray&gt;</a>
-<a name="1721"><span class="lineNum">    1721 </span><span class="lineCov">      21216 : RayTracingStudy::acquireReplicatedRay()</span></a>
-<a name="1722"><span class="lineNum">    1722 </span>            : {</a>
-<a name="1723"><span class="lineNum">    1723 </span><span class="lineCov">      21216 :   mooseAssert(currentlyGenerating(), &quot;Can only use during generateRays()&quot;);</span></a>
-<a name="1724"><span class="lineNum">    1724 </span><span class="lineCov">      42432 :   libmesh_parallel_only(comm());</span></a>
-<a name="1725"><span class="lineNum">    1725 </span>            : </a>
-<a name="1726"><span class="lineNum">    1726 </span><span class="lineCov">      42432 :   std::shared_ptr&lt;Ray&gt; ray = _parallel_ray_study-&gt;acquireParallelData(</span></a>
-<a name="1727"><span class="lineNum">    1727 </span>            :       /* tid = */ 0,</a>
-<a name="1728"><span class="lineNum">    1728 </span>            :       this,</a>
-<a name="1729"><span class="lineNum">    1729 </span><span class="lineCov">      21216 :       generateReplicatedRayID(),</span></a>
-<a name="1730"><span class="lineNum">    1730 </span><span class="lineCov">      21216 :       rayDataSize(),</span></a>
-<a name="1731"><span class="lineNum">    1731 </span><span class="lineCov">      21216 :       rayAuxDataSize(),</span></a>
-<a name="1732"><span class="lineNum">    1732 </span><span class="lineCov">      21216 :       /* reset = */ true,</span></a>
-<a name="1733"><span class="lineNum">    1733 </span><span class="lineCov">      21216 :       Ray::ConstructRayKey());</span></a>
-<a name="1734"><span class="lineNum">    1734 </span>            : </a>
-<a name="1735"><span class="lineNum">    1735 </span><span class="lineCov">      21216 :   return ray;</span></a>
-<a name="1736"><span class="lineNum">    1736 </span>            : }</a>
+<a name="1720"><span class="lineNum">    1720 </span><span class="lineCov">      42432 :   std::shared_ptr&lt;Ray&gt; ray = _parallel_ray_study-&gt;acquireParallelData(</span></a>
+<a name="1721"><span class="lineNum">    1721 </span>            :       /* tid = */ 0,</a>
+<a name="1722"><span class="lineNum">    1722 </span>            :       this,</a>
+<a name="1723"><span class="lineNum">    1723 </span><span class="lineCov">      21216 :       generateReplicatedRayID(),</span></a>
+<a name="1724"><span class="lineNum">    1724 </span><span class="lineCov">      21216 :       rayDataSize(),</span></a>
+<a name="1725"><span class="lineNum">    1725 </span><span class="lineCov">      21216 :       rayAuxDataSize(),</span></a>
+<a name="1726"><span class="lineNum">    1726 </span><span class="lineCov">      21216 :       /* reset = */ true,</span></a>
+<a name="1727"><span class="lineNum">    1727 </span><span class="lineCov">      21216 :       Ray::ConstructRayKey());</span></a>
+<a name="1728"><span class="lineNum">    1728 </span>            : </a>
+<a name="1729"><span class="lineNum">    1729 </span><span class="lineCov">      21216 :   return ray;</span></a>
+<a name="1730"><span class="lineNum">    1730 </span>            : }</a>
+<a name="1731"><span class="lineNum">    1731 </span>            : </a>
+<a name="1732"><span class="lineNum">    1732 </span>            : std::shared_ptr&lt;Ray&gt;</a>
+<a name="1733"><span class="lineNum">    1733 </span><span class="lineCov">       5538 : RayTracingStudy::acquireRegisteredRay(const std::string &amp; name)</span></a>
+<a name="1734"><span class="lineNum">    1734 </span>            : {</a>
+<a name="1735"><span class="lineNum">    1735 </span><span class="lineCov">       5538 :   mooseAssert(currentlyGenerating(), &quot;Can only use during generateRays()&quot;);</span></a>
+<a name="1736"><span class="lineNum">    1736 </span><span class="lineCov">       5538 :   mooseAssert(_use_ray_registration, &quot;Can only use with Ray registration&quot;);</span></a>
 <a name="1737"><span class="lineNum">    1737 </span>            : </a>
-<a name="1738"><span class="lineNum">    1738 </span>            : std::shared_ptr&lt;Ray&gt;</a>
-<a name="1739"><span class="lineNum">    1739 </span><span class="lineCov">       5538 : RayTracingStudy::acquireRegisteredRay(const std::string &amp; name)</span></a>
-<a name="1740"><span class="lineNum">    1740 </span>            : {</a>
-<a name="1741"><span class="lineNum">    1741 </span><span class="lineCov">       5538 :   mooseAssert(currentlyGenerating(), &quot;Can only use during generateRays()&quot;);</span></a>
-<a name="1742"><span class="lineNum">    1742 </span><span class="lineCov">       5538 :   mooseAssert(_use_ray_registration, &quot;Can only use with Ray registration&quot;);</span></a>
-<a name="1743"><span class="lineNum">    1743 </span>            : </a>
-<a name="1744"><span class="lineNum">    1744 </span>            :   // Either register a Ray or get an already registered Ray id</a>
-<a name="1745"><span class="lineNum">    1745 </span><span class="lineCov">       5538 :   const RayID id = registerRay(name);</span></a>
-<a name="1746"><span class="lineNum">    1746 </span>            : </a>
-<a name="1747"><span class="lineNum">    1747 </span>            :   // Acquire a Ray with the properly sized data initialized to zero</a>
-<a name="1748"><span class="lineNum">    1748 </span><span class="lineCov">       5538 :   std::shared_ptr&lt;Ray&gt; ray = _parallel_ray_study-&gt;acquireParallelData(</span></a>
-<a name="1749"><span class="lineNum">    1749 </span>            :       /* tid = */ 0,</a>
-<a name="1750"><span class="lineNum">    1750 </span>            :       this,</a>
-<a name="1751"><span class="lineNum">    1751 </span>            :       id,</a>
-<a name="1752"><span class="lineNum">    1752 </span><span class="lineCov">       5538 :       rayDataSize(),</span></a>
-<a name="1753"><span class="lineNum">    1753 </span><span class="lineCov">       5538 :       rayAuxDataSize(),</span></a>
-<a name="1754"><span class="lineNum">    1754 </span><span class="lineCov">       5538 :       /* reset = */ true,</span></a>
-<a name="1755"><span class="lineNum">    1755 </span><span class="lineCov">       5538 :       Ray::ConstructRayKey());</span></a>
-<a name="1756"><span class="lineNum">    1756 </span>            : </a>
-<a name="1757"><span class="lineNum">    1757 </span><span class="lineCov">       5538 :   return ray;</span></a>
-<a name="1758"><span class="lineNum">    1758 </span>            : }</a>
-<a name="1759"><span class="lineNum">    1759 </span>            : </a>
-<a name="1760"><span class="lineNum">    1760 </span>            : std::shared_ptr&lt;Ray&gt;</a>
-<a name="1761"><span class="lineNum">    1761 </span><span class="lineCov">   17527178 : RayTracingStudy::acquireCopiedRay(const Ray &amp; ray)</span></a>
-<a name="1762"><span class="lineNum">    1762 </span>            : {</a>
-<a name="1763"><span class="lineNum">    1763 </span><span class="lineCov">   17527178 :   mooseAssert(currentlyGenerating(), &quot;Can only use during generateRays()&quot;);</span></a>
-<a name="1764"><span class="lineNum">    1764 </span><span class="lineCov">   17527178 :   return _parallel_ray_study-&gt;acquireParallelData(</span></a>
-<a name="1765"><span class="lineNum">    1765 </span><span class="lineCov">   35054360 :       /* tid = */ 0, &amp;ray, Ray::ConstructRayKey());</span></a>
-<a name="1766"><span class="lineNum">    1766 </span>            : }</a>
-<a name="1767"><span class="lineNum">    1767 </span>            : </a>
-<a name="1768"><span class="lineNum">    1768 </span>            : std::shared_ptr&lt;Ray&gt;</a>
-<a name="1769"><span class="lineNum">    1769 </span><span class="lineCov">     247320 : RayTracingStudy::acquireRayDuringTrace(const THREAD_ID tid, const AcquireMoveDuringTraceKey &amp;)</span></a>
-<a name="1770"><span class="lineNum">    1770 </span>            : {</a>
-<a name="1771"><span class="lineNum">    1771 </span><span class="lineCov">     247320 :   mooseAssert(currentlyPropagating(), &quot;Can only use during propagation&quot;);</span></a>
-<a name="1772"><span class="lineNum">    1772 </span><span class="lineCov">     494640 :   return _parallel_ray_study-&gt;acquireParallelData(tid,</span></a>
-<a name="1773"><span class="lineNum">    1773 </span>            :                                                   this,</a>
-<a name="1774"><span class="lineNum">    1774 </span><span class="lineCov">     247320 :                                                   generateUniqueRayID(tid),</span></a>
-<a name="1775"><span class="lineNum">    1775 </span><span class="lineCov">     247320 :                                                   rayDataSize(),</span></a>
-<a name="1776"><span class="lineNum">    1776 </span><span class="lineCov">     247320 :                                                   rayAuxDataSize(),</span></a>
-<a name="1777"><span class="lineNum">    1777 </span><span class="lineCov">     247320 :                                                   /* reset = */ true,</span></a>
-<a name="1778"><span class="lineNum">    1778 </span><span class="lineCov">     247320 :                                                   Ray::ConstructRayKey());</span></a>
-<a name="1779"><span class="lineNum">    1779 </span>            : }</a>
+<a name="1738"><span class="lineNum">    1738 </span>            :   // Either register a Ray or get an already registered Ray id</a>
+<a name="1739"><span class="lineNum">    1739 </span><span class="lineCov">       5538 :   const RayID id = registerRay(name);</span></a>
+<a name="1740"><span class="lineNum">    1740 </span>            : </a>
+<a name="1741"><span class="lineNum">    1741 </span>            :   // Acquire a Ray with the properly sized data initialized to zero</a>
+<a name="1742"><span class="lineNum">    1742 </span><span class="lineCov">       5538 :   std::shared_ptr&lt;Ray&gt; ray = _parallel_ray_study-&gt;acquireParallelData(</span></a>
+<a name="1743"><span class="lineNum">    1743 </span>            :       /* tid = */ 0,</a>
+<a name="1744"><span class="lineNum">    1744 </span>            :       this,</a>
+<a name="1745"><span class="lineNum">    1745 </span>            :       id,</a>
+<a name="1746"><span class="lineNum">    1746 </span><span class="lineCov">       5538 :       rayDataSize(),</span></a>
+<a name="1747"><span class="lineNum">    1747 </span><span class="lineCov">       5538 :       rayAuxDataSize(),</span></a>
+<a name="1748"><span class="lineNum">    1748 </span><span class="lineCov">       5538 :       /* reset = */ true,</span></a>
+<a name="1749"><span class="lineNum">    1749 </span><span class="lineCov">       5538 :       Ray::ConstructRayKey());</span></a>
+<a name="1750"><span class="lineNum">    1750 </span>            : </a>
+<a name="1751"><span class="lineNum">    1751 </span><span class="lineCov">       5538 :   return ray;</span></a>
+<a name="1752"><span class="lineNum">    1752 </span>            : }</a>
+<a name="1753"><span class="lineNum">    1753 </span>            : </a>
+<a name="1754"><span class="lineNum">    1754 </span>            : std::shared_ptr&lt;Ray&gt;</a>
+<a name="1755"><span class="lineNum">    1755 </span><span class="lineCov">   17527178 : RayTracingStudy::acquireCopiedRay(const Ray &amp; ray)</span></a>
+<a name="1756"><span class="lineNum">    1756 </span>            : {</a>
+<a name="1757"><span class="lineNum">    1757 </span><span class="lineCov">   17527178 :   mooseAssert(currentlyGenerating(), &quot;Can only use during generateRays()&quot;);</span></a>
+<a name="1758"><span class="lineNum">    1758 </span><span class="lineCov">   17527178 :   return _parallel_ray_study-&gt;acquireParallelData(</span></a>
+<a name="1759"><span class="lineNum">    1759 </span><span class="lineCov">   35054360 :       /* tid = */ 0, &amp;ray, Ray::ConstructRayKey());</span></a>
+<a name="1760"><span class="lineNum">    1760 </span>            : }</a>
+<a name="1761"><span class="lineNum">    1761 </span>            : </a>
+<a name="1762"><span class="lineNum">    1762 </span>            : std::shared_ptr&lt;Ray&gt;</a>
+<a name="1763"><span class="lineNum">    1763 </span><span class="lineCov">     247320 : RayTracingStudy::acquireRayDuringTrace(const THREAD_ID tid, const AcquireMoveDuringTraceKey &amp;)</span></a>
+<a name="1764"><span class="lineNum">    1764 </span>            : {</a>
+<a name="1765"><span class="lineNum">    1765 </span><span class="lineCov">     247320 :   mooseAssert(currentlyPropagating(), &quot;Can only use during propagation&quot;);</span></a>
+<a name="1766"><span class="lineNum">    1766 </span><span class="lineCov">     494640 :   return _parallel_ray_study-&gt;acquireParallelData(tid,</span></a>
+<a name="1767"><span class="lineNum">    1767 </span>            :                                                   this,</a>
+<a name="1768"><span class="lineNum">    1768 </span><span class="lineCov">     247320 :                                                   generateUniqueRayID(tid),</span></a>
+<a name="1769"><span class="lineNum">    1769 </span><span class="lineCov">     247320 :                                                   rayDataSize(),</span></a>
+<a name="1770"><span class="lineNum">    1770 </span><span class="lineCov">     247320 :                                                   rayAuxDataSize(),</span></a>
+<a name="1771"><span class="lineNum">    1771 </span><span class="lineCov">     247320 :                                                   /* reset = */ true,</span></a>
+<a name="1772"><span class="lineNum">    1772 </span><span class="lineCov">     247320 :                                                   Ray::ConstructRayKey());</span></a>
+<a name="1773"><span class="lineNum">    1773 </span>            : }</a>
 </pre>
       </td>
     </tr>

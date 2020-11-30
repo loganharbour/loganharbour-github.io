@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-28 23:30:08</td>
+            <td class="headerValue">2020-11-29 21:22:53</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">2</td>
@@ -85,14 +85,14 @@
 <a name="15"><span class="lineNum">      15 </span><span class="lineCov">      14110 : SidePtrHelper::SidePtrHelper() : _threaded_side_ptr_elems(libMesh::n_threads()) {}</span></a>
 <a name="16"><span class="lineNum">      16 </span>            : </a>
 <a name="17"><span class="lineNum">      17 </span>            : const libMesh::Elem *</a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineCov">  362893900 : SidePtrHelper::sidePtrHelper(const libMesh::Elem * elem, const unsigned int s, const THREAD_ID tid)</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">  362894000 : SidePtrHelper::sidePtrHelper(const libMesh::Elem * elem, const unsigned int s, const THREAD_ID tid)</span></a>
 <a name="19"><span class="lineNum">      19 </span>            : {</a>
-<a name="20"><span class="lineNum">      20 </span><span class="lineCov">  362893900 :   auto &amp; elems = _threaded_side_ptr_elems[tid];</span></a>
-<a name="21"><span class="lineNum">      21 </span><span class="lineCov">  362893900 :   if ((std::size_t)elem-&gt;type() &gt;= elems.size())</span></a>
-<a name="22"><span class="lineNum">      22 </span><span class="lineCov">      13255 :     elems.resize(elem-&gt;type() + 1);</span></a>
-<a name="23"><span class="lineNum">      23 </span><span class="lineCov">  362893900 :   std::unique_ptr&lt;const libMesh::Elem&gt; &amp; side_elem = elems[elem-&gt;type()];</span></a>
-<a name="24"><span class="lineNum">      24 </span><span class="lineCov">  362893900 :   elem-&gt;build_side_ptr(side_elem, s);</span></a>
-<a name="25"><span class="lineNum">      25 </span><span class="lineCov">  362893900 :   return side_elem.get();</span></a>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">  362894000 :   auto &amp; elems = _threaded_side_ptr_elems[tid];</span></a>
+<a name="21"><span class="lineNum">      21 </span><span class="lineCov">  362894000 :   if ((std::size_t)elem-&gt;type() &gt;= elems.size())</span></a>
+<a name="22"><span class="lineNum">      22 </span><span class="lineCov">      13249 :     elems.resize(elem-&gt;type() + 1);</span></a>
+<a name="23"><span class="lineNum">      23 </span><span class="lineCov">  362894000 :   std::unique_ptr&lt;const libMesh::Elem&gt; &amp; side_elem = elems[elem-&gt;type()];</span></a>
+<a name="24"><span class="lineNum">      24 </span><span class="lineCov">  362894000 :   elem-&gt;build_side_ptr(side_elem, s);</span></a>
+<a name="25"><span class="lineNum">      25 </span><span class="lineCov">  362894000 :   return side_elem.get();</span></a>
 <a name="26"><span class="lineNum">      26 </span>            : }</a>
 </pre>
       </td>

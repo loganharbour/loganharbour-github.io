@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-30 20:56:32</td>
+            <td class="headerValue">2020-11-30 21:00:29</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">1</td>
@@ -82,16 +82,16 @@
 <a name="12"><span class="lineNum">      12 </span>            : namespace GeochemistrySortedIndices</a>
 <a name="13"><span class="lineNum">      13 </span>            : {</a>
 <a name="14"><span class="lineNum">      14 </span>            : std::vector&lt;unsigned&gt;</a>
-<a name="15"><span class="lineNum">      15 </span><span class="lineCov">       4766 : sortedIndices(const std::vector&lt;Real&gt; &amp; to_sort, bool ascending)</span></a>
+<a name="15"><span class="lineNum">      15 </span><span class="lineCov">       9500 : sortedIndices(const std::vector&lt;Real&gt; &amp; to_sort, bool ascending)</span></a>
 <a name="16"><span class="lineNum">      16 </span>            : {</a>
-<a name="17"><span class="lineNum">      17 </span><span class="lineCov">       4766 :   std::vector&lt;unsigned&gt; order(to_sort.size());</span></a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineCov">       4766 :   unsigned ind = 0;</span></a>
-<a name="19"><span class="lineNum">      19 </span><span class="lineCov">       4766 :   std::iota(order.begin(), order.end(), ind++);</span></a>
-<a name="20"><span class="lineNum">      20 </span><span class="lineCov">       4766 :   if (ascending)</span></a>
-<a name="21"><span class="lineNum">      21 </span><span class="lineCov">      29028 :     std::sort(order.begin(), order.end(), [&amp;](int i, int j) { return to_sort[i] &lt; to_sort[j]; });</span></a>
+<a name="17"><span class="lineNum">      17 </span><span class="lineCov">       9500 :   std::vector&lt;unsigned&gt; order(to_sort.size());</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">       9500 :   unsigned ind = 0;</span></a>
+<a name="19"><span class="lineNum">      19 </span><span class="lineCov">       9500 :   std::iota(order.begin(), order.end(), ind++);</span></a>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">       9500 :   if (ascending)</span></a>
+<a name="21"><span class="lineNum">      21 </span><span class="lineCov">      58020 :     std::sort(order.begin(), order.end(), [&amp;](int i, int j) { return to_sort[i] &lt; to_sort[j]; });</span></a>
 <a name="22"><span class="lineNum">      22 </span>            :   else</a>
-<a name="23"><span class="lineNum">      23 </span><span class="lineCov">     162749 :     std::sort(order.begin(), order.end(), [&amp;](int i, int j) { return to_sort[i] &gt; to_sort[j]; });</span></a>
-<a name="24"><span class="lineNum">      24 </span><span class="lineCov">       4766 :   return order;</span></a>
+<a name="23"><span class="lineNum">      23 </span><span class="lineCov">     325438 :     std::sort(order.begin(), order.end(), [&amp;](int i, int j) { return to_sort[i] &gt; to_sort[j]; });</span></a>
+<a name="24"><span class="lineNum">      24 </span><span class="lineCov">       9500 :   return order;</span></a>
 <a name="25"><span class="lineNum">      25 </span>            : }</a>
 <a name="26"><span class="lineNum">      26 </span>            : } // namespace GeochemistrySortedIndices</a>
 </pre>

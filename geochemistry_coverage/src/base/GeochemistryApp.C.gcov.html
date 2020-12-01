@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-30 20:56:32</td>
+            <td class="headerValue">2020-11-30 21:00:29</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">2</td>
@@ -83,16 +83,16 @@
 <a name="13"><span class="lineNum">      13 </span>            : #include &quot;MooseSyntax.h&quot;</a>
 <a name="14"><span class="lineNum">      14 </span>            : </a>
 <a name="15"><span class="lineNum">      15 </span>            : InputParameters</a>
-<a name="16"><span class="lineNum">      16 </span><span class="lineCov">        262 : GeochemistryApp::validParams()</span></a>
+<a name="16"><span class="lineNum">      16 </span><span class="lineCov">        564 : GeochemistryApp::validParams()</span></a>
 <a name="17"><span class="lineNum">      17 </span>            : {</a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineCov">        262 :   InputParameters params = MooseApp::validParams();</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">        564 :   InputParameters params = MooseApp::validParams();</span></a>
 <a name="19"><span class="lineNum">      19 </span>            : </a>
 <a name="20"><span class="lineNum">      20 </span>            :   // Do not use legacy DirichletBC, that is, set DirichletBC default for preset = true</a>
-<a name="21"><span class="lineNum">      21 </span><span class="lineCov">        262 :   params.set&lt;bool&gt;(&quot;use_legacy_dirichlet_bc&quot;) = false;</span></a>
+<a name="21"><span class="lineNum">      21 </span><span class="lineCov">        564 :   params.set&lt;bool&gt;(&quot;use_legacy_dirichlet_bc&quot;) = false;</span></a>
 <a name="22"><span class="lineNum">      22 </span>            : </a>
-<a name="23"><span class="lineNum">      23 </span><span class="lineCov">        262 :   params.set&lt;bool&gt;(&quot;use_legacy_material_output&quot;) = false;</span></a>
+<a name="23"><span class="lineNum">      23 </span><span class="lineCov">        564 :   params.set&lt;bool&gt;(&quot;use_legacy_material_output&quot;) = false;</span></a>
 <a name="24"><span class="lineNum">      24 </span>            : </a>
-<a name="25"><span class="lineNum">      25 </span><span class="lineCov">        262 :   return params;</span></a>
+<a name="25"><span class="lineNum">      25 </span><span class="lineCov">        564 :   return params;</span></a>
 <a name="26"><span class="lineNum">      26 </span>            : }</a>
 <a name="27"><span class="lineNum">      27 </span>            : </a>
 <a name="28"><span class="lineNum">      28 </span>            : registerKnownLabel(&quot;GeochemistryApp&quot;);</a>
@@ -123,15 +123,15 @@
 <a name="53"><span class="lineNum">      53 </span>            : }</a>
 <a name="54"><span class="lineNum">      54 </span>            : </a>
 <a name="55"><span class="lineNum">      55 </span>            : void</a>
-<a name="56"><span class="lineNum">      56 </span><span class="lineCov">        262 : GeochemistryApp::registerAll(Factory &amp; f, ActionFactory &amp; af, Syntax &amp; s)</span></a>
+<a name="56"><span class="lineNum">      56 </span><span class="lineCov">        564 : GeochemistryApp::registerAll(Factory &amp; f, ActionFactory &amp; af, Syntax &amp; s)</span></a>
 <a name="57"><span class="lineNum">      57 </span>            : {</a>
 <a name="58"><span class="lineNum">      58 </span>            :   /* ModulesApp::registerAll(f, af, s); */</a>
-<a name="59"><span class="lineNum">      59 </span><span class="lineCov">        786 :   Registry::registerObjectsTo(f, {&quot;GeochemistryApp&quot;});</span></a>
-<a name="60"><span class="lineNum">      60 </span><span class="lineCov">        786 :   Registry::registerActionsTo(af, {&quot;GeochemistryApp&quot;});</span></a>
+<a name="59"><span class="lineNum">      59 </span><span class="lineCov">       1692 :   Registry::registerObjectsTo(f, {&quot;GeochemistryApp&quot;});</span></a>
+<a name="60"><span class="lineNum">      60 </span><span class="lineCov">       1692 :   Registry::registerActionsTo(af, {&quot;GeochemistryApp&quot;});</span></a>
 <a name="61"><span class="lineNum">      61 </span>            : </a>
 <a name="62"><span class="lineNum">      62 </span>            :   /* register custom execute flags, action syntax, etc. here */</a>
-<a name="63"><span class="lineNum">      63 </span><span class="lineCov">        262 :   associateSyntaxInner(s, af);</span></a>
-<a name="64"><span class="lineNum">      64 </span><span class="lineCov">        262 : }</span></a>
+<a name="63"><span class="lineNum">      63 </span><span class="lineCov">        564 :   associateSyntaxInner(s, af);</span></a>
+<a name="64"><span class="lineNum">      64 </span><span class="lineCov">        564 : }</span></a>
 <a name="65"><span class="lineNum">      65 </span>            : </a>
 <a name="66"><span class="lineNum">      66 </span>            : void</a>
 <a name="67"><span class="lineNum">      67 </span><span class="lineNoCov">          0 : GeochemistryApp::registerApps()</span></a>

@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2020-11-30 20:56:32</td>
+            <td class="headerValue">2020-11-30 21:00:29</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">3</td>
@@ -195,90 +195,90 @@
 <a name="125"><span class="lineNum">     125 </span>            :    * constructor which simply sets the _mgd reference in dest equal to the _mgd reference in src,</a>
 <a name="126"><span class="lineNum">     126 </span>            :    * and does not make a copy of the data within src._mgd)</a>
 <a name="127"><span class="lineNum">     127 </span>            :    */</a>
-<a name="128"><span class="lineNum">     128 </span><span class="lineCov">        175 :   GeochemicalSystem &amp; operator=(const GeochemicalSystem &amp; src)</span></a>
+<a name="128"><span class="lineNum">     128 </span><span class="lineCov">        345 :   GeochemicalSystem &amp; operator=(const GeochemicalSystem &amp; src)</span></a>
 <a name="129"><span class="lineNum">     129 </span>            :   {</a>
-<a name="130"><span class="lineNum">     130 </span><span class="lineCov">        175 :     if (this == &amp;src) // trivial a=a situation</span></a>
+<a name="130"><span class="lineNum">     130 </span><span class="lineCov">        345 :     if (this == &amp;src) // trivial a=a situation</span></a>
 <a name="131"><span class="lineNum">     131 </span>            :       return *this;</a>
 <a name="132"><span class="lineNum">     132 </span>            :     // check for bad assignment situations.  Other &quot;const&quot; things that</a>
 <a name="133"><span class="lineNum">     133 </span>            :     // needn't be the same (but probably actually are) include: _swap_out and _swap_in</a>
-<a name="134"><span class="lineNum">     134 </span><span class="lineCov">        174 :     if (_num_basis != src._num_basis || _num_eqm != src._num_eqm || _num_redox != src._num_redox ||</span></a>
-<a name="135"><span class="lineNum">     135 </span><span class="lineCov">        349 :         _num_surface_pot != src._num_surface_pot || _num_kin != src._num_kin ||</span></a>
-<a name="136"><span class="lineNum">     136 </span><span class="lineCov">        173 :         _original_charge_balance_species != src._original_charge_balance_species)</span></a>
-<a name="137"><span class="lineNum">     137 </span><span class="lineCov">          3 :       mooseError(&quot;GeochemicalSystem: copy assigment operator called with inconsistent fundamental &quot;</span></a>
+<a name="134"><span class="lineNum">     134 </span><span class="lineCov">        343 :     if (_num_basis != src._num_basis || _num_eqm != src._num_eqm || _num_redox != src._num_redox ||</span></a>
+<a name="135"><span class="lineNum">     135 </span><span class="lineCov">        688 :         _num_surface_pot != src._num_surface_pot || _num_kin != src._num_kin ||</span></a>
+<a name="136"><span class="lineNum">     136 </span><span class="lineCov">        341 :         _original_charge_balance_species != src._original_charge_balance_species)</span></a>
+<a name="137"><span class="lineNum">     137 </span><span class="lineCov">          6 :       mooseError(&quot;GeochemicalSystem: copy assigment operator called with inconsistent fundamental &quot;</span></a>
 <a name="138"><span class="lineNum">     138 </span>            :                  &quot;properties&quot;);</a>
 <a name="139"><span class="lineNum">     139 </span>            :     // actually do the copying</a>
-<a name="140"><span class="lineNum">     140 </span><span class="lineCov">        172 :     _mgd = src._mgd;</span></a>
-<a name="141"><span class="lineNum">     141 </span><span class="lineCov">        172 :     _swapper = src._swapper;</span></a>
-<a name="142"><span class="lineNum">     142 </span><span class="lineCov">        172 :     _gac = src._gac;</span></a>
-<a name="143"><span class="lineNum">     143 </span><span class="lineCov">        172 :     _is = src._is;</span></a>
-<a name="144"><span class="lineNum">     144 </span><span class="lineCov">        172 :     _charge_balance_species = src._charge_balance_species;</span></a>
-<a name="145"><span class="lineNum">     145 </span><span class="lineCov">        172 :     _charge_balance_basis_index = src._charge_balance_basis_index;</span></a>
-<a name="146"><span class="lineNum">     146 </span><span class="lineCov">        172 :     _constrained_species = src._constrained_species;</span></a>
-<a name="147"><span class="lineNum">     147 </span><span class="lineCov">        172 :     _constraint_value = src._constraint_value;</span></a>
-<a name="148"><span class="lineNum">     148 </span><span class="lineCov">        172 :     _original_constraint_value = src._original_constraint_value;</span></a>
-<a name="149"><span class="lineNum">     149 </span><span class="lineCov">        172 :     _constraint_meaning = src._constraint_meaning;</span></a>
-<a name="150"><span class="lineNum">     150 </span><span class="lineCov">        172 :     _eqm_log10K = src._eqm_log10K;</span></a>
-<a name="151"><span class="lineNum">     151 </span><span class="lineCov">        172 :     _redox_log10K = src._redox_log10K;</span></a>
-<a name="152"><span class="lineNum">     152 </span><span class="lineCov">        172 :     _kin_log10K = src._kin_log10K;</span></a>
-<a name="153"><span class="lineNum">     153 </span><span class="lineCov">        172 :     _num_basis_in_algebraic_system = src._num_basis_in_algebraic_system;</span></a>
-<a name="154"><span class="lineNum">     154 </span><span class="lineCov">        172 :     _num_in_algebraic_system = src._num_in_algebraic_system;</span></a>
-<a name="155"><span class="lineNum">     155 </span><span class="lineCov">        172 :     _in_algebraic_system = src._in_algebraic_system;</span></a>
-<a name="156"><span class="lineNum">     156 </span><span class="lineCov">        172 :     _algebraic_index = src._algebraic_index;</span></a>
-<a name="157"><span class="lineNum">     157 </span><span class="lineCov">        172 :     _basis_index = src._basis_index;</span></a>
-<a name="158"><span class="lineNum">     158 </span><span class="lineCov">        172 :     _bulk_moles_old = src._bulk_moles_old;</span></a>
-<a name="159"><span class="lineNum">     159 </span><span class="lineCov">        172 :     _basis_molality = src._basis_molality;</span></a>
-<a name="160"><span class="lineNum">     160 </span><span class="lineCov">        172 :     _basis_activity_known = src._basis_activity_known;</span></a>
-<a name="161"><span class="lineNum">     161 </span><span class="lineCov">        172 :     _basis_activity = src._basis_activity;</span></a>
-<a name="162"><span class="lineNum">     162 </span><span class="lineCov">        172 :     _eqm_molality = src._eqm_molality;</span></a>
-<a name="163"><span class="lineNum">     163 </span><span class="lineCov">        172 :     _basis_activity_coef = src._basis_activity_coef;</span></a>
-<a name="164"><span class="lineNum">     164 </span><span class="lineCov">        172 :     _eqm_activity_coef = src._eqm_activity_coef;</span></a>
-<a name="165"><span class="lineNum">     165 </span><span class="lineCov">        172 :     _eqm_activity = src._eqm_activity;</span></a>
-<a name="166"><span class="lineNum">     166 </span><span class="lineCov">        172 :     _surface_pot_expr = src._surface_pot_expr;</span></a>
-<a name="167"><span class="lineNum">     167 </span><span class="lineCov">        172 :     _sorbing_surface_area = src._sorbing_surface_area;</span></a>
-<a name="168"><span class="lineNum">     168 </span><span class="lineCov">        172 :     _kin_moles = src._kin_moles;</span></a>
-<a name="169"><span class="lineNum">     169 </span><span class="lineCov">        172 :     _kin_moles_old = src._kin_moles_old;</span></a>
-<a name="170"><span class="lineNum">     170 </span><span class="lineCov">        172 :     _iters_to_make_consistent = src._iters_to_make_consistent;</span></a>
-<a name="171"><span class="lineNum">     171 </span><span class="lineCov">        172 :     _temperature = src._temperature;</span></a>
-<a name="172"><span class="lineNum">     172 </span><span class="lineCov">        172 :     _min_initial_molality = src._min_initial_molality;</span></a>
-<a name="173"><span class="lineNum">     173 </span><span class="lineCov">        172 :     _original_redox_lhs = src._original_redox_lhs;</span></a>
-<a name="174"><span class="lineNum">     174 </span><span class="lineCov">        172 :     return *this;</span></a>
+<a name="140"><span class="lineNum">     140 </span><span class="lineCov">        339 :     _mgd = src._mgd;</span></a>
+<a name="141"><span class="lineNum">     141 </span><span class="lineCov">        339 :     _swapper = src._swapper;</span></a>
+<a name="142"><span class="lineNum">     142 </span><span class="lineCov">        339 :     _gac = src._gac;</span></a>
+<a name="143"><span class="lineNum">     143 </span><span class="lineCov">        339 :     _is = src._is;</span></a>
+<a name="144"><span class="lineNum">     144 </span><span class="lineCov">        339 :     _charge_balance_species = src._charge_balance_species;</span></a>
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">        339 :     _charge_balance_basis_index = src._charge_balance_basis_index;</span></a>
+<a name="146"><span class="lineNum">     146 </span><span class="lineCov">        339 :     _constrained_species = src._constrained_species;</span></a>
+<a name="147"><span class="lineNum">     147 </span><span class="lineCov">        339 :     _constraint_value = src._constraint_value;</span></a>
+<a name="148"><span class="lineNum">     148 </span><span class="lineCov">        339 :     _original_constraint_value = src._original_constraint_value;</span></a>
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">        339 :     _constraint_meaning = src._constraint_meaning;</span></a>
+<a name="150"><span class="lineNum">     150 </span><span class="lineCov">        339 :     _eqm_log10K = src._eqm_log10K;</span></a>
+<a name="151"><span class="lineNum">     151 </span><span class="lineCov">        339 :     _redox_log10K = src._redox_log10K;</span></a>
+<a name="152"><span class="lineNum">     152 </span><span class="lineCov">        339 :     _kin_log10K = src._kin_log10K;</span></a>
+<a name="153"><span class="lineNum">     153 </span><span class="lineCov">        339 :     _num_basis_in_algebraic_system = src._num_basis_in_algebraic_system;</span></a>
+<a name="154"><span class="lineNum">     154 </span><span class="lineCov">        339 :     _num_in_algebraic_system = src._num_in_algebraic_system;</span></a>
+<a name="155"><span class="lineNum">     155 </span><span class="lineCov">        339 :     _in_algebraic_system = src._in_algebraic_system;</span></a>
+<a name="156"><span class="lineNum">     156 </span><span class="lineCov">        339 :     _algebraic_index = src._algebraic_index;</span></a>
+<a name="157"><span class="lineNum">     157 </span><span class="lineCov">        339 :     _basis_index = src._basis_index;</span></a>
+<a name="158"><span class="lineNum">     158 </span><span class="lineCov">        339 :     _bulk_moles_old = src._bulk_moles_old;</span></a>
+<a name="159"><span class="lineNum">     159 </span><span class="lineCov">        339 :     _basis_molality = src._basis_molality;</span></a>
+<a name="160"><span class="lineNum">     160 </span><span class="lineCov">        339 :     _basis_activity_known = src._basis_activity_known;</span></a>
+<a name="161"><span class="lineNum">     161 </span><span class="lineCov">        339 :     _basis_activity = src._basis_activity;</span></a>
+<a name="162"><span class="lineNum">     162 </span><span class="lineCov">        339 :     _eqm_molality = src._eqm_molality;</span></a>
+<a name="163"><span class="lineNum">     163 </span><span class="lineCov">        339 :     _basis_activity_coef = src._basis_activity_coef;</span></a>
+<a name="164"><span class="lineNum">     164 </span><span class="lineCov">        339 :     _eqm_activity_coef = src._eqm_activity_coef;</span></a>
+<a name="165"><span class="lineNum">     165 </span><span class="lineCov">        339 :     _eqm_activity = src._eqm_activity;</span></a>
+<a name="166"><span class="lineNum">     166 </span><span class="lineCov">        339 :     _surface_pot_expr = src._surface_pot_expr;</span></a>
+<a name="167"><span class="lineNum">     167 </span><span class="lineCov">        339 :     _sorbing_surface_area = src._sorbing_surface_area;</span></a>
+<a name="168"><span class="lineNum">     168 </span><span class="lineCov">        339 :     _kin_moles = src._kin_moles;</span></a>
+<a name="169"><span class="lineNum">     169 </span><span class="lineCov">        339 :     _kin_moles_old = src._kin_moles_old;</span></a>
+<a name="170"><span class="lineNum">     170 </span><span class="lineCov">        339 :     _iters_to_make_consistent = src._iters_to_make_consistent;</span></a>
+<a name="171"><span class="lineNum">     171 </span><span class="lineCov">        339 :     _temperature = src._temperature;</span></a>
+<a name="172"><span class="lineNum">     172 </span><span class="lineCov">        339 :     _min_initial_molality = src._min_initial_molality;</span></a>
+<a name="173"><span class="lineNum">     173 </span><span class="lineCov">        339 :     _original_redox_lhs = src._original_redox_lhs;</span></a>
+<a name="174"><span class="lineNum">     174 </span><span class="lineCov">        339 :     return *this;</span></a>
 <a name="175"><span class="lineNum">     175 </span>            :   };</a>
 <a name="176"><span class="lineNum">     176 </span>            : </a>
 <a name="177"><span class="lineNum">     177 </span>            :   /**</a>
 <a name="178"><span class="lineNum">     178 </span>            :    * Copy constructor.</a>
 <a name="179"><span class="lineNum">     179 </span>            :    */</a>
-<a name="180"><span class="lineNum">     180 </span><span class="lineCov">       2852 :   GeochemicalSystem(const GeochemicalSystem &amp; src) = default;</span></a>
+<a name="180"><span class="lineNum">     180 </span><span class="lineCov">       5580 :   GeochemicalSystem(const GeochemicalSystem &amp; src) = default;</span></a>
 <a name="181"><span class="lineNum">     181 </span>            : </a>
-<a name="182"><span class="lineNum">     182 </span><span class="lineCov">          2 :   bool operator==(const GeochemicalSystem &amp; rhs) const</span></a>
+<a name="182"><span class="lineNum">     182 </span><span class="lineCov">          4 :   bool operator==(const GeochemicalSystem &amp; rhs) const</span></a>
 <a name="183"><span class="lineNum">     183 </span>            :   {</a>
-<a name="184"><span class="lineNum">     184 </span><span class="lineCov">          4 :     return (_mgd == rhs._mgd) &amp;&amp; (_num_basis == rhs._num_basis) &amp;&amp; (_num_eqm == rhs._num_eqm) &amp;&amp;</span></a>
-<a name="185"><span class="lineNum">     185 </span><span class="lineCov">          2 :            (_num_redox == rhs._num_redox) &amp;&amp; (_num_surface_pot == rhs._num_surface_pot) &amp;&amp;</span></a>
-<a name="186"><span class="lineNum">     186 </span><span class="lineCov">          4 :            (_num_kin == rhs._num_kin) &amp;&amp; (_swapper == rhs._swapper) &amp;&amp;</span></a>
-<a name="187"><span class="lineNum">     187 </span><span class="lineCov">          4 :            (_swap_out == rhs._swap_out) &amp;&amp; (_swap_in == rhs._swap_in) &amp;&amp; (_gac == rhs._gac) &amp;&amp;</span></a>
-<a name="188"><span class="lineNum">     188 </span><span class="lineCov">          4 :            (_is == rhs._is) &amp;&amp; (_charge_balance_species == rhs._charge_balance_species) &amp;&amp;</span></a>
-<a name="189"><span class="lineNum">     189 </span><span class="lineCov">          2 :            (_original_charge_balance_species == rhs._original_charge_balance_species) &amp;&amp;</span></a>
-<a name="190"><span class="lineNum">     190 </span><span class="lineCov">          4 :            (_charge_balance_basis_index == rhs._charge_balance_basis_index) &amp;&amp;</span></a>
-<a name="191"><span class="lineNum">     191 </span><span class="lineCov">          2 :            (_constrained_species == rhs._constrained_species) &amp;&amp;</span></a>
-<a name="192"><span class="lineNum">     192 </span><span class="lineCov">          2 :            (_constraint_value == rhs._constraint_value) &amp;&amp;</span></a>
-<a name="193"><span class="lineNum">     193 </span><span class="lineCov">          2 :            (_original_constraint_value == rhs._original_constraint_value) &amp;&amp;</span></a>
-<a name="194"><span class="lineNum">     194 </span><span class="lineCov">          4 :            (_constraint_meaning == rhs._constraint_meaning) &amp;&amp; (_eqm_log10K == rhs._eqm_log10K) &amp;&amp;</span></a>
-<a name="195"><span class="lineNum">     195 </span><span class="lineCov">          4 :            (_redox_log10K == rhs._redox_log10K) &amp;&amp; (_kin_log10K == rhs._kin_log10K) &amp;&amp;</span></a>
-<a name="196"><span class="lineNum">     196 </span><span class="lineCov">          2 :            (_num_basis_in_algebraic_system == rhs._num_basis_in_algebraic_system) &amp;&amp;</span></a>
-<a name="197"><span class="lineNum">     197 </span><span class="lineCov">          2 :            (_num_in_algebraic_system == rhs._num_in_algebraic_system) &amp;&amp;</span></a>
-<a name="198"><span class="lineNum">     198 </span><span class="lineCov">          2 :            (_in_algebraic_system == rhs._in_algebraic_system) &amp;&amp;</span></a>
-<a name="199"><span class="lineNum">     199 </span><span class="lineCov">          2 :            (_algebraic_index == rhs._algebraic_index) &amp;&amp; (_basis_index == rhs._basis_index) &amp;&amp;</span></a>
-<a name="200"><span class="lineNum">     200 </span><span class="lineCov">          6 :            (_bulk_moles_old == rhs._bulk_moles_old) &amp;&amp; (_basis_molality == rhs._basis_molality) &amp;&amp;</span></a>
-<a name="201"><span class="lineNum">     201 </span><span class="lineCov">          2 :            (_basis_activity_known == rhs._basis_activity_known) &amp;&amp;</span></a>
-<a name="202"><span class="lineNum">     202 </span><span class="lineCov">          4 :            (_basis_activity == rhs._basis_activity) &amp;&amp; (_eqm_molality == rhs._eqm_molality) &amp;&amp;</span></a>
-<a name="203"><span class="lineNum">     203 </span><span class="lineCov">          2 :            (_basis_activity_coef == rhs._basis_activity_coef) &amp;&amp;</span></a>
-<a name="204"><span class="lineNum">     204 </span><span class="lineCov">          4 :            (_eqm_activity_coef == rhs._eqm_activity_coef) &amp;&amp; (_eqm_activity == rhs._eqm_activity) &amp;&amp;</span></a>
-<a name="205"><span class="lineNum">     205 </span><span class="lineCov">          2 :            (_surface_pot_expr == rhs._surface_pot_expr) &amp;&amp;</span></a>
-<a name="206"><span class="lineNum">     206 </span><span class="lineCov">          4 :            (_sorbing_surface_area == rhs._sorbing_surface_area) &amp;&amp; (_kin_moles == rhs._kin_moles) &amp;&amp;</span></a>
-<a name="207"><span class="lineNum">     207 </span><span class="lineCov">          2 :            (_kin_moles_old == rhs._kin_moles_old) &amp;&amp;</span></a>
-<a name="208"><span class="lineNum">     208 </span><span class="lineCov">          2 :            (_iters_to_make_consistent == rhs._iters_to_make_consistent) &amp;&amp;</span></a>
-<a name="209"><span class="lineNum">     209 </span><span class="lineCov">          2 :            (_temperature == rhs._temperature) &amp;&amp;</span></a>
-<a name="210"><span class="lineNum">     210 </span><span class="lineCov">          4 :            (_min_initial_molality == rhs._min_initial_molality) &amp;&amp;</span></a>
-<a name="211"><span class="lineNum">     211 </span><span class="lineCov">          2 :            (_original_redox_lhs == rhs._original_redox_lhs);</span></a>
+<a name="184"><span class="lineNum">     184 </span><span class="lineCov">          8 :     return (_mgd == rhs._mgd) &amp;&amp; (_num_basis == rhs._num_basis) &amp;&amp; (_num_eqm == rhs._num_eqm) &amp;&amp;</span></a>
+<a name="185"><span class="lineNum">     185 </span><span class="lineCov">          4 :            (_num_redox == rhs._num_redox) &amp;&amp; (_num_surface_pot == rhs._num_surface_pot) &amp;&amp;</span></a>
+<a name="186"><span class="lineNum">     186 </span><span class="lineCov">          8 :            (_num_kin == rhs._num_kin) &amp;&amp; (_swapper == rhs._swapper) &amp;&amp;</span></a>
+<a name="187"><span class="lineNum">     187 </span><span class="lineCov">          8 :            (_swap_out == rhs._swap_out) &amp;&amp; (_swap_in == rhs._swap_in) &amp;&amp; (_gac == rhs._gac) &amp;&amp;</span></a>
+<a name="188"><span class="lineNum">     188 </span><span class="lineCov">          8 :            (_is == rhs._is) &amp;&amp; (_charge_balance_species == rhs._charge_balance_species) &amp;&amp;</span></a>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">          4 :            (_original_charge_balance_species == rhs._original_charge_balance_species) &amp;&amp;</span></a>
+<a name="190"><span class="lineNum">     190 </span><span class="lineCov">          8 :            (_charge_balance_basis_index == rhs._charge_balance_basis_index) &amp;&amp;</span></a>
+<a name="191"><span class="lineNum">     191 </span><span class="lineCov">          4 :            (_constrained_species == rhs._constrained_species) &amp;&amp;</span></a>
+<a name="192"><span class="lineNum">     192 </span><span class="lineCov">          4 :            (_constraint_value == rhs._constraint_value) &amp;&amp;</span></a>
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">          4 :            (_original_constraint_value == rhs._original_constraint_value) &amp;&amp;</span></a>
+<a name="194"><span class="lineNum">     194 </span><span class="lineCov">          8 :            (_constraint_meaning == rhs._constraint_meaning) &amp;&amp; (_eqm_log10K == rhs._eqm_log10K) &amp;&amp;</span></a>
+<a name="195"><span class="lineNum">     195 </span><span class="lineCov">          8 :            (_redox_log10K == rhs._redox_log10K) &amp;&amp; (_kin_log10K == rhs._kin_log10K) &amp;&amp;</span></a>
+<a name="196"><span class="lineNum">     196 </span><span class="lineCov">          4 :            (_num_basis_in_algebraic_system == rhs._num_basis_in_algebraic_system) &amp;&amp;</span></a>
+<a name="197"><span class="lineNum">     197 </span><span class="lineCov">          4 :            (_num_in_algebraic_system == rhs._num_in_algebraic_system) &amp;&amp;</span></a>
+<a name="198"><span class="lineNum">     198 </span><span class="lineCov">          4 :            (_in_algebraic_system == rhs._in_algebraic_system) &amp;&amp;</span></a>
+<a name="199"><span class="lineNum">     199 </span><span class="lineCov">          4 :            (_algebraic_index == rhs._algebraic_index) &amp;&amp; (_basis_index == rhs._basis_index) &amp;&amp;</span></a>
+<a name="200"><span class="lineNum">     200 </span><span class="lineCov">         12 :            (_bulk_moles_old == rhs._bulk_moles_old) &amp;&amp; (_basis_molality == rhs._basis_molality) &amp;&amp;</span></a>
+<a name="201"><span class="lineNum">     201 </span><span class="lineCov">          4 :            (_basis_activity_known == rhs._basis_activity_known) &amp;&amp;</span></a>
+<a name="202"><span class="lineNum">     202 </span><span class="lineCov">          8 :            (_basis_activity == rhs._basis_activity) &amp;&amp; (_eqm_molality == rhs._eqm_molality) &amp;&amp;</span></a>
+<a name="203"><span class="lineNum">     203 </span><span class="lineCov">          4 :            (_basis_activity_coef == rhs._basis_activity_coef) &amp;&amp;</span></a>
+<a name="204"><span class="lineNum">     204 </span><span class="lineCov">          8 :            (_eqm_activity_coef == rhs._eqm_activity_coef) &amp;&amp; (_eqm_activity == rhs._eqm_activity) &amp;&amp;</span></a>
+<a name="205"><span class="lineNum">     205 </span><span class="lineCov">          4 :            (_surface_pot_expr == rhs._surface_pot_expr) &amp;&amp;</span></a>
+<a name="206"><span class="lineNum">     206 </span><span class="lineCov">          8 :            (_sorbing_surface_area == rhs._sorbing_surface_area) &amp;&amp; (_kin_moles == rhs._kin_moles) &amp;&amp;</span></a>
+<a name="207"><span class="lineNum">     207 </span><span class="lineCov">          4 :            (_kin_moles_old == rhs._kin_moles_old) &amp;&amp;</span></a>
+<a name="208"><span class="lineNum">     208 </span><span class="lineCov">          4 :            (_iters_to_make_consistent == rhs._iters_to_make_consistent) &amp;&amp;</span></a>
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">          4 :            (_temperature == rhs._temperature) &amp;&amp;</span></a>
+<a name="210"><span class="lineNum">     210 </span><span class="lineCov">          8 :            (_min_initial_molality == rhs._min_initial_molality) &amp;&amp;</span></a>
+<a name="211"><span class="lineNum">     211 </span><span class="lineCov">          4 :            (_original_redox_lhs == rhs._original_redox_lhs);</span></a>
 <a name="212"><span class="lineNum">     212 </span>            :   }</a>
 <a name="213"><span class="lineNum">     213 </span>            : </a>
 <a name="214"><span class="lineNum">     214 </span>            :   /// returns the number of species in the basis</a>

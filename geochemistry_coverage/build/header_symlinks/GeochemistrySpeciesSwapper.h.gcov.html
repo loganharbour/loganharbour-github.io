@@ -1,0 +1,310 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - geochemistry Test Coverage - build/header_symlinks/GeochemistrySpeciesSwapper.h</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">build/header_symlinks</a> - GeochemistrySpeciesSwapper.h<span style="font-size: 80%;"> (source / <a href="GeochemistrySpeciesSwapper.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">geochemistry Test Coverage</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2020-11-30 20:56:32</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntryHi">-</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Legend:</td>
+            <td class="headerValueLeg">            Lines:
+            <span class="coverLegendCov">hit</span>
+            <span class="coverLegendNoCov">not hit</span>
+</td>
+            <td></td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : //* This file is part of the MOOSE framework</a>
+<a name="2"><span class="lineNum">       2 </span>            : //* https://www.mooseframework.org</a>
+<a name="3"><span class="lineNum">       3 </span>            : //*</a>
+<a name="4"><span class="lineNum">       4 </span>            : //* All rights reserved, see COPYRIGHT for full restrictions</a>
+<a name="5"><span class="lineNum">       5 </span>            : //* https://github.com/idaholab/moose/blob/master/COPYRIGHT</a>
+<a name="6"><span class="lineNum">       6 </span>            : //*</a>
+<a name="7"><span class="lineNum">       7 </span>            : //* Licensed under LGPL 2.1, please see LICENSE for details</a>
+<a name="8"><span class="lineNum">       8 </span>            : //* https://www.gnu.org/licenses/lgpl-2.1.html</a>
+<a name="9"><span class="lineNum">       9 </span>            : </a>
+<a name="10"><span class="lineNum">      10 </span>            : #pragma once</a>
+<a name="11"><span class="lineNum">      11 </span>            : </a>
+<a name="12"><span class="lineNum">      12 </span>            : #include &quot;DenseMatrix.h&quot;</a>
+<a name="13"><span class="lineNum">      13 </span>            : #include &quot;PertinentGeochemicalSystem.h&quot;</a>
+<a name="14"><span class="lineNum">      14 </span>            : #include &lt;libmesh/dense_vector.h&gt;</a>
+<a name="15"><span class="lineNum">      15 </span>            : </a>
+<a name="16"><span class="lineNum">      16 </span>            : /**</a>
+<a name="17"><span class="lineNum">      17 </span>            :  * Class to swap basis species with equilibrium species</a>
+<a name="18"><span class="lineNum">      18 </span>            :  */</a>
+<a name="19"><span class="lineNum">      19 </span>            : class GeochemistrySpeciesSwapper</a>
+<a name="20"><span class="lineNum">      20 </span>            : {</a>
+<a name="21"><span class="lineNum">      21 </span>            : public:</a>
+<a name="22"><span class="lineNum">      22 </span>            :   /**</a>
+<a name="23"><span class="lineNum">      23 </span>            :    * @param basis_size Number of basis species in the geochemical model</a>
+<a name="24"><span class="lineNum">      24 </span>            :    * @param stoi_tol Swapping involves inverting matrices via a singular value decomposition. During</a>
+<a name="25"><span class="lineNum">      25 </span>            :    * this process: (1) if abs(singular value) &lt; stoi_tol * L1norm(singular values), then the matrix</a>
+<a name="26"><span class="lineNum">      26 </span>            :    * is deemed singular (so the basis swap is deemed invalid); (2) if abs(any stoichiometric</a>
+<a name="27"><span class="lineNum">      27 </span>            :    * coefficient) &lt; stoi_tol then it is set to zero.  A suggested reasonable value is stoi_tol=1E-6</a>
+<a name="28"><span class="lineNum">      28 </span>            :    */</a>
+<a name="29"><span class="lineNum">      29 </span>            :   GeochemistrySpeciesSwapper(unsigned basis_size, Real stoi_tol);</a>
+<a name="30"><span class="lineNum">      30 </span>            : </a>
+<a name="31"><span class="lineNum">      31 </span><span class="lineCov">          2 :   bool operator==(const GeochemistrySpeciesSwapper &amp; rhs) const</span></a>
+<a name="32"><span class="lineNum">      32 </span>            :   {</a>
+<a name="33"><span class="lineNum">      33 </span><span class="lineCov">          2 :     return (_stoi_tol == rhs._stoi_tol) &amp;&amp; (_swap_matrix.m() == rhs._swap_matrix.m());</span></a>
+<a name="34"><span class="lineNum">      34 </span>            :   };</a>
+<a name="35"><span class="lineNum">      35 </span>            : </a>
+<a name="36"><span class="lineNum">      36 </span>            :   /**</a>
+<a name="37"><span class="lineNum">      37 </span>            :    * Check that replacing the named basis species with the named equilibrium species is valid.  In</a>
+<a name="38"><span class="lineNum">      38 </span>            :    * performing this check, the &quot;swap&quot; matrix is inverted, so the check is somewhat expensive.</a>
+<a name="39"><span class="lineNum">      39 </span>            :    * Therefore, if the swap will be performed, assuming it's valid, the performSwap method should be</a>
+<a name="40"><span class="lineNum">      40 </span>            :    * used instead.</a>
+<a name="41"><span class="lineNum">      41 </span>            :    * A mooseError or mooseException will result if the swap is invalid</a>
+<a name="42"><span class="lineNum">      42 </span>            :    * @param mgd The ModelGeochemicalDatabase that holds all information regarding basis</a>
+<a name="43"><span class="lineNum">      43 </span>            :    * components, equilibrium species, stoichiometries, etc</a>
+<a name="44"><span class="lineNum">      44 </span>            :    * @param replace_this The basis component that will be removed from the basis and added to the</a>
+<a name="45"><span class="lineNum">      45 </span>            :    * equilibrium species list</a>
+<a name="46"><span class="lineNum">      46 </span>            :    * @param with_this The equilibrium species that will be removed from the equilibrium species list</a>
+<a name="47"><span class="lineNum">      47 </span>            :    * and added to the basis component list</a>
+<a name="48"><span class="lineNum">      48 </span>            :    */</a>
+<a name="49"><span class="lineNum">      49 </span>            :   void checkSwap(const ModelGeochemicalDatabase &amp; mgd,</a>
+<a name="50"><span class="lineNum">      50 </span>            :                  const std::string &amp; replace_this,</a>
+<a name="51"><span class="lineNum">      51 </span>            :                  const std::string &amp; with_this);</a>
+<a name="52"><span class="lineNum">      52 </span>            : </a>
+<a name="53"><span class="lineNum">      53 </span>            :   /**</a>
+<a name="54"><span class="lineNum">      54 </span>            :    * Check that replacing the indexed basis species with the indexed equilibrium species is valid.</a>
+<a name="55"><span class="lineNum">      55 </span>            :    * In performing this check, the &quot;swap&quot; matrix is inverted, so the check is somewhat expensive.</a>
+<a name="56"><span class="lineNum">      56 </span>            :    * Therefore, if the swap will be performed, assuming it's valid, the performSwap method should be</a>
+<a name="57"><span class="lineNum">      57 </span>            :    * used instead.</a>
+<a name="58"><span class="lineNum">      58 </span>            :    * A mooseError or mooseException will result if the swap is invalid</a>
+<a name="59"><span class="lineNum">      59 </span>            :    * @param mgd The ModelGeochemicalDatabase that holds all information regarding basis</a>
+<a name="60"><span class="lineNum">      60 </span>            :    * components, equilibrium species, stoichiometries, etc</a>
+<a name="61"><span class="lineNum">      61 </span>            :    * @param basis_index_to_replace The index of the basis component that will be removed from the</a>
+<a name="62"><span class="lineNum">      62 </span>            :    * basis and added to the equilibrium species list</a>
+<a name="63"><span class="lineNum">      63 </span>            :    * @param eqm_index_to_insert The index of the equilibrium species that will be removed from the</a>
+<a name="64"><span class="lineNum">      64 </span>            :    * equilibrium species list and added to the basis component list</a>
+<a name="65"><span class="lineNum">      65 </span>            :    */</a>
+<a name="66"><span class="lineNum">      66 </span>            :   void checkSwap(const ModelGeochemicalDatabase &amp; mgd,</a>
+<a name="67"><span class="lineNum">      67 </span>            :                  unsigned basis_index_to_replace,</a>
+<a name="68"><span class="lineNum">      68 </span>            :                  unsigned eqm_index_to_insert);</a>
+<a name="69"><span class="lineNum">      69 </span>            : </a>
+<a name="70"><span class="lineNum">      70 </span>            :   /**</a>
+<a name="71"><span class="lineNum">      71 </span>            :    * Check that replacing the named basis species with the named equilibrium species is valid, and</a>
+<a name="72"><span class="lineNum">      72 </span>            :    * then perform this swap by altering the mgd data structure.</a>
+<a name="73"><span class="lineNum">      73 </span>            :    * A mooseError or mooseException will result if the swap is invalid</a>
+<a name="74"><span class="lineNum">      74 </span>            :    * @param mgd The ModelGeochemicalDatabase that holds all information regarding basis</a>
+<a name="75"><span class="lineNum">      75 </span>            :    * components, equilibrium species, stoichiometries, etc</a>
+<a name="76"><span class="lineNum">      76 </span>            :    * @param replace_this The basis component that will be removed from the basis and added to the</a>
+<a name="77"><span class="lineNum">      77 </span>            :    * equilibrium species list</a>
+<a name="78"><span class="lineNum">      78 </span>            :    * @param with_this The equilibrium species that will be removed from the equilibrium species list</a>
+<a name="79"><span class="lineNum">      79 </span>            :    * and added to the basis component list</a>
+<a name="80"><span class="lineNum">      80 </span>            :    */</a>
+<a name="81"><span class="lineNum">      81 </span>            :   void performSwap(ModelGeochemicalDatabase &amp; mgd,</a>
+<a name="82"><span class="lineNum">      82 </span>            :                    const std::string &amp; replace_this,</a>
+<a name="83"><span class="lineNum">      83 </span>            :                    const std::string &amp; with_this);</a>
+<a name="84"><span class="lineNum">      84 </span>            : </a>
+<a name="85"><span class="lineNum">      85 </span>            :   /**</a>
+<a name="86"><span class="lineNum">      86 </span>            :    * Check that replacing the indexed basis species with the indexed equilibrium species is valid,</a>
+<a name="87"><span class="lineNum">      87 </span>            :    * and then perform this swap by altering the mgd data structure.</a>
+<a name="88"><span class="lineNum">      88 </span>            :    * A mooseError or mooseException will result if the swap is invalid</a>
+<a name="89"><span class="lineNum">      89 </span>            :    * @param mgd The ModelGeochemicalDatabase that holds all information regarding basis</a>
+<a name="90"><span class="lineNum">      90 </span>            :    * components, equilibrium species, stoichiometries, etc</a>
+<a name="91"><span class="lineNum">      91 </span>            :    * @param basis_index_to_replace The index of the basis component that will be removed from the</a>
+<a name="92"><span class="lineNum">      92 </span>            :    * basis and added to the equilibrium species list</a>
+<a name="93"><span class="lineNum">      93 </span>            :    * @param eqm_index_to_insert The index of the equilibrium species that will be removed from the</a>
+<a name="94"><span class="lineNum">      94 </span>            :    * equilibrium species list and added to the basis component list</a>
+<a name="95"><span class="lineNum">      95 </span>            :    */</a>
+<a name="96"><span class="lineNum">      96 </span>            :   void performSwap(ModelGeochemicalDatabase &amp; mgd,</a>
+<a name="97"><span class="lineNum">      97 </span>            :                    unsigned basis_index_to_replace,</a>
+<a name="98"><span class="lineNum">      98 </span>            :                    unsigned eqm_index_to_insert);</a>
+<a name="99"><span class="lineNum">      99 </span>            : </a>
+<a name="100"><span class="lineNum">     100 </span>            :   /**</a>
+<a name="101"><span class="lineNum">     101 </span>            :    * Check that replacing the named basis species with the named equilibrium species is valid, and</a>
+<a name="102"><span class="lineNum">     102 </span>            :    * then perform this swap by altering the mgd data structure, and calculate the bulk composition</a>
+<a name="103"><span class="lineNum">     103 </span>            :    * of the new system.</a>
+<a name="104"><span class="lineNum">     104 </span>            :    * A mooseError or mooseException will result if the swap is invalid</a>
+<a name="105"><span class="lineNum">     105 </span>            :    * @param mgd The ModelGeochemicalDatabase that holds all information regarding basis</a>
+<a name="106"><span class="lineNum">     106 </span>            :    * components, equilibrium species, stoichiometries, etc</a>
+<a name="107"><span class="lineNum">     107 </span>            :    * @param[in/out] bulk_composition Upon entry, the bulk composition in the original basis.  Upon</a>
+<a name="108"><span class="lineNum">     108 </span>            :    * exit, the bulk composition in the basis after the swap</a>
+<a name="109"><span class="lineNum">     109 </span>            :    * @param replace_this The basis component that will be removed from the basis and added to the</a>
+<a name="110"><span class="lineNum">     110 </span>            :    * equilibrium species list</a>
+<a name="111"><span class="lineNum">     111 </span>            :    * @param with_this The equilibrium species that will be removed from the equilibrium species list</a>
+<a name="112"><span class="lineNum">     112 </span>            :    * and added to the basis component list</a>
+<a name="113"><span class="lineNum">     113 </span>            :    */</a>
+<a name="114"><span class="lineNum">     114 </span>            :   void performSwap(ModelGeochemicalDatabase &amp; mgd,</a>
+<a name="115"><span class="lineNum">     115 </span>            :                    DenseVector&lt;Real&gt; &amp; bulk_composition,</a>
+<a name="116"><span class="lineNum">     116 </span>            :                    const std::string &amp; replace_this,</a>
+<a name="117"><span class="lineNum">     117 </span>            :                    const std::string &amp; with_this);</a>
+<a name="118"><span class="lineNum">     118 </span>            : </a>
+<a name="119"><span class="lineNum">     119 </span>            :   /**</a>
+<a name="120"><span class="lineNum">     120 </span>            :    * Check that replacing the indexed basis species with the indexed equilibrium species is valid,</a>
+<a name="121"><span class="lineNum">     121 </span>            :    * and then perform this swap by altering the mgd data structure, and calculate the bulk</a>
+<a name="122"><span class="lineNum">     122 </span>            :    * composition of the new system.</a>
+<a name="123"><span class="lineNum">     123 </span>            :    * A mooseError or mooseException will result if the swap is invalid</a>
+<a name="124"><span class="lineNum">     124 </span>            :    * @param mgd The ModelGeochemicalDatabase that holds all information regarding basis</a>
+<a name="125"><span class="lineNum">     125 </span>            :    * components, equilibrium species, stoichiometries, etc</a>
+<a name="126"><span class="lineNum">     126 </span>            :    * @param[in/out] bulk_composition Upon entry, the bulk composition in the original basis.  Upon</a>
+<a name="127"><span class="lineNum">     127 </span>            :    * exit, the bulk composition in the basis after the swap</a>
+<a name="128"><span class="lineNum">     128 </span>            :    * @param basis_index_to_replace The index of the basis component that will be removed from the</a>
+<a name="129"><span class="lineNum">     129 </span>            :    * basis and added to the equilibrium species list</a>
+<a name="130"><span class="lineNum">     130 </span>            :    * @param eqm_index_to_insert The index of the equilibrium species that will be removed from the</a>
+<a name="131"><span class="lineNum">     131 </span>            :    * equilibrium species list and added to the basis component list</a>
+<a name="132"><span class="lineNum">     132 </span>            :    */</a>
+<a name="133"><span class="lineNum">     133 </span>            :   void performSwap(ModelGeochemicalDatabase &amp; mgd,</a>
+<a name="134"><span class="lineNum">     134 </span>            :                    DenseVector&lt;Real&gt; &amp; bulk_composition,</a>
+<a name="135"><span class="lineNum">     135 </span>            :                    unsigned basis_index_to_replace,</a>
+<a name="136"><span class="lineNum">     136 </span>            :                    unsigned eqm_index_to_insert);</a>
+<a name="137"><span class="lineNum">     137 </span>            : </a>
+<a name="138"><span class="lineNum">     138 </span>            :   /**</a>
+<a name="139"><span class="lineNum">     139 </span>            :    * For the the given basis index, find the equilibrium index that it should be swapped with</a>
+<a name="140"><span class="lineNum">     140 </span>            :    * @param basis_ind index of basis species in mgd that we'd like to swap out of the basis</a>
+<a name="141"><span class="lineNum">     141 </span>            :    * @param mgd the model's geochemical databgase</a>
+<a name="142"><span class="lineNum">     142 </span>            :    * @param eqm_molality the molality of all the equilibrium species</a>
+<a name="143"><span class="lineNum">     143 </span>            :    * @param minerals_allowed if false, best_eqm_species will not correspond to a mineral.  Since</a>
+<a name="144"><span class="lineNum">     144 </span>            :    * equilibrium minerals have molality=0 it is very unlikely that best_eqm_species will correspond</a>
+<a name="145"><span class="lineNum">     145 </span>            :    * to a mineral, even if this flag is true.</a>
+<a name="146"><span class="lineNum">     146 </span>            :    * @param gases_allowed if false, best_eqm_species will not correspond to a gas.  Since</a>
+<a name="147"><span class="lineNum">     147 </span>            :    * equilibrium gases have molality=0 it is very unlikely that best_eqm_species will correspond to</a>
+<a name="148"><span class="lineNum">     148 </span>            :    * a gas, even if this flag is true.</a>
+<a name="149"><span class="lineNum">     149 </span>            :    * @param sorption_allowed if false, best_eqm_species will not be involved in sorption</a>
+<a name="150"><span class="lineNum">     150 </span>            :    * @param[out] best_eqm_species the index of the equilibrium species that should be swapped with</a>
+<a name="151"><span class="lineNum">     151 </span>            :    * basis_ind</a>
+<a name="152"><span class="lineNum">     152 </span>            :    * @return true if a valid swap was found.  if false, then best_eqm_species will be garbage</a>
+<a name="153"><span class="lineNum">     153 </span>            :    */</a>
+<a name="154"><span class="lineNum">     154 </span>            :   bool findBestEqmSwap(unsigned basis_ind,</a>
+<a name="155"><span class="lineNum">     155 </span>            :                        const ModelGeochemicalDatabase &amp; mgd,</a>
+<a name="156"><span class="lineNum">     156 </span>            :                        const std::vector&lt;Real&gt; &amp; eqm_molality,</a>
+<a name="157"><span class="lineNum">     157 </span>            :                        bool minerals_allowed,</a>
+<a name="158"><span class="lineNum">     158 </span>            :                        bool gas_allowed,</a>
+<a name="159"><span class="lineNum">     159 </span>            :                        bool sorption_allowed,</a>
+<a name="160"><span class="lineNum">     160 </span>            :                        unsigned &amp; best_eqm_species) const;</a>
+<a name="161"><span class="lineNum">     161 </span>            : </a>
+<a name="162"><span class="lineNum">     162 </span>            : private:</a>
+<a name="163"><span class="lineNum">     163 </span>            :   /**</a>
+<a name="164"><span class="lineNum">     164 </span>            :    * Construct the swap matrix, and its inverse, that describes the swap between the indexed basis</a>
+<a name="165"><span class="lineNum">     165 </span>            :    * species and the indexed equilibrium index.  The inverse of the swap matrix is used in alterMGD</a>
+<a name="166"><span class="lineNum">     166 </span>            :    * to modify its datastructures to implement the swap.</a>
+<a name="167"><span class="lineNum">     167 </span>            :    * A mooseError or mooseException will result if the swap is invalid</a>
+<a name="168"><span class="lineNum">     168 </span>            :    * @param mgd The ModelGeochemicalDatabase that holds all information regarding basis</a>
+<a name="169"><span class="lineNum">     169 </span>            :    * components, equilibrium species, stoichiometries, etc</a>
+<a name="170"><span class="lineNum">     170 </span>            :    * @param basis_index_to_replace The index of the basis component that will be removed from the</a>
+<a name="171"><span class="lineNum">     171 </span>            :    * basis and added to the equilibrium species list</a>
+<a name="172"><span class="lineNum">     172 </span>            :    * @param eqm_index_to_insert The index of the equilibrium species that will be removed from the</a>
+<a name="173"><span class="lineNum">     173 </span>            :    * equilibrium species list and added to the basis component list</a>
+<a name="174"><span class="lineNum">     174 </span>            :    */</a>
+<a name="175"><span class="lineNum">     175 </span>            :   void constructInverseMatrix(const ModelGeochemicalDatabase &amp; mgd,</a>
+<a name="176"><span class="lineNum">     176 </span>            :                               unsigned basis_index_to_replace,</a>
+<a name="177"><span class="lineNum">     177 </span>            :                               unsigned eqm_index_to_insert);</a>
+<a name="178"><span class="lineNum">     178 </span>            : </a>
+<a name="179"><span class="lineNum">     179 </span>            :   /**</a>
+<a name="180"><span class="lineNum">     180 </span>            :    * Modify the ModelGeochemicalDatabase mgd to swap the indexed basis</a>
+<a name="181"><span class="lineNum">     181 </span>            :    * species and the indexed equilibrium index.</a>
+<a name="182"><span class="lineNum">     182 </span>            :    * @param mgd The ModelGeochemicalDatabase that holds all information regarding basis</a>
+<a name="183"><span class="lineNum">     183 </span>            :    * components, equilibrium species, stoichiometries, etc</a>
+<a name="184"><span class="lineNum">     184 </span>            :    * @param basis_index_to_replace The index of the basis component that will be removed from the</a>
+<a name="185"><span class="lineNum">     185 </span>            :    * basis and added to the equilibrium species list</a>
+<a name="186"><span class="lineNum">     186 </span>            :    * @param eqm_index_to_insert The index of the equilibrium species that will be removed from the</a>
+<a name="187"><span class="lineNum">     187 </span>            :    * equilibrium species list and added to the basis component list</a>
+<a name="188"><span class="lineNum">     188 </span>            :    */</a>
+<a name="189"><span class="lineNum">     189 </span>            :   void alterMGD(ModelGeochemicalDatabase &amp; mgd,</a>
+<a name="190"><span class="lineNum">     190 </span>            :                 unsigned basis_index_to_replace,</a>
+<a name="191"><span class="lineNum">     191 </span>            :                 unsigned eqm_index_to_insert);</a>
+<a name="192"><span class="lineNum">     192 </span>            : </a>
+<a name="193"><span class="lineNum">     193 </span>            :   /**</a>
+<a name="194"><span class="lineNum">     194 </span>            :    * Calculate the bulk composition in the new basis based on the bulk composition in the original</a>
+<a name="195"><span class="lineNum">     195 </span>            :    * basis</a>
+<a name="196"><span class="lineNum">     196 </span>            :    * @param basis_size Size of basis, which is only used for error checking</a>
+<a name="197"><span class="lineNum">     197 </span>            :    * @param[in/out] bulk_composition Upon entry, the bulk composition in the original basis.  Upon</a>
+<a name="198"><span class="lineNum">     198 </span>            :    * exit, the bulk composition in the basis after the swap</a>
+<a name="199"><span class="lineNum">     199 </span>            :    */</a>
+<a name="200"><span class="lineNum">     200 </span>            :   void alterBulkComposition(unsigned basis_size, DenseVector&lt;Real&gt; &amp; bulk_composition) const;</a>
+<a name="201"><span class="lineNum">     201 </span>            : </a>
+<a name="202"><span class="lineNum">     202 </span>            :   /// tolerance for matrix inversion and stoichiometric coefficients</a>
+<a name="203"><span class="lineNum">     203 </span>            :   Real _stoi_tol;</a>
+<a name="204"><span class="lineNum">     204 </span>            : </a>
+<a name="205"><span class="lineNum">     205 </span>            :   /// swap matrix</a>
+<a name="206"><span class="lineNum">     206 </span>            :   DenseMatrix&lt;Real&gt; _swap_matrix;</a>
+<a name="207"><span class="lineNum">     207 </span>            : </a>
+<a name="208"><span class="lineNum">     208 </span>            :   /**</a>
+<a name="209"><span class="lineNum">     209 </span>            :    * Before _swap_matrix.svd (a non-const method) is called, we copy _true_swap_matrix =</a>
+<a name="210"><span class="lineNum">     210 </span>            :    * _swap_matrix. It is necessary to record _swap_matrix in this fashion so that</a>
+<a name="211"><span class="lineNum">     211 </span>            :    * mgd.swap_to_original_basis can be modified using it</a>
+<a name="212"><span class="lineNum">     212 </span>            :    */</a>
+<a name="213"><span class="lineNum">     213 </span>            :   DenseMatrix&lt;Real&gt; _true_swap_matrix;</a>
+<a name="214"><span class="lineNum">     214 </span>            : </a>
+<a name="215"><span class="lineNum">     215 </span>            :   /// inverse of swap matrix</a>
+<a name="216"><span class="lineNum">     216 </span>            :   DenseMatrix&lt;Real&gt; _inv_swap_matrix;</a>
+<a name="217"><span class="lineNum">     217 </span>            : </a>
+<a name="218"><span class="lineNum">     218 </span>            :   /// used in SVD decomposition of swap matrix</a>
+<a name="219"><span class="lineNum">     219 </span>            :   DenseVector&lt;Real&gt; _swap_sigma;</a>
+<a name="220"><span class="lineNum">     220 </span>            : </a>
+<a name="221"><span class="lineNum">     221 </span>            :   /// used in SVD decomposition of swap matrix</a>
+<a name="222"><span class="lineNum">     222 </span>            :   DenseMatrix&lt;Real&gt; _swap_U;</a>
+<a name="223"><span class="lineNum">     223 </span>            : </a>
+<a name="224"><span class="lineNum">     224 </span>            :   /// used in SVD decomposition of swap matrix</a>
+<a name="225"><span class="lineNum">     225 </span>            :   DenseMatrix&lt;Real&gt; _swap_VT;</a>
+<a name="226"><span class="lineNum">     226 </span>            : };</a>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.0</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>
